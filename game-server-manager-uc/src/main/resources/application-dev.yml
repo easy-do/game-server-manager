@@ -1,0 +1,247 @@
+
+server:
+  port: 30001
+
+spring:
+  cache:
+    type: redis
+    redis:
+      ##存活时间,毫秒为单位
+      time-to-live: 6000000
+      ##key的前缀,建议不配置这个，让它默认使用分区名做前缀
+      key-prefix: CACHE_
+      ##是否使用前缀
+      use-key-prefix: true
+      ##是否缓存空值，防止缓存穿透
+      cache-null-values: true
+  servlet:
+    multipart:
+      # 文件最大限制
+      max-file-size: 1024MB
+      # 请求最大限制
+      max-request-size: 1024MB
+      enabled: true
+      # 设置文件缓存的临界点,超过则先保存到临时目录,默认为0,所有文件都会进行缓存
+      file-size-threshold: 0
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  application:
+    name: ${APPLICATION_NAME:game-server-manager-uc}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:9090}/${MYSQL_DATA_BASE:game-manager}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:root}
+  #redis 配置
+  redis:
+    host: ${REDIS_HOST:redis.server}
+    password: ${REDIS_PASSWORD:n2H%yuXZFS}
+    port: ${REDIS_PORT:6379}
+    database: 5
+    timeout: 20000ms
+    lettuce:
+      pool:
+        #连接池大小，默认为8
+        max-active: 20
+        #最大空闲连接数
+        max-idle: 100
+        #最小空闲连接数,只有在time-between-eviction-runs设置为正值时才有效
+        min-idle: 50
+        #获取连接的最大阻塞等待时间(-1表示不限制)
+        max-wait: 30s
+        #空闲连接检查线程运行周期
+        time-between-eviction-runs: 3000ms
+      shutdown-timeout: 100ms
+  #邮箱基本配置
+  mail:
+    #配置smtp服务主机地址
+    host: ${MAIL_HOST:smtp.qq.com}
+    #发送邮箱
+    send-mailer: ${MAIL_ACCOUNT:xxxx@qq.com}
+    #用户名
+    username: ${MAIL_USER:xxxx@qq.com}
+    #申请到的授权码
+    password: ${MAIL_PASS:xxxxxx}
+    #端口号465或587
+    port: ${MAIL_PORT:465}
+    #默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    #其他参数
+    properties:
+      mail:
+        #配置SSL 加密工厂
+        smtp:
+          ssl:
+            #ssl连接
+            enable: true
+            required: false
+          #开启debug模式
+        debug: true
+management:
+  server:
+    port: 0
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+#MybatisPlus配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: game.server.manager.**.entity
+  global-config:
+    #数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      logic-delete-field: delFlag
+#      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+#      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+    banner: false
+  #原生配置
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+    default-statement-timeout: 50000
+
+system:
+  #黑名单配置
+  back-list:
+    #拉黑持续时间
+    back-time: 30
+    #判断单个url请求频率的时间范围 单位毫秒
+    max-req-time: 30000
+    #指定时间范围内触发黑名单的最大请求次数
+    max-req-count: 10
+  #分页增强
+  page:
+    enable: false
+    current-page-filed: currentPage
+    page-size-filed: pageSize
+  #前端地址
+  be-domain: ${BE_DOMAIN:https://push.easydo.plus}
+  #后端地址
+  fe-domain: ${FE_DOMAIN:https://manager.easydo.plus}
+  easy-push:
+    clients:
+      dingtalk:
+        clientId: 123
+        secret: 123
+        redirectUri: ${system.fe-domain}/uc/oauth/callback/dingtalk
+      gitee:
+        clientId: 123
+        secret: 123
+        redirectUri: ${GITEE_URL:${system.fe-domain}/uc/oauth/callback/gitee}
+      alipay:
+        clientId: 123
+        #应用私钥
+        secret: 123
+        #支付宝公钥
+        alipayPublicKey: 123
+        redirectUri: ${system.fe-domain}/uc/oauth/callback/alipay
+      wechat_enterprise:
+        clientId: 123
+        secret: 123
+        agentId: 123
+        redirectUri: ${system.fe-domain}/uc/oauth/callback/wechat_enterprise
+      huawei:
+        clientId: 123
+        secret: 123
+        redirectUri: ${system.fe-domain}/uc/oauth/callback/huawei
+      github:
+        clientId: 123
+        secret: d123
+        redirectUri: ${system.fe-domain}/uc/oauth/callback/github
+      oschina:
+        clientId: 123
+        secret: 123
+        redirectUri: ${system.fe-domain}/uc/oauth/callback/oschina
+      baidu:
+        clientId: 123
+        secret: 123
+        redirectUri: ${system.fe-domain}/uc/oauth/callback/baidu
+      coding:
+        clientId: 123
+        secret: 123
+        redirectUri: ${system.fe-domain}/uc/oauth/callback/codeing
+        team: easy-do
+  redis:
+    cache:
+      # 缓存默认过期时间
+      timout: 300
+    fastJson:
+      package:
+        #序列化白名单，不填则不限制
+        white:
+    #redis订阅
+    subscribe:
+      enable: false
+      taskNum: 5
+      # map格式  key：订阅的主题  value：对应spring中的bean  需要继承AbstractMessageHandler
+      topics:
+        topic1: applicationDeploy
+    # 开启redis stream队列  消费者需要加注解 @RedisStreamListener指定频道和分组 实现StreamListener类
+    stream:
+      enabled: false
+
+# Sa-Token配置
+sa-token:
+  # jwt秘钥
+  jwt-secret-key: 123
+  # token 名称 (同时也是cookie名称)
+  token-name: token
+  # token 有效期，单位s 默认30天, -1代表永不过期
+  timeout: 3600
+  # token 临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
+  alone-redis:
+    # Redis数据库索引
+    database: 1
+    # Redis服务器地址
+    host: ${REDIS_HOST:redis.server}
+    # Redis服务器连接端口
+    port: ${REDIS_PORT:6379}
+    # Redis服务器连接密码（默认为空）
+    password: ${REDIS_PASSWORD:n2H%yuXZFS}
+    # 连接超时时间
+    timeout: 10s
+
+springdoc:
+  swagger-ui:
+    # 修改Swagger UI路径
+    path: /swagger-ui.html
+    # 开启Swagger UI界面
+    enabled: true
+  api-docs:
+    # 修改api-docs路径
+    path: /v2/api-docs
+    # 开启api-docs
+    enabled: true
+  # 配置需要生成接口文档的扫描包
+  packages-to-scan: game.server.manager.uc.controller
+  # 配置需要生成接口文档的接口路径
+  #  paths-to-match: /brand/**,/admin/**
+  customize:
+    title: 用户中心 API
+    description: 用户中心API接口
+    version: 1.0.0
+    license:
+      name: 未设置
+      url: https://push.easydo.plus
+    externalDocs:
+      description: 外部文档
+      url: https://push.easydo.plus
+
+

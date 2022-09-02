@@ -1,0 +1,78 @@
+apiVersion: v1
+data:
+  nginx.conf: |-
+    server {
+        listen  0.0.0.0:8080;
+        server_name  localhost;
+
+        location / {
+        try_files $uri $uri/ /index.html;
+                root /html;
+        }
+
+        location ^~ /api/ {
+            add_header backendIP $upstream_addr;
+            add_header backendCode $upstream_status;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header REMOTE-HOST $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                rewrite ^/api/(.*)$ /$1 break;
+                proxy_pass http://game-server-manager-server.server:8888;
+
+        }
+
+        location /wss/ {
+            proxy_pass http://game-server-manager-server.server:8888;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "Upgrade";
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+     }
+kind: ConfigMap
+metadata:
+  annotations:
+    field.cattle.io/creatorId: user-mqcd7
+    kubectl.kubernetes.io/last-applied-configuration: '{"apiVersion":"v1","data":{"nginx.conf":"server
+      {\n    listen  0.0.0.0:8080;\n    server_name  localhost;\n\n    location /
+      {\n    try_files $uri $uri/ /index.html;\n            root /html;\n    }\n\n    location
+      ^~ /api/ {\n        add_header backendIP $upstream_addr;\n        add_header
+      backendCode $upstream_status;\n        proxy_set_header Host $http_host;\n        proxy_set_header
+      X-Real-IP $remote_addr;\n            proxy_set_header REMOTE-HOST $remote_addr;\n            proxy_set_header
+      X-Forwarded-For $proxy_add_x_forwarded_for;\n            rewrite ^/api/(.*)$
+      /$1 break;\n            proxy_pass http://game-server-manager-server.server:8888;\n\n    }\n\n    location
+      /wss/ {\n        proxy_pass http://game-server-manager-server:8888;\n        proxy_http_version
+      1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header
+      Connection \"Upgrade\";\n        proxy_set_header X-Real-IP $remote_addr;\n    }\n
+      }"},"kind":"ConfigMap","metadata":{"annotations":{"field.cattle.io/creatorId":"user-mqcd7"},"creationTimestamp":null,"labels":{"cattle.io/creator":"norman"},"managedFields":[{"apiVersion":"v1","fieldsType":"FieldsV1","fieldsV1":{"f:data":{".":{},"f:nginx.conf":{}},"f:metadata":{"f:annotations":{".":{},"f:field.cattle.io/creatorId":{}},"f:labels":{".":{},"f:cattle.io/creator":{}}}},"manager":"Go-http-client","operation":"Update","time":"2022-08-26T03:16:52Z"}],"name":"nginx.conf","namespace":"server","selfLink":"/api/v1/namespaces/server/configmaps/nginx.conf"}}'
+  creationTimestamp: null
+  labels:
+    cattle.io/creator: norman
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:field.cattle.io/creatorId: {}
+        f:labels:
+          .: {}
+          f:cattle.io/creator: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2022-08-27T15:09:28Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        f:nginx.conf: {}
+      f:metadata:
+        f:annotations:
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2022-08-27T16:59:32Z"
+  name: nginx.conf

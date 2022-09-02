@@ -1,0 +1,50 @@
+server:
+  port: 8888
+#  tomcat:
+#    basedir: /home/production/temp
+
+spring:
+  application:
+    name: ${APPLICATION_NAME:api-gateway}
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: uc
+          uri: http://localhost:30001/**
+          predicates:
+            - Path=/uc/**
+          filters:
+            - StripPrefix=1
+        - id: server
+          uri: http://localhost:30002/**
+          predicates:
+            - Path=/server/**
+          filters:
+            - StripPrefix=1
+        - id: gen
+          uri: http://localhost:30003
+          predicates:
+            - Path=/gen/**
+          filters:
+            - StripPrefix=1
+
+
+management:
+  server:
+    port: 0
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus

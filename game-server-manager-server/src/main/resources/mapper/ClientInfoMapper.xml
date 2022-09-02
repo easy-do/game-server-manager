@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="game.server.manager.server.mapper.ClientInfoMapper">
+
+    <resultMap id="BaseResultMap" type="game.server.manager.server.entity.ClientInfo">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="clientName" column="client_name" jdbcType="VARCHAR"/>
+            <result property="serverId" column="server_id" jdbcType="BIGINT"/>
+            <result property="serverName" column="server_name" jdbcType="VARCHAR"/>
+            <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="clientData" column="client_data" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="lastUpTime" column="last_up_time" jdbcType="TIMESTAMP"/>
+            <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+            <result property="publicKey" column="public_key" jdbcType="VARCHAR"/>
+            <result property="privateKey" column="private_key" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,client_name,server_id,
+        server_name,user_name,status,
+        client_data,create_time,update_time,
+        last_up_time,del_flag,public_key,
+        private_key
+    </sql>
+</mapper>

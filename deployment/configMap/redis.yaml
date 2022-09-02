@@ -1,0 +1,32 @@
+apiVersion: v1
+data:
+  REDIS_HOST: redis.server
+  REDIS_PASSWORD: n2H%yuXZFS
+  REDIS_PORT: "6379"
+kind: ConfigMap
+metadata:
+  annotations:
+    field.cattle.io/creatorId: user-v7bm2
+  creationTimestamp: null
+  labels:
+    cattle.io/creator: norman
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:REDIS_HOST: {}
+        f:REDIS_PASSWORD: {}
+        f:REDIS_PORT: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:field.cattle.io/creatorId: {}
+        f:labels:
+          .: {}
+          f:cattle.io/creator: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2022-08-27T15:07:47Z"
+  name: redis

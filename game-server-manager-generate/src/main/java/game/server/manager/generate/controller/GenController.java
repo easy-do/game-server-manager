@@ -1,0 +1,351 @@
+package game.server.manager.generate.controller;
+
+import cn.hutool.core.io.IoUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import game.server.manager.common.result.DataResult;
+import game.server.manager.common.result.R;
+import game.server.manager.generate.dto.GenerateDatabaseDocDto;
+import game.server.manager.generate.dto.JsonGenerateDto;
+import game.server.manager.generate.entity.GenTable;
+import game.server.manager.generate.entity.GenTableColumn;
+import game.server.manager.generate.service.DataSourceDbService;
+import game.server.manager.generate.service.GenTableColumnService;
+import game.server.manager.generate.service.GenTableService;
+import game.server.manager.generate.service.GenerateService;
+import game.server.manager.generate.util.WordPdfUtils;
+import game.server.manager.mybatis.plus.result.MpDataResult;
+import game.server.manager.mybatis.plus.result.MpResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 代码生成
+ *
+ * @author laoyu
+ */
+@RequestMapping("/gen")
+@RestController
+public class GenController {
+
+    private static final String OCTET_STREAM = "application/octet-stream; charset=UTF-8";
+
+    private static final String PDF = "application/pdf; charset=UTF-8";
+
+    private static final String MSWORD = "application/maword; charset=UTF-8";
+
+    @Autowired
+    private GenTableService genTableService;
+
+    @Autowired
+    private GenTableColumnService genTableColumnService;
+
+    @Autowired
+    private DataSourceDbService dataSourceDbService;
+
+    @Autowired
+    private GenerateService generateService;
+
+    /**
+     * 查询代码生成列表
+     *
+     * @param genTable genTable
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @GetMapping("/list")
+    public R<Object> genList(GenTable genTable) {
+        List<GenTable> list = genTableService.selectGenTableList(genTable);
+        return DataResult.ok(list);
+    }
+
+    /**
+     * 分页查询代码生成列表
+     *
+     * @param genTable genTable
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @GetMapping("/page")
+    public MpDataResult page(GenTable genTable) {
+        IPage<GenTable> page = genTableService.pageGenTableList(genTable);
+        return MpResultUtil.buildPage(page);
+    }
+
+    /**
+     * 修改代码生成业务
+     *
+     * @param tableId talbleId
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @GetMapping(value = "/{tableId}")
+    public R<Object> getInfo(@PathVariable Long tableId) {
+        GenTable table = genTableService.selectGenTableById(tableId);
+        List<GenTable> tables = genTableService.selectGenTableAll();
+        List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("info", table);
+        map.put("rows", list);
+        map.put("tables", tables);
+        return DataResult.ok(map);
+    }
+
+    /**
+     * 查询数据库列表
+     *
+     * @param genTable genTable
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @GetMapping("/db/list")
+    public R<Object> dataList(GenTable genTable) {
+        List<GenTable> list = dataSourceDbService.selectDbTableList(genTable);
+        long total = dataSourceDbService.countDbTableList(genTable);
+        Map<String, Object> map = new HashMap<>();
+        map.put("data",list);
+        map.put("count",list.size());
+        map.put("total",total);
+        return DataResult.ok(map);
+    }
+
+    /**
+     * 查询数据表字段列表
+     *
+     * @param tableId tableId
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @GetMapping(value = "/column/{talbleId}")
+    public R<Object> columnList(Long tableId) {
+        List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
+        return DataResult.ok(list);
+    }
+
+    /**
+     * 导入表结构（保存)
+     *
+     * @param tables       tables
+     * @param dataSourceId dataSourceId
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @PostMapping("/importTable")
+    public R<Object> importTableSave(String tables, String dataSourceId) {
+        String[] tableNames = tables.split(",");
+        // 查询表信息
+        List<GenTable> tableList = dataSourceDbService.selectDbTableListByNames(dataSourceId, tableNames);
+        genTableService.importGenTable(dataSourceId, tableList);
+        return DataResult.ok();
+    }
+
+    /**
+     * 修改保存代码生成业务
+     *
+     * @param genTable genTable
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @PutMapping
+    public R<Object> editSave(@Validated @RequestBody GenTable genTable) {
+        genTableService.validateEdit(genTable);
+        genTableService.updateGenTable(genTable);
+        return DataResult.ok();
+    }
+
+    /**
+     * 删除代码生成
+     *
+     * @param tableIds tableIds
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @DeleteMapping("/{tableIds}")
+    public R<Object> remove(@PathVariable Long[] tableIds) {
+        genTableService.deleteGenTableByIds(tableIds);
+        return DataResult.ok();
+    }
+
+    /**
+     * 预览代码
+     *
+     * @param tableId tableId
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @GetMapping("/preview/{tableId}")
+    public R<Map<String, String>> preview(@PathVariable("tableId") Long tableId) {
+        Map<String, String> dataMap = generateService.previewCode(tableId);
+        return DataResult.ok(dataMap);
+    }
+
+    /**
+     * 生成代码（下载方式）
+     *
+     * @param response  response
+     * @param tableName tableName
+     * @throws IOException IOException
+     * @author laoyu
+     */
+    @GetMapping("/download/{tableName}")
+    public void download(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
+        byte[] data = generateService.downloadCode(tableName);
+        genCode(response, data, OCTET_STREAM, tableName + ".zip");
+    }
+
+    /**
+     * 生成代码（自定义路径）
+     *
+     * @param tableName tableName
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @GetMapping("/genCode/{tableName}")
+    public R<Object> genCode(@PathVariable("tableName") String tableName) {
+        generateService.generatorCode(tableName);
+        return DataResult.ok();
+    }
+
+    /**
+     * 同步数据库
+     *
+     * @param tableName tableName
+     * @return plus.easydo.core.R.DataR
+     * @author laoyu
+     */
+    @GetMapping("/synchDb/{tableName}")
+    public R<Object> synchDb(@PathVariable("tableName") String tableName) {
+        genTableService.syncDb(tableName);
+        return DataResult.ok();
+    }
+
+    /**
+     * 批量生成代码
+     *
+     * @param response response
+     * @param tables   tables
+     * @throws IOException IOException
+     * @author laoyu
+     */
+    @GetMapping("/batchGenCode")
+    public void batchGenCode(HttpServletResponse response, String tables) throws IOException {
+        String[] tableNames = tables.split(",");
+        byte[] data = generateService.downloadCode(tableNames);
+        genCode(response, data, OCTET_STREAM, tables + ".zip");
+    }
+
+    /**
+     * 生成zip文件
+     *
+     * @param response response
+     * @param data     data
+     * @param fileName fileName
+     * @throws IOException IOException
+     * @author laoyu
+     */
+    private void genCode(HttpServletResponse response, byte[] data, String contentType, String fileName) throws IOException {
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType(contentType);
+        IoUtil.write(response.getOutputStream(),true, data);
+    }
+
+    /**
+     * 生成数据库文档-zip
+     *
+     * @param response response
+     * @param dto      dto
+     * @author laoyu
+     */
+    @PostMapping("/generateDatabaseDocZip")
+    public void generateDatabaseDoc(HttpServletResponse response, @RequestBody GenerateDatabaseDocDto dto) throws IOException {
+        byte[] data = generateService.generateDatabaseDoc(response, dto);
+        genCode(response, data, OCTET_STREAM, "databaseDoc.zip");
+    }
+
+    /**
+     * 生成数据库文档-docx
+     *
+     * @param response response
+     * @param dto      dto
+     * @author laoyu
+     */
+    @PostMapping("/generateDataBaseDocx")
+    public void previewDataBaseDoc(HttpServletResponse response, @RequestBody GenerateDatabaseDocDto dto) throws IOException {
+        byte[] docByte = generateService.generateDataBaseDocx(response, dto);
+        genCode(response, docByte, MSWORD, "databaseDoc.docx");
+    }
+
+    /**
+     * 预览数据库文档-pdf
+     *
+     * @param response response
+     * @param tables tables
+     * @param dataSourceId dataSourceId
+     * @param templateId templateId
+     * @author laoyu
+     */
+    @GetMapping("/showDatabasePdf")
+    public void showDatabasePdf(HttpServletResponse response,
+                                @RequestParam(name = "tables") String tables,
+                                @RequestParam(name = "dataSourceId") String dataSourceId,
+                                @RequestParam(name = "templateId") Long templateId) throws IOException {
+        GenerateDatabaseDocDto dto = new GenerateDatabaseDocDto();
+        dto.setDataSourceId(dataSourceId);
+        dto.setTables(tables);
+        dto.setTemplateId(String.valueOf(templateId));
+        byte[] docByte = generateService.showDatabasePdf(response, dto);
+        genCode(response, docByte, PDF, "databaseDoc.pdf");
+    }
+
+    /**
+     * word转pdf
+     *
+     * @param response response
+     * @param file file
+     * @author laoyu
+     */
+    @GetMapping("/wordToPdf")
+    public void wordToPdf(HttpServletResponse response, @RequestParam(name = "file") MultipartFile file) throws IOException {
+        InputStream in = file.getInputStream();
+        ServletOutputStream op = response.getOutputStream();
+        WordPdfUtils.toPDF(in, op);
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=R.pdf");
+        response.setContentType(PDF);
+    }
+
+
+    /**
+     * 根据http接口结果生成
+     *
+     * @param response response
+     * @param dto      dto
+     * @author laoyu
+     */
+    @PostMapping("/jsonGenerate")
+    public void jsonGenerate(HttpServletResponse response, @RequestBody JsonGenerateDto dto) throws IOException {
+        byte[] data = generateService.jsonGenerate(response, dto);
+        genCode(response, data, OCTET_STREAM, "jonGenerate.zip");
+    }
+
+
+}

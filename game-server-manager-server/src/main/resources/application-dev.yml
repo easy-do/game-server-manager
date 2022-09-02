@@ -1,0 +1,170 @@
+
+server:
+  port: 30002
+
+
+management:
+  server:
+    port: 0
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+#MybatisPlus配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: game.server.manager.**.entity
+  global-config:
+    #数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      logic-delete-field: delFlag
+    #      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+    #      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+    banner: false
+  #原生配置
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+    default-statement-timeout: 50000
+
+system:
+  server-list:
+    uc: http://127.0.0.1:30001
+  #黑名单配置
+  back-list:
+    #拉黑持续时间
+    back-time: 30
+    #判断单个url请求频率的时间范围 单位毫秒
+    max-req-time: 30000
+    #指定时间范围内触发黑名单的最大请求次数
+    max-req-count: 10
+  #分页增强
+  page:
+    enable: false
+    current-page-filed: currentPage
+    page-size-filed: pageSize
+  #后端地址
+  domain: ${BE_DOMAIN:https://manager.easydo.plus}
+  easy-push:
+    clients:
+      dingtalk:
+        clientId: dingoaj6o3215hurhbrewt
+        secret: -Vh1ajnnMUNAFuwK5UPxtI3lGUOYGXTUURDmVHpbD5JjEFEzd3WHusi6i5Wc2PPs
+        redirectUri: ${system.be-domain}/oauth/callback/dingtalk
+      gitee:
+        clientId: bf073f099984670b519356cc71df88a9c9191f7c4e0cf4b84362ad8777e42963
+        secret: 3f35729cb6bf1fb5ff1519dba94877b7aabf4e159b064dfc0d25895b3790b32b
+        redirectUri: ${GITEE_URL:${system.be-domain}/oauth/callback/gitee}
+      alipay:
+        clientId: 2021003122639026
+        #应用私钥
+        secret: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCBvG7fUTQ0TEO+eTD/JnHUCthJsghTg9zZ78CR+UwdKJa0TQeaKv0R2McT+eobrLg38BkUcCMZ3VMLRmIq1YSg9cnSsigP2Y0zzb07UCQ605H6YEt7YrLCpm5M17/ZKkUR7o1GNgY1DnC0lWznhtF4mWMPJqLx1F3jwJpbdGx34TYnwmaID4wn8+S8Jd7pP6VjnxXDAAKvr20RBvaneLX2x/fr9H6zDO4DsNXb3ogQ9xINXvvp65aFhXLd/w/EGPRVMpyMeZ963BilaIzWTzIli/ZS5Remro0u963LXuegyRu11UlI1pIjEHUyo4tZRxXwRfgfaCE1wHUGxYCNK5U/AgMBAAECggEAYlHu6Jk+6f9+O6TW6Bc3ns4VOkyNGNXPEu8qzrXS5Co1hDD4ePLpVZQm01HMBOsxtVrlduLBB0H/RIUzsmicmeuL53yS9egWpdLe/UtwGZDriYdezQRwmynMX7oGL8tkCwHx2Orqa10lNwYjQZefujjspLfQN1uNSCRYFsU1yuczL+yY1lDr8/KbZPRmixiMtPQ1ZroTDfHxLQfBj9LEohSYp7ekNc2PRNHHjzM3teABHkp4fbTkizGHf/5Kfffk2+RZdK5WdCIM1AL0qtYHP96KqQYgja8GHlnF7gu9wL0cApyC9RDrU0QEJqEMpEGrX5zMu+qjbbahX/fmTYI9uQKBgQC/yb0ZayiX9X/fhvz8vzsdjiL1xDiAbrftybh7xHBSUVMubwmfikGfhYQvBEtl9c83/FHl2GvAboeIi45eb+0hsnk9w2pTqXqpdjX+oJG8kT2IVJEkeOQ2vzFAhxyDU9uXGS6b5IFR6ajXGt5HP4IeXBkUV1EMSIvmUMAEVkIgtQKBgQCtLC9DirDKc+5PZrwuZ4YYkJpVKZa2wsSrc4ag0yqCL72P+B1b1cjvbKuJ/P8OFL7CoNvmSr8auCBGkPvgriX2lUE4mMkOtKxuE2wDMD9D9Dgb005MPH9zkSO+ll/oEYO7XNUpSJUu4lYKBWo76fy33V2sd4FnR9a0/olHrKD6owKBgQCzA6cSNsepL2mwRtuVPxn6uFVBeWoT10SvG36rZ+w/qdEuok4lMHOYZpO/Hw8RmKNW6pm3JI9PCtxPQ5Qb6fU5YtFwKRryBFuOGdzEUzQ1Aoyg1+6yUHUT9NoQFQ00N+3b15F9yYg74RHL1jRr5IebtvNh3S61fHG5BN52Ld2DkQKBgCYTkwjc0+aP+xRGWJYzeQ6prOWQ0Wy6AphYPH/cLnqVmK6xNXNd3GKYmFcs47/q287bo75NLRvo5F/fvSI36G0BgGe7YGn1W/yQFK3Wy/JbHoMvwQWOP8/fV+auFcRnJXnq/YuoQ/UdGyH08tjdqA2dhN1JIZDeAN2nIfQ6huLVAoGAX+/NEHD+sEi+WRYV6+n/pPEGQwNS5Pabkt4cIX1O3RGDoljsiPyyWqN8HBOP5ZdXVvWX3EIi8zCIRPW+kBi1JnSa/kRUklCmBSqJgAJI2nXIQ0B851DkYratklNQOV7dj2fqxiMXjW7WdTsQW8nHJug371lpJwB2aHnxoQ7I6zo=
+        #支付宝公钥
+        alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw4nwyuA7cx1DEXaQCTTOzX1DT5tf/APPytaaHVg6JqidtyhIeN/nbi5LJwRish0JhEnh842aPeArD9MibA1nSbxhhFRCQyzBdZMuP4xLPWcgPzwYbjM9WBOOdra3j0b3FstJudXNc2yQ/ampaZtkexgWU82APzeHDfOsCCozo3tgEjfCFRZHHA9VudKlTMWXJFKun18QXVSF/BBnk4Z760g/voBo/IgDXly0A5WeANGUq6RjRGkl5+ZmGycOW4K/A91t39lD4P+d7uDdL+7ZluzuJ/gMifNytQo08WuHS86pHjBa1l4zgbG2nfcjO3r9Jq3zng19nMR7NOcTqGQNbQIDAQAB
+        redirectUri: ${system.be-domain}/oauth/callback/alipay
+      wechat_enterprise:
+        clientId: wwcc3bef7a256e4a3b
+        secret: BI7PbOK4vWFSt6Oppl9Q5bL83qUa41DDnxN2gJzFxnM
+        agentId: 1000002
+        redirectUri: ${system.be-domain}/oauth/callback/wechat_enterprise
+      huawei:
+        clientId: 105631865
+        secret: 1475d98cecbe96b17745af7752c26e2daa67c9781b8f80c8f320a44e4713048a
+        redirectUri: ${system.be-domain}/oauth/callback/huawei
+      github:
+        clientId: dfacf7538a30f8394709
+        secret: d4dca03b074439401a2f52ecc88200f97b755e22
+        redirectUri: ${system.be-domain}/oauth/callback/github
+      oschina:
+        clientId: DnRt0flhfUJX4sGKM5bp
+        secret: 7c7gVoezDmH7Aunt8U0PbwTbmeIgL1HI
+        redirectUri: ${system.be-domain}/oauth/callback/oschina
+      baidu:
+        clientId: o6X70Zx8iScbnXRWsoHxkq5g
+        secret: z7DGDneC63yVPf0z0W53LvPVNPaTlxow
+        redirectUri: ${system.be-domain}/oauth/callback/baidu
+      coding:
+        clientId: 6aaf7ca520eadf011e4b26bbdf895308
+        secret: dfb6ee3171bba37304108d8eea88ff538945619c
+        redirectUri: ${system.be-domain}/oauth/callback/codeing
+        team: easy-do
+  redis:
+    cache:
+      # 缓存默认过期时间
+      timout: 300
+    fastJson:
+      package:
+        #序列化白名单，不填则不限制
+        white:
+    #redis订阅
+    subscribe:
+      enable: false
+      taskNum: 5
+      # map格式  key：订阅的主题  value：对应spring中的bean  需要继承AbstractMessageHandler
+      topics:
+        topic1: applicationDeploy
+    # 开启redis stream队列  消费者需要加注解 @RedisStreamListener指定频道和分组 实现StreamListener类
+    stream:
+      enabled: false
+
+# Sa-Token配置
+sa-token:
+  # jwt秘钥
+  jwt-secret-key: asdqwezxcqweasdzcx
+  # token 名称 (同时也是cookie名称)
+  token-name: token
+  # token 有效期，单位s 默认30天, -1代表永不过期
+  timeout: 3600
+  # token 临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
+  alone-redis:
+    # Redis数据库索引
+    database: 1
+    # Redis服务器地址
+    host: ${REDIS_HOST:redis.server}
+    # Redis服务器连接端口
+    port: ${REDIS_PORT:6379}
+    # Redis服务器连接密码（默认为空）
+    password: ${REDIS_PASSWORD:n2H%yuXZFS}
+    # 连接超时时间
+    timeout: 10s
+
+springdoc:
+  swagger-ui:
+    # 修改Swagger UI路径
+    path: /swagger-ui.html
+    # 开启Swagger UI界面
+    enabled: true
+  api-docs:
+    # 修改api-docs路径
+    path: /v2/api-docs
+    # 开启api-docs
+    enabled: true
+  # 配置需要生成接口文档的扫描包
+  packages-to-scan: game.server.manager.uc.controller
+  # 配置需要生成接口文档的接口路径
+  #  paths-to-match: /brand/**,/admin/**
+  customize:
+    title: 主服务程序 API
+    description: 主服务程序API接口
+    version: 1.0.0
+    license:
+      name: 未设置
+      url: https://push.easydo.plus
+    externalDocs:
+      description: 外部文档
+      url: https://push.easydo.plus
