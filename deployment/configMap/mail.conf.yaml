@@ -1,0 +1,36 @@
+apiVersion: v1
+data:
+  MAIL_ACCOUNT: easydoplus@163.com
+  MAIL_HOST: smtp.163.com
+  MAIL_PASS: NDLHQMGTYFVDBFUM
+  MAIL_PORT: "465"
+  MAIL_USER: easydoplus
+kind: ConfigMap
+metadata:
+  annotations:
+    field.cattle.io/creatorId: user-hz94g
+  creationTimestamp: null
+  labels:
+    cattle.io/creator: norman
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:MAIL_ACCOUNT: {}
+        f:MAIL_HOST: {}
+        f:MAIL_PASS: {}
+        f:MAIL_PORT: {}
+        f:MAIL_USER: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:field.cattle.io/creatorId: {}
+        f:labels:
+          .: {}
+          f:cattle.io/creator: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2022-09-02T18:32:20Z"
+  name: mail.conf

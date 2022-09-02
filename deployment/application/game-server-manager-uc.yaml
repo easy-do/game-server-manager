@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "15"
+    field.cattle.io/creatorId: user-hz94g
+    field.cattle.io/publicEndpoints: '[{"port":30001,"protocol":"TCP","serviceName":"server:game-server-manager-uc-nodeport","allNodes":true}]'
+  creationTimestamp: null
+  generation: 1
+  labels:
+    cattle.io/creator: norman
+    workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-uc
+  name: game-server-manager-uc
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-uc
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        cattle.io/timestamp: "2022-09-02T17:37:49Z"
+        field.cattle.io/ports: '[[{"containerPort":8888,"dnsName":"game-server-manager-uc-nodeport","kind":"NodePort","name":"8888tcp300011","protocol":"TCP","sourcePort":30001},{"containerPort":8888,"dnsName":"game-server-manager-uc-nodeport","kind":"NodePort","name":"8888tcp1","protocol":"TCP"}]]'
+        field.cattle.io/publicEndpoints: '[{"allNodes":true,"port":30001,"protocol":"TCP","serviceId":"server:game-server-manager-uc-nodeport"}]'
+      creationTimestamp: null
+      labels:
+        workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-uc
+    spec:
+      containers:
+      - env:
+        - name: DOMAIN
+          value: https://push.easydo.plus
+        - name: JAVA_OPTS
+          value: --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/sun.net.util=ALL-UNNAMED
+            --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.lang.invoke=ALL-UNNAMED
+        - name: MYSQL_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_HOST
+              name: mysql
+        - name: MYSQL_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_PORT
+              name: mysql
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_USER
+              name: mysql
+        - name: MYSQL_PASS
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_PASS
+              name: mysql
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: REDIS_HOST
+              name: redis
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: REDIS_PORT
+              name: redis
+        image: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:uc-1.0.0
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8689
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        name: game-server-manager-uc
+        ports:
+        - containerPort: 8888
+          name: 8888tcp300011
+          protocol: TCP
+        - containerPort: 8888
+          name: 8888tcp1
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /actuator/health
+            port: 8689
+            scheme: HTTP
+          initialDelaySeconds: 50
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /data
+          name: vol1
+          subPath: game-manager-server
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: data
+status: {}

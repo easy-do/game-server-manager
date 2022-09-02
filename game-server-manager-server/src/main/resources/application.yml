@@ -1,0 +1,220 @@
+server:
+  port: 8888
+  #支持http2
+  http2:
+    enabled: true
+  undertow:
+    threads:
+      #长链数，一直在runnable状态。设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接
+      io: 32
+      #短链的线程数，目前所有的http请求都是通过此线程处理。阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+      #它的值设置取决于系统线程执行任务的阻塞系数，当业务执行时间在500ms以下时，1000个worker-thread可支持2000+的qps
+      worker: 1000
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+    # HTTP POST请求最大的大小
+    max-http-post-size: 0
+  # 对客户端浏览器的请求与响应做压缩
+  compression:
+    enabled: true
+    # mime-types: application/json,application/xml,text/html,text/xml,type/plain
+
+spring:
+  cache:
+    type: redis
+    redis:
+      ##存活时间,毫秒为单位
+      time-to-live: 6000000
+      ##key的前缀,建议不配置这个，让它默认使用分区名做前缀
+      key-prefix: CACHE_
+      ##是否使用前缀
+      use-key-prefix: true
+      ##是否缓存空值，防止缓存穿透
+      cache-null-values: true
+  servlet:
+    multipart:
+      # 文件最大限制
+      max-file-size: 1024MB
+      # 请求最大限制
+      max-request-size: 1024MB
+      enabled: true
+      # 设置文件缓存的临界点,超过则先保存到临时目录,默认为0,所有文件都会进行缓存
+      file-size-threshold: 0
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  application:
+    name: ${APPLICATION_NAME:game-server-manager-server}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:9090}/${MYSQL_DATA_BASE:game-manager}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:root}
+  #redis 配置
+  redis:
+    host: ${REDIS_HOST:redis.server}
+    password: ${REDIS_PASSWORD:n2H%yuXZFS}
+    port: ${REDIS_PORT:6379}
+    database: 5
+    timeout: 20000ms
+    lettuce:
+      pool:
+        #连接池大小，默认为8
+        max-active: 20
+        #最大空闲连接数
+        max-idle: 100
+        #最小空闲连接数,只有在time-between-eviction-runs设置为正值时才有效
+        min-idle: 50
+        #获取连接的最大阻塞等待时间(-1表示不限制)
+        max-wait: 30s
+        #空闲连接检查线程运行周期
+        time-between-eviction-runs: 3000ms
+      shutdown-timeout: 100ms
+
+#MybatisPlus配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: game.server.manager.**.entity
+  global-config:
+    #数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      logic-delete-field: delFlag
+#      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+#      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+    banner: false
+  #原生配置
+  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+    default-statement-timeout: 50000
+
+system:
+  server-list:
+    uc: game-server-manager-uc.server:8888
+  #黑名单配置
+  back-list:
+    #拉黑持续时间
+    back-time: 30
+    #判断单个url请求频率的时间范围 单位毫秒
+    max-req-time: 30000
+    #指定时间范围内触发黑名单的最大请求次数
+    max-req-count: 10
+  #分页增强
+  page:
+    enable: false
+    current-page-filed: currentPage
+    page-size-filed: pageSize
+  redis:
+    cache:
+      # 缓存默认过期时间
+      timout: 300
+    fastJson:
+      package:
+        #序列化白名单，不填则不限制
+        white:
+    #redis订阅
+    subscribe:
+      enable: false
+      taskNum: 5
+      # map格式  key：订阅的主题  value：对应spring中的bean  需要继承AbstractMessageHandler
+      topics:
+        topic1: applicationDeploy
+    # 开启redis stream队列  消费者需要加注解 @RedisStreamListener指定频道和分组 实现StreamListener类
+    stream:
+      enabled: false
+
+
+# Sa-Token配置
+sa-token:
+  # jwt秘钥
+  jwt-secret-key: asdqwezxcqweasdzcx
+  # token 名称 (同时也是cookie名称)
+  token-name: token
+  # token 有效期，单位s 默认30天, -1代表永不过期
+  timeout: 3600
+  # token 临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
+  alone-redis:
+    # Redis数据库索引
+    database: 1
+    # Redis服务器地址
+    host: ${REDIS_HOST:redis.server}
+    # Redis服务器连接端口
+    port: ${REDIS_PORT:6379}
+    # Redis服务器连接密码（默认为空）
+    password: ${REDIS_PASSWORD:n2H%yuXZFS}
+    # 连接超时时间
+    timeout: 10s
+
+
+management:
+  server:
+    port: 8689
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+  okhttp:
+    enabled: true
+  httpclient:
+    maxConnections: 1000
+    connectionTimeout: 3000
+
+logging:
+  level:
+    root: INFO
+    feign.Logger: INFO
+
+springdoc:
+  swagger-ui:
+    # 修改Swagger UI路径
+    path: /swagger-ui.html
+    # 开启Swagger UI界面
+    enabled: true
+  api-docs:
+    # 修改api-docs路径
+    path: /v2/api-docs
+    # 开启api-docs
+    enabled: true
+  # 配置需要生成接口文档的扫描包
+  packages-to-scan: game.server.manager.uc.controller
+  # 配置需要生成接口文档的接口路径
+  #  paths-to-match: /brand/**,/admin/**
+  customize:
+    title: 主服务程序 API
+    description: 主服务程序API接口
+    version: 1.0.0
+    license:
+      name: 未设置
+      url: https://push.easydo.plus
+    externalDocs:
+      description: 外部文档
+      url: https://push.easydo.plus

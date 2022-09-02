@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>game.server.manager</groupId>
+    <artifactId>game-server-manager</artifactId>
+    <version>1.0.0</version>
+    <name>game-server-manager</name>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <mapstruct.version>1.5.2.Final</mapstruct.version>
+        <lombok.version>1.18.24</lombok.version>
+        <spring-cloud.version>2021.0.1</spring-cloud.version>
+        <sa-token-version>1.30.0</sa-token-version>
+    </properties>
+
+
+    <modules>
+        <module>commons/game-server-manager-common</module>
+        <module>commons/game-server-manager-mapstruct</module>
+        <module>commons/game-server-manager-log</module>
+        <module>commons/game-server-manager-api</module>
+        <module>commons/game-server-manager-redis</module>
+        <module>commons/game-server-manager-auth</module>
+        <module>commons/game-server-manager-event</module>
+        <module>commons/game-server-manager-mybatis-plus</module>
+        <module>commons/game-server-manager-web</module>
+        <module>commons/game-server-manager-doc</module>
+        <module>game-server-manager-plugins</module>
+        <module>game-server-manager-client</module>
+        <module>game-server-manager-gateway</module>
+        <module>game-server-manager-uc</module>
+        <module>game-server-manager-server</module>
+        <module>game-server-manager-generate</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.6.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+
+</project>
