@@ -102,12 +102,12 @@ system:
     uc: game-server-manager-uc.server:8888
   #黑名单配置
   back-list:
-    #拉黑持续时间
-    back-time: 30
+    #拉黑持续时间 分钟
+    back-time: ${BACK_LIST_TIME:30}
     #判断单个url请求频率的时间范围 单位毫秒
-    max-req-time: 30000
+    max-req-time: ${BACK_LIST_MAX_REQ_TIME:3000}
     #指定时间范围内触发黑名单的最大请求次数
-    max-req-count: 10
+    max-req-count: ${BACK_LIST_MAX_REQ_COUNT:10}
   #分页增强
   page:
     enable: false
