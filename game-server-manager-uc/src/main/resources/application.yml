@@ -143,49 +143,50 @@ system:
   be-domain: ${BE_DOMAIN:https://push.easydo.plus}
   #后端地址
   fe-domain: ${FE_DOMAIN:https://manager.easydo.plus}
+  callback-path: /uc/oauth/callback/
   easy-push:
     clients:
       dingtalk:
-        clientId: 123
-        secret: 123
-        redirectUri: ${system.fe-domain}/uc/oauth/callback/dingtalk
+        clientId: ${dingtalk_clientId:123}
+        secret: ${dingtalk_secret:123}
+        redirectUri: ${dingtalk_redirectUri:${system.fe-domain}${system.callback-path}dingtalk}
       gitee:
-        clientId: 123
-        secret: 123
-        redirectUri: ${GITEE_URL:${system.fe-domain}/uc/oauth/callback/gitee}
+        clientId: ${gitee_clientId:123}
+        secret: ${gitee_secret:123}
+        redirectUri: ${gitee_redirectUri:${system.fe-domain}${system.callback-path}gitee}
       alipay:
-        clientId: 123
+        clientId: ${alipay_clientId:123}
         #应用私钥
-        secret: 123
+        secret: ${alipay_secret:123}
         #支付宝公钥
-        alipayPublicKey: 123
-        redirectUri: ${system.fe-domain}/uc/oauth/callback/alipay
+        alipayPublicKey: ${alipay_alipayPublicKey:123}
+        redirectUri: ${gitee_redirectUri:${system.fe-domain}${system.callback-path}alipay}
       wechat_enterprise:
-        clientId: 123
-        secret: 123
-        agentId: 123
-        redirectUri: ${system.fe-domain}/uc/oauth/callback/wechat_enterprise
+        clientId: ${wechat_enterprise_clientId:123}
+        secret: ${wechat_enterprise_secret:123}
+        agentId: ${wechat_enterprise_agentId:123}
+        redirectUri: ${wechat_enterprise_redirectUri:${system.fe-domain}${system.callback-path}wechat_enterprise}
       huawei:
-        clientId: 123
-        secret: 123
-        redirectUri: ${system.fe-domain}/uc/oauth/callback/huawei
+        clientId: ${huawei_clientId:123}
+        secret: ${huawei_secret:123}
+        redirectUri: ${huawei_redirectUri:${system.fe-domain}${system.callback-path}huawei}
       github:
-        clientId: 123
-        secret: d123
-        redirectUri: ${system.fe-domain}/uc/oauth/callback/github
+        clientId: ${github_clientId:123}
+        secret: ${github_secret:123}
+        redirectUri: ${github_redirectUri:${system.fe-domain}${system.callback-path}github}
       oschina:
-        clientId: 123
-        secret: 123
-        redirectUri: ${system.fe-domain}/uc/oauth/callback/oschina
+        clientId: ${oschina_clientId:123}
+        secret: ${oschina_secret:123}
+        redirectUri: ${oschina_redirectUri:${system.fe-domain}${system.callback-path}oschina}
       baidu:
-        clientId: 123
-        secret: 123
-        redirectUri: ${system.fe-domain}/uc/oauth/callback/baidu
+        clientId: ${baidu_clientId:123}
+        secret: ${baidu_secret:123}
+        redirectUri: ${baidu_redirectUri:${system.fe-domain}${system.callback-path}baidu}
       coding:
-        clientId: 123
-        secret: 123
-        redirectUri: ${system.fe-domain}/uc/oauth/callback/codeing
-        team: easy-do
+        clientId: ${codeing_clientId:123}
+        secret: ${codeing_secret:123}
+        redirectUri: ${codeing_redirectUri:${system.fe-domain}${system.callback-path}codeing}
+        team: ${codeing_team:easy-do}
   redis:
     cache:
       # 缓存默认过期时间

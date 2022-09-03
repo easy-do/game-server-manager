@@ -1,0 +1,68 @@
+apiVersion: v1
+data:
+  alipay_alipayPublicKey: "123"
+  alipay_clientId: "123"
+  alipay_secret: "123"
+  baidu_clientId: "123"
+  baidu_secret: "123"
+  codeing_clientId: "123"
+  codeing_secret: "123"
+  codeing_team: "123"
+  dingtalk_clientId: "123"
+  dingtalk_secret: "123"
+  gitee_clientId: "123"
+  gitee_secret: "123"
+  github_clientId: "123"
+  github_secret: "123"
+  huawei_clientId: "123"
+  huawei_secret: "123"
+  oschina_clientId: "123"
+  oschina_secret: "123"
+  wechat_enterprise_agentId: "123"
+  wechat_enterprise_clientId: "123"
+  wechat_enterprise_secret: "123"
+kind: ConfigMap
+metadata:
+  annotations:
+    field.cattle.io/creatorId: user-hz94g
+  creationTimestamp: null
+  labels:
+    cattle.io/creator: norman
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:alipay_alipayPublicKey: {}
+        f:alipay_clientId: {}
+        f:alipay_secret: {}
+        f:baidu_clientId: {}
+        f:baidu_secret: {}
+        f:codeing_clientId: {}
+        f:codeing_secret: {}
+        f:codeing_team: {}
+        f:dingtalk_clientId: {}
+        f:dingtalk_secret: {}
+        f:gitee_clientId: {}
+        f:gitee_secret: {}
+        f:github_clientId: {}
+        f:github_secret: {}
+        f:huawei_clientId: {}
+        f:huawei_secret: {}
+        f:oschina_clientId: {}
+        f:oschina_secret: {}
+        f:wechat_enterprise_agentId: {}
+        f:wechat_enterprise_clientId: {}
+        f:wechat_enterprise_secret: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:field.cattle.io/creatorId: {}
+        f:labels:
+          .: {}
+          f:cattle.io/creator: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2022-09-03T08:23:34Z"
+  name: auth.conf
