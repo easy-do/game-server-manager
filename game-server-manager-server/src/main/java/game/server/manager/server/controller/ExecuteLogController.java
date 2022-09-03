@@ -38,10 +38,10 @@ public class ExecuteLogController{
     @SaCheckLogin
     @PostMapping("/page")
     public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
-        UserInfoVo user = AuthorizationUtil.getUser();
+        
         LambdaQueryWrapper<ExecuteLog> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(ExecuteLog::getCreateBy,user.getId());
+        if (!AuthorizationUtil.isAdmin()) {
+            wrapper.eq(ExecuteLog::getCreateBy,AuthorizationUtil.getUserId());
             wrapper.eq(ExecuteLog::getApplicationId, mpBaseQo.getParams().get("applicationId"));
         }else {
             Object applicationId = mpBaseQo.getParams().get("applicationId");
@@ -58,10 +58,10 @@ public class ExecuteLogController{
     @SaCheckLogin
     @RequestMapping("/info/{id}")
     public R<ExecuteLogVo> info(@PathVariable("id") Long id) {
-        UserInfoVo user = AuthorizationUtil.getUser();
+        
         LambdaQueryWrapper<ExecuteLog> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(ExecuteLog::getCreateBy, user.getId());
+        if (!AuthorizationUtil.isAdmin()) {
+            wrapper.eq(ExecuteLog::getCreateBy, AuthorizationUtil.getUserId());
         }
         wrapper.eq(ExecuteLog::getId, id);
         ExecuteLogVo executeLogVo = BeanUtil.copyProperties(executeLogService.getOne(wrapper), ExecuteLogVo.class);

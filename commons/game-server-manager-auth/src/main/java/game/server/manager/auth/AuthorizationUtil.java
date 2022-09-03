@@ -3,6 +3,7 @@ package game.server.manager.auth;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONObject;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class AuthorizationUtil {
 
     public static UserInfoVo getUser(){
         StpUtil.checkLogin();
-        JSONObject userJson = (JSONObject) StpUtil.getExtra("info");
+        JSONObject userJson = (JSONObject) StpUtil.getExtra(SystemConstant.TOKEN_USER_INFO);
         Integer lastLoginTimeInt = userJson.getInt("lastLoginTime");
         userJson.remove("lastLoginTime");
         UserInfoVo userInfoVo = userJson.toBean(UserInfoVo.class);
@@ -34,11 +35,15 @@ public class AuthorizationUtil {
     }
 
     public static void reloadUserCache(UserInfoVo userInfo){
-        StpUtil.login(userInfo.getId(), SaLoginConfig.setExtra("info",userInfo));
+        StpUtil.login(userInfo.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO,userInfo));
     }
 
-    public boolean isAdmin(){
-        return getUser().isAdmin();
+    public static long getUserId(){
+        return StpUtil.getLoginIdAsLong();
+    }
+
+    public static boolean isAdmin(){
+        return StpUtil.hasRole(SystemConstant.SUPER_ADMIN_ROLE);
     }
 
     /**

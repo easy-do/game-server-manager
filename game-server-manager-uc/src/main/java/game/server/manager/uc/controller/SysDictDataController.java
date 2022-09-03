@@ -2,7 +2,9 @@ package game.server.manager.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.exception.IdTokenInvalidException;
 import cn.dev33.satoken.id.SaIdUtil;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import game.server.manager.api.SysDictDataApi;
 import game.server.manager.common.dto.ChangeStatusDto;
@@ -93,8 +95,10 @@ public class SysDictDataController extends BaseController<SysDictDataService, Sy
 
     @GetMapping("/listByCode/{dictCode}")
     public R<Object> listByCode(@PathVariable("dictCode") String dictCode) {
-        // 校验 Id-Token 身份凭证
-        SaIdUtil.checkCurrentRequestToken();
+        if(!StpUtil.isLogin()){
+          // 不是用户请求的则校验 Id-Token 身份凭证
+          SaIdUtil.checkCurrentRequestToken();
+        }
         if(CharSequenceUtil.isEmpty(dictCode)){
             throw new BizException("code为空");
         }
@@ -104,8 +108,10 @@ public class SysDictDataController extends BaseController<SysDictDataService, Sy
 
     @GetMapping("/getSingleDictData/{dictCode}/{dictDataKey}")
     public R<SysDictDataVo> getSingleDictData(@PathVariable("dictCode")String dictCode, @PathVariable("dictDataKey")String dictDataKey){
-        // 校验 Id-Token 身份凭证
-        SaIdUtil.checkCurrentRequestToken();
+        if(!StpUtil.isLogin()){
+            // 不是用户请求的则校验 Id-Token 身份凭证
+            SaIdUtil.checkCurrentRequestToken();
+        }
         return DataResult.ok(baseService.getSingleDictData(dictCode,dictDataKey));
     }
 

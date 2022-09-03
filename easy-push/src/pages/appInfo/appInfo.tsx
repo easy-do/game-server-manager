@@ -20,12 +20,13 @@ import useStores from "../../utils/store";
 import { useEffect } from "react";
 import FormUploadImg from "../upload/formUploadImg";
 import AuditPage from "../auditManager/auditPage";
+import { RoleEnum } from "../../utils/systemConstant";
 
 const AppInfo = () => {
   const { Text } = Typography;
 
   const { OauthStore, AppInfoStore, AuditStore } = useStores();
-  const { loginFlag, userInfo } = OauthStore;
+  const { loginFlag , hasRole } = OauthStore;
   const { commitAuditRequest } = AuditStore;
 
   const {
@@ -175,9 +176,7 @@ const AppInfo = () => {
             >
               提交审核
             </Button>
-            {userInfo.isAdmin ? (
-              <Button onClick={() => auditButton(record.id)}>审核</Button>
-            ) : null}
+            <Button hidden={!hasRole(RoleEnum.SUPE_ADMIN)} onClick={() => auditButton(record.id)}>审核</Button>
             <Button
               type="danger"
               onClick={() => onClickDeleteButton(record.id)}

@@ -14,7 +14,6 @@ import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.mapper.AppInfoMapper;
 import game.server.manager.server.service.ApplicationInfoService;
 import game.server.manager.common.vo.AppInfoVo;
-import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import game.server.manager.common.result.DataResult;
@@ -51,10 +50,9 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoVo, AppI
 
     @Override
     public List<AppInfoVo> voList() {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppInfo> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppInfo::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppInfo::getCreateBy, getUserId());
             wrapper.eq(AppInfo::getState, 1);
             wrapper.or().eq(AppInfo::getAppScope, ScopeEnum.PUBLIC);
         }
@@ -65,10 +63,9 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoVo, AppI
 
     @Override
     public IPage<AppInfoVo> page(MpBaseQo mpBaseQo) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppInfo> wrapper = getWrapper();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppInfo::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppInfo::getCreateBy, getUserId());
         }
         wrapper.orderByDesc(AppInfo::getCreateTime);
         pageSelect(wrapper);
@@ -77,10 +74,9 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoVo, AppI
 
     @Override
     public AppInfoVo info(Serializable id) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppInfo> wrapper = getWrapper();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppInfo::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppInfo::getCreateBy, getUserId());
         }
         wrapper.eq(AppInfo::getId, id);
         return AppInfoMapstruct.INSTANCE.entityToVo(baseMapper.selectOne(wrapper));
@@ -90,10 +86,9 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoVo, AppI
     public boolean add(AppInfoDto appInfoDto) {
         //校验授权信息
         checkAuthorization("appAdd");
-        UserInfoVo user = getUser();
         AppInfo entity = AppInfoMapstruct.INSTANCE.dtoToEntity(appInfoDto);
-        entity.setCreateBy(user.getId());
-        entity.setAuthor(user.getNickName());
+        entity.setCreateBy(getUserId());
+        entity.setAuthor(getUser().getNickName());
         return save(entity);
     }
 
@@ -101,12 +96,11 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoVo, AppI
     public boolean edit(AppInfoDto appInfoDto) {
         //校验授权信息
         checkAuthorization("appEdit");
-        UserInfoVo user = getUser();
         AppInfo entity = AppInfoMapstruct.INSTANCE.dtoToEntity(appInfoDto);
-        entity.setUpdateBy(user.getId());
+        entity.setUpdateBy(getUserId());
         LambdaQueryWrapper<AppInfo> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppInfo::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppInfo::getCreateBy, getUserId());
         }
         wrapper.eq(AppInfo::getId, entity.getId());
         return update(entity, wrapper);
@@ -120,10 +114,9 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoVo, AppI
         if (count >= 1) {
             DataResult.fail("拒绝删除,已有应用绑定");
         }
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppInfo> wrapper = getWrapper();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppInfo::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppInfo::getCreateBy, getUserId());
         }
         wrapper.eq(AppInfo::getId, id);
         return remove(wrapper);

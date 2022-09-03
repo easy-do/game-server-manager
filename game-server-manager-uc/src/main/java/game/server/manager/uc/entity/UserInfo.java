@@ -125,13 +125,4 @@ public class UserInfo implements Serializable {
     @TableLogic
     private Integer delFlag;
 
-    /**
-     * 是否为管理员
-     */
-    private Integer isAdmin;
-
-    public Boolean isAdmin(){
-        return this.isAdmin != null && this.isAdmin == 1;
-    }
-
 }

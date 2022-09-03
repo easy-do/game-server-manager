@@ -48,19 +48,15 @@ public class SysJobController {
     @Autowired
     private SysJobService jobService;
 
-    @Autowired
-    private AuthorizationUtil authorizationUtil;
-
     /**
      * 查询定时任务列表
      */
     @SaCheckLogin
     @PostMapping("/page")
     public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
-        UserInfoVo user = AuthorizationUtil.getUser();
         LambdaQueryWrapper<SysJob> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(SysJob::getCreateBy, user.getId());
+        if (!AuthorizationUtil.isAdmin()) {
+            wrapper.eq(SysJob::getCreateBy, AuthorizationUtil.getUserId());
         }
         IPage<SysJob> page = jobService.page(mpBaseQo.startPage(),wrapper);
         return MpResultUtil.buildPage(page);
@@ -72,10 +68,9 @@ public class SysJobController {
     @SaCheckLogin
     @GetMapping(value = "/info/{jobId}")
     public R<SysJobVo> info(@PathVariable("jobId") Long jobId) {
-        UserInfoVo user = AuthorizationUtil.getUser();
         LambdaQueryWrapper<SysJob> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(SysJob::getCreateBy, user.getId());
+        if (!AuthorizationUtil.isAdmin()) {
+            wrapper.eq(SysJob::getCreateBy, AuthorizationUtil.getUserId());
         }
         wrapper.eq(SysJob::getJobId, jobId);
         SysJob job = jobService.getOne(wrapper);
@@ -96,7 +91,6 @@ public class SysJobController {
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "任务管理", description = "添加任务: ?1", expressions = {"#p1.jobName"}, actionType = "添加")
     public R<Object> add(@RequestBody @Validated({Insert.class}) SysJobDto sysJobDto) throws TaskException, SchedulerException {
-        UserInfoVo user = AuthorizationUtil.getUser();
         SysJob sysJob = BeanUtil.copyProperties(sysJobDto, SysJob.class);
         if (!CronUtils.isValid(sysJobDto.getCronExpression())) {
             return DataResult.fail("新增任务'" + sysJobDto.getJobName() + "'失败，Cron表达式不正确");
@@ -109,7 +103,7 @@ public class SysJobController {
             jobModel.setEnv(sysJobDto.getEnv());
             sysJob.setJobParam(JSON.toJSONString(jobModel));
         }
-        sysJob.setCreateBy(user.getId());
+        sysJob.setCreateBy(AuthorizationUtil.getUserId());
         return jobService.insertJob(sysJob) > 0 ? DataResult.ok() : DataResult.fail();
     }
 
@@ -152,10 +146,9 @@ public class SysJobController {
     @GetMapping("/run/{id}")
     @SaveLog(logType = "操作日志", moduleName = "任务管理", description = "执行任务: ?1 ", expressions = {"#p1"}, actionType = "调用")
     public R<Object> run(@PathVariable("id") Long jobId) throws SchedulerException {
-        UserInfoVo user = AuthorizationUtil.getUser();
         LambdaQueryWrapper<SysJob> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(SysJob::getCreateBy, user.getId());
+        if (!AuthorizationUtil.isAdmin()) {
+            wrapper.eq(SysJob::getCreateBy, AuthorizationUtil.getUserId());
         }
         wrapper.eq(SysJob::getJobId, jobId);
         SysJob sysJob = jobService.getOne(wrapper);

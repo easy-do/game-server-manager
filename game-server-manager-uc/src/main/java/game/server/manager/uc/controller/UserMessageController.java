@@ -2,6 +2,7 @@ package game.server.manager.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.id.SaIdUtil;
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -10,7 +11,6 @@ import game.server.manager.common.dto.UserMessageDto;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
-import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.common.vo.UserMessageVo;
 import game.server.manager.uc.entity.UserMessage;
 import game.server.manager.uc.mapstruct.UserMessageMapstruct;
@@ -37,15 +37,11 @@ public class UserMessageController {
     @Autowired
     private UserMessageService userMessageService;
 
-    @Autowired
-    private AuthorizationUtil authorizationUtil;
-
     @SaCheckLogin
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo){
-        UserInfoVo user = AuthorizationUtil.getUser();
+    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
         LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(UserMessage::getUserId,user.getId());
+        wrapper.eq(UserMessage::getUserId, AuthorizationUtil.getUserId());
         wrapper.orderByDesc(UserMessage::getCreateTime);
         IPage<UserMessage> page = userMessageService.page(mpBaseQo.startPage(), wrapper);
         return MpResultUtil.buildPage(page, UserMessageVo.class);
@@ -53,59 +49,57 @@ public class UserMessageController {
 
     @SaCheckLogin
     @GetMapping("/count")
-    public R<Long> page(){
-        UserInfoVo user = AuthorizationUtil.getUser();
+    public R<Long> page() {
         LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(UserMessage::getUserId,user.getId());
-        wrapper.eq(UserMessage::getStatus,0);
+        wrapper.eq(UserMessage::getUserId, AuthorizationUtil.getUserId());
+        wrapper.eq(UserMessage::getStatus, 0);
         long count = userMessageService.count(wrapper);
         return DataResult.ok(count);
     }
 
     @SaCheckLogin
     @GetMapping("/readMessage/{id}")
-    public R<Long> readMessage(@PathVariable Long id){
-        UserInfoVo user = AuthorizationUtil.getUser();
-        Long userId = user.getId();
+    public R<Long> readMessage(@PathVariable Long id) {
+        Long userId = AuthorizationUtil.getUserId();
         LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(UserMessage::getUserId,userId);
-        wrapper.eq(UserMessage::getStatus,0);
-        wrapper.eq(UserMessage::getId,id);
+        wrapper.eq(UserMessage::getUserId, userId);
+        wrapper.eq(UserMessage::getStatus, 0);
+        wrapper.eq(UserMessage::getId, id);
         UserMessage entity = UserMessage.builder().build();
         entity.setStatus(1);
-        return userMessageService.update(entity,wrapper)?DataResult.ok():DataResult.fail();
+        return userMessageService.update(entity, wrapper) ? DataResult.ok() : DataResult.fail();
     }
 
     @SaCheckLogin
     @GetMapping("/readAllMessage")
-    public R<Long> readAllMessage(){
-        UserInfoVo user = AuthorizationUtil.getUser();
-        Long userId = user.getId();
+    public R<Long> readAllMessage() {
+        Long userId = AuthorizationUtil.getUserId();
         LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(UserMessage::getUserId,userId);
-        wrapper.eq(UserMessage::getStatus,0);
+        wrapper.eq(UserMessage::getUserId, userId);
+        wrapper.eq(UserMessage::getStatus, 0);
         UserMessage entity = UserMessage.builder().build();
         entity.setStatus(1);
-        return userMessageService.update(entity,wrapper)?DataResult.ok():DataResult.fail();
+        return userMessageService.update(entity, wrapper) ? DataResult.ok() : DataResult.fail();
     }
 
     @SaCheckLogin
     @GetMapping("/cleanAllMessage")
-    public R<Long> cleanAllMessage(){
-        UserInfoVo user = AuthorizationUtil.getUser();
-        Long userId = user.getId();
+    public R<Long> cleanAllMessage() {
+        Long userId = AuthorizationUtil.getUserId();
         LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(UserMessage::getUserId,userId);
-        return userMessageService.remove(wrapper)?DataResult.ok():DataResult.okMsg("没有任何消息。");
+        wrapper.eq(UserMessage::getUserId, userId);
+        return userMessageService.remove(wrapper) ? DataResult.ok() : DataResult.okMsg("没有任何消息。");
     }
 
     @SaCheckLogin
     @PostMapping("/insert")
-    public R<Long> insert(@RequestBody UserMessageDto userMessageDto){
-        // 校验 Id-Token 身份凭证
-        SaIdUtil.checkCurrentRequestToken();
+    public R<Long> insert(@RequestBody UserMessageDto userMessageDto) {
+        if (!StpUtil.isLogin()) {
+            // 不是用户请求的则校验 Id-Token 身份凭证
+            SaIdUtil.checkCurrentRequestToken();
+        }
         UserMessage userMessage = UserMessageMapstruct.INSTANCE.dtoToEntity(userMessageDto);
-        return userMessageService.save(userMessage)?DataResult.ok():DataResult.fail();
+        return userMessageService.save(userMessage) ? DataResult.ok() : DataResult.fail();
     }
 
 }

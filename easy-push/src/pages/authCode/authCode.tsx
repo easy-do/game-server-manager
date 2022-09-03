@@ -13,11 +13,12 @@ import {
 import { observer } from "mobx-react";
 import useStores from "../../utils/store";
 import { useEffect } from "react";
+import { RoleEnum } from "../../utils/systemConstant";
 
 const AuthCode = () => {
   const { OauthStore, AuthCodeStore } = useStores();
 
-  const { loginFlag, userInfo } = OauthStore;
+  const { loginFlag, userInfo, hasRole } = OauthStore;
 
   const {
     currentPage,
@@ -42,7 +43,7 @@ const AuthCode = () => {
   } = AuthCodeStore;
 
   useEffect(() => {
-    if (loginFlag && userInfo.isAdmin) {
+    if (loginFlag && hasRole(RoleEnum.SUPE_ADMIN)) {
       pageRequest();
     }
   }, []);
@@ -132,7 +133,7 @@ const AuthCode = () => {
   return (
     <>
       <Empty
-        style={{ display: !loginFlag || !userInfo.isAdmin ? "block" : "none" }}
+        style={{ display: !loginFlag || !hasRole(RoleEnum.SUPE_ADMIN) ? "block" : "none" }}
         image={<IllustrationNoContent style={{ width: 150, height: 150 }} />}
         darkModeImage={
           <IllustrationConstructionDark style={{ width: 150, height: 150 }} />
@@ -140,7 +141,7 @@ const AuthCode = () => {
         title={"未登录或无权限。"}
         description="未登录或无权限"
       />
-      {loginFlag && userInfo.isAdmin ? (
+      {loginFlag && hasRole(RoleEnum.SUPE_ADMIN) ? (
         <Table
           title={
             <ButtonGroup theme="borderless">

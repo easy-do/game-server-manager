@@ -628,10 +628,9 @@ INSERT INTO `sys_dict_data` VALUES (5, 3, 0, '整数', 'num', 'num', 'str', 0, 0
 INSERT INTO `sys_dict_data` VALUES (6, 3, 0, '字符', 'str', 'str', 'str', 0, 0, NULL, '2022-07-23 17:39:34', NULL, '2022-07-23 22:52:28', NULL);
 INSERT INTO `sys_dict_data` VALUES (7, 4, 0, '邮箱', 'admin_email', '123@123.com', 'str', 0, 0, NULL, '2022-07-23 23:01:07', NULL, '2022-07-23 23:01:13', NULL);
 INSERT INTO `sys_dict_data` VALUES (8, 5, 0, '代理证书', 'azClientCert', '/cert/mitmproxy-ca-cert.cer', 'str', 0, 0, NULL, '2022-07-30 18:02:44', NULL, '2022-07-30 18:02:44', '原神安卓代理证书');
-INSERT INTO `sys_dict_data` VALUES (9, 6, 0, '客户端镜像', 'client_images_name', ' game-server-manager-client:latest', 'str', 0, 0, NULL, '2022-08-04 23:21:38', NULL, '2022-08-04 23:21:38', NULL);
 INSERT INTO `sys_dict_data` VALUES (10, 6, 0, '客户端安装脚本', 'client_install_script', '50', 'str', 0, 0, NULL, '2022-08-05 12:45:41', NULL, '2022-08-05 14:35:20', NULL);
 INSERT INTO `sys_dict_data` VALUES (11, 6, 0, '客户端APPID', 'client_app_id', '41', 'str', 0, 0, NULL, '2022-08-05 14:23:57', NULL, '2022-08-05 14:23:57', NULL);
-INSERT INTO `sys_dict_data` VALUES (12, 6, 0, '客户端安装命令', 'client_install_cmd', 'wget -O client_install.sh https://manager.easydo.plus/client/installScript && sh client_install.sh', 'str', 0, 0, NULL, '2022-08-07 00:38:29', NULL, '2022-08-07 00:54:00', NULL);
+INSERT INTO `sys_dict_data` VALUES (12, 6, 0, '客户端安装命令', 'client_install_cmd', 'wget -O client_install.sh https://manager.easydo.plus/server/client/installScript && sh client_install.sh', 'str', 0, 0, NULL, '2022-08-07 00:38:29', NULL, '2022-08-07 00:54:00', NULL);
 INSERT INTO `sys_dict_data` VALUES (13, 6, 0, '客户端卸载脚本', 'client_uninstall_script', '70', 'str', 0, 0, NULL, '2022-08-10 21:42:17', NULL, '2022-08-10 21:42:17', NULL);
 INSERT INTO `sys_dict_data` VALUES (14, 6, 0, '部署次数', 'deploy_count', '5051', 'num', 0, 0, NULL, '2022-09-01 10:56:32', NULL, '2022-09-01 10:56:32', NULL);
 
@@ -920,7 +919,6 @@ CREATE TABLE `user_info`  (
   `authorization` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '授权信息',
   `points` int NULL DEFAULT 0 COMMENT '积分',
   `state` int NULL DEFAULT 0 COMMENT '状态',
-  `is_admin` int NULL DEFAULT 0 COMMENT '是否为管理员',
   `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
   `salt` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '盐',
   `login_ip` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录ip',
@@ -936,7 +934,7 @@ CREATE TABLE `user_info`  (
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES (1, '50243551', '123456789', 'GITEE', '隔壁老于', 'gebilaoyu@foxmail.com', 'https://gitee.com/assets/no_portrait.png', '{\"appCreationNum\":99,\"appNum\":99,\"description\":\"自己用\",\"expires\":\"2023-05-31 10:10:04\",\"genNum\":99,\"scriptCreationNum\":99,\"serverNum\":99,\"state\":3,\"id\":2}', 5237, 0, 1, '1231231231', '$2a123123', '123.123.123.123', '2022-09-03 01:40:55', '2022-05-23 11:47:27', '2022-09-03 01:40:55', NULL, 0);
+INSERT INTO user_info (`id`, `union_id`, `secret`, `platform`, `nick_name`, `email`, `avatar_url`, `authorization`, `points`, `state`, `password`, `salt`, `login_ip`, `last_login_time`, `create_time`, `update_time`, `update_by`, `del_flag`) VALUES (17, '5024355', '123', 'GITEE', '隔壁老于', 'gebilaoyu@foxmail.com', 'https://gitee.com/assets/no_portrait.png', '{\"appCreationNum\":99,\"appNum\":99,\"description\":\"自己用\",\"expires\":\"2023-05-31 10:10:04\",\"genNum\":99,\"scriptCreationNum\":99,\"serverNum\":99,\"state\":3,\"id\":2}', 5237, 0,'123', '123', '192.168.31.127 |0|0|0|内网IP|内网IP', '2022-09-03 19:15:07', '2022-05-23 11:47:27', '2022-09-03 19:15:07', NULL, 0);
 
 -- ----------------------------
 -- Table structure for user_message

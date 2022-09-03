@@ -62,10 +62,9 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, ServerInf
 
     @Override
     public List<ServerInfoVo> voList() {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ServerInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ServerInfo::getUserId,getUserId());
         }
         listSelect(wrapper);
         return ServerInfoMapstruct.INSTANCE.entityListToVoList(list(wrapper));
@@ -73,10 +72,9 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, ServerInf
 
     @Override
     public IPage<ServerInfoVo> page(MpBaseQo mpBaseQo) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(ServerInfo::getUserId, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(ServerInfo::getUserId, getUserId());
         }
         wrapper.orderByDesc(ServerInfo::getCreateTime);
         pageSelect(wrapper);
@@ -85,10 +83,9 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, ServerInf
 
     @Override
     public ServerInfoVo info(Serializable id) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ServerInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ServerInfo::getUserId,getUserId());
         }
         wrapper.eq(ServerInfo::getId,id);
         return ServerInfoMapstruct.INSTANCE.entityToVo(getOne(wrapper));
@@ -98,9 +95,8 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, ServerInf
     public boolean add(ServerInfoDto serverInfoDto) {
         //校验授权信息
         checkAuthorization("serverAdd");
-        UserInfoVo user = getUser();
         ServerInfo entity = ServerInfoMapstruct.INSTANCE.dtoToEntity(serverInfoDto);
-        entity.setUserId(user.getId());
+        entity.setUserId(getUserId());
         return save(entity);
     }
 
@@ -108,11 +104,10 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, ServerInf
     public boolean edit(ServerInfoDto serverInfoDto) {
         //校验授权信息
         checkAuthorization("serverEdit");
-        UserInfoVo user = getUser();
         ServerInfo entity = ServerInfoMapstruct.INSTANCE.dtoToEntity(serverInfoDto);
         LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ServerInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ServerInfo::getUserId,getUserId());
         }
         wrapper.eq(ServerInfo::getId,entity.getId());
         return update(entity,wrapper);
@@ -122,14 +117,13 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, ServerInf
     public boolean delete(Serializable id) {
         //校验授权信息
         checkAuthorization("serverDel");
-        UserInfoVo user = getUser();
         long count = applicationInfoService.countByServerId(String.valueOf(id));
         if(count >= 1){
             DataResult.fail("拒绝删除,已绑定应用");
         }
         LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ServerInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ServerInfo::getUserId, getUserId());
         }
         wrapper.eq(ServerInfo::getId,id);
         return remove(wrapper);
