@@ -9,7 +9,7 @@ spring:
 #      uri: mongodb://${MONGO_DB}/grasscutter
 
 
-manager-url: ${MANAGER_URL:https://manager.easydo.plus}
+manager-url: ${MANAGER_URL:https://manager.easydo.plus/server}
 application-id: ${APPLICATION_ID}
 app-id: ${APP_ID}
 app-version: ${APP_VERSION}
