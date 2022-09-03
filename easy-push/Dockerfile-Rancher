@@ -1,4 +1,4 @@
-FROM bitnami/nginx:1.20.2
+FROM registry.cn-hangzhou.aliyuncs.com/gebilaoyu/bitnami:nginx-1.20.2
 MAINTAINER gebilaoyu
 
 ENV MANAGER_ADDRESS=http://game-server-manager-server:8888
