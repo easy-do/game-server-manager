@@ -18,7 +18,6 @@ import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import game.server.manager.server.service.FileStoreService;
-import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,12 +83,11 @@ public class FileStoreController {
         if(Objects.isNull(file)){
             return DataResult.fail("未获取到文件");
         }
-        UserInfoVo user = AuthorizationUtil.getUser();
         int maxFileNameLength = 32;
         int maxFileSize = 2048 * 1024;
         long fileSize = file.getSize();
         //校验文件大小
-        if(!user.isAdmin() && fileSize > maxFileSize){
+        if(!AuthorizationUtil.isAdmin() && fileSize > maxFileSize){
             throw new BizException("文件大小不得超过"+(maxFileSize/1024)+"kb。");
         }
         //根据md5查找是否存在相同文件，存在则直接返回已有的文件

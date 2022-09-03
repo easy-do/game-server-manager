@@ -25,7 +25,7 @@ class UserManagerStore {
     order: [
       { column: 'createTime', asc: false }
     ],
-    columns: ['id','nickName', 'platform', 'state', 'isAdmin', 'authorization', 'loginIp', 'lastLoginTime', 'createTime'],
+    columns: ['id','nickName', 'platform', 'state', 'authorization', 'loginIp', 'lastLoginTime', 'createTime'],
     params: {}
   }
 
@@ -437,7 +437,7 @@ class UserManagerStore {
     let pageParam = {
       currentPage: 1,
       pageSize: 20,
-      columns: ['id','nickName','isAdmin','platform'],
+      columns: ['id','nickName','platform'],
       params: {}
     }
     if(input !== undefined && input !== ''){

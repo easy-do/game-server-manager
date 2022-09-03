@@ -94,10 +94,10 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
 
     @Override
     public List<ClientInfoVo> voList() {
-        UserInfoVo user = getUser();
+        
         LambdaQueryWrapper<ClientInfo> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(ClientInfo::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(ClientInfo::getCreateBy, getUserId());
             wrapper.eq(ClientInfo::getStatus, AppStatusEnum.DEPLOYMENT_SUCCESS.getDesc());
         }
         wrapper.orderByDesc(ClientInfo::getCreateTime);
@@ -107,10 +107,10 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
 
     @Override
     public IPage<ClientInfoVo> page(MpBaseQo mpBaseQo) {
-        UserInfoVo user = getUser();
+        
         LambdaQueryWrapper<ClientInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ClientInfo::getCreateBy,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ClientInfo::getCreateBy,getUserId());
         }
         wrapper.orderByDesc(ClientInfo::getCreateTime);
         pageSelect(wrapper);
@@ -119,10 +119,10 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
 
     @Override
     public ClientInfoVo info(Serializable id) {
-        UserInfoVo user = getUser();
+        
         LambdaQueryWrapper<ClientInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ClientInfo::getCreateBy,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ClientInfo::getCreateBy,getUserId());
         }
         wrapper.eq(ClientInfo::getId,id);
         return ClientInfoMapstruct.INSTANCE.entityToVo(baseMapper.selectOne(wrapper));
@@ -138,9 +138,9 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
             }
             entity.setServerName(serverInfo.getServerName());
         }
-        UserInfoVo user = getUser();
-        entity.setCreateBy(user.getId());
-        entity.setUserName(user.getNickName());
+        
+        entity.setCreateBy(getUserId());
+        entity.setUserName(getUser().getNickName());
         String clientId = DateUtil.format(LocalDateTime.now(), DatePattern.PURE_DATETIME_PATTERN) + "-" + UUID.randomUUID().toString(false);
         entity.setId(clientId);
         RSA rsa = new RSA();
@@ -172,7 +172,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
             executeLogService.removeByApplicationId(id);
             return true;
         }
-        UserInfoVo user = getUser();
+        
         String unInstallScriptId = getUnInstallScriptId();
         //创建执行记录
         ExecuteLog executeLog = ExecuteLog.builder()
@@ -180,7 +180,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
                 .applicationName(clientInfo.getClientName())
                 .createTime(LocalDateTime.now())
                 .executeState(AppStatusEnum.QUEUE.getDesc())
-                .createBy(user.getId())
+                .createBy(getUserId())
                 .build();
         executeLogService.save(executeLog);
         //生成客户端消息
@@ -189,7 +189,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
         DeployParam deployParam = DeployParam.builder()
                 .applicationId((String) id)
                 .appScriptId(unInstallScriptId)
-                .userId(String.valueOf(user.getId()))
+                .userId(String.valueOf(getUserId()))
                 .env(env)
                 .isClient(true)
                 .uninstall(true)
@@ -198,8 +198,8 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
         ClientMessage messageEntity = ClientMessage.builder()
                 .clientId((String) id)
                 .message(JSON.toJSONString(deployParam))
-                .createBy(user.getId())
-                .updateBy(user.getId())
+                .createBy(getUserId())
+                .updateBy(getUserId())
                 .messageType(ClientMessageTypeEnum.UNINSTALL.getCode())
                 .build();
         return clientMessageService.save(messageEntity);
@@ -218,13 +218,13 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
         if(!serverInfoService.exists(serverId)){
             throw new BizException("服务器已不存在.");
         }
-        UserInfoVo user = getUser();
+        
         JSONObject env = new JSONObject();
         env.put("CLIENT_ID",id);
         DeployParam deployParam = DeployParam.builder()
                 .applicationId(id)
                 .appScriptId(getInstallScriptId())
-                .userId(String.valueOf(user.getId()))
+                .userId(String.valueOf(getUserId()))
                 .env(env)
                 .isClient(true)
                 .build();
@@ -234,7 +234,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
                 .applicationName(clientInfo.getClientName())
                 .createTime(LocalDateTime.now())
                 .executeState(AppStatusEnum.QUEUE.getDesc())
-                .createBy(user.getId())
+                .createBy(getUserId())
                 .build();
         executeLogService.save(entity);
         //发布订阅消息

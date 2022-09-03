@@ -95,10 +95,9 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
 
     @Override
     public CommentDetailsVo info(Serializable id) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<CommentDetails> wrapper = getWrapper();
-        if (!user.isAdmin()) {
-            wrapper.eq(CommentDetails::getUserId, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(CommentDetails::getUserId, getUserId());
         }
         wrapper.eq(CommentDetails::getId, id);
         return CommentDetailsMapstruct.INSTANCE.entityToVo(baseMapper.selectOne(wrapper));
@@ -107,8 +106,8 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
     @Override
     public boolean add(CommentDetailsDto commentDetailsDto) {
         boolean result;
-        UserInfoVo user = getUser();
-        checkCommentCount(user.getId());
+        Long userId = getUserId();
+        checkCommentCount(userId);
         CommentDetails entity = CommentDetailsMapstruct.INSTANCE.dtoToEntity(commentDetailsDto);
         Long commentId = commentDetailsDto.getCommentId();
         Long businessId = entity.getBusinessId();
@@ -116,8 +115,8 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
         if (Objects.isNull(discussion)) {
             throw new BizException("主题不存在");
         }
-        entity.setUserId(user.getId());
-        entity.setUserName(user.getNickName());
+        entity.setUserId(userId);
+        entity.setUserName(getUser().getNickName());
         entity.setCreateTime(LocalDateTime.now());
         if (commentId != 0) {
             //回复的是评论
@@ -128,14 +127,14 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
             //获取被回复的用户信息
             Long toUserId = toCommentDetails.getUserId();
             //不允许回复自己的评论
-            if (toUserId.equals(user.getId())) {
+            if (toUserId.equals(userId)) {
                 throw new BizException("不能回复自己的评论");
             }
             UserInfoVo toUser = userInfoService.getUserInfo(toUserId).getData();
             if (Objects.isNull(toUser)) {
                 throw new BizException("用户已不存在");
             }
-            entity.setToUserId(toUser.getId());
+            entity.setToUserId(toUserId);
             entity.setToUserName(toUser.getNickName());
 
         } else {
@@ -150,12 +149,12 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
         }
         result = save(entity);
         //只要需要接收通知的人不是自己，那么就发送通知
-        if (result && !entity.getToUserId().equals(user.getId())){
+        if (result && !entity.getToUserId().equals(userId)){
             //发送收到回复通知
             basePublishEventServer.publishCommentEvent(entity.getToUserId(),entity.getToUserName(),discussion.getTitle());
         }
         if(result){
-            cacheCommentCount(user.getId());
+            cacheCommentCount(getUserId());
         }
         return result;
     }
@@ -178,10 +177,10 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
 
     @Override
     public boolean delete(Serializable id) {
-        UserInfoVo user = getUser();
+        
         LambdaQueryWrapper<CommentDetails> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(CommentDetails::getUserId, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(CommentDetails::getUserId, getUserId());
         }
         wrapper.eq(CommentDetails::getId, id);
         return remove(wrapper);
@@ -189,10 +188,10 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
 
     @Override
     public IPage<CommentDetailsVo> managerPage(MpBaseQo mpBaseQo) {
-        UserInfoVo user = getUser();
+        
         LambdaQueryWrapper<CommentDetails> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(CommentDetails::getUserId, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(CommentDetails::getUserId, getUserId());
         }
         wrapper.orderByDesc(CommentDetails::getCreateTime);
         return baseMapper.selectPage(mpBaseQo.startPage(), wrapper).convert(CommentDetailsMapstruct.INSTANCE::entityToVo);

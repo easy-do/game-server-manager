@@ -12,10 +12,8 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import game.server.manager.auth.AuthStateRedisCache;
 import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.common.utils.IpRegionSearchUtil;
-import game.server.manager.common.vo.UserInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -53,9 +51,6 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Component
 public class LogAop {
-
-
-    private static final String CHECK_PARAMETER_NAME = "token";
 
     /**
      * 审计日志固定logger内容
@@ -184,40 +179,21 @@ public class LogAop {
     }
 
     private String getUserId() {
-        if (RequestContextHolder.getRequestAttributes() == null) {
-            return null;
-        }
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String token = request.getHeader(CHECK_PARAMETER_NAME);
-        if(CharSequenceUtil.isNotBlank(token)){
-            try {
-                if(StpUtil.isLogin()){
-                    UserInfoVo user = AuthorizationUtil.getUser();
-                    return String.valueOf(user.getId());
-                }
-            }catch (Exception e){
-                return null;
-            }
+        if(StpUtil.isLogin()){
+            return StpUtil.getLoginIdAsString();
         }
         return null;
     }
 
 
     private String getUserName() {
-        if (RequestContextHolder.getRequestAttributes() == null) {
-            return null;
-        }
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String token = request.getHeader(CHECK_PARAMETER_NAME);
-        if(CharSequenceUtil.isNotBlank(token)){
+        if(StpUtil.isLogin()){
             try {
-                if(StpUtil.isLogin()){
-                    UserInfoVo user = AuthorizationUtil.getUser();
-                    return user.getNickName();
-                }
+                AuthorizationUtil.getUser().getNickName();
             }catch (Exception e){
                 return null;
             }
+
         }
         return null;
     }

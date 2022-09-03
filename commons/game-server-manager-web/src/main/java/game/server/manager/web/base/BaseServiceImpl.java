@@ -27,10 +27,17 @@ public abstract class BaseServiceImpl<Entity,VO,DTO,MAPPER extends BaseMapper<En
 
 
 
-    protected UserInfoVo getUser(){
+    protected static UserInfoVo getUser(){
         return AuthorizationUtil.getUser();
     }
 
+    protected static boolean isAdmin(){
+        return AuthorizationUtil.isAdmin();
+    }
+
+    protected static long getUserId(){
+        return AuthorizationUtil.getUserId();
+    }
 
     protected void checkAuthorization(String authType){
         authorizationUtil.checkAuthorization(authType);

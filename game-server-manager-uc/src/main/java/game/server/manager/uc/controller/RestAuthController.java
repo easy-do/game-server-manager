@@ -122,9 +122,8 @@ public class RestAuthController {
     @SaCheckLogin
     @GetMapping("/getUserInfo")
     public R<UserInfoVo> getUserInfo() {
-        UserInfoVo user = AuthorizationUtil.getUser();
-        if (Objects.nonNull(user)) {
-            return DataResult.ok(user);
+        if (Objects.nonNull(AuthorizationUtil.getUser())) {
+            return DataResult.ok(AuthorizationUtil.getUser());
         } else {
             return DataResult.fail(HttpStatus.FORBIDDEN, "登录过期");
         }
@@ -143,8 +142,7 @@ public class RestAuthController {
     @SaveLog(logType = "授权日志", moduleName = "授权服务", description = "绑定邮箱：?1", expressions = {"#p2"}, actionType = "绑定邮箱")
     @GetMapping("/bindingEmail")
     public R<Object> bindingEmail(@RequestParam("email") String email, @RequestParam("code") String code) {
-        UserInfoVo user = AuthorizationUtil.getUser();
-        boolean result = userInfoService.bindingEmail(user.getId(), email, code);
+        boolean result = userInfoService.bindingEmail(AuthorizationUtil.getUserId(), email, code);
         return result ? DataResult.ok() : DataResult.fail();
     }
 
@@ -160,8 +158,7 @@ public class RestAuthController {
     @SaveLog(logType = "授权日志", moduleName = "授权服务", description = "授权码：?1", expressions = {"#p1"}, actionType = "使用授权码")
     @GetMapping("/authorization/{authorizationCode}")
     public R<Object> authorization(@PathVariable("authorizationCode") String authorizationCode) {
-        UserInfoVo user = AuthorizationUtil.getUser();
-        boolean result = userInfoService.authorization(user, authorizationCode);
+        boolean result = userInfoService.authorization(AuthorizationUtil.getUser(), authorizationCode);
         return result ? DataResult.ok() : DataResult.fail("授权失败");
 
     }

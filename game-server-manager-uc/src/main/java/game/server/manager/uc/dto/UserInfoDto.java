@@ -110,13 +110,4 @@ public class UserInfoDto implements Serializable {
      */
     private Integer delFlag;
 
-    /**
-     * 是否为管理员
-     */
-    private Integer isAdmin;
-
-    public Boolean isAdmin(){
-        return this.isAdmin == 1;
-    }
-
 }

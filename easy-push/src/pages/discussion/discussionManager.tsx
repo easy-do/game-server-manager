@@ -9,13 +9,14 @@ import {
 import DiscussionDtails from "./discussionDtails";
 import MarkdownEditor from "../markdownEditor/markdownEditor";
 import AuditPage from "../auditManager/auditPage";
+import { RoleEnum } from "../../utils/systemConstant";
 
 
 const Discussion = () => {
 
   const { Text } = Typography;
   const { OauthStore, DiscussionStore,AuditStore } = useStores();
-  const { loginFlag, userInfo } = OauthStore;
+  const { loginFlag, hasRole } = OauthStore;
 
   const { commitAuditRequest } = AuditStore;
 
@@ -99,9 +100,9 @@ const Discussion = () => {
           <ButtonGroup theme="borderless">
             <Button type='primary' onClick={()=>showInfoButton(record.id)}>详情</Button>
             {/* <Button>编辑</Button> */}
-            {userInfo.isAdmin ? <Button type='danger' onClick={()=> onClickDeleteButton(record.id)}>删除</Button> : null}
+            <Button hidden={!hasRole(RoleEnum.SUPE_ADMIN)} type='danger' onClick={()=> onClickDeleteButton(record.id)}>删除</Button>
             <Button disabled={(record.status === 1 || record.status === 2  || record.status === 4)} onClick={()=>commitAuditRequest(record.id,1,managerPage)}>提交审核</Button>
-            { userInfo.isAdmin ? <Button onClick={()=>auditButton(record.id)}>审核</Button> : null}
+            <Button hidden={!hasRole(RoleEnum.SUPE_ADMIN)} onClick={()=>auditButton(record.id)}>审核</Button>
           </ButtonGroup>
         );
       },

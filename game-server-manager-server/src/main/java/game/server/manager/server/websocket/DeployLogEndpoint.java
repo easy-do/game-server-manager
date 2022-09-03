@@ -117,11 +117,11 @@ public class DeployLogEndpoint {
 
         StpLogicJwtForSimple stpLogic = (StpLogicJwtForSimple) StpUtil.stpLogic;
         cn.hutool.json.JSONObject payloads = SaJwtUtil.getPayloadsNotCheck((String) token, stpLogic.loginType, stpLogic.jwtSecretKey());
-        cn.hutool.json.JSONObject info = payloads.getJSONObject("info");
-        int isAdmin = info.getInt("isAdmin");
+        cn.hutool.json.JSONObject info = payloads.getJSONObject(SystemConstant.TOKEN_USER_INFO);
+        boolean isAdmin = info.getJSONArray(SystemConstant.TOKEN_USER_PERMISSIONS).contains(SystemConstant.SUPER_ADMIN_ROLE);
         Long userId = info.getLong("id");
 
-        if (isAdmin == 0) {
+        if (!isAdmin) {
             Object applicationId = messageObject.get("applicationId");
             if (Objects.isNull(applicationId)) {
                 sendMessage(JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用信息不存在,断开连接")).build()));

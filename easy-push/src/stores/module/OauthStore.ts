@@ -328,6 +328,32 @@ class OauthStore {
 
   }
 
+  hasRole = (role:string) =>{
+    return this.userInfo.roles.includes(role);
+  }
+
+  hasPermission = (permission:string) =>{
+    return this.userInfo.ermissions.includes(permission);
+  }
+
+  hasRoleOr = (roles:string[]) =>{
+    for(let role of roles){
+      if(this.userInfo.roles.includes(role)){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  hasPermissionOr = (permissions:string[]) =>{
+    for(let permission of permissions){
+      if(this.userInfo.ermissions.includes(permission)){
+        return true;
+      }
+    }
+    return false;
+  }
+
 
 }
 

@@ -64,9 +64,8 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
 
     @Override
     public List<AppScriptVo> listByAppid(Long appId) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppScript> queryWrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
+        if (!isAdmin()) {
             queryWrapper.eq(AppScript::getAdaptationAppId, appId);
             //或者是未绑定应用并且公开的
             queryWrapper.or(wrapper -> wrapper.eq(AppScript::getAdaptationAppId, "no").eq(AppScript::getScriptScope, ScopeEnum.PUBLIC));
@@ -88,11 +87,10 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
 
     @Override
     public List<AppScriptVo> voList() {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppScript> queryWrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
+        if (!isAdmin()) {
             //本人创建的私有脚本
-            queryWrapper.and(wrapper -> wrapper.eq(AppScript::getCreateBy, user.getId()).eq(AppScript::getScriptScope, ScopeEnum.PRIVATE));
+            queryWrapper.and(wrapper -> wrapper.eq(AppScript::getCreateBy, getUserId()).eq(AppScript::getScriptScope, ScopeEnum.PRIVATE));
             //或者是未绑定应用并且公开的
             queryWrapper.or(wrapper -> wrapper.eq(AppScript::getAdaptationAppId, "no").eq(AppScript::getScriptScope, ScopeEnum.PUBLIC));
         }
@@ -103,10 +101,9 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
 
     @Override
     public IPage<AppScriptVo> page(MpBaseQo mpBaseQo) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppScript> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppScript::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppScript::getCreateBy, getUserId());
         }
         wrapper.orderByDesc(AppScript::getCreateTime);
         pageSelect(wrapper);
@@ -115,10 +112,9 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
 
     @Override
     public AppScriptVo info(Serializable id) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppScript> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppScript::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppScript::getCreateBy, getUserId());
         }
         wrapper.eq(AppScript::getId, id);
         AppScriptVo appScriptVo = AppScriptMapstruct.INSTANCE.entityToVo(baseMapper.selectOne(wrapper));
@@ -131,10 +127,9 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
     public boolean add(AppScriptDto appScriptDto) {
         //校验授权信息
         checkAuthorization("appScriptAdd");
-        UserInfoVo user = getUser();
         AppScript entity = AppScriptMapstruct.INSTANCE.dtoToEntity(appScriptDto);
-        entity.setCreateBy(user.getId());
-        entity.setAuthor(user.getNickName());
+        entity.setCreateBy(getUserId());
+        entity.setAuthor(getUser().getNickName());
         boolean result = save(entity);
         if (result) {
             List<AppEnvInfoDto> envList = appScriptDto.getScriptEnv();
@@ -153,12 +148,11 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
     public boolean edit(AppScriptDto appScriptDto) {
         //校验授权信息
         checkAuthorization("appScriptEdit");
-        UserInfoVo user = getUser();
         AppScript entity = AppScriptMapstruct.INSTANCE.dtoToEntity(appScriptDto);
-        entity.setUpdateBy(user.getId());
+        entity.setUpdateBy(getUserId());
         LambdaQueryWrapper<AppScript> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppScript::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppScript::getCreateBy, getUserId());
         }
         wrapper.eq(AppScript::getId, entity.getId());
         boolean result = update(entity, wrapper);
@@ -190,10 +184,9 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
     public boolean delete(Serializable id) {
         //校验授权信息
         checkAuthorization("appScriptDel");
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<AppScript> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(AppScript::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(AppScript::getCreateBy, getUserId());
         }
         wrapper.eq(AppScript::getId, id);
         boolean result = remove(wrapper);

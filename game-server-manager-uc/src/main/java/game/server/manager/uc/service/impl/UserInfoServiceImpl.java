@@ -103,7 +103,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             nickname = "用户" + DateUtil.format(LocalDateTime.now(), DatePattern.PURE_DATETIME_MS_PATTERN);
         }
         UserInfo userInfo = UserInfo.builder().unionId(unionId).nickName(nickname).avatarUrl(avatar).platform(source).secret(UUID.fastUUID().toString(true))
-                .isAdmin(0).state(0).createTime(LocalDateTime.now()).updateTime(LocalDateTime.now()).build();
+                .state(0).createTime(LocalDateTime.now()).updateTime(LocalDateTime.now()).build();
         if (save(userInfo)) {
             //关联默认角色
             sysRoleService.bindingDefaultRole(userInfo.getId());

@@ -14,17 +14,9 @@ public class SystemConstant {
 
     public static final String PREFIX = "easy_push_oauth:";
 
-    public static final String AUTH_USER = "auth_user:";
-
-    public static final String SECRET_TOKEN = "secret_token:";
+    public static final String SUPER_ADMIN_ROLE = "super_admin";
 
     public static final String USER_INFO = "user_info:";
-
-    public static final String PUBLIC_KEY = "publicKey";
-
-    public static final String PRIVATE_KEY = "privateKey";
-
-    public static final String JWT_KEY = "jwtKey";
 
     public static final String JUST_AUTH = "just_auth:";
 
@@ -41,6 +33,12 @@ public class SystemConstant {
     public static final String MAIL_CODE = "mail_code:";
 
     public static final String USER_COMMENT = "user_comment:";
+
+    public static final String TOKEN_USER_INFO = "userInfo";
+
+    public static final String TOKEN_USER_ROLES = "roles";
+
+    public static final String TOKEN_USER_PERMISSIONS = "permissions";
 
     private SystemConstant() {
     }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,27 +42,5 @@ public class AuthStateRedisCache implements AuthStateCache {
     @Override
     public boolean containsKey(String key) {
         return redisUtils.hasKey(SystemConstant.PREFIX + SystemConstant.JUST_AUTH + key);
-    }
-
-    public void cacheUserRoleList(Object userId, List<String> roles) {
-        redisUtils.set(SystemConstant.PREFIX + SystemConstant.USER_ROLES + userId,roles);
-    }
-
-    public Object getUserRoleList(Object userId) {
-        return redisUtils.get(SystemConstant.PREFIX + SystemConstant.USER_ROLES + userId);
-    }
-
-
-    public void cacheUserPermissions(Object userId, List<String> permissions) {
-        redisUtils.set(SystemConstant.PREFIX + SystemConstant.USER_PERMISSION + userId,permissions);
-    }
-
-    public Object getUserPermissions(Object userId) {
-        return redisUtils.get(SystemConstant.PREFIX + SystemConstant.USER_PERMISSION + userId);
-    }
-
-    public void cleanUserRoleAndPermission(Object userId) {
-        redisUtils.delete(SystemConstant.PREFIX + SystemConstant.USER_ROLES + userId);
-        redisUtils.delete(SystemConstant.PREFIX + SystemConstant.USER_PERMISSION + userId);
     }
 }

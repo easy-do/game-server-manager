@@ -1,12 +1,10 @@
 package game.server.manager.auth;
 
 import cn.dev33.satoken.stp.StpInterface;
-import org.springframework.beans.factory.annotation.Autowired;
+import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author yuzhanfeng
@@ -15,21 +13,14 @@ import java.util.Objects;
  */
 @Component
 public class StpInterfaceImpl implements StpInterface {
-    @Autowired
-    private AuthStateRedisCache authStateRedisCache;
-
-    //TODO 缓存用户权限和角色集合
 
     /**
      * 返回一个账号所拥有的权限码集合
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        Object list = authStateRedisCache.getUserPermissions(loginId);
-        if(Objects.isNull(list)){
-            return Collections.emptyList();
-        }
-        return (List<String>) list;
+        UserInfoVo user = AuthorizationUtil.getUser();
+        return user.getPermissions();
     }
 
     /**
@@ -37,11 +28,8 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        Object list = authStateRedisCache.getUserRoleList(loginId);
-        if(Objects.isNull(list)){
-            return Collections.emptyList();
-        }
-        return (List<String>) list;
+        UserInfoVo user = AuthorizationUtil.getUser();
+        return user.getRoles();
     }
 
 }

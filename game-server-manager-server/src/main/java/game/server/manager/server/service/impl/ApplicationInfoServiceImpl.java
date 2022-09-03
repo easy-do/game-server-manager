@@ -103,8 +103,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
     public boolean deployment(DeployParam deployParam) {
         //校验授权信息
         checkAuthorization("deploy");
-        UserInfoVo user = getUser();
-        deployParam.setUserId(String.valueOf(user.getId()));
+        deployParam.setUserId(String.valueOf(getUserId()));
         String appId = deployParam.getApplicationId();
         ApplicationInfo application = baseMapper.selectById(appId);
         ServerInfo serverInfo = null;
@@ -162,8 +161,8 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
                 ClientMessage messageEntity = ClientMessage.builder()
                         .clientId(application.getDeviceId())
                         .message(JSON.toJSONString(deployParam))
-                        .createBy(user.getId())
-                        .updateBy(user.getId())
+                        .createBy(getUserId())
+                        .updateBy(getUserId())
                         .messageType(ClientMessageTypeEnum.SCRIPT.getCode())
                         .build();
                 return clientMessageService.save(messageEntity);
@@ -200,10 +199,9 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
 
     @Override
     public List<ApplicationInfoVo> voList() {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<ApplicationInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ApplicationInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ApplicationInfo::getUserId,getUserId());
         }
         wrapper.orderByDesc(ApplicationInfo::getLastUpTime);
         listSelect(wrapper);
@@ -212,10 +210,9 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
 
     @Override
     public IPage<ApplicationInfoVo> page(MpBaseQo mpBaseQo) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<ApplicationInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ApplicationInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ApplicationInfo::getUserId,getUserId());
         }
         wrapper.orderByDesc(ApplicationInfo::getLastUpTime);
         pageSelect(wrapper);
@@ -224,10 +221,9 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
 
     @Override
     public ApplicationInfoVo info(Serializable id) {
-        UserInfoVo user = getUser();
         LambdaQueryWrapper<ApplicationInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ApplicationInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ApplicationInfo::getUserId,getUserId());
         }
         wrapper.eq(ApplicationInfo::getApplicationId,id);
         return ApplicationInfoMapstruct.INSTANCE.entityToVo(baseMapper.selectOne(wrapper));
@@ -259,8 +255,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
             entity.setDeviceName(client.getClientName());
         }
         String applicationId = DateUtil.format(LocalDateTime.now(), DatePattern.PURE_DATETIME_PATTERN) + "-" + UUID.randomUUID().toString(false);
-        UserInfoVo user = getUser();
-        entity.setUserId(user.getId());
+        entity.setUserId(getUserId());
         RSA rsa = new RSA();
         String privateKey = rsa.getPrivateKeyBase64();
         String publicKey = rsa.getPublicKeyBase64();
@@ -273,12 +268,11 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
 
     @Override
     public boolean edit(ApplicationInfoDto applicationInfoDto) {
-        UserInfoVo user = getUser();
         //校验授权信息
         checkAuthorization("applicationEdit");
         LambdaQueryWrapper<ApplicationInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ApplicationInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ApplicationInfo::getUserId,getUserId());
         }
         wrapper.eq(ApplicationInfo::getApplicationId,applicationInfoDto.getApplicationId());
         ApplicationInfo app = getOne(wrapper);
@@ -296,12 +290,11 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
 
     @Override
     public boolean delete(Serializable id) {
-        UserInfoVo user = getUser();
         //校验授权信息
         checkAuthorization("applicationDel");
         LambdaQueryWrapper<ApplicationInfo> wrapper = Wrappers.lambdaQuery();
-        if(!user.isAdmin()){
-            wrapper.eq(ApplicationInfo::getUserId,user.getId());
+        if(!isAdmin()){
+            wrapper.eq(ApplicationInfo::getUserId,getUserId());
         }
         wrapper.eq(ApplicationInfo::getApplicationId,id);
         ApplicationInfo app = baseMapper.selectOne(wrapper);

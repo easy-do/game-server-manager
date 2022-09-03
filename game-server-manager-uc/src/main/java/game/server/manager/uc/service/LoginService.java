@@ -1,13 +1,12 @@
 package game.server.manager.uc.service;
 
-import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import game.server.manager.auth.AuthStateRedisCache;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.enums.LoginTypeEnums;
 import game.server.manager.common.utils.IpRegionSearchUtil;
 import game.server.manager.common.vo.SysRoleVo;
@@ -45,9 +44,6 @@ public class LoginService {
 
     @Autowired
     private EmailService emailService;
-
-    @Autowired
-    private AuthStateRedisCache authStateRedisCache;
 
     /**
      * 登录
@@ -88,8 +84,8 @@ public class LoginService {
         }
         setUserLastLoginDetails(user);
         UserInfoVo userInfoVo = UserInfoMapstruct.INSTANCE.entityToVo(user);
-        StpUtil.login(user.getId(), SaLoginConfig.setExtra("info", userInfoVo));
-        cacheUserRoleAndPermission(user.getId());
+        buildUserRoleAndPermission(userInfoVo);
+        StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, userInfoVo));
         userInfoVo.setToken(StpUtil.getTokenValue());
         return userInfoVo;
     }
@@ -122,8 +118,8 @@ public class LoginService {
         if(BCrypt.checkpw(password,dbPassword)){
             setUserLastLoginDetails(user);
             UserInfoVo userInfoVo = UserInfoMapstruct.INSTANCE.entityToVo(user);
-            StpUtil.login(user.getId(), SaLoginConfig.setExtra("info", userInfoVo));
-            cacheUserRoleAndPermission(user.getId());
+            buildUserRoleAndPermission(userInfoVo);
+            StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, userInfoVo));
             userInfoVo.setToken(StpUtil.getTokenValue());
             return userInfoVo;
         }
@@ -151,8 +147,8 @@ public class LoginService {
             }
             setUserLastLoginDetails(user);
             UserInfoVo userInfoVo = UserInfoMapstruct.INSTANCE.entityToVo(user);
-            StpUtil.login(user.getId(), SaLoginConfig.setExtra("info", userInfoVo));
-            cacheUserRoleAndPermission(user.getId());
+            buildUserRoleAndPermission(userInfoVo);
+            StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, userInfoVo));
             userInfoVo.setToken(StpUtil.getTokenValue());
             return userInfoVo;
         }else {
@@ -171,8 +167,8 @@ public class LoginService {
     public String platformLogin(AuthUser authUser) {
         UserInfoVo user = userInfoService.getOrCreateUserInfo(authUser);
         setUserLastLoginDetails(user);
+        buildUserRoleAndPermission(user);
         StpUtil.login(user.getId(), SaLoginConfig.setExtra("info", user));
-        cacheUserRoleAndPermission(user.getId());
         return StpUtil.getTokenValue();
     }
 
@@ -205,16 +201,16 @@ public class LoginService {
         return userInfo;
     }
 
-    private void cacheUserRoleAndPermission(Long id) {
-        List<String> roleList = sysRoleService.selectRolesByUserId(id).stream().map(SysRoleVo::getRoleKey).toList();
-        authStateRedisCache.cacheUserRoleList(id,roleList);
-        List<String> permissionList = sysMenuService.userPermissionList(id);
-        authStateRedisCache.cacheUserPermissions(id,permissionList);
+    private void buildUserRoleAndPermission(UserInfoVo userInfoVo) {
+        Long userId = userInfoVo.getId();
+        List<String> roleList = sysRoleService.selectRolesByUserId(userId).stream().map(SysRoleVo::getRoleKey).toList();
+        List<String> permissionList = sysMenuService.userPermissionList(userId);
+        userInfoVo.setRoles(roleList);
+        userInfoVo.setPermissions(permissionList);
     }
 
     public void logout() {
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         StpUtil.logout(tokenInfo.loginId);
-        authStateRedisCache.cleanUserRoleAndPermission(tokenInfo.loginId);
     }
 }

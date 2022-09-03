@@ -72,26 +72,26 @@ public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, Discussio
 
     @Override
     public boolean add(DiscussionDto discussionDto) {
-        UserInfoVo user = getUser();
+        
         Discussion entity = DiscussionMapstruct.INSTANCE.dtoToEntity(discussionDto);
-        entity.setCreateBy(user.getId());
+        entity.setCreateBy(getUserId());
         entity.setCreateTime(LocalDateTime.now());
-        entity.setCreateName(user.getNickName());
+        entity.setCreateName(getUser().getNickName());
         entity.setUpdateTime(LocalDateTime.now());
-        entity.setUpdateBy(user.getId());
+        entity.setUpdateBy(getUserId());
         return save(entity);
     }
 
     @Override
     public boolean edit(DiscussionDto discussionDto) {
-        UserInfoVo user = getUser();
+        
         Discussion entity = DiscussionMapstruct.INSTANCE.dtoToEntity(discussionDto);
         entity.setUpdateTime(LocalDateTime.now());
-        entity.setUpdateBy(user.getId());
+        entity.setUpdateBy(getUserId());
         LambdaQueryWrapper<Discussion> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
+        if (!isAdmin()) {
             entity.setStatus(ProblemStateEnum.DRAFT.getState());
-            wrapper.eq(Discussion::getCreateBy, user.getId());
+            wrapper.eq(Discussion::getCreateBy, getUserId());
         }
         wrapper.eq(Discussion::getId, entity.getId());
         return update(entity, wrapper);
@@ -99,10 +99,10 @@ public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, Discussio
 
     @Override
     public boolean delete(Serializable id) {
-        UserInfoVo user = getUser();
+        
         LambdaQueryWrapper<Discussion> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(Discussion::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(Discussion::getCreateBy, getUserId());
         }
         wrapper.eq(Discussion::getId, id);
         return remove(wrapper);
@@ -110,10 +110,10 @@ public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, Discussio
 
     @Override
     public IPage<DiscussionVo> managerPage(MpBaseQo mpBaseQo) {
-        UserInfoVo user = getUser();
+        
         LambdaQueryWrapper<Discussion> wrapper = Wrappers.lambdaQuery();
-        if (!user.isAdmin()) {
-            wrapper.eq(Discussion::getCreateBy, user.getId());
+        if (!isAdmin()) {
+            wrapper.eq(Discussion::getCreateBy, getUserId());
         }
         wrapper.orderByDesc(Discussion::getCreateTime);
         pageSelect(wrapper);

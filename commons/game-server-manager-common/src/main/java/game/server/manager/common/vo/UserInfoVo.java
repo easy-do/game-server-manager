@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author laoyu
@@ -72,11 +73,6 @@ public class UserInfoVo implements Serializable {
     private String email;
 
     /**
-     * 是否为管理员
-     */
-    private Integer isAdmin;
-
-    /**
      * 登录ip
      */
     private String loginIp;
@@ -87,11 +83,11 @@ public class UserInfoVo implements Serializable {
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime lastLoginTime;
 
-
     private String token;
 
-    public Boolean isAdmin(){
-        return this.isAdmin == 1;
-    }
+    private List<String> roles;
+
+    private List<String> permissions;
+
 
 }
