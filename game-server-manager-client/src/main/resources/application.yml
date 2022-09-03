@@ -5,7 +5,7 @@ spring:
   application:
     name: game-server-manager-client
 
-manager-url: ${MANAGER_URL:https://manager.easydo.plus}
+manager-url: ${MANAGER_URL:https://manager.easydo.plus/server}
 client-id: ${CLIENT_ID:no}
 app-id: ${APP_ID:no}
 client_version: ${CLIENT_VERSION:no}
