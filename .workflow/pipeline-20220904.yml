@@ -1,0 +1,25 @@
+version: '1.0'
+name: pipeline-20220904
+displayName: pipeline-20220904
+triggers:
+  trigger: auto
+  push:
+    branches:
+      prefix:
+        - ''
+stages:
+  - name: stage-61d80c0b
+    displayName: 未命名
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: sc@opensca
+        name: open_sca
+        displayName: OpenSCA 开源组件检测
+        detectPath: ./game-server-manager
+        notify: []
+        strategy:
+          retry: '0'
+strategy:
+  blocking: true
