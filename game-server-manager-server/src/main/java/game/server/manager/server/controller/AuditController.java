@@ -25,7 +25,7 @@ public class AuditController {
     @Autowired
     private AuditService auditService;
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/audit")
     @SaveLog(logType = "操作日志", moduleName = "审核模块", description = "审核: ?1,?2,?3 ", expressions = {"#p1.id","#p1.auditType","#p1.status"}, actionType = "审核")
     public R<Object> commit(@RequestBody AuditDto auditDto) {

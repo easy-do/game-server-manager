@@ -64,7 +64,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
         return super.edit(discussionDto);
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{id}")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "删除话题: ?1 ", expressions = {"#p1"}, actionType = "删除")
     public R<Object> delete( @PathVariable("id") Long id) {

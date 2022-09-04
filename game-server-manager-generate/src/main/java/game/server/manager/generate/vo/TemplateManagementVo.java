@@ -1,5 +1,6 @@
 package game.server.manager.generate.vo;
 
+import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,9 +42,19 @@ public class TemplateManagementVo implements Serializable {
     private String templateCode;
 
     /**
-     * 包路径
+     * 类型
      */
-    private String packagePath;
+    private String templateType;
+
+    /**
+     * 可见范围
+     */
+    private String templateScope;
+
+    /**
+     * 版本
+     */
+    private String version;
 
     /**
      * 文件名
@@ -56,19 +67,35 @@ public class TemplateManagementVo implements Serializable {
     private String filePath;
 
     /**
-     * 删除标志
+     * 描述
      */
-    private Integer delFlag;
+    private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime createTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    /**
+     * 更新时间
+     */
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime updateTime;
 
     /**
-     * 删除标志
+     * 创建人
      */
-    private String remark;
+    private Long createBy;
+
+    /**
+     * 更新人
+     */
+    private Long updateBy;
+
+    /**
+     * 创建用户名
+     */
+    private String createName;
 
 }

@@ -1,10 +1,12 @@
 package game.server.manager.generate.qo;
 
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 模板管理查询对象
@@ -12,18 +14,11 @@ import lombok.ToString;
  * @author gebilaoyu
  */
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class TemplateManagementQo {
-
-
-    /**当前页*/
-    protected Integer currentPage = 1;
-
-    /** 每页显示条数 */
-    protected Integer pageSize = 10;
+public class TemplateManagementQo extends MpBaseQo {
 
     /**
      * 自增主键
@@ -39,11 +34,6 @@ public class TemplateManagementQo {
      * 代码
      */
     private String templateCode;
-
-    /**
-     * 包路径
-     */
-    private String packagePath;
 
     /**
      * 文件名

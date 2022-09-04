@@ -52,7 +52,7 @@ public interface TemplateManagementService {
      * @param dto 数据传输对象
      * @return 结果
      */
-    int update(TemplateManagementDto dto);
+    boolean update(TemplateManagementDto dto);
 
     /**
      * 批量删除模板管理

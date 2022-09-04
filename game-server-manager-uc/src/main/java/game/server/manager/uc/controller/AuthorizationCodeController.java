@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.log.SaveLog;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
@@ -35,13 +36,13 @@ public class AuthorizationCodeController {
     @Autowired
     private AuthorizationCodeService authorizationCodeService;
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/list")
     public R<List<AuthorizationCode>> list() {
         return DataResult.ok(BeanUtil.copyToList(authorizationCodeService.list(),AuthorizationCode.class));
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
     public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
         LambdaQueryWrapper<AuthorizationCode> wrapper = Wrappers.lambdaQuery();
@@ -49,20 +50,20 @@ public class AuthorizationCodeController {
         return MpResultUtil.buildPage(authorizationCodeService.page(mpBaseQo.startPage(),wrapper));
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/info/{id}")
     public R<AuthorizationCode> list(@PathVariable("id")String id) {
         return DataResult.ok(authorizationCodeService.getById(id));
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/edit")
     @SaveLog(logType = "操作日志", moduleName = "授权码管理", description = "编辑授权码: ?1", expressions = {"#p1.id"},actionType = "编辑")
     public R<Object> edit(@RequestBody AuthorizationCode authorizationCode) {
         return authorizationCodeService.updateById(authorizationCode)? DataResult.ok():DataResult.fail();
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/generateAuthCode")
     @SaveLog(logType = "操作日志", moduleName = "授权码管理", description = "生成授权码 ?1 个", expressions = {"#p1.genNum"},actionType = "添加")
     public R<Object> generateAuthorization(@RequestBody() AuthorizationConfigDto authorizationConfigDto) {
@@ -70,7 +71,7 @@ public class AuthorizationCodeController {
         return result? DataResult.ok():DataResult.fail();
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{id}")
     @SaveLog(logType = "操作日志", moduleName = "授权码管理", description = "删除授权码: ?1", expressions = {"#p1"}, actionType = "删除")
     public R<Object> delete(@PathVariable("id")String id) {

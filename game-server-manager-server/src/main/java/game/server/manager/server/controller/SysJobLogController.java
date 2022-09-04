@@ -39,7 +39,7 @@ public class SysJobLogController {
     /**
      * 查询定时任务调度日志列表
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
     public MpDataResult list(@RequestBody MpBaseQo mpBaseQo) {
         LambdaQueryWrapper<SysJobLog> wrapper = Wrappers.lambdaQuery();
@@ -51,7 +51,7 @@ public class SysJobLogController {
     /**
      * 根据调度编号获取详细信息
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping(value = "/info/{jobLogId}")
     public R<Object> getInfo(@PathVariable Long jobLogId) {
         return DataResult.ok(jobLogService.selectJobLogById(jobLogId));
@@ -60,7 +60,7 @@ public class SysJobLogController {
     /**
      * 根据id获取加班执行结果的行集合
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping(value = "/logResult/{jobLogId}")
     public R<List<String>> logResult(@PathVariable Long jobLogId) {
         SysJobLog sysJobLog = jobLogService.selectJobLogById(jobLogId);
@@ -74,7 +74,7 @@ public class SysJobLogController {
     /**
      * 根据任务id获取日志列表
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping(value = "/listByJobId/{jobId}")
     public R<List<SysJobLog>> listByJobId(@PathVariable Long jobId) {
         LambdaQueryWrapper<SysJobLog> wrapper = Wrappers.lambdaQuery();
@@ -87,7 +87,7 @@ public class SysJobLogController {
     /**
      * 删除定时任务调度日志
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{jobLogIds}")
     public R<Object> remove(@PathVariable Long[] jobLogIds) {
         return jobLogService.deleteJobLogByIds(jobLogIds) > 0 ? DataResult.ok() : DataResult.fail();
@@ -96,7 +96,7 @@ public class SysJobLogController {
     /**
      * 清空定时任务调度日志
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @DeleteMapping("/clean")
     public R<Object> clean() {
         jobLogService.cleanJobLog();

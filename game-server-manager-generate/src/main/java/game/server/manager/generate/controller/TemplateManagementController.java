@@ -11,11 +11,9 @@ import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,7 +65,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/info/{id}")
     public R<Object> getInfo(@PathVariable("id") Long id) {
         return DataResult.ok(templateManagementService.selectById(id));
     }
@@ -79,7 +77,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-    @PostMapping
+    @PostMapping("/add")
     public R<Object> add(@RequestBody @Validated TemplateManagementDto dto) {
         return DataResult.ok(templateManagementService.insert(dto));
     }
@@ -91,20 +89,20 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-    @PutMapping
+    @PostMapping("/edit")
     public R<Object> edit(@RequestBody @Validated TemplateManagementDto dto) {
-        return DataResult.ok(templateManagementService.update(dto));
+        return templateManagementService.update(dto)?DataResult.ok():DataResult.fail();
     }
 
     /**
      * 删除模板管理
      *
-     * @param ids ids
+     * @param id id
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-    @DeleteMapping("/{ids}")
-    public R<Object> remove(@PathVariable Long[] ids) {
-        return DataResult.ok(templateManagementService.deleteByIds(ids));
+    @GetMapping("/delete/{id}")
+    public R<Object> remove(@PathVariable Long id) {
+        return DataResult.ok(templateManagementService.deleteById(id));
     }
 }

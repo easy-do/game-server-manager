@@ -3,6 +3,7 @@ package game.server.manager.uc.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.uc.dto.SysRoleDto;
 import game.server.manager.uc.entity.SysRole;
@@ -63,7 +64,7 @@ public class SysRoleController {
     /**
      * 获取角色选择框列表
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/list")
     public R<Object> list() {
         MpBaseQo mpBaseQo = MpBaseQo.builder().columns(Arrays.asList("roleId","roleName")).build();
@@ -73,7 +74,7 @@ public class SysRoleController {
     }
 
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
     public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
         return MpResultUtil.buildPage(sysRoleService.page(mpBaseQo.startPage(),mpBaseQo.buildSearchWrapper()),SysRoleVo.class);
@@ -83,7 +84,7 @@ public class SysRoleController {
     /**
      * 根据角色编号获取详细信息
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping(value = "/info/{roleId}")
     public R<SysRoleVo> info(@PathVariable("roleId") Long roleId) {
         return DataResult.ok(BeanUtil.copyProperties(sysRoleService.getById(roleId),SysRoleVo.class));
@@ -92,7 +93,7 @@ public class SysRoleController {
     /**
      * 新增角色
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/add")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = ADD_DESCRIPTION, expressions = ADD_EXPRESSIONS, actionType = BaseController.ADD_ACTION)
     public R<Object> add(@Validated @RequestBody SysRoleDto dto) {
@@ -108,7 +109,7 @@ public class SysRoleController {
     /**
      * 修改保存角色
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/edit")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions =  EDIT_EXPRESSIONS, actionType = BaseController.ADD_ACTION)
     public R<Object> edit(@Validated @RequestBody SysRoleDto dto) {
@@ -123,7 +124,7 @@ public class SysRoleController {
     /**
      * 状态修改
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/changeStatus")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = CHANGE_DESCRIPTION, expressions = CHANGE_EXPRESSIONS, actionType = BaseController.EDIT_ACTION)
     public R<Object> changeStatus(@RequestBody ChangeStatusDto changeStatusDto) {
@@ -133,7 +134,7 @@ public class SysRoleController {
     /**
      * 删除角色
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{roleId}")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = BaseController.REMOVE_ACTION)
     public R<Object> remove(@PathVariable Long roleId) {
@@ -148,7 +149,7 @@ public class SysRoleController {
 //     * @author laoyu
 //     * @date 2022/7/21
 //     */
-//    @SaCheckRole("super_admin")
+//    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
 //    @GetMapping("/setAllUserRoleDefault")
 //    public R<Object> syncAllUserRoleDefault() {
 //        return sysRoleService.syncAllUserRoleDefault()?DataResult.ok():DataResult.fail();

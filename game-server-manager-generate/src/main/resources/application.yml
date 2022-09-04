@@ -56,7 +56,7 @@ spring:
       strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
       datasource:
         master:
-          url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:3306}/${DATABASE_NAME:game-manager-gen}?characterEncoding=utf8&useSSL=false
+          url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:3306}/${DATABASE_NAME:game-manager}?characterEncoding=utf8&useSSL=false
           username: ${MYSQL_USER:root}
           password: ${MYSQL_PASS:root}
   #        master:
@@ -116,7 +116,7 @@ mybatis-plus:
     jdbc-type-for-null: 'null'
 
 
-easy-push:
+system:
   #代码生成
   generate:
     # 作者
@@ -127,6 +127,39 @@ easy-push:
     autoRemovePre: false
     # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
     tablePrefix: sys_
+  server-list:
+    uc: game-server-manager-uc.server:8888
+  #黑名单配置
+  back-list:
+    #拉黑持续时间 分钟
+    back-time: ${BACK_LIST_TIME:30}
+    #判断单个url请求频率的时间范围 单位毫秒
+    max-req-time: ${BACK_LIST_MAX_REQ_TIME:3000}
+    #指定时间范围内触发黑名单的最大请求次数
+    max-req-count: ${BACK_LIST_MAX_REQ_COUNT:10}
+  #分页增强
+  page:
+    enable: false
+    current-page-filed: currentPage
+    page-size-filed: pageSize
+  redis:
+    cache:
+      # 缓存默认过期时间
+      timout: 300
+    fastJson:
+      package:
+        #序列化白名单，不填则不限制
+        white:
+    #redis订阅
+    subscribe:
+      enable: false
+      taskNum: 5
+      # map格式  key：订阅的主题  value：对应spring中的bean  需要继承AbstractMessageHandler
+      topics:
+        topic1: applicationDeploy
+    # 开启redis stream队列  消费者需要加注解 @RedisStreamListener指定频道和分组 实现StreamListener类
+    stream:
+      enabled: false
 
 
 # Sa-Token配置
@@ -159,6 +192,7 @@ sa-token:
     # 连接超时时间
     timeout: 10s
 
+
 management:
   server:
     port: 8689
@@ -187,3 +221,29 @@ logging:
   level:
     root: INFO
     feign.Logger: INFO
+
+springdoc:
+  swagger-ui:
+    # 修改Swagger UI路径
+    path: /swagger-ui.html
+    # 开启Swagger UI界面
+    enabled: true
+  api-docs:
+    # 修改api-docs路径
+    path: /v2/api-docs
+    # 开启api-docs
+    enabled: true
+  # 配置需要生成接口文档的扫描包
+  packages-to-scan: game.server.manager.generate.controller
+  # 配置需要生成接口文档的接口路径
+  #  paths-to-match: /brand/**,/admin/**
+  customize:
+    title: 生成服务 API
+    description: 生成服务API接口
+    version: 1.0.0
+    license:
+      name: 未设置
+      url: https://push.easydo.plus
+    externalDocs:
+      description: 外部文档
+      url: https://push.easydo.plus

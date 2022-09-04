@@ -56,7 +56,7 @@ public class FileStoreController {
     @Autowired
     private HttpServletResponse response;
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
     public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
         LambdaQueryWrapper<FileStore> wrapper = Wrappers.lambdaQuery();
@@ -64,13 +64,13 @@ public class FileStoreController {
         return MpResultUtil.buildPage(fileStoreService.page(mpBaseQo.startPage()));
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/info/{id}")
     public R<FileStore> info(@PathVariable("id") Long id) {
         return DataResult.ok(fileStoreService.getById(id));
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{id}")
     public R<FileStore> delete(@PathVariable("id") Long id) {
         return fileStoreService.removeById(id)?DataResult.ok():DataResult.fail();
