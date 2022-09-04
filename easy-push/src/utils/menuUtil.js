@@ -2,7 +2,8 @@
 import { Nav } from "@douyinfe/semi-ui";
 import { iocnMap } from "./iconUtil";
 
-export const buildMenu = (item, level) => {
+
+export const buildMenu = (item, level, navigate) => {
     if (item !== undefined && !item.disabled) {
       if (item.menuType === "M") {
         return (
@@ -16,7 +17,7 @@ export const buildMenu = (item, level) => {
           >
             {item.items
               ? item.items.map((item1) => {
-                  return buildMenu(item1, level + 1);
+                  return buildMenu(item1, level + 1, navigate);
                 })
               : null}
           </Nav.Sub>
@@ -31,7 +32,8 @@ export const buildMenu = (item, level) => {
             icon={iocnMap.get(item.icon)}
             level={level + 1}
             indent={true}
-            link={item.link}
+            onClick={()=>navigate(item.link)}
+            linkOptions={{onClick:e=>e.preventDefault()}}
           />
         );
       }

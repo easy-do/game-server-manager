@@ -4,16 +4,22 @@ import { useEffect } from "react";
 import useStores from "../../utils/store";
 import UserMessage from "../userMessage/userMessage";
 import AVA from "../../pages/avatar/avatar";
-import { buildMenu } from "../../utils/menuUtil";
 
 
 import { iocnMap } from "../../utils/iconUtil";
+import { useNavigate } from "react-router-dom";
 
 const TopNavigation = () => {
 
-  const { OauthStore } = useStores();
-  const { loginFlag, userInfo, userMenuTreeRequest, userMenuTree } = OauthStore;
+  const navigate = useNavigate()
 
+  const { OauthStore, MenuManagerStore } = useStores();
+
+  const { userMenuTreeRequest, userMenuTree } = MenuManagerStore;
+
+  const { loginFlag, userInfo } = OauthStore;
+
+  console.log('TopNavigation加載')
 
   useEffect(() => {
         //加载主题样式
@@ -74,19 +80,22 @@ const TopNavigation = () => {
       itemKey="appStore"
       text="APP市场"
       icon={iocnMap.get('IconShoppingBag')}
-      link={"/appStore"}
+      onClick={()=>navigate("/appStore")}
+      linkOptions={{onClick:e=>e.preventDefault()}}
     />
     <Nav.Item
       itemKey="appStore"
       text="讨论交流"
       icon={iocnMap.get('IconComment')}
-      link={"/discussion"}
+      onClick={()=>navigate("/discussion")}
+      linkOptions={{onClick:e=>e.preventDefault()}}
     />
     <Nav.Item
       itemKey="appStore"
       text="官方Q群"
       icon={iocnMap.get('IconUserGroup')}
-      link={"https://jq.qq.com/?_wv=1027&k=OfQIQC2Y"}
+      onClick={()=>navigate("https://jq.qq.com/?_wv=1027&k=OfQIQC2Y")}
+      linkOptions={{onClick:e=>e.preventDefault()}}
     />
   </Nav>
   );

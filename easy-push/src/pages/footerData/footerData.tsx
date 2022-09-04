@@ -12,6 +12,7 @@ const FooterData = () => {
     hometopDataRequest();
   }, []);
 
+  console.log('FooterData加載')
   return (
     <>
       <Row type="flex" justify="center">

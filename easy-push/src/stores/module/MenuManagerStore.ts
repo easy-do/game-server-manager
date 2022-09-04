@@ -36,6 +36,8 @@ class MenuManagerStore {
 
   treeSelectList = new Array<any>();
 
+  userMenuTree:any = []
+
 
   loading = () => {
     runInAction(() => {
@@ -325,6 +327,27 @@ class MenuManagerStore {
         this.editDataShow = false
       })
     }
+
+    
+  userMenuTreeRequest = () => {
+    const userMenuTree = sessionStorage.getItem('userMenuTree');
+    if(userMenuTree){
+      runInAction(() => {
+        this.userMenuTree = JSON.parse(userMenuTree)
+      })
+      return
+    }
+    userMenu().then((result) => {
+      if (result.data.success) {
+        runInAction(() => {
+          this.userMenuTree = result.data.data
+          sessionStorage.setItem('userMenuTree',JSON.stringify(result.data.data))
+        })
+
+      }
+    })
+
+  }
   
 }
 
