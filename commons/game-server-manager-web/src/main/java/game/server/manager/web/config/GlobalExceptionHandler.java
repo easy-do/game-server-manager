@@ -1,4 +1,4 @@
-package game.server.manager.web.handler;
+package game.server.manager.web.config;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.SaTokenException;
