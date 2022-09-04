@@ -51,7 +51,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
     private SysRoleMenuService roleMenuService;
 
     @Override
-    @Cacheable(value = "sysMenu",key = "'treeSelect'")
     public List<Tree<Long>> treeSelect() {
         MpBaseQo mpBaseQo = MpBaseQo.builder().columns(Arrays.asList("menuId","menuName","parentId","status")).build();
         List<SysMenu> allList = list(mpBaseQo.buildSearchWrapper());
@@ -87,7 +86,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
 
     @Override
     public List<Tree<Long>> treeInfoList(MpBaseQo mpBaseQo) {
-        QueryWrapper<SysMenu> wrapper = mpBaseQo.buildSearchWrapper();
+        LambdaQueryWrapper<SysMenu> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(SysMenu::getDelFlag,0);
         List<SysMenu> allList = list(wrapper);
         return buildSelectMenuTree(allList);
     }

@@ -2,6 +2,7 @@ package game.server.manager.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.web.base.BaseController;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.uc.dto.SysDictTypeDto;
@@ -79,7 +80,7 @@ public class SysDictTypeController extends BaseController<SysDictTypeService, Sy
         return super.delete(id);
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/changeStatus")
     public R<Object> changeStatus(@Validated @RequestBody ChangeStatusDto changeStatusDto) {
         return baseService.changeStatus(changeStatusDto)? DataResult.ok():DataResult.fail();

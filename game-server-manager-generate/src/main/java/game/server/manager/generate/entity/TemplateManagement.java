@@ -1,13 +1,19 @@
 package game.server.manager.generate.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 /**
  * 模板管理数据库映射对象
@@ -24,7 +30,7 @@ public class TemplateManagement {
     private static final long serialVersionUID = 1L;
 
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -38,9 +44,19 @@ public class TemplateManagement {
     private String templateCode;
 
     /**
-     * 包路径
+     * 类型
      */
-    private String packagePath;
+    private String templateType;
+
+    /**
+     * 可见范围
+     */
+    private String templateScope;
+
+    /**
+     * 版本
+     */
+    private String version;
 
     /**
      * 文件名
@@ -51,5 +67,43 @@ public class TemplateManagement {
      * 文件路径
      */
     private String filePath;
+
+    /**
+     * 描述
+     */
+    private String description;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+
+    /**
+     * 创建人
+     */
+    private Long createBy;
+
+    /**
+     * 更新人
+     */
+    private Long updateBy;
+
+    /**
+     * 创建用户名
+     */
+    private String createName;
+
+    /**
+     * 删除标记
+     */
+    @TableLogic
+    private Integer delFlag;
 
 }

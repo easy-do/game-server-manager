@@ -58,7 +58,7 @@ public class CommentDetailsController extends BaseController<CommentDetailsServi
     }
 
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{id}")
     @SaveLog(logType = "操作日志", moduleName = "评论", description = "删除评论: ?1 ", expressions = {"#p1"}, actionType = "删除")
     public R<Object> delete( @PathVariable("id") Long id) {

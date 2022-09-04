@@ -39,9 +39,19 @@ public class TemplateManagementDto implements Serializable {
     private String templateCode;
 
     /**
-     * 包路径
+     * 类型
      */
-    private String packagePath;
+    private String templateType;
+
+    /**
+     * 可见范围
+     */
+    private String templateScope;
+
+    /**
+     * 版本
+     */
+    private String version;
 
     /**
      * 文件名
@@ -54,8 +64,8 @@ public class TemplateManagementDto implements Serializable {
     private String filePath;
 
     /**
-     * 备注
+     * 描述
      */
-    private String remark;
+    private String description;
 
 }

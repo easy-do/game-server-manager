@@ -22,6 +22,7 @@ import MenuManager from "../menuManager/menuManager";
 import { observer } from "mobx-react";
 import DictType from "../dictMamager/dictType";
 import ClientManager from "../clientInfo/clientManager";
+import TemplateManager from "../template/templateManager";
 
 class RouteStting extends react.Component<any, any> {
   constructor(props: any) {
@@ -53,6 +54,7 @@ class RouteStting extends react.Component<any, any> {
         <Route path="/menuManager" element={<MenuManager />}></Route>
         <Route path="/dictType" element={<DictType />}></Route>
         <Route path="/client" element={<ClientManager />}></Route>
+        <Route path="/template" element={<TemplateManager />}></Route>
       </Routes>
     );
   }

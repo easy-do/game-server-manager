@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @author ruoyi
  */
 @Component
-@ConfigurationProperties(prefix = "easy-push.generate")
+@ConfigurationProperties(prefix = "system.generate")
 public class GenerateConfig {
     /**
      * 作者

@@ -32,7 +32,7 @@ public class SysLogController {
     @Autowired
     private SysLogService sysLogService;
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
     public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
         LambdaQueryWrapper<SysLog> wrapper = Wrappers.lambdaQuery();
@@ -43,7 +43,7 @@ public class SysLogController {
     /**
      * 删除日志
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/clean")
     @SaveLog(logType = "操作日志", moduleName = "系统日志", description = "清空日志", actionType = "清空")
     public R<Object> clean() {
@@ -54,7 +54,7 @@ public class SysLogController {
     /**
      * 删除日志
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{id}")
     @SaveLog(logType = "操作日志", moduleName = "系统日志", description = "删除日志:?1" , expressions = "#p1",actionType = "删除")
     public R<Object> delete(@PathVariable("id")Long id){

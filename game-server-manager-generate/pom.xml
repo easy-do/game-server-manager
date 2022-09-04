@@ -35,14 +35,46 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--  doc -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-doc</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
-        <!--  redis -->
+        <!--  event -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-event</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- redis -->
         <dependency>
             <groupId>game.server.manager</groupId>
             <artifactId>game-server-manager-redis</artifactId>
             <version>1.0.0</version>
         </dependency>
 
+        <!--spring缓存-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <!-- 授权相关 -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-auth</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- 日志相关 -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-log</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <!-- mapstruct -->
         <dependency>
@@ -50,7 +82,6 @@
             <artifactId>game-server-manager-mapstruct</artifactId>
             <version>1.0.0</version>
         </dependency>
-
 
         <!--  数据库相关-->
         <dependency>

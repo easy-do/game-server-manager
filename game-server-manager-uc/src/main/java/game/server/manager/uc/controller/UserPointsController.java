@@ -5,6 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
@@ -74,7 +75,7 @@ public class UserPointsController {
      * @author laoyu
      * @date 2022/7/29
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/userPointsOperation")
     public R<Object> userPointsOperation(@Validated @RequestBody UserPointsOperationDto userPointsOperationDto){
         return userPointsLogService.userPointsOperation(userPointsOperationDto)? DataResult.ok():DataResult.fail();

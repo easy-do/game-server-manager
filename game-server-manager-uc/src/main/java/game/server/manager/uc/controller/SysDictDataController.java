@@ -7,6 +7,7 @@ import cn.dev33.satoken.id.SaIdUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import game.server.manager.api.SysDictDataApi;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.uc.dto.SysDictDataDto;
 import game.server.manager.uc.entity.SysDictData;
@@ -87,7 +88,7 @@ public class SysDictDataController extends BaseController<SysDictDataService, Sy
         return super.delete(id);
     }
 
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/changeStatus")
     public R<Object> changeStatus(@Validated @RequestBody ChangeStatusDto changeStatusDto) {
         return baseService.changeStatus(changeStatusDto)? DataResult.ok():DataResult.fail();

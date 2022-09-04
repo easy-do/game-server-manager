@@ -28,6 +28,7 @@ import DictTypeStore from './module/DictTypeStore'
 import DictDataStore from './module/DictDataStore'
 import AuditStore from './module/AuditStore'
 import ClientInfoStore from './module/ClientInfoStore'
+import TemplateStore from './module/TemplateStore'
 
 configure({
   enforceActions: 'always' // 严格模式
@@ -63,6 +64,7 @@ const stores = {
   DictDataStore,
   AuditStore,
   ClientInfoStore,
+  TemplateStore,
 }
 
 export default stores

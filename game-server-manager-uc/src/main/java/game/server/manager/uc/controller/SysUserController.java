@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import game.server.manager.auth.AuthorizationUtil;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.log.SaveLog;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
@@ -82,7 +83,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取详细信息
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping(value = {"/info/{userId}"})
     public R<UserManagerVo> getInfo(@PathVariable(value = "userId") Long userId) {
         if (Objects.nonNull(userId)) {
@@ -96,7 +97,7 @@ public class SysUserController {
     /**
      * 修改用户
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/edit")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions =  EDIT_EXPRESSIONS, actionType = BaseController.ADD_ACTION)
     public R<Object> edit(@Validated @RequestBody UserInfoDto userInfoDto) {
@@ -112,7 +113,7 @@ public class SysUserController {
     /**
      * 删除用户
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{userId}")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = BaseController.REMOVE_ACTION)
     public R<Object> remove(@PathVariable("userId")Long userId) {
@@ -125,7 +126,7 @@ public class SysUserController {
     /**
      * 重置密码
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/resetPwd")
     public R<Object> resetPwd(@RequestBody ResetPasswordDto resetPasswordDto) {
         resetPasswordDto.setUpdateUserId(AuthorizationUtil.getUser().getId());
@@ -135,7 +136,7 @@ public class SysUserController {
     /**
      * 状态修改
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/changeStatus")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = CHANGE_DESCRIPTION, expressions = CHANGE_EXPRESSIONS, actionType = BaseController.EDIT_ACTION)
     public R<Object> changeStatus(@RequestBody ChangeStatusDto changeStatusDto) {
@@ -147,7 +148,7 @@ public class SysUserController {
     /**
      * 用户授权角色
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/authRole")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = AUTH_DESCRIPTION, expressions = AUTH_EXPRESSIONS, actionType = BaseController.EDIT_ACTION)
     public R<Object> insertAuthRole(@RequestBody @Validated AuthRoleDto authRoleDto) {
@@ -157,7 +158,7 @@ public class SysUserController {
     /**
      * 获取用户已授权角色集合
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/authRole/{userId}")
     public R<List<SysRoleVo>> authRole(@PathVariable("userId") Long userId) {
         return DataResult.ok(sysRoleService.selectRolesByUserId(userId));

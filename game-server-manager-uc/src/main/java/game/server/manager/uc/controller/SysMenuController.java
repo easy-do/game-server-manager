@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.log.SaveLog;
 import game.server.manager.auth.AuthorizationUtil;
@@ -61,14 +62,12 @@ public class SysMenuController {
     public static final String AUTH_EXPRESSIONS = "#p1.roleId";
 
     @Autowired
-    private AuthorizationUtil authorizationUtil;
-    @Autowired
     private SysMenuService sysMenuService;
 
     /**
      * 根据菜单编号获取详细信息
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping(value = "/info/{menuId}")
     public R<SysMenuVo> info(@PathVariable Long menuId) {
         return DataResult.ok(BeanUtil.copyProperties(sysMenuService.getById(menuId),SysMenuVo.class));
@@ -77,7 +76,7 @@ public class SysMenuController {
     /**
      * 新增菜单
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/add")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = ADD_DESCRIPTION, expressions = ADD_EXPRESSIONS, actionType = BaseController.ADD_ACTION)
     public R<Object> add(@Validated @RequestBody SysMenuDto sysMenuDto) {
@@ -90,7 +89,7 @@ public class SysMenuController {
     /**
      * 修改菜单
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/edit")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions = EDIT_EXPRESSIONS, actionType = BaseController.EDIT_ACTION)
     public R<Object> edit(@Validated @RequestBody SysMenuDto sysMenuDto) {
@@ -106,7 +105,7 @@ public class SysMenuController {
     /**
      * 删除菜单
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/delete/{menuId}")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = BaseController.REMOVE_ACTION)
     public R<Object> remove(@PathVariable("menuId") Long menuId) {
@@ -118,7 +117,7 @@ public class SysMenuController {
      * 修改菜单状态
      *
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/changeStatus")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = CHANGE_DESCRIPTION, expressions = CHANGE_EXPRESSIONS, actionType = BaseController.EDIT_ACTION)
     public R<Object> changeStatus(@Validated @RequestBody ChangeStatusDto changeStatusDto) {
@@ -129,7 +128,7 @@ public class SysMenuController {
     /**
      * 授权角色菜单
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/authRoleMenu")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = AUTH_DESCRIPTION, expressions = AUTH_EXPRESSIONS, actionType = BaseController.EDIT_ACTION)
     public R<Object> authRoleMenu(@RequestBody AuthRoleMenuDto authRoleMenuDto) {
@@ -139,7 +138,7 @@ public class SysMenuController {
     /**
      * 获取所有菜单下树列表(带详情)
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/list")
     public R<List<Tree<Long>>> list(@RequestBody MpBaseQo mpBaseQo) {
         return DataResult.ok(sysMenuService.treeInfoList(mpBaseQo));
@@ -148,7 +147,7 @@ public class SysMenuController {
     /**
      * 获取所有菜单下拉树
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/treeSelect")
     public R<List<Tree<Long>>> treeSelect() {
         return DataResult.ok(sysMenuService.treeSelect());
@@ -158,7 +157,7 @@ public class SysMenuController {
     /**
      * 加载对应角色菜单列表树
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping(value = "/roleTreeSelect/{roleId}")
     public R<List<Tree<Long>>> roleTreeSelect(@PathVariable("roleId") Long roleId) {
         return DataResult.ok(sysMenuService.roleTreeSelect(roleId));
@@ -167,7 +166,7 @@ public class SysMenuController {
     /**
      * 加载对应角色菜单id集合
      */
-    @SaCheckRole("super_admin")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping(value = "/roleMenuIds/{roleId}")
     public R<List<Long>> roleMenuIds(@PathVariable("roleId") Long roleId) {
         return DataResult.ok(sysMenuService.roleMenuIds(roleId));
