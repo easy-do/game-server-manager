@@ -88,14 +88,14 @@ const TopNavigation = () => {
       text="讨论交流"
       icon={iocnMap.get('IconComment')}
       onClick={()=>navigate("/discussion")}
+      // link={'/discussion'}
       linkOptions={{onClick:e=>e.preventDefault()}}
     />
     <Nav.Item
       itemKey="appStore"
       text="官方Q群"
       icon={iocnMap.get('IconUserGroup')}
-      onClick={()=>navigate("https://jq.qq.com/?_wv=1027&k=OfQIQC2Y")}
-      linkOptions={{onClick:e=>e.preventDefault()}}
+      link={'https://jq.qq.com/?_wv=1027&k=OfQIQC2Y'}
     />
   </Nav>
   );
