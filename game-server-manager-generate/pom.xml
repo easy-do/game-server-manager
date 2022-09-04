@@ -105,13 +105,14 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
+            <version>5.3.22</version>
         </dependency>
 
         <!--velocity代码生成使用模板 -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.7</version>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>2.3</version>
         </dependency>
 
         <dependency>
@@ -131,7 +132,7 @@
         <dependency>
             <groupId>org.docx4j</groupId>
             <artifactId>docx4j-JAXB-Internal</artifactId>
-            <version>8.3.2</version>
+            <version>8.3.8</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-io</artifactId>
@@ -147,7 +148,7 @@
         <dependency>
             <groupId>org.docx4j</groupId>
             <artifactId>docx4j-export-fo</artifactId>
-            <version>8.3.2</version>
+            <version>11.4.7</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-io</artifactId>

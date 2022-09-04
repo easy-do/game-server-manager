@@ -33,7 +33,6 @@ public class VelocityInitializer {
             p.setProperty("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
             // 定义字符集
             p.setProperty(Velocity.INPUT_ENCODING, GenConstants.UTF8);
-            p.setProperty(Velocity.OUTPUT_ENCODING, GenConstants.UTF8);
             // 初始化Velocity引擎，指定配置Properties
             Velocity.init(p);
         } catch (Exception e) {
@@ -51,7 +50,6 @@ public class VelocityInitializer {
             p.setProperty("string.resource.loader.repository.class", "org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl");
             // 定义字符集
             p.setProperty(Velocity.INPUT_ENCODING, GenConstants.UTF8);
-            p.setProperty(Velocity.OUTPUT_ENCODING, GenConstants.UTF8);
             // 初始化Velocity引擎，指定配置Properties
             Velocity.init(p);
         } catch (Exception e) {
@@ -77,7 +75,6 @@ public class VelocityInitializer {
             p.setProperty("ds.resource.loader.cache", "true");
             // 定义字符集
             p.setProperty(Velocity.INPUT_ENCODING, GenConstants.UTF8);
-            p.setProperty(Velocity.OUTPUT_ENCODING, GenConstants.UTF8);
             //将数据源放进去
             Velocity.setProperty("ds.resource.loader.instance", dataSourceResourceLoader);
             // 初始化Velocity引擎，指定配置Properties

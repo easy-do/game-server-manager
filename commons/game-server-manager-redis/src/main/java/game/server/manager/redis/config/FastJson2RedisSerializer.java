@@ -1,16 +1,14 @@
 package game.server.manager.redis.config;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import org.springframework.util.Assert;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.JSONWriter;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.SerializationException;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 
 /**
@@ -18,33 +16,25 @@ import java.nio.charset.StandardCharsets;
  *
  * @author yuzhanfeng
  */
-public class FastJson2RedisSerializer<T> extends FastJsonRedisSerializer<T> {
+public class FastJson2RedisSerializer implements RedisSerializer<Object> {
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    static {
-        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
-    }
-
-    @SuppressWarnings("unused")
-    private ObjectMapper objectMapper = new ObjectMapper();
-
-    public FastJson2RedisSerializer(Class type) {
-        super(type);
-    }
-
-    public byte[] serializeObject(Object object){
-        if (object == null) {
+    @Override
+    public byte[] serialize(Object object) throws SerializationException {
+        if(Objects.isNull(object)){
             return new byte[0];
         }
-        return JSON.toJSONString(object, SerializerFeature.WriteClassName).getBytes(DEFAULT_CHARSET);
+        return JSON.toJSONString(object, JSONWriter.Feature.WriteClassName).getBytes(DEFAULT_CHARSET);
     }
 
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        Assert.notNull(objectMapper, "'objectMapper' must not be null");
-        this.objectMapper = objectMapper;
+    @Override
+    public Object deserialize(byte[] bytes) throws SerializationException {
+        if (bytes != null && bytes.length != 0) {
+            return JSON.parseObject(bytes, Object.class, JSONReader.Feature.SupportAutoType);
+        } else {
+            return null;
+        }
     }
 
-    protected JavaType getJavaType(Class<?> clazz) {
-        return TypeFactory.defaultInstance().constructType(clazz);
-    }
+
 }
