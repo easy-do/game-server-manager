@@ -3,25 +3,31 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import useStores from "../../utils/store";
 import { buildMenu } from "../../utils/menuUtil";
+import { useNavigate } from 'react-router-dom'
 
 const SideNavigation = () => {
+
+  const navigate = useNavigate()
+
+  const loginFlag = localStorage.getItem("loginFlag") ? true : false;
+
   useEffect(() => {
     if (loginFlag) {
       userMenuTreeRequest();
     }
   }, []);
 
-  const { OauthStore } = useStores();
-  const { loginFlag, userMenuTreeRequest, userMenuTree } = OauthStore;
+  const { MenuManagerStore } = useStores();
+  const { userMenuTreeRequest, userMenuTree } = MenuManagerStore;
 
-
+  console.info("菜单加载")
 
   return loginFlag && userMenuTree.length > 0 ? (
     <Nav
       limitIndent={false}
       header={{
         logo: (
-          <img src="https://push.easydo.plus/favicon.ico" />
+          <img src="/favicon.ico" />
         ),
         text: "简单推送",
       }}
@@ -30,7 +36,7 @@ const SideNavigation = () => {
       }}
     >
       {userMenuTree[0].items.map((item: any) => {
-        return buildMenu(item, 0);
+        return buildMenu(item, 0, navigate);
       })}
     </Nav>
   ) : null;

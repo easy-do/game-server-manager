@@ -8,18 +8,15 @@ import { useEffect } from "react";
 import SideNavigation from "./pages/systemMenu/sideNavigation";
 import TopNavigation from "./pages/systemMenu/topNavigation";
 
-<script
-  async
-  src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"
-></script>;
-
 export default function App() {
   const { Header, Footer, Content } = Layout;
   useEffect(() => {
   }, []);
 
+  console.info("app重新加载")
+
   return (
-    <Provider {...stores}>
+    
       <Layout
         style={{
           border: "1px solid var(--semi-color-border)",
@@ -27,11 +24,15 @@ export default function App() {
         }}
       >
         <Sider style={{ backgroundColor: "var(--semi-color-bg-1)" }}>
+        <Provider {...stores}>
             <SideNavigation/>
+            </Provider>
         </Sider>
         <Layout style={{}}>
           <Header style={{ backgroundColor: "var(--semi-color-bg-1)" }}>
+          <Provider {...stores}>
             <TopNavigation/>
+            </Provider>
           </Header>
           <Content
             style={{
@@ -39,7 +40,10 @@ export default function App() {
               backgroundColor: "var(--semi-color-bg-0)",
             }}
           >
+            <Provider {...stores}>
             <RouteStting />
+            </Provider>
+            
           </Content>
           <Footer
             style={{
@@ -50,10 +54,13 @@ export default function App() {
               backgroundColor: "rgba(var(--semi-grey-0), 1)",
             }}
           >
+            <Provider {...stores}>
             <FooterData />
+            </Provider>
+            
           </Footer>
         </Layout>
       </Layout>
-    </Provider>
+    
   );
 }

@@ -42,8 +42,6 @@ class OauthStore {
   }
   resetPasswordModelShow = false
 
-  userMenuTree:any = []
-
   loading = () => {
     runInAction(() => {
       this.loadingData = !this.loadingData;
@@ -95,7 +93,6 @@ class OauthStore {
   validateEmail = (value: string) => {
     const regexp = new RegExp(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/);
     const serchfind = regexp.test(value);
-    console.log(serchfind)
     if (serchfind) {
       this.sendEmailButtonDisable = false;
       return '';
@@ -284,7 +281,6 @@ class OauthStore {
     const search = window.location.search;
     const param = new URLSearchParams(search);
     const token = param.get('token');
-    console.log(token)
     if(token){
       this.saveToken(token)
       return token;
@@ -295,8 +291,6 @@ class OauthStore {
     return null;
   }
 
-
-
   cleanAuth = () => {
     cookie.remove('secret');
     cookie.remove('token');
@@ -305,27 +299,6 @@ class OauthStore {
     runInAction(() => {
       this.loginFlag = false;
     })
-  }
-
-
-  userMenuTreeRequest = () => {
-    const userMenuTree = sessionStorage.getItem('userMenuTree');
-    if(userMenuTree){
-      runInAction(() => {
-        this.userMenuTree = JSON.parse(userMenuTree)
-      })
-      return
-    }
-    userMenu().then((result) => {
-      if (result.data.success) {
-        runInAction(() => {
-          this.userMenuTree = result.data.data
-          sessionStorage.setItem('userMenuTree',JSON.stringify(result.data.data))
-        })
-
-      }
-    })
-
   }
 
   hasRole = (role:string) =>{
