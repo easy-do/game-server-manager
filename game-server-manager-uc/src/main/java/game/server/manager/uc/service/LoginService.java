@@ -168,7 +168,7 @@ public class LoginService {
         UserInfoVo user = userInfoService.getOrCreateUserInfo(authUser);
         setUserLastLoginDetails(user);
         buildUserRoleAndPermission(user);
-        StpUtil.login(user.getId(), SaLoginConfig.setExtra("info", user));
+        StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, user));
         return StpUtil.getTokenValue();
     }
 
