@@ -29,7 +29,7 @@ const SideNavigation = () => {
 
   console.info("菜单加载")
 
-  return userMenuTree.length > 0 &&  userMenuTree[0].length > 0? (
+  return userMenuTree.length > 0 && userMenuTree[0].items? (
     <Nav
       selectedKeys={[pathname]}
       limitIndent={false}
