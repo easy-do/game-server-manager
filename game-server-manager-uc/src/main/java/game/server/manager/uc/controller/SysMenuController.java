@@ -175,10 +175,9 @@ public class SysMenuController {
     /**
      * 加载对应用户菜单列表树
      */
-    @SaCheckLogin()
     @GetMapping(value = "/userMenu")
     public R<List<Tree<Long>>> userTreeSelect() {
-        return DataResult.ok(sysMenuService.userMenu(AuthorizationUtil.getUser().getId()));
+        return DataResult.ok(sysMenuService.userMenu());
     }
 
 }

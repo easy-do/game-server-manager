@@ -3,7 +3,7 @@ import { Nav } from "@douyinfe/semi-ui";
 import { iocnMap } from "./iconUtil";
 
 
-export const buildMenu = (item, level, navigate) => {
+export const buildMenu = (item, level, push) => {
     if (item !== undefined && !item.disabled) {
       if (item.menuType === "M") {
         return (
@@ -17,23 +17,36 @@ export const buildMenu = (item, level, navigate) => {
           >
             {item.items
               ? item.items.map((item1) => {
-                  return buildMenu(item1, level + 1, navigate);
+                  return buildMenu(item1, level + 1, push);
                 })
               : null}
           </Nav.Sub>
         );
       } 
-      if (item.menuType === "C") {
+      if (item.menuType === "C" && item.isFrame === 1) {
         return (
           <Nav.Item
             key={item.itemKey}
-            itemKey={item.itemKey + ""}
+            itemKey={item.link}
             text={item.text}
             icon={iocnMap.get(item.icon)}
             level={level + 1}
             indent={true}
-            onClick={()=>navigate(item.link)}
-            linkOptions={{onClick:e=>e.preventDefault()}}
+            onClick={({ itemKey, domEvent }) => push(domEvent, String(itemKey))}
+          />
+        );
+      }
+
+      if (item.menuType === "C" && item.isFrame === 0) {
+        return (
+          <Nav.Item
+            key={item.itemKey}
+            itemKey={item.link}
+            text={item.text}
+            icon={iocnMap.get(item.icon)}
+            level={level + 1}
+            indent={true}
+            link={item.link}
           />
         );
       }

@@ -47,6 +47,15 @@ public interface SysMenuService extends IService<SysMenu> {
     List<Tree<Long>> userMenu(Long userId);
 
     /**
+     * 获取用户的所有菜单下拉树
+     *
+     * @return java.util.List<cn.hutool.core.lang.tree.Tree<java.lang.Long>>
+     * @author laoyu
+     * @date 2022/7/19
+     */
+    List<Tree<Long>> userMenu();
+
+    /**
      * 获取用户的所有权限列表
      *
      * @param userId userId

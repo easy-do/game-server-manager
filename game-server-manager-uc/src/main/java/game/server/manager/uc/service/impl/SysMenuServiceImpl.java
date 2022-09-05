@@ -1,5 +1,6 @@
 package game.server.manager.uc.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
@@ -7,9 +8,9 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.common.enums.StatusEnum;
 import game.server.manager.common.vo.SysMenuVo;
@@ -70,7 +71,24 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
         if(roleIds.isEmpty()){
             return ListUtil.empty();
         }
-        return buildUserMenu(roleIds);
+        return buildRoleMenu(roleIds);
+    }
+
+    @Cacheable(value = "roleMenu", key = "#roleIds")
+    public List<Tree<Long>> RoleMenu(List<Long> roleIds) {
+        if(roleIds.isEmpty()){
+            return ListUtil.empty();
+        }
+        return buildRoleMenu(roleIds);
+    }
+
+    @Override
+    public List<Tree<Long>> userMenu() {
+        if(StpUtil.isLogin()){
+            return userMenu(AuthorizationUtil.getUserId());
+        }else {
+         return RoleMenu(List.of(3L));
+        }
     }
 
     @Override
@@ -102,7 +120,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
         }
         List<Long> menuIds = roleMenuList.stream().map(SysRoleMenu::getMenuId).toList();
         LambdaQueryWrapper<SysMenu> menuWrapper = Wrappers.lambdaQuery();
-        menuWrapper.select(SysMenu::getMenuId,SysMenu::getMenuName,SysMenu::getParentId,SysMenu::getIcon,SysMenu::getPath,SysMenu::getQuery,SysMenu::getMenuType,SysMenu::getStatus,SysMenu::getPerms);
+        menuWrapper.select(SysMenu::getMenuId,SysMenu::getMenuName,SysMenu::getParentId,SysMenu::getIcon,SysMenu::getPath,SysMenu::getQuery,SysMenu::getMenuType,SysMenu::getStatus,SysMenu::getPerms,SysMenu::getIsFrame);
         menuWrapper.in(SysMenu::getMenuId,menuIds);
         menuWrapper.in(SysMenu::getStatus,0);
         return list(menuWrapper);
@@ -130,7 +148,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
      * @author laoyu
      * @date 2022/7/19
      */
-    private List<Tree<Long>> buildUserMenu(List<Long> roleIds) {
+    private List<Tree<Long>> buildRoleMenu(List<Long> roleIds) {
         List<SysMenu> menuList = getRoleMenuList(roleIds);
         return buildUserMenuTree(menuList);
     }
@@ -161,6 +179,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
             String query = sysMenuVo.getQuery();
             treeNode.putExtra("link",sysMenuVo.getPath() + (CharSequenceUtil.isNotEmpty(query)?query:""));
             treeNode.put("menuType",sysMenuVo.getMenuType());
+            treeNode.put("isFrame",sysMenuVo.getIsFrame());
             treeNode.putExtra("disabled", sysMenuVo.getStatus().equals(StatusEnum.DISABLE.getCode()));
         };
         Long min = voList.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();
