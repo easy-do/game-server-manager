@@ -197,6 +197,7 @@ class MenuManagerStore {
     /** 修改菜单信息 */
     editRequest = (id: number) => {
       this.loading()
+      console.log(this.dataInfo)
       edit(this.dataInfo).then((result) => {
         if (result.data.success) {
           Toast.success("操作成功")
@@ -330,7 +331,14 @@ class MenuManagerStore {
 
     
   userMenuTreeRequest = () => {
-    const userMenuTree = sessionStorage.getItem('userMenuTree');
+    const loginFlag = localStorage.getItem("loginFlag") ? true : false;
+    let userMenuTree:any = [];
+    if(loginFlag){
+       userMenuTree = sessionStorage.getItem('userMenuTree');
+    }else{
+      userMenuTree = sessionStorage.getItem('anonymousMenuTree');
+    }
+    
     if(userMenuTree){
       runInAction(() => {
         this.userMenuTree = JSON.parse(userMenuTree)
@@ -341,7 +349,11 @@ class MenuManagerStore {
       if (result.data.success) {
         runInAction(() => {
           this.userMenuTree = result.data.data
-          sessionStorage.setItem('userMenuTree',JSON.stringify(result.data.data))
+          if(loginFlag){
+            sessionStorage.setItem('userMenuTree',JSON.stringify(result.data.data))
+          }else{
+            sessionStorage.setItem('anonymousMenuTree',JSON.stringify(result.data.data))
+          }
         })
 
       }

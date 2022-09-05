@@ -1,29 +1,37 @@
 import { Nav } from "@douyinfe/semi-ui";
 import { observer } from "mobx-react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import useStores from "../../utils/store";
 import { buildMenu } from "../../utils/menuUtil";
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const SideNavigation = () => {
 
+  useEffect(() => {
+      userMenuTreeRequest();
+  }, []);
+
+  const { pathname } = useLocation();
+
   const navigate = useNavigate()
 
-  const loginFlag = localStorage.getItem("loginFlag") ? true : false;
 
-  useEffect(() => {
-    if (loginFlag) {
-      userMenuTreeRequest();
-    }
-  }, []);
+  const push = useCallback(
+    (event: MouseEvent, path: string) => {
+      event.preventDefault();
+      navigate(path);
+    },
+    [navigate]
+  );
 
   const { MenuManagerStore } = useStores();
   const { userMenuTreeRequest, userMenuTree } = MenuManagerStore;
 
   console.info("菜单加载")
 
-  return loginFlag && userMenuTree.length > 0 ? (
+  return userMenuTree.length > 0 &&  userMenuTree[0].length > 0? (
     <Nav
+      selectedKeys={[pathname]}
       limitIndent={false}
       header={{
         logo: (
@@ -36,7 +44,7 @@ const SideNavigation = () => {
       }}
     >
       {userMenuTree[0].items.map((item: any) => {
-        return buildMenu(item, 0, navigate);
+        return buildMenu(item, 0, push);
       })}
     </Nav>
   ) : null;

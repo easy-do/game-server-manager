@@ -1,13 +1,14 @@
 import { Button, Nav, Tooltip } from "@douyinfe/semi-ui";
 import { observer } from "mobx-react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import useStores from "../../utils/store";
 import UserMessage from "../userMessage/userMessage";
 import AVA from "../../pages/avatar/avatar";
 
 
 import { iocnMap } from "../../utils/iconUtil";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { buildMenu } from "../../utils/menuUtil";
 
 const TopNavigation = () => {
 
@@ -17,9 +18,19 @@ const TopNavigation = () => {
 
   const { userMenuTreeRequest, userMenuTree } = MenuManagerStore;
 
-  const { loginFlag, userInfo } = OauthStore;
+  const { loginFlag } = OauthStore;
 
   console.log('TopNavigation加載')
+
+  const push = useCallback(
+    (event: MouseEvent, path: string) => {
+      event.preventDefault();
+      navigate(path);
+    },
+    [navigate]
+  );
+
+  const { pathname } = useLocation();
 
   useEffect(() => {
         //加载主题样式
@@ -28,9 +39,7 @@ const TopNavigation = () => {
           const body = document.body;
           body.setAttribute("theme-mode", "dark");
         }
-        if(loginFlag){
           userMenuTreeRequest();
-        }
   }, []);
 
     //切换黑夜模式
@@ -46,13 +55,14 @@ const TopNavigation = () => {
     };
   
   return (
-    <Nav
+    <Nav 
+    selectedKeys={[pathname]}
     toggleIconPosition={'left'}
     mode="horizontal"
     footer={
       <>
       
-      {userInfo.id ?<UserMessage/>:null}
+      {loginFlag ?<UserMessage/>:null}
 
         <Tooltip content={"暗色模式"}>
           <Button
@@ -70,33 +80,9 @@ const TopNavigation = () => {
       </>
     }
   >
-    {/* { loginFlag && userMenuTree.length > 0 ? userMenuTree[1].items.map((item: any) => {
-        return buildMenu(item, 0);
-      }):null
-    } */}
-
-
-    <Nav.Item
-      itemKey="appStore"
-      text="APP市场"
-      icon={iocnMap.get('IconShoppingBag')}
-      onClick={()=>navigate("/appStore")}
-      linkOptions={{onClick:e=>e.preventDefault()}}
-    />
-    <Nav.Item
-      itemKey="appStore"
-      text="讨论交流"
-      icon={iocnMap.get('IconComment')}
-      onClick={()=>navigate("/discussion")}
-      // link={'/discussion'}
-      linkOptions={{onClick:e=>e.preventDefault()}}
-    />
-    <Nav.Item
-      itemKey="appStore"
-      text="官方Q群"
-      icon={iocnMap.get('IconUserGroup')}
-      link={'https://jq.qq.com/?_wv=1027&k=OfQIQC2Y'}
-    />
+     {userMenuTree.length > 0 ? userMenuTree[1].items.map((item: any) => {
+        return buildMenu(item, 0, push);
+      }):null}
   </Nav>
   );
 };
