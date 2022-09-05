@@ -18,7 +18,6 @@ import game.server.manager.server.service.AppScriptService;
 import game.server.manager.server.mapper.AppScriptMapper;
 import game.server.manager.common.vo.AppEnvInfoVo;
 import game.server.manager.common.vo.AppScriptVo;
-import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,7 @@ import java.util.Objects;
  * @createDate 2022-05-26 18:30:13
  */
 @Service
-public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo, AppScriptDto, AppScriptMapper> implements AppScriptService {
+public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, MpBaseQo, AppScriptVo, AppScriptDto, AppScriptMapper> implements AppScriptService {
 
 
     @Autowired
@@ -72,7 +71,7 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
         }
         queryWrapper.orderByDesc(AppScript::getCreateTime);
         queryWrapper.select(AppScript::getId, AppScript::getScriptName, AppScript::getAuthor, AppScript::getScriptType, AppScript::getVersion);
-        return AppScriptMapstruct.INSTANCE.entityListToVoList(baseMapper.selectList(queryWrapper));
+        return AppScriptMapstruct.INSTANCE.entityToVo(baseMapper.selectList(queryWrapper));
     }
 
     @Override
@@ -96,7 +95,7 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
         }
         queryWrapper.orderByDesc(AppScript::getCreateTime);
         listSelect(queryWrapper);
-        return AppScriptMapstruct.INSTANCE.entityListToVoList(baseMapper.selectList(queryWrapper));
+        return AppScriptMapstruct.INSTANCE.entityToVo(baseMapper.selectList(queryWrapper));
     }
 
     @Override
@@ -118,7 +117,7 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, AppScriptVo
         }
         wrapper.eq(AppScript::getId, id);
         AppScriptVo appScriptVo = AppScriptMapstruct.INSTANCE.entityToVo(baseMapper.selectOne(wrapper));
-        List<AppEnvInfoVo> envList = AppEnvInfoMapstruct.INSTANCE.entityListToVoList(appEnvInfoService.getListByScriptId(appScriptVo.getId()));
+        List<AppEnvInfoVo> envList = AppEnvInfoMapstruct.INSTANCE.entityToVo(appEnvInfoService.getListByScriptId(appScriptVo.getId()));
         appScriptVo.setScriptEnv(envList);
         return appScriptVo;
     }

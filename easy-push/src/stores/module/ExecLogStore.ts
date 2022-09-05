@@ -19,7 +19,8 @@ class ExecLogStore {
     currentPage: this.currentPage,
     pageSize: this.pageSize,
     order: {},
-    params: {}
+    params: [],
+    applicationId: ''
   }
 
   dataList = new Array<object>();
@@ -65,9 +66,7 @@ class ExecLogStore {
   pageRequest = (applicationId: string) => {
     this.loading()
     let param = this.pageParam;
-    param.params = {
-      "applicationId": applicationId
-    };
+    param.applicationId = applicationId
     page(param).then((result) => {
       if (result.data.success) {
         runInAction(() => {

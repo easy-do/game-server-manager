@@ -17,8 +17,13 @@ class UserPointsStore {
   pageParam = {
     currentPage: this.currentPage,
     pageSize: this.pageSize,
-    order: {},
-    params: {}
+    order: [{
+      column:'createTime',
+      asc:false
+
+    }],
+    params: [],
+    userId:0
   }
 
   dataList = new Array<object>();
@@ -42,9 +47,7 @@ class UserPointsStore {
   pageRequest = (userId: number) => {
     this.loading()
     let param = this.pageParam;
-    param.params = {
-      "userId": userId
-    };
+    param.userId = userId;
     page(param).then((result) => {
       if (result.data.success) {
         runInAction(() => {

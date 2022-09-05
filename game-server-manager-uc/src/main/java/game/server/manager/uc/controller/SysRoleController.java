@@ -2,7 +2,7 @@ package game.server.manager.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.uc.dto.SysRoleDto;
@@ -68,8 +68,8 @@ public class SysRoleController {
     @GetMapping("/list")
     public R<Object> list() {
         MpBaseQo mpBaseQo = MpBaseQo.builder().columns(Arrays.asList("roleId","roleName")).build();
-        QueryWrapper<SysRole> wrapper = mpBaseQo.buildSearchWrapper();
-        wrapper.eq("status",0);
+        LambdaQueryWrapper<SysRole> wrapper = mpBaseQo.buildSearchWrapper();
+        wrapper.eq(SysRole::getStatus,0);
         return DataResult.ok(sysRoleService.list(wrapper));
     }
 

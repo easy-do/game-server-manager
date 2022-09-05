@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.auth.AuthorizationUtil;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
+import game.server.manager.server.qo.ExecuteLogQo;
 import game.server.manager.server.service.ExecuteLogService;
 import game.server.manager.common.vo.ExecuteLogVo;
-import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,14 +36,13 @@ public class ExecuteLogController{
 
     @SaCheckLogin
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
-        
-        LambdaQueryWrapper<ExecuteLog> wrapper = Wrappers.lambdaQuery();
+    public MpDataResult page(@RequestBody ExecuteLogQo executeLogQo) {
+        LambdaQueryWrapper<ExecuteLog> wrapper = executeLogQo.buildSearchWrapper();
+        String applicationId = executeLogQo.getApplicationId();
         if (!AuthorizationUtil.isAdmin()) {
             wrapper.eq(ExecuteLog::getCreateBy,AuthorizationUtil.getUserId());
-            wrapper.eq(ExecuteLog::getApplicationId, mpBaseQo.getParams().get("applicationId"));
+            wrapper.eq(ExecuteLog::getApplicationId, applicationId);
         }else {
-            Object applicationId = mpBaseQo.getParams().get("applicationId");
             if(Objects.nonNull(applicationId)){
                 wrapper.eq(ExecuteLog::getApplicationId, applicationId);
             }
@@ -52,7 +50,7 @@ public class ExecuteLogController{
         wrapper.orderByDesc(ExecuteLog::getCreateTime);
         wrapper.select(ExecuteLog::getId,ExecuteLog::getExecuteState,ExecuteLog::getAppName,ExecuteLog::getScriptName,ExecuteLog::getDeviceName,
                 ExecuteLog::getApplicationName,ExecuteLog::getStartTime,ExecuteLog::getEndTime,ExecuteLog::getCreateTime);
-        return MpResultUtil.buildPage(executeLogService.page(mpBaseQo.startPage(), wrapper), ExecuteLogVo.class);
+        return MpResultUtil.buildPage(executeLogService.page(executeLogQo.startPage(), wrapper), ExecuteLogVo.class);
     }
 
     @SaCheckLogin

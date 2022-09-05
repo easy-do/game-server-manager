@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import game.server.manager.api.UserInfoApi;
 import game.server.manager.event.BasePublishEventServer;
+import game.server.manager.server.qo.CommentDetailsQo;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.server.dto.CommentDetailsDto;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
  * @createDate 2022-07-03 20:00:35
  */
 @Service
-public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, CommentDetailsVo, CommentDetailsDto, CommentDetailsMapper> implements CommentDetailsService {
+public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, CommentDetailsQo, CommentDetailsVo, CommentDetailsDto, CommentDetailsMapper> implements CommentDetailsService {
 
     @Autowired
     private UserInfoApi userInfoService;
@@ -67,12 +68,11 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
     }
 
     @Override
-    public IPage<CommentDetailsVo> page(MpBaseQo mpBaseQo) {
-        LambdaQueryWrapper<CommentDetails> wrapper = getWrapper();
+    public IPage<CommentDetailsVo> page(CommentDetailsQo commentDetailsQo) {
+        LambdaQueryWrapper<CommentDetails> wrapper = commentDetailsQo.buildSearchWrapper();
         wrapper.orderByAsc(CommentDetails::getCreateTime);
-        Map<String, Object> params = mpBaseQo.getParams();
-        Integer discussionId = (Integer) params.get("discussionId");
-        if (discussionId <= 0) {
+        Long discussionId = commentDetailsQo.getDiscussionId();
+        if (Objects.isNull(discussionId)) {
             return new Page<>();
         }
         //获得所有该主题的二级评论
@@ -81,7 +81,7 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
         //获取第一级评论 递归出父子结构
         wrapper.eq(CommentDetails::getBusinessId, discussionId);
         wrapper.eq(CommentDetails::getParentId, 0);
-        return baseMapper.selectPage(mpBaseQo.startPage(), wrapper).convert(entityClass -> {
+        return baseMapper.selectPage(commentDetailsQo.startPage(), wrapper).convert(entityClass -> {
             CommentDetailsVo vo = CommentDetailsMapstruct.INSTANCE.entityToVo(entityClass);
             String avatar = userInfoService.avatar(vo.getUserId()).getData();
             vo.setUserAvatar(avatar);

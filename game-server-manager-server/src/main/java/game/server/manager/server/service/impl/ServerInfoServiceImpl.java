@@ -16,7 +16,6 @@ import game.server.manager.server.service.ApplicationInfoService;
 import game.server.manager.server.service.ServerInfoService;
 import game.server.manager.server.mapper.ServerInfoMapper;
 import game.server.manager.common.vo.ServerInfoVo;
-import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import game.server.manager.common.result.DataResult;
@@ -30,7 +29,7 @@ import java.util.List;
 * @createDate 2022-05-19 19:29:55
 */
 @Service
-public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, ServerInfoVo, ServerInfoDto,ServerInfoMapper>
+public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo, ServerInfoVo, ServerInfoDto,ServerInfoMapper>
     implements ServerInfoService{
 
     @Autowired
@@ -67,7 +66,7 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, ServerInf
             wrapper.eq(ServerInfo::getUserId,getUserId());
         }
         listSelect(wrapper);
-        return ServerInfoMapstruct.INSTANCE.entityListToVoList(list(wrapper));
+        return ServerInfoMapstruct.INSTANCE.entityToVo(list(wrapper));
     }
 
     @Override

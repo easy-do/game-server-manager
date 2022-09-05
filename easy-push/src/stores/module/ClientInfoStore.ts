@@ -23,7 +23,7 @@ class ClientInfoStore {
       { column: 'createTime', asc: false }
     ],
     columns: [],
-    params: {}
+    params: []
   }
 
   dataList = new Array<object>();
@@ -268,7 +268,7 @@ class ClientInfoStore {
   /**点击搜索按钮 */
   searchButton = () => {
     let param = this.pageParam;
-    param.params = this.searchParam
+    // param.params = this.searchParam
     this.searchRequest(param)
   }
 

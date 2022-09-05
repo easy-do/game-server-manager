@@ -1,6 +1,7 @@
 package game.server.manager.server.service;
 
 import game.server.manager.common.vo.ClientInfoVo;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.web.base.BaseService;
 import game.server.manager.server.dto.ClientInfoDto;
 import game.server.manager.server.entity.ClientInfo;
@@ -10,7 +11,7 @@ import game.server.manager.server.entity.ClientInfo;
 * @description 针对表【client_info(客户端信息)】的数据库操作Service
 * @createDate 2022-08-04 19:22:22
 */
-public interface ClientInfoService extends BaseService<ClientInfo, ClientInfoVo, ClientInfoDto> {
+public interface ClientInfoService extends BaseService<ClientInfo, MpBaseQo, ClientInfoVo, ClientInfoDto> {
 
     /**
      * 在线安装

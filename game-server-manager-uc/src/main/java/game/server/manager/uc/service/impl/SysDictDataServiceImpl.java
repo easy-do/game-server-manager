@@ -29,7 +29,7 @@ import java.util.Objects;
 * @createDate 2022-07-22 10:19:20
 */
 @Service
-public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData, SysDictDataVo, SysDictDataDto,SysDictDataMapper>
+public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData, MpBaseQo, SysDictDataVo, SysDictDataDto,SysDictDataMapper>
     implements SysDictDataService{
 
     @Autowired
@@ -49,7 +49,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData, SysDict
     public List<SysDictDataVo> voList() {
         LambdaQueryWrapper<SysDictData> wrapper = getWrapper();
         listSelect(wrapper);
-        return SysDictDataMapstruct.INSTANCE.entityListToVoList(list(wrapper));
+        return SysDictDataMapstruct.INSTANCE.entityToVo(list(wrapper));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData, SysDict
         wrapper.select(SysDictData::getDictLabel,SysDictData::getDictSort,SysDictData::getDictKey,SysDictData::getDictValue,SysDictData::getDictValueType,SysDictData::getIsDefault);
         wrapper.eq(SysDictData::getDictTypeId,dictTypeId);
         wrapper.eq(SysDictData::getStatus, StatusEnum.ENABLE.getCode());
-        return SysDictDataMapstruct.INSTANCE.entityListToVoList(list(wrapper));
+        return SysDictDataMapstruct.INSTANCE.entityToVo(list(wrapper));
     }
 
     @Override

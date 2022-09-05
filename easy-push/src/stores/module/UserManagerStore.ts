@@ -2,6 +2,7 @@ import { Toast } from "@douyinfe/semi-ui";
 import { makeAutoObservable, runInAction } from "mobx";
 import { managerPage, changeStatus, info, remove, authRole, getAuthRoles } from "../../api/userManager";
 import { userPointsOperation } from "../../api/userPoints";
+import { SearchParam, SearchTypeEnum } from "../../utils/systemConstant";
 
 
 
@@ -26,7 +27,7 @@ class UserManagerStore {
       { column: 'createTime', asc: false }
     ],
     columns: ['id','nickName', 'platform', 'state', 'authorization', 'loginIp', 'lastLoginTime', 'createTime'],
-    params: {}
+    params: []
   }
 
   dataList = new Array<object>();
@@ -260,7 +261,7 @@ class UserManagerStore {
   /**点击搜索按钮 */
   searchButton = () => {
     let param = this.pageParam;
-    param.params = this.searchParam
+    // param.params = this.searchParam
     this.searchRequest(param)
   }
 
@@ -438,12 +439,12 @@ class UserManagerStore {
       currentPage: 1,
       pageSize: 20,
       columns: ['id','nickName','platform'],
-      params: {}
+      params: new Array<SearchParam>()
     }
     if(input !== undefined && input !== ''){
-      pageParam.params = {
-        'nickName': input
-      }
+      pageParam.params.push(
+        new SearchParam('nickName',input,SearchTypeEnum.LIKE)
+      )
     }
     managerPage(pageParam).then((result) => {
       if (result.data.success) {

@@ -1,7 +1,6 @@
 package game.server.manager.web.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import java.util.List;
  * @description 基础controller
  * @date 2022/6/18
  */
-public abstract class BaseController<SERVICE extends BaseService<Entity,VO,DTO>, Entity, ID extends Serializable, VO, DTO> {
+public abstract class BaseController<SERVICE extends BaseService<Entity,QO,VO,DTO>, Entity, ID extends Serializable,QO, VO, DTO> {
 
     public static final String ADD_ACTION = "添加";
 
@@ -53,14 +52,14 @@ public abstract class BaseController<SERVICE extends BaseService<Entity,VO,DTO>,
     /**
      * 分页查询
      *
-     * @param mpBaseQo mpBaseQo
+     * @param qo qo
      * @return game.server.manager.server.result.MPDataResult
      * @author laoyu
      * @date 2022/7/6
      */
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo){
-        IPage<VO> page = baseService.page(mpBaseQo);
+    public MpDataResult page(@RequestBody QO qo){
+        IPage<VO> page = baseService.page(qo);
         return MpResultUtil.buildPage(page);
     }
 

@@ -4,16 +4,15 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import game.server.manager.common.vo.UserPointsVo;
 import game.server.manager.uc.dto.UserPointsOperationDto;
 import game.server.manager.uc.entity.UserPointsLog;
+import game.server.manager.uc.qo.UserPointsQo;
 import game.server.manager.uc.service.UserPointsLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -42,26 +41,20 @@ public class UserPointsController {
     /**
      * 分页查询
      *
-     * @param mpBaseQo mpBaseQo
+     * @param userPointsQo userPointsQo
      * @return game.server.manager.server.result.MPDataResult
      * @author laoyu
      * @date 2022/7/6
      */
     @SaCheckLogin
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo){
-        LambdaQueryWrapper<UserPointsLog> wrapper = Wrappers.lambdaQuery();
-        Map<String, Object> params = mpBaseQo.getParams();
-        if(Objects.isNull(params)){
+    public MpDataResult page(@RequestBody UserPointsQo userPointsQo){
+        LambdaQueryWrapper<UserPointsLog> wrapper = userPointsQo.buildSearchWrapper();
+        if(Objects.isNull(userPointsQo.getUserId())){
             return MpResultUtil.empty();
         }
-        Object userId = params.get("userId");
-        if(Objects.isNull(userId)){
-            return MpResultUtil.empty();
-        }
-        wrapper.eq(UserPointsLog::getUserId,userId);
         wrapper.orderByDesc(UserPointsLog::getCreateTime);
-        IPage<UserPointsLog> page = userPointsLogService.page(mpBaseQo.startPage(),wrapper);
+        IPage<UserPointsLog> page = userPointsLogService.page(userPointsQo.startPage(),wrapper);
         return MpResultUtil.buildPage(page, UserPointsVo.class);
     }
 

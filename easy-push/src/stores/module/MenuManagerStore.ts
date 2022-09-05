@@ -13,7 +13,7 @@ class MenuManagerStore {
   dataInfo: object = {}
 
   pageParam = {
-    params: {}
+    params: []
   }
 
   dataList = new Array<object>();
@@ -241,7 +241,7 @@ class MenuManagerStore {
   /**点击搜索按钮 */
   searchButton = () => {
     let param = this.pageParam;
-    param.params = this.searchParam
+    // param.params = this.searchParam
     this.searchRequest(param)
   }
 

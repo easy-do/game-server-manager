@@ -38,7 +38,7 @@ public interface BaseMapstruct <ENTITY,VO,DTO>{
      * @author laoyu
      * @date 2022/8/29
      */
-    List<ENTITY> dtoListToEntityList(List<DTO> dto);
+    List<ENTITY> dtoToEntity(List<DTO> dto);
 
 
     /**
@@ -64,12 +64,12 @@ public interface BaseMapstruct <ENTITY,VO,DTO>{
 
 
     /**
-     * entityListToVoList
+     * entityToVo
      *
      * @param list list
      * @return game.server.manager.generate.core.dto.DataSourceDto
      * @author laoyu
      * @date 2022/8/29
      */
-    List<VO> entityListToVoList(List<ENTITY> list);
+    List<VO> entityToVo(List<ENTITY> list);
 }

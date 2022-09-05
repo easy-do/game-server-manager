@@ -1,6 +1,7 @@
 package game.server.manager.server.service;
 
 import game.server.manager.common.application.DeployParam;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.web.base.BaseService;
 import game.server.manager.server.dto.ApplicationInfoDto;
 import game.server.manager.server.entity.ApplicationInfo;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 * @description 针对表【application_info(应用信息)】的数据库操作Service
 * @createDate 2022-05-20 10:29:54
 */
-public interface ApplicationInfoService extends BaseService<ApplicationInfo, ApplicationInfoVo, ApplicationInfoDto> {
+public interface ApplicationInfoService extends BaseService<ApplicationInfo, MpBaseQo, ApplicationInfoVo, ApplicationInfoDto> {
 
     /**
      * 统计用户应用数量

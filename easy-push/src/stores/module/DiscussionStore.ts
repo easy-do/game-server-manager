@@ -21,7 +21,7 @@ class DiscussionStore {
     currentPage: this.currentPage,
     pageSize: this.pageSize,
     order: {},
-    params: {}
+    params: []
   }
 
   dataList = new Array<object>();

@@ -1,5 +1,6 @@
 package game.server.manager.server.service;
 
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.web.base.BaseService;
 import game.server.manager.server.dto.ServerInfoDto;
 import game.server.manager.server.entity.ServerInfo;
@@ -10,7 +11,7 @@ import game.server.manager.common.vo.ServerInfoVo;
 * @description 针对表【server_info(服务器信息)】的数据库操作Service
 * @createDate 2022-05-19 19:29:55
 */
-public interface ServerInfoService extends BaseService<ServerInfo, ServerInfoVo, ServerInfoDto> {
+public interface ServerInfoService extends BaseService<ServerInfo, MpBaseQo, ServerInfoVo, ServerInfoDto> {
 
     /**
      * 统计用户服务数量

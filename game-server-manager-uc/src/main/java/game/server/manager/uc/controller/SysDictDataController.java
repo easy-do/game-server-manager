@@ -38,7 +38,7 @@ import game.server.manager.common.vaild.Update;
  */
 @RestController
 @RequestMapping("/dictData")
-public class SysDictDataController extends BaseController<SysDictDataService, SysDictData,Long, SysDictDataVo, SysDictDataDto> implements SysDictDataApi {
+public class SysDictDataController extends BaseController<SysDictDataService, SysDictData,Long, MpBaseQo, SysDictDataVo, SysDictDataDto> implements SysDictDataApi {
 
     public static final String MODULE_NAME = "字典数据管理";
 

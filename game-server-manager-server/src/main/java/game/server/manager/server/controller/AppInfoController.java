@@ -2,6 +2,8 @@ package game.server.manager.server.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import game.server.manager.log.SaveLog;
+import game.server.manager.server.dto.CommentDetailsDto;
+import game.server.manager.server.qo.CommentDetailsQo;
 import game.server.manager.web.base.BaseController;
 import game.server.manager.common.vaild.Insert;
 import game.server.manager.common.vaild.Update;
@@ -26,7 +28,7 @@ import game.server.manager.common.result.R;
  */
 @RestController
 @RequestMapping("/app")
-public class AppInfoController extends BaseController<AppInfoService, AppInfo, Long, AppInfoVo, AppInfoDto> {
+public class AppInfoController extends BaseController<AppInfoService, AppInfo, Long, MpBaseQo,  AppInfoVo, AppInfoDto> {
 
     public static final String MODULE_NAME = "APP管理";
 
