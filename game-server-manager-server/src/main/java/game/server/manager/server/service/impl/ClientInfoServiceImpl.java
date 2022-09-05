@@ -17,7 +17,6 @@ import game.server.manager.common.exception.BizException;
 import game.server.manager.common.utils.AppScriptUtils;
 import game.server.manager.common.vo.ClientInfoVo;
 import game.server.manager.common.vo.SysDictDataVo;
-import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.common.application.DeployParam;
 import game.server.manager.event.BasePublishEventServer;
 import game.server.manager.web.base.BaseServiceImpl;
@@ -54,7 +53,7 @@ import java.util.Objects;
 * @createDate 2022-08-04 19:22:22
 */
 @Service
-public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInfoVo, ClientInfoDto, ClientInfoMapper>
+public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo, ClientInfoVo, ClientInfoDto, ClientInfoMapper>
     implements ClientInfoService{
 
 
@@ -102,7 +101,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, ClientInf
         }
         wrapper.orderByDesc(ClientInfo::getCreateTime);
         listSelect(wrapper);
-        return ClientInfoMapstruct.INSTANCE.entityListToVoList(baseMapper.selectList(wrapper));
+        return ClientInfoMapstruct.INSTANCE.entityToVo(baseMapper.selectList(wrapper));
     }
 
     @Override

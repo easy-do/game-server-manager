@@ -36,7 +36,6 @@ import game.server.manager.server.service.ClientMessageService;
 import game.server.manager.server.service.ExecuteLogService;
 import game.server.manager.server.service.ServerInfoService;
 import game.server.manager.common.vo.ApplicationInfoVo;
-import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import game.server.manager.common.exception.BizException;
@@ -52,7 +51,7 @@ import java.util.Objects;
 * @createDate 2022-05-20 10:29:54
 */
 @Service
-public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,ApplicationInfoVo, ApplicationInfoDto,ApplicationInfoMapper>
+public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo, MpBaseQo, ApplicationInfoVo, ApplicationInfoDto,ApplicationInfoMapper>
     implements ApplicationInfoService{
 
     @Autowired
@@ -205,7 +204,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
         }
         wrapper.orderByDesc(ApplicationInfo::getLastUpTime);
         listSelect(wrapper);
-        return ApplicationInfoMapstruct.INSTANCE.entityListToVoList(baseMapper.selectList(wrapper));
+        return ApplicationInfoMapstruct.INSTANCE.entityToVo(baseMapper.selectList(wrapper));
     }
 
     @Override

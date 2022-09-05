@@ -12,7 +12,7 @@ import game.server.manager.common.vo.DiscussionVo;
 * @description 针对表讨论交流的数据库操作Service
 * @createDate 2022-07-03 20:00:32
 */
-public interface DiscussionService extends BaseService<Discussion, DiscussionVo, DiscussionDto> {
+public interface DiscussionService extends BaseService<Discussion, MpBaseQo, DiscussionVo, DiscussionDto> {
 
     /**
      * 管理分页

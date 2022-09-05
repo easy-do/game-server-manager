@@ -77,7 +77,7 @@ public class TemplateManagementServiceImpl extends ServiceImpl<TemplateManagemen
         wrapper.select(TemplateManagement::getId,TemplateManagement::getTemplateName,
                 TemplateManagement::getTemplateType,TemplateManagement::getVersion,TemplateManagement::getCreateName);
         List<TemplateManagement> list = baseMapper.selectList(wrapper);
-        return TemplateMapstruct.INSTANCE.entityListToVoList(list);
+        return TemplateMapstruct.INSTANCE.entityToVo(list);
 
     }
 

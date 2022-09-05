@@ -117,11 +117,7 @@ system:
     max-req-time: 30000
     #指定时间范围内触发黑名单的最大请求次数
     max-req-count: 10
-  #分页增强
-  page:
-    enable: false
-    current-page-filed: currentPage
-    page-size-filed: pageSize
+
   #前端地址
   be-domain: ${BE_DOMAIN:https://push.easydo.plus}
   #后端地址

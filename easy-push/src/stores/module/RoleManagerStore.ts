@@ -27,7 +27,8 @@ class RoleManagerStore {
       { column: 'createTime', asc: false }
     ],
     columns: ['roleId','roleName', 'roleKey','status','createTime','updateTime','isDefault'],
-    params: {}
+    params: [],
+    applicationId:0
   }
 
   dataList = new Array<object>();
@@ -328,7 +329,7 @@ class RoleManagerStore {
   /**点击搜索按钮 */
   searchButton = () => {
     let param = this.pageParam;
-    param.params = this.searchParam
+    // param.params = this.searchParam
     this.searchRequest(param)
   }
 

@@ -33,7 +33,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/application")
-public class ApplicationController extends BaseController<ApplicationInfoService, ApplicationInfo, String, ApplicationInfoVo, ApplicationInfoDto> {
+public class ApplicationController extends BaseController<ApplicationInfoService, ApplicationInfo, String, MpBaseQo, ApplicationInfoVo, ApplicationInfoDto> {
 
 
     public static final String MODULE_NAME = "应用管理";

@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentMap;
 * @createDate 2022-05-22 17:44:07
 */
 @Service
-public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoVo, AppInfoDto, AppInfoMapper> implements AppInfoService{
+public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, MpBaseQo, AppInfoVo, AppInfoDto, AppInfoMapper> implements AppInfoService{
 
     public static final ConcurrentMap<String,IPage<AppInfo>> STORE_PAGE_CACHE = new ConcurrentHashMap<>();
 
@@ -58,7 +58,7 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoVo, AppI
         }
         wrapper.orderByDesc(AppInfo::getCreateTime);
         listSelect(wrapper);
-        return AppInfoMapstruct.INSTANCE.entityListToVoList(baseMapper.selectList(wrapper));
+        return AppInfoMapstruct.INSTANCE.entityToVo(baseMapper.selectList(wrapper));
     }
 
     @Override

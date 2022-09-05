@@ -18,10 +18,9 @@ class CommentStore {
         currentPage: this.currentPage,
         pageSize: this.pageSize,
         order: {},
-        params:{
-            discussionId : 0,
-            type:0,
-        }
+        params:[],
+        discussionId : 0,
+        type:0,
     }
 
     dataList = new Array<object>();
@@ -71,8 +70,8 @@ class CommentStore {
     pageRequest = (discussionId: number,type:number) => {
         this.loading()
         let pageParam = this.pageParam;
-        pageParam.params.type = type;
-        pageParam.params.discussionId = discussionId;
+        pageParam.type = type;
+        pageParam.discussionId = discussionId;
         page(pageParam).then((result) => {
             if (result.data.success) {
                 runInAction(() => {

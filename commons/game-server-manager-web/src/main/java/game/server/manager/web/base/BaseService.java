@@ -2,8 +2,6 @@ package game.server.manager.web.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
  * @date 2022/7/6
  */
 
-public interface BaseService<Entity,VO,DTO> extends IService<Entity> {
+public interface BaseService<Entity,QO,VO,DTO> extends IService<Entity> {
 
 
     /**
@@ -29,12 +27,12 @@ public interface BaseService<Entity,VO,DTO> extends IService<Entity> {
     /**
      * 分页查询
      *
-     * @param mpBaseQo mpBaseQo
+     * @param qo qo
      * @return com.baomidou.mybatisplus.core.metadata.IPage<Entity>
      * @author laoyu
      * @date 2022/7/6
      */
-    public IPage<VO> page(@RequestBody MpBaseQo mpBaseQo);
+    public IPage<VO> page(QO qo);
 
     /**
      * 获取详情

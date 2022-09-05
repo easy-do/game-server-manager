@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/serverInfo")
-public class ServerInfoController extends BaseController<ServerInfoService,ServerInfo,Long,ServerInfoVo,ServerInfoDto> {
+public class ServerInfoController extends BaseController<ServerInfoService,ServerInfo,Long,MpBaseQo,ServerInfoVo,ServerInfoDto> {
 
     @SaCheckLogin
     @RequestMapping("/list")

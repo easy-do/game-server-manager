@@ -30,7 +30,7 @@ import game.server.manager.common.vaild.Update;
  */
 @RestController
 @RequestMapping("/dictType")
-public class SysDictTypeController extends BaseController<SysDictTypeService, SysDictType,Long, SysDictTypeVo, SysDictTypeDto> {
+public class SysDictTypeController extends BaseController<SysDictTypeService, SysDictType, Long, MpBaseQo, SysDictTypeVo, SysDictTypeDto> {
 
     public static final String MODULE_NAME = "字典类型管理";
 

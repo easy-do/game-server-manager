@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import game.server.manager.auth.AuthorizationUtil;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.common.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +18,7 @@ import java.util.List;
  * @date 2022/7/6
  */
 
-public abstract class BaseServiceImpl<Entity,VO,DTO,MAPPER extends BaseMapper<Entity>>  extends ServiceImpl<MAPPER, Entity> implements BaseService<Entity,VO,DTO> {
+public abstract class BaseServiceImpl<Entity,QO,VO,DTO,MAPPER extends BaseMapper<Entity>>  extends ServiceImpl<MAPPER, Entity> implements BaseService<Entity,QO,VO,DTO> {
 
 
     @Autowired
@@ -80,13 +79,13 @@ public abstract class BaseServiceImpl<Entity,VO,DTO,MAPPER extends BaseMapper<En
     /**
      * 分页
      *
-     * @param mpBaseQo mpBaseQo
+     * @param qo qo
      * @return com.baomidou.mybatisplus.core.metadata.IPage<Entity>
      * @author laoyu
      * @date 2022/7/6
      */
     @Override
-    public abstract IPage<VO> page(MpBaseQo mpBaseQo);
+    public abstract IPage<VO> page(QO qo);
 
     /**
      * 详情

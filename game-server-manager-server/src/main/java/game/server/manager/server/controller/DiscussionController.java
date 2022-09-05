@@ -32,7 +32,7 @@ import game.server.manager.common.vaild.Update;
  */
 @RestController
 @RequestMapping("/discussion")
-public class DiscussionController extends BaseController<DiscussionService, Discussion,Long, DiscussionVo, DiscussionDto> {
+public class DiscussionController extends BaseController<DiscussionService, Discussion,Long, MpBaseQo, DiscussionVo, DiscussionDto> {
 
 
     @PostMapping("/page")

@@ -46,7 +46,7 @@ public class AppEnvInfoServiceImpl extends ServiceImpl<AppEnvInfoMapper, AppEnvI
                     List<AppEnvInfo> list = getListByScriptId(script.getId());
                     ScriptEnvListVo scriptEnvListVo = ScriptEnvListVo.builder()
                             .scriptName(script.getScriptName())
-                            .env(AppEnvInfoMapstruct.INSTANCE.entityListToVoList(list))
+                            .env(AppEnvInfoMapstruct.INSTANCE.entityToVo(list))
                             .build();
                     allEvenList.add(scriptEnvListVo);
                 }
@@ -56,7 +56,7 @@ public class AppEnvInfoServiceImpl extends ServiceImpl<AppEnvInfoMapper, AppEnvI
         List<AppEnvInfo> list = getListByScriptId(scriptId);
         ScriptEnvListVo scriptEnvListVo = ScriptEnvListVo.builder()
                 .scriptName(appScript.getScriptName())
-                .env(AppEnvInfoMapstruct.INSTANCE.entityListToVoList(list))
+                .env(AppEnvInfoMapstruct.INSTANCE.entityToVo(list))
                 .build();
         allEvenList.add(scriptEnvListVo);
         return allEvenList;
@@ -74,7 +74,7 @@ public class AppEnvInfoServiceImpl extends ServiceImpl<AppEnvInfoMapper, AppEnvI
     @Override
     public List<AppEnvInfoVo> getVoListByScriptId(Long scriptId) {
         List<AppEnvInfo> list = getListByScriptId(scriptId);
-        return AppEnvInfoMapstruct.INSTANCE.entityListToVoList(list);
+        return AppEnvInfoMapstruct.INSTANCE.entityToVo(list);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class AppEnvInfoServiceImpl extends ServiceImpl<AppEnvInfoMapper, AppEnvI
                 appEnvInfoDto.setAppId(scriptId);
             }
         }).toList();
-        saveOrUpdateBatch(AppEnvInfoMapstruct.INSTANCE.dtoListToEntityList(appEnvInfoVoList));
+        saveOrUpdateBatch(AppEnvInfoMapstruct.INSTANCE.dtoToEntity(appEnvInfoVoList));
     }
 
     private void removeByAppIdAndEnvKeys(Long scriptId, List<String> deleteKeys) {

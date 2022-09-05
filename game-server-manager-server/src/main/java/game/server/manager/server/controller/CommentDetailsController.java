@@ -3,7 +3,7 @@ package game.server.manager.server.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import game.server.manager.common.constant.SystemConstant;
-import game.server.manager.web.base.BaseController;
+import game.server.manager.server.qo.CommentDetailsQo;
 import game.server.manager.server.dto.CommentDetailsDto;
 import game.server.manager.server.entity.CommentDetails;
 import game.server.manager.log.SaveLog;
@@ -12,6 +12,7 @@ import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import game.server.manager.server.service.CommentDetailsService;
 import game.server.manager.common.vo.CommentDetailsVo;
+import game.server.manager.web.base.BaseController;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,13 +32,15 @@ import game.server.manager.common.vaild.Insert;
  */
 @RestController
 @RequestMapping("/commentDetails")
-public class CommentDetailsController extends BaseController<CommentDetailsService,CommentDetails,Long,CommentDetailsVo,CommentDetailsDto> {
+public class CommentDetailsController extends BaseController<CommentDetailsService, CommentDetails, Long, CommentDetailsQo, CommentDetailsVo, CommentDetailsDto> {
     
 
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
-        return super.page(mpBaseQo);
+    public MpDataResult page(@RequestBody CommentDetailsQo commentDetailsQo) {
+        return super.page(commentDetailsQo);
     }
+
+
 
     @SaCheckLogin
     @PostMapping("/managerPage")

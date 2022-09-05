@@ -24,7 +24,7 @@ import java.util.Objects;
 * @createDate 2022-07-22 10:19:24
 */
 @Service
-public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, SysDictTypeVo, SysDictTypeDto, SysDictTypeMapper>
+public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, MpBaseQo, SysDictTypeVo, SysDictTypeDto, SysDictTypeMapper>
     implements SysDictTypeService{
 
     @Override
@@ -41,7 +41,7 @@ public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, SysDict
     public List<SysDictTypeVo> voList() {
         LambdaQueryWrapper<SysDictType> wrapper = getWrapper();
         listSelect(wrapper);
-        return SysDictTypeMapstruct.INSTANCE.entityListToVoList(list(wrapper));
+        return SysDictTypeMapstruct.INSTANCE.entityToVo(list(wrapper));
     }
 
     @Override

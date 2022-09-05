@@ -165,7 +165,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
         if(sysMenuList.isEmpty()){
             return ListUtil.empty();
         }
-        List<SysMenuVo> voList = SysMenuMapstruct.INSTANCE.entityListToVoList(sysMenuList);
+        List<SysMenuVo> voList = SysMenuMapstruct.INSTANCE.entityToVo(sysMenuList);
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setIdKey("itemKey");
         treeNodeConfig.setNameKey("text");
@@ -200,7 +200,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
         if(sysMenuList.isEmpty()){
             return ListUtil.empty();
         }
-        List<SysMenuVo> voList = SysMenuMapstruct.INSTANCE.entityListToVoList(sysMenuList);
+        List<SysMenuVo> voList = SysMenuMapstruct.INSTANCE.entityToVo(sysMenuList);
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setIdKey("value");
         treeNodeConfig.setNameKey("label");

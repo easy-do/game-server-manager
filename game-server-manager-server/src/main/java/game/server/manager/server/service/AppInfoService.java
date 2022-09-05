@@ -12,7 +12,7 @@ import game.server.manager.mybatis.plus.qo.MpBaseQo;
 * @description 针对表【app_info(APP信息)】的数据库操作Service
 * @createDate 2022-05-22 17:44:07
 */
-public interface AppInfoService extends BaseService<AppInfo, AppInfoVo, AppInfoDto> {
+public interface AppInfoService extends BaseService<AppInfo, MpBaseQo, AppInfoVo, AppInfoDto> {
 
     /**
      * 统计用户APP数量

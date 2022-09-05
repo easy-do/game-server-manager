@@ -67,7 +67,7 @@ public class DataSourceManagerServiceImpl extends ServiceImpl<DataSourceManagerM
     @Override
     public List<DataSourceVo> list(DataSourceQo qo) {
         List<DataSource> list = baseMapper.selectDataSourceManagerList(qo);
-        return DataSourceMapstruct.INSTANCE.entityListToVoList(list);
+        return DataSourceMapstruct.INSTANCE.entityToVo(list);
     }
 
     @Override

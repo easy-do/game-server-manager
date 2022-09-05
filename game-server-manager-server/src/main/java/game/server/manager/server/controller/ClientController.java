@@ -39,7 +39,7 @@ import static game.server.manager.common.constant.Constants.WINDOW_LINE_END_CHAR
  */
 @RestController
 @RequestMapping("/client")
-public class ClientController extends BaseController<ClientInfoService, ClientInfo, String, ClientInfoVo, ClientInfoDto> {
+public class ClientController extends BaseController<ClientInfoService, ClientInfo, String, MpBaseQo, ClientInfoVo, ClientInfoDto> {
 
 
     public static final String MODULE_NAME = "客户端管理";

@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentMap;
 * @createDate 2022-07-03 20:00:32
 */
 @Service
-public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, DiscussionVo, DiscussionDto, CommonProblemMapper>
+public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, MpBaseQo, DiscussionVo, DiscussionDto, CommonProblemMapper>
     implements DiscussionService {
 
     public static final ConcurrentMap<String,IPage<DiscussionVo>> PAGE_CACHE = new ConcurrentHashMap<>();

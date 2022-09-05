@@ -138,11 +138,7 @@ system:
     max-req-time: ${BACK_LIST_MAX_REQ_TIME:3000}
     #指定时间范围内触发黑名单的最大请求次数
     max-req-count: ${BACK_LIST_MAX_REQ_COUNT:10}
-  #分页增强
-  page:
-    enable: false
-    current-page-filed: currentPage
-    page-size-filed: pageSize
+
   redis:
     cache:
       # 缓存默认过期时间
