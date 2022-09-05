@@ -29,7 +29,7 @@ axios.interceptors.response.use(
         cookie.remove('token');
         localStorage.clear()
         sessionStorage.clear()
-        window.location.reload()
+        window.location.pathname = '/home'
       } else {
         Toast.warning({ content: data.data.errorMessage, duration: 3 })
       }
