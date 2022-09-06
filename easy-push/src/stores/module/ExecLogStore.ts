@@ -18,8 +18,8 @@ class ExecLogStore {
   pageParam = {
     currentPage: this.currentPage,
     pageSize: this.pageSize,
-    order: {},
-    params: [],
+    orders: [],
+    params: {},
     applicationId: ''
   }
 

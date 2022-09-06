@@ -51,7 +51,7 @@ import java.util.Objects;
 * @createDate 2022-05-20 10:29:54
 */
 @Service
-public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo, MpBaseQo, ApplicationInfoVo, ApplicationInfoDto,ApplicationInfoMapper>
+public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo, MpBaseQo<ApplicationInfo>, ApplicationInfoVo, ApplicationInfoDto,ApplicationInfoMapper>
     implements ApplicationInfoService{
 
     @Autowired
@@ -208,7 +208,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
     }
 
     @Override
-    public IPage<ApplicationInfoVo> page(MpBaseQo mpBaseQo) {
+    public IPage<ApplicationInfoVo> page(MpBaseQo<ApplicationInfo> mpBaseQo) {
         LambdaQueryWrapper<ApplicationInfo> wrapper = Wrappers.lambdaQuery();
         if(!isAdmin()){
             wrapper.eq(ApplicationInfo::getUserId,getUserId());

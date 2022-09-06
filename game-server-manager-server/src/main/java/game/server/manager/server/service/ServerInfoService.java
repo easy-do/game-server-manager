@@ -11,7 +11,7 @@ import game.server.manager.common.vo.ServerInfoVo;
 * @description 针对表【server_info(服务器信息)】的数据库操作Service
 * @createDate 2022-05-19 19:29:55
 */
-public interface ServerInfoService extends BaseService<ServerInfo, MpBaseQo, ServerInfoVo, ServerInfoDto> {
+public interface ServerInfoService extends BaseService<ServerInfo, MpBaseQo<ServerInfo>, ServerInfoVo, ServerInfoDto> {
 
     /**
      * 统计用户服务数量

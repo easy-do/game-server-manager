@@ -53,7 +53,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
 
     @Override
     public List<Tree<Long>> treeSelect() {
-        MpBaseQo mpBaseQo = MpBaseQo.builder().columns(Arrays.asList("menuId","menuName","parentId","status")).build();
+        MpBaseQo<SysMenu> mpBaseQo = new MpBaseQo<>();
+        mpBaseQo.setColumns(Arrays.asList("menuId","menuName","parentId","status"));
         List<SysMenu> allList = list(mpBaseQo.buildSearchWrapper());
         return buildSelectMenuTree(allList);
     }

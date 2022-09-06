@@ -24,7 +24,7 @@ import java.util.Objects;
 * @createDate 2022-07-22 10:19:24
 */
 @Service
-public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, MpBaseQo, SysDictTypeVo, SysDictTypeDto, SysDictTypeMapper>
+public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, MpBaseQo<SysDictType>, SysDictTypeVo, SysDictTypeDto, SysDictTypeMapper>
     implements SysDictTypeService{
 
     @Override
@@ -45,7 +45,7 @@ public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, MpBaseQ
     }
 
     @Override
-    public IPage<SysDictTypeVo> page(MpBaseQo mpBaseQo) {
+    public IPage<SysDictTypeVo> page(MpBaseQo<SysDictType> mpBaseQo) {
         return page(mpBaseQo.startPage(),mpBaseQo.buildSearchWrapper()).convert(SysDictTypeMapstruct.INSTANCE::entityToVo);
     }
 

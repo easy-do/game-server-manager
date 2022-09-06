@@ -14,7 +14,7 @@ import java.util.List;
 * @description 针对表【sys_dict_data(字典数据表)】的数据库操作Service
 * @createDate 2022-07-22 10:19:20
 */
-public interface SysDictDataService extends  BaseService<SysDictData, MpBaseQo, SysDictDataVo, SysDictDataDto> {
+public interface SysDictDataService extends  BaseService<SysDictData, MpBaseQo<SysDictData>, SysDictDataVo, SysDictDataDto> {
 
     /**
      * 更改状态

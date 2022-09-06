@@ -29,7 +29,7 @@ import java.util.Objects;
 * @createDate 2022-07-22 10:19:20
 */
 @Service
-public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData, MpBaseQo, SysDictDataVo, SysDictDataDto,SysDictDataMapper>
+public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBaseQo<SysDictData>, SysDictDataVo, SysDictDataDto, SysDictDataMapper>
     implements SysDictDataService{
 
     @Autowired
@@ -53,7 +53,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData, MpBaseQ
     }
 
     @Override
-    public IPage<SysDictDataVo> page(MpBaseQo mpBaseQo) {
+    public IPage<SysDictDataVo> page(MpBaseQo<SysDictData> mpBaseQo) {
         return page(mpBaseQo.startPage(),mpBaseQo.buildSearchWrapper()).convert(SysDictDataMapstruct.INSTANCE::entityToVo);
     }
 

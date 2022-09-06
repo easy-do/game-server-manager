@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.common.vo.UserInfoVo;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ import java.util.List;
  * @date 2022/7/6
  */
 
-public abstract class BaseServiceImpl<Entity,QO,VO,DTO,MAPPER extends BaseMapper<Entity>>  extends ServiceImpl<MAPPER, Entity> implements BaseService<Entity,QO,VO,DTO> {
+public abstract class BaseServiceImpl<Entity,QO extends MpBaseQo<Entity>, VO, DTO, MAPPER extends BaseMapper<Entity>>  extends ServiceImpl<MAPPER, Entity> implements BaseService<Entity,QO,VO,DTO> {
 
 
     @Autowired

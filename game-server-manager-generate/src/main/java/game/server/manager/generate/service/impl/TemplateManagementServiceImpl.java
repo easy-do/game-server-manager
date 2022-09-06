@@ -51,7 +51,7 @@ public class TemplateManagementServiceImpl extends ServiceImpl<TemplateManagemen
      */
     @Override
     public IPage<TemplateManagementVo> page(TemplateManagementQo qo) {
-        IPage<TemplateManagement> page = new Page<>(qo.getCurrentPage(), qo.getPageSize());
+        IPage<TemplateManagement> page = qo.startPage();
         LambdaQueryWrapper<TemplateManagement> wrapper = Wrappers.lambdaQuery();
         if (CharSequenceUtil.isNotBlank(qo.getTemplateName())) {
             wrapper.like(TemplateManagement::getTemplateName, qo.getTemplateName());

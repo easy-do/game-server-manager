@@ -2,6 +2,7 @@ package game.server.manager.web.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * @date 2022/7/6
  */
 
-public interface BaseService<Entity,QO,VO,DTO> extends IService<Entity> {
+public interface BaseService<Entity, QO extends MpBaseQo<Entity>, VO,DTO> extends IService<Entity> {
 
 
     /**

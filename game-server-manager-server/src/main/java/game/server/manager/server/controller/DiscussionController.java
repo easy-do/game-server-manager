@@ -32,17 +32,17 @@ import game.server.manager.common.vaild.Update;
  */
 @RestController
 @RequestMapping("/discussion")
-public class DiscussionController extends BaseController<DiscussionService, Discussion,Long, MpBaseQo, DiscussionVo, DiscussionDto> {
+public class DiscussionController extends BaseController<DiscussionService, Discussion,Long, MpBaseQo<Discussion>, DiscussionVo, DiscussionDto> {
 
 
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
+    public MpDataResult page(@RequestBody MpBaseQo<Discussion> mpBaseQo) {
         return super.page(mpBaseQo);
     }
 
     @SaCheckLogin
     @PostMapping("/managerPage")
-    public MpDataResult managerPage(@RequestBody MpBaseQo mpBaseQo) {
+    public MpDataResult managerPage(@RequestBody MpBaseQo<Discussion> mpBaseQo) {
        return MpResultUtil.buildPage(baseService.managerPage(mpBaseQo));
     }
 

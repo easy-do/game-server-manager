@@ -17,7 +17,7 @@ class CommentStore {
     pageParam = {
         currentPage: this.currentPage,
         pageSize: this.pageSize,
-        order: {},
+        orders: [],
         params:[],
         discussionId : 0,
         type:0,

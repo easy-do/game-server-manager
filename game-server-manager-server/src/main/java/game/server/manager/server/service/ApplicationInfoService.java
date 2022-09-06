@@ -14,7 +14,7 @@ import java.io.Serializable;
 * @description 针对表【application_info(应用信息)】的数据库操作Service
 * @createDate 2022-05-20 10:29:54
 */
-public interface ApplicationInfoService extends BaseService<ApplicationInfo, MpBaseQo, ApplicationInfoVo, ApplicationInfoDto> {
+public interface ApplicationInfoService extends BaseService<ApplicationInfo, MpBaseQo<ApplicationInfo>, ApplicationInfoVo, ApplicationInfoDto> {
 
     /**
      * 统计用户应用数量

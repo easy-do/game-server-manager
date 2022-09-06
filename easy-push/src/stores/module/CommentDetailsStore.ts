@@ -20,8 +20,8 @@ class CommentDetailsStore {
   pageParam = {
     currentPage: this.currentPage,
     pageSize: this.pageSize,
-    order: {},
-    params: []
+    orders: [],
+    params: {}
   }
 
   dataList = new Array<object>();

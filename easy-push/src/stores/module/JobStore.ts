@@ -24,7 +24,7 @@ class JobStore {
   pageParam = {
     currentPage: this.currentPage,
     pageSize: this.pageSize,
-    order: {}
+    orders: []
   }
 
   dataList = new Array<object>();
