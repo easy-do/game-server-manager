@@ -53,7 +53,7 @@ import java.util.Objects;
 * @createDate 2022-08-04 19:22:22
 */
 @Service
-public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo, ClientInfoVo, ClientInfoDto, ClientInfoMapper>
+public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<ClientInfo>, ClientInfoVo, ClientInfoDto, ClientInfoMapper>
     implements ClientInfoService{
 
 
@@ -105,7 +105,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo,
     }
 
     @Override
-    public IPage<ClientInfoVo> page(MpBaseQo mpBaseQo) {
+    public IPage<ClientInfoVo> page(MpBaseQo<ClientInfo> mpBaseQo) {
         
         LambdaQueryWrapper<ClientInfo> wrapper = Wrappers.lambdaQuery();
         if(!isAdmin()){

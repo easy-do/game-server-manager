@@ -1,6 +1,7 @@
 package game.server.manager.web.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.List;
  * @description 基础controller
  * @date 2022/6/18
  */
-public abstract class BaseController<SERVICE extends BaseService<Entity,QO,VO,DTO>, Entity, ID extends Serializable,QO, VO, DTO> {
+public abstract class BaseController<SERVICE extends BaseService<Entity, QO, VO, DTO>, Entity, ID extends Serializable, QO extends MpBaseQo<Entity>, VO, DTO> {
 
     public static final String ADD_ACTION = "添加";
 

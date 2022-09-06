@@ -27,7 +27,6 @@ import game.server.manager.common.exception.BizException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -187,7 +186,7 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
     }
 
     @Override
-    public IPage<CommentDetailsVo> managerPage(MpBaseQo mpBaseQo) {
+    public IPage<CommentDetailsVo> managerPage(MpBaseQo<CommentDetails> mpBaseQo) {
         
         LambdaQueryWrapper<CommentDetails> wrapper = Wrappers.lambdaQuery();
         if (!isAdmin()) {

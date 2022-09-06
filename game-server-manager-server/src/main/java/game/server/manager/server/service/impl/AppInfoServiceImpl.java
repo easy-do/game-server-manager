@@ -3,6 +3,7 @@ package game.server.manager.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import game.server.manager.server.qo.AppInfoQo;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.server.dto.AppInfoDto;
 import game.server.manager.server.entity.AppInfo;
@@ -30,7 +31,7 @@ import java.util.concurrent.ConcurrentMap;
 * @createDate 2022-05-22 17:44:07
 */
 @Service
-public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, MpBaseQo, AppInfoVo, AppInfoDto, AppInfoMapper> implements AppInfoService{
+public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppInfoVo, AppInfoDto, AppInfoMapper> implements AppInfoService{
 
     public static final ConcurrentMap<String,IPage<AppInfo>> STORE_PAGE_CACHE = new ConcurrentHashMap<>();
 
@@ -62,7 +63,7 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, MpBaseQo, AppIn
     }
 
     @Override
-    public IPage<AppInfoVo> page(MpBaseQo mpBaseQo) {
+    public IPage<AppInfoVo> page(AppInfoQo mpBaseQo) {
         LambdaQueryWrapper<AppInfo> wrapper = getWrapper();
         if (!isAdmin()) {
             wrapper.eq(AppInfo::getCreateBy, getUserId());
@@ -143,7 +144,7 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, MpBaseQo, AppIn
     }
 
     @Override
-    public IPage<AppInfo> storePage(MpBaseQo mpBaseQo) {
+    public IPage<AppInfo> storePage(AppInfoQo mpBaseQo) {
         IPage<AppInfo> cachePage = STORE_PAGE_CACHE.get(mpBaseQo.getCurrentPage() + ":" + mpBaseQo.getPageSize());
         if(Objects.nonNull(cachePage)){
             return cachePage;

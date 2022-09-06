@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { threadId } from "worker_threads";
 import { authRoleMenu, roleMenuIds, roleTreeSelect } from "../../api/menuManager";
 import { managerPage, changeStatus, info, remove, edit, add, selectList } from "../../api/roleManager";
+import { SearchTypeEnum } from "../../utils/systemConstant";
 
 
 
@@ -23,12 +24,12 @@ class RoleManagerStore {
   pageParam = {
     currentPage: this.currentPage,
     pageSize: this.pageSize,
-    order: [
+    orders: [
       { column: 'createTime', asc: false }
     ],
     columns: ['roleId','roleName', 'roleKey','status','createTime','updateTime','isDefault'],
-    params: [],
-    applicationId:0
+    params: {},
+    searchConfig:{'roleName':SearchTypeEnum.LIKE}
   }
 
   dataList = new Array<object>();
@@ -42,8 +43,6 @@ class RoleManagerStore {
   editDataShow = false
 
   searchFormapi: any = {}
-
-  searchParam = {}
 
   deletecConfirmShow = false
 
@@ -101,26 +100,6 @@ class RoleManagerStore {
     })
 
   }
-
-  /**
-  * 搜索请求
-  */
-  searchRequest = (params: any) => {
-    this.loading()
-    managerPage(params).then((result) => {
-      if (result.data.success) {
-        runInAction(() => {
-          this.dataList = result.data.data;
-          this.total = result.data.total;
-          this.currentPage = result.data.currentPage;
-          this.pageSize = result.data.pageSize;
-        })
-      }
-      this.loading()
-    })
-
-  }
-
 
   /** 改变页码 */
   onPageChange = (currentPage: number) => {
@@ -322,15 +301,13 @@ class RoleManagerStore {
   /**搜索表单参数变化 */
   serchFormValueChange = (values: any) => {
     runInAction(() => {
-      this.searchParam = values;
+      this.pageParam.params = values;
     })
   }
 
   /**点击搜索按钮 */
   searchButton = () => {
-    let param = this.pageParam;
-    // param.params = this.searchParam
-    this.searchRequest(param)
+    this.pageRequest();
   }
 
   /**点击重置按钮 */

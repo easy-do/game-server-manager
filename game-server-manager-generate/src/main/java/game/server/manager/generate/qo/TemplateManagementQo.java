@@ -1,5 +1,6 @@
 package game.server.manager.generate.qo;
 
+import game.server.manager.generate.entity.TemplateManagement;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +15,10 @@ import lombok.experimental.SuperBuilder;
  * @author gebilaoyu
  */
 @Data
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class TemplateManagementQo extends MpBaseQo {
+public class TemplateManagementQo extends MpBaseQo<TemplateManagement> {
 
     /**
      * 自增主键

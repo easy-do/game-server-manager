@@ -75,7 +75,7 @@ public class SysUserController {
      * 获取用户列表
      */
     @PostMapping("/page")
-    public MpDataResult list(@RequestBody MpBaseQo mpBaseQo) {
+    public MpDataResult list(@RequestBody MpBaseQo<UserInfo> mpBaseQo) {
         return MpResultUtil.buildPage(userInfoService.page(mpBaseQo.startPage(), mpBaseQo.buildSearchWrapper()));
     }
 

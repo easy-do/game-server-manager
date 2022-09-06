@@ -5,6 +5,7 @@ import game.server.manager.server.entity.AppInfo;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
+import game.server.manager.server.qo.AppInfoQo;
 import game.server.manager.server.service.AppInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ public class AppStoreController {
 
 
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
+    public MpDataResult page(@RequestBody AppInfoQo mpBaseQo) {
         IPage<AppInfo> pageResult = appInfoService.storePage(mpBaseQo);
         long pageSize = pageResult.getSize();
         long current = pageResult.getCurrent();

@@ -23,5 +23,5 @@ public interface CommentDetailsService extends BaseService<CommentDetails, Comme
      * @author laoyu
      * @date 2022/9/5
      */
-    IPage<CommentDetailsVo> managerPage(MpBaseQo mpBaseQo);
+    IPage<CommentDetailsVo> managerPage(MpBaseQo<CommentDetails> mpBaseQo);
 }

@@ -13,7 +13,7 @@ class MenuManagerStore {
   dataInfo: object = {}
 
   pageParam = {
-    params: []
+    params: {}
   }
 
   dataList = new Array<object>();
@@ -27,8 +27,6 @@ class MenuManagerStore {
   editDataShow = false
 
   searchFormapi: any = {}
-
-  searchParam = {}
 
   deletecConfirmShow = false
 
@@ -87,9 +85,9 @@ class MenuManagerStore {
   /**
   * 搜索请求
   */
-  searchRequest = (params: any) => {
+  pageRequest = () => {
     this.loading()
-    list(params).then((result) => {
+    list(this.pageParam).then((result) => {
       if (result.data.success) {
         runInAction(() => {
           this.dataList = result.data.data;
@@ -234,15 +232,13 @@ class MenuManagerStore {
   /**搜索表单参数变化 */
   serchFormValueChange = (values: any) => {
     runInAction(() => {
-      this.searchParam = values;
+      this.pageParam.params = values;
     })
   }
 
   /**点击搜索按钮 */
   searchButton = () => {
-    let param = this.pageParam;
-    // param.params = this.searchParam
-    this.searchRequest(param)
+    this.pageRequest()
   }
 
   /**点击重置按钮 */

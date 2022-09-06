@@ -17,8 +17,6 @@ public class SearchParam {
 
     private String column;
 
-    private Object value;
-
     private String searChType;
 
 }

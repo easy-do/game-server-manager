@@ -2,7 +2,7 @@ import { Toast } from "@douyinfe/semi-ui";
 import { makeAutoObservable, runInAction } from "mobx";
 import { managerPage, changeStatus, info, remove, authRole, getAuthRoles } from "../../api/userManager";
 import { userPointsOperation } from "../../api/userPoints";
-import { SearchParam, SearchTypeEnum } from "../../utils/systemConstant";
+import { SearchTypeEnum } from "../../utils/systemConstant";
 
 
 
@@ -23,11 +23,12 @@ class UserManagerStore {
   pageParam = {
     currentPage: this.currentPage,
     pageSize: this.pageSize,
-    order: [
+    orders: [
       { column: 'createTime', asc: false }
     ],
     columns: ['id','nickName', 'platform', 'state', 'authorization', 'loginIp', 'lastLoginTime', 'createTime'],
-    params: []
+    params: {},
+    searchConfig:{'nickName':SearchTypeEnum.LIKE}
   }
 
   dataList = new Array<object>();
@@ -41,8 +42,6 @@ class UserManagerStore {
   editDataShow = false
 
   searchFormapi: any = {}
-
-  searchParam = {}
 
   deletecConfirmShow = false
 
@@ -118,25 +117,25 @@ class UserManagerStore {
 
   }
 
-  /**
-  * 搜索请求
-  */
-  searchRequest = (params: any) => {
-    this.loading()
-    managerPage(params).then((result) => {
-      if (result.data.success) {
-        runInAction(() => {
-          this.dataList = result.data.data;
-          this.total = result.data.total;
-          this.currentPage = result.data.currentPage;
-          this.pageSize = result.data.pageSize;
-        })
-      }
+    /**
+   * 分页请求
+   */
+     searchRequest = (pageParam:any) => {
       this.loading()
-    })
-
-  }
-
+      managerPage(pageParam).then((result) => {
+        if (result.data.success) {
+          runInAction(() => {
+            this.dataList = result.data.data;
+            this.total = result.data.total;
+            this.currentPage = result.data.currentPage;
+            this.pageSize = result.data.pageSize;
+          })
+  
+        }
+        this.loading()
+      })
+  
+    }
 
   /** 改变页码 */
   onPageChange = (currentPage: number) => {
@@ -254,15 +253,13 @@ class UserManagerStore {
   /**搜索表单参数变化 */
   serchFormValueChange = (values: any) => {
     runInAction(() => {
-      this.searchParam = values;
+      this.pageParam.params = values;
     })
   }
 
   /**点击搜索按钮 */
   searchButton = () => {
-    let param = this.pageParam;
-    // param.params = this.searchParam
-    this.searchRequest(param)
+    this.pageRequest()
   }
 
   /**点击重置按钮 */
@@ -435,16 +432,9 @@ class UserManagerStore {
   /**下拉框搜索 */
   userHandleSearch = (input:string) =>{
     this.loading()
-    let pageParam = {
-      currentPage: 1,
-      pageSize: 20,
-      columns: ['id','nickName','platform'],
-      params: new Array<SearchParam>()
-    }
+    let pageParam = this.pageParam;
     if(input !== undefined && input !== ''){
-      pageParam.params.push(
-        new SearchParam('nickName',input,SearchTypeEnum.LIKE)
-      )
+      pageParam.params=input;
     }
     managerPage(pageParam).then((result) => {
       if (result.data.success) {
@@ -464,8 +454,17 @@ class UserManagerStore {
       }
       this.loading()
     })
+    
+  }
 
-  
+  tableOnChange = (event:{ pagination: any,
+    filters: Array<string>, sorter: {dataIndex:string ,sortOrder: 'descend'|'ascend',sorter: true,title:string}, extra: any } ) => {
+      const orders = [
+        { column: event.sorter.dataIndex, asc: event.sorter.sortOrder === 'ascend' }
+      ]
+      let searchParam = this.pageParam;
+      searchParam.orders = orders;
+      this.searchRequest(searchParam);
   }
 
 

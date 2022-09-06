@@ -13,7 +13,7 @@ import java.util.List;
 * @description 针对表【app_script】的数据库操作Service
 * @createDate 2022-05-26 18:30:13
 */
-public interface AppScriptService extends BaseService<AppScript, MpBaseQo, AppScriptVo, AppScriptDto> {
+public interface AppScriptService extends BaseService<AppScript, MpBaseQo<AppScript>, AppScriptVo, AppScriptDto> {
 
     /**
      * 统计用户创建数量

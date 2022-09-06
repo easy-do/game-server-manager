@@ -29,7 +29,7 @@ import java.util.List;
 * @createDate 2022-05-19 19:29:55
 */
 @Service
-public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo, ServerInfoVo, ServerInfoDto,ServerInfoMapper>
+public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo<ServerInfo>,ServerInfoVo, ServerInfoDto, ServerInfoMapper>
     implements ServerInfoService{
 
     @Autowired
@@ -70,7 +70,7 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo,
     }
 
     @Override
-    public IPage<ServerInfoVo> page(MpBaseQo mpBaseQo) {
+    public IPage<ServerInfoVo> page(MpBaseQo<ServerInfo> mpBaseQo) {
         LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();
         if (!isAdmin()) {
             wrapper.eq(ServerInfo::getUserId, getUserId());

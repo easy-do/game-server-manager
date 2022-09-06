@@ -30,7 +30,7 @@ import game.server.manager.common.vaild.Update;
  */
 @RestController
 @RequestMapping("/dictType")
-public class SysDictTypeController extends BaseController<SysDictTypeService, SysDictType, Long, MpBaseQo, SysDictTypeVo, SysDictTypeDto> {
+public class SysDictTypeController extends BaseController<SysDictTypeService, SysDictType, Long, MpBaseQo<SysDictType>, SysDictTypeVo, SysDictTypeDto> {
 
     public static final String MODULE_NAME = "字典类型管理";
 
@@ -49,7 +49,7 @@ public class SysDictTypeController extends BaseController<SysDictTypeService, Sy
 
     @Override
     @SaCheckLogin
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo){
+    public MpDataResult page(@RequestBody MpBaseQo<SysDictType> mpBaseQo){
         return super.page(mpBaseQo);
     }
 

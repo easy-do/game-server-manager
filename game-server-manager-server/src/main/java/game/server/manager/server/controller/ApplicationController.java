@@ -33,7 +33,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/application")
-public class ApplicationController extends BaseController<ApplicationInfoService, ApplicationInfo, String, MpBaseQo, ApplicationInfoVo, ApplicationInfoDto> {
+public class ApplicationController extends BaseController<ApplicationInfoService, ApplicationInfo, String, MpBaseQo<ApplicationInfo>, ApplicationInfoVo, ApplicationInfoDto> {
 
 
     public static final String MODULE_NAME = "应用管理";
@@ -56,7 +56,7 @@ public class ApplicationController extends BaseController<ApplicationInfoService
 
     @SaCheckLogin
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
+    public MpDataResult page(@RequestBody MpBaseQo<ApplicationInfo> mpBaseQo) {
         return super.page(mpBaseQo);
     }
 

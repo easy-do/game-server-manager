@@ -22,7 +22,7 @@ class UserPointsStore {
       asc:false
 
     }],
-    params: [],
+    params: {},
     userId:0
   }
 

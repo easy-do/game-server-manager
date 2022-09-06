@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentMap;
 * @createDate 2022-07-03 20:00:32
 */
 @Service
-public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, MpBaseQo, DiscussionVo, DiscussionDto, CommonProblemMapper>
+public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, MpBaseQo<Discussion>, DiscussionVo, DiscussionDto, CommonProblemMapper>
     implements DiscussionService {
 
     public static final ConcurrentMap<String,IPage<DiscussionVo>> PAGE_CACHE = new ConcurrentHashMap<>();
@@ -49,7 +49,7 @@ public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, MpBaseQo,
     }
 
     @Override
-    public IPage<DiscussionVo> page(MpBaseQo mpBaseQo) {
+    public IPage<DiscussionVo> page(MpBaseQo<Discussion> mpBaseQo) {
         IPage<DiscussionVo> pageCache = PAGE_CACHE.get(mpBaseQo.getCurrentPage() + ":" + mpBaseQo.getPageSize());
         if(Objects.nonNull(pageCache)){
             return pageCache;
@@ -109,7 +109,7 @@ public class DiscussionServiceImpl extends BaseServiceImpl<Discussion, MpBaseQo,
     }
 
     @Override
-    public IPage<DiscussionVo> managerPage(MpBaseQo mpBaseQo) {
+    public IPage<DiscussionVo> managerPage(MpBaseQo<Discussion> mpBaseQo) {
         
         LambdaQueryWrapper<Discussion> wrapper = Wrappers.lambdaQuery();
         if (!isAdmin()) {

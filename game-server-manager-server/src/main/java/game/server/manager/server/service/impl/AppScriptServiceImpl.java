@@ -31,7 +31,7 @@ import java.util.Objects;
  * @createDate 2022-05-26 18:30:13
  */
 @Service
-public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, MpBaseQo, AppScriptVo, AppScriptDto, AppScriptMapper> implements AppScriptService {
+public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, MpBaseQo<AppScript>, AppScriptVo, AppScriptDto, AppScriptMapper> implements AppScriptService {
 
 
     @Autowired
@@ -99,7 +99,7 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, MpBaseQo, A
     }
 
     @Override
-    public IPage<AppScriptVo> page(MpBaseQo mpBaseQo) {
+    public IPage<AppScriptVo> page(MpBaseQo<AppScript> mpBaseQo) {
         LambdaQueryWrapper<AppScript> wrapper = Wrappers.lambdaQuery();
         if (!isAdmin()) {
             wrapper.eq(AppScript::getCreateBy, getUserId());

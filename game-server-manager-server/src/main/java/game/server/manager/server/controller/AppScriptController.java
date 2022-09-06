@@ -30,7 +30,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/appScript")
-public class AppScriptController extends BaseController<AppScriptService, AppScript, Long, MpBaseQo, AppScriptVo, AppScriptDto> {
+public class AppScriptController extends BaseController<AppScriptService, AppScript, Long, MpBaseQo<AppScript>, AppScriptVo, AppScriptDto> {
 
     public static final String MODULE_NAME = "脚本管理";
 

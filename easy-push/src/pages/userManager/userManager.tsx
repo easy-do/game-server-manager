@@ -72,6 +72,7 @@ const UserManager = () => {
     showPointsModal,
     showPointsCancel,
     showPointsUserid,
+    tableOnChange
 
   } = UserManagerStore;
 
@@ -147,6 +148,7 @@ selectList.map((item: any, i: number) => {
     {
       title: "注册时间",
       dataIndex: "createTime",
+      sorter: true,
     },
     {
       title: "操作",
@@ -238,6 +240,7 @@ selectList.map((item: any, i: number) => {
               <Button onClick={userPointsOperationsButton}>批量操作积分</Button>
             </ButtonGroup>
           </>}
+          onChange={tableOnChange}
           columns={columns}
           dataSource={dataList}
           pagination={{

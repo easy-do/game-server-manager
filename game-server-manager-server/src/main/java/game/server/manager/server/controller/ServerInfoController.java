@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/serverInfo")
-public class ServerInfoController extends BaseController<ServerInfoService,ServerInfo,Long,MpBaseQo,ServerInfoVo,ServerInfoDto> {
+public class ServerInfoController extends BaseController<ServerInfoService,ServerInfo,Long,MpBaseQo<ServerInfo>,ServerInfoVo,ServerInfoDto> {
 
     @SaCheckLogin
     @RequestMapping("/list")
@@ -41,7 +41,7 @@ public class ServerInfoController extends BaseController<ServerInfoService,Serve
 
     @SaCheckLogin
     @PostMapping("/page")
-    public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
+    public MpDataResult page(@RequestBody MpBaseQo<ServerInfo> mpBaseQo) {
         return super.page(mpBaseQo);
     }
 
