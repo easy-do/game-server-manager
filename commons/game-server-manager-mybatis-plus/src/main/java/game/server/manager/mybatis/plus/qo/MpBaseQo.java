@@ -38,7 +38,9 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class MpBaseQo {
+public class MpBaseQo<E> {
+
+    private Class<E> clazz;
 
     /**
      * 当前页
@@ -168,7 +170,7 @@ public class MpBaseQo {
      * @date 2022/9/5
      */
     private void checkParamColumns(List<String> columns){
-        Field[] fields = ClassUtil.getDeclaredFields(this.getClass());
+        Field[] fields = ClassUtil.getDeclaredFields(clazz);
         List<String> filedNames = Arrays.stream(fields).map(Field::getName).toList();
         if (!CollUtil.containsAll(filedNames, columns)) {
             throw new BizException("具有非法字段");

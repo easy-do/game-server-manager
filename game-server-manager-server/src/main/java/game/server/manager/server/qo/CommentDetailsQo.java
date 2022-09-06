@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDetailsQo extends MpBaseQo {
+public class CommentDetailsQo extends MpBaseQo<CommentDetailsQo> {
 
     private Long discussionId;
 }
