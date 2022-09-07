@@ -76,7 +76,8 @@ public class SysUserController {
      */
     @PostMapping("/page")
     public MpDataResult list(@RequestBody MpBaseQo<UserInfo> mpBaseQo) {
-        return MpResultUtil.buildPage(userInfoService.page(mpBaseQo.startPage(), mpBaseQo.buildSearchWrapper()));
+        mpBaseQo.initInstance(UserInfo.class);
+        return MpResultUtil.buildPage(userInfoService.page(mpBaseQo.getPage(), mpBaseQo.getWrapper()));
     }
 
 
