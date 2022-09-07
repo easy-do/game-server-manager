@@ -7,6 +7,8 @@ export enum RoleEnum {
 export enum SearchTypeEnum {
         EQ='eq',
         NE='ne',
+        IN='in',
+        NOT_IN='notIn',
         LT='lt',
         GT='gt',
         GE='ge',
