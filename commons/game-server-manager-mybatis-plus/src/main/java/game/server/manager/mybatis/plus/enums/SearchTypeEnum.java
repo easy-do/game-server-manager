@@ -12,6 +12,8 @@ public enum SearchTypeEnum {
     /**/
     EQ("eq","等于"),
     NE("ne","不等于"),
+    IN("in","包含"),
+    NOT_IN("notIn","包含"),
     LT("lt","小于"),
     GT("gt","大于"),
     GE("ge","大于等于 >="),

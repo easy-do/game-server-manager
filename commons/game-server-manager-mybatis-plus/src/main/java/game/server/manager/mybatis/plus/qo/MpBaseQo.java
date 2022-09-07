@@ -75,7 +75,7 @@ public class MpBaseQo<T> {
             checkParamColumns(orderColumns);
             page.setOrders(orders.stream().peek(orderItem -> {
                 String column = orderItem.getColumn();
-                orderItem.setColumn(CharSequenceUtil.toSymbolCase(column, '_'));
+                orderItem.setColumn(toSymbolCase(column));
             }).toList());
         }
     }
@@ -93,50 +93,54 @@ public class MpBaseQo<T> {
         if (Objects.nonNull(params) && !params.isEmpty()) {
             checkParamColumns(params.keySet());
             params.forEach((column, value) -> {
-                if (Objects.isNull(searchConfig)) {
-                    wrapper.eq(toSymbolCase(column), value);
-                } else {
-                    String searChType = searchConfig.get(column);
-                    switch (SearchTypeEnum.matchValue(searChType)) {
-                        case EQ -> wrapper.eq(toSymbolCase(column), value);
-                        case NE -> wrapper.ne(toSymbolCase(column), value);
-                        case LT -> wrapper.lt(toSymbolCase(column), value);
-                        case GT -> wrapper.gt(toSymbolCase(column), value);
-                        case GE -> wrapper.ge(toSymbolCase(column), value);
-                        case LE -> wrapper.le(toSymbolCase(column), value);
-                        case BETWEEN -> {
-                            if (value.getClass().isArray()) {
-                                Object[] arrayValue = (Object[]) value;
-                                if (arrayValue.length == arrayValueSize) {
-                                    wrapper.between(toSymbolCase(column), arrayValue[0], arrayValue[1]);
+                if (Objects.nonNull(value)) {
+                    if (Objects.isNull(searchConfig)) {
+                        wrapper.eq(toSymbolCase(column), value);
+                    } else {
+                        String searChType = searchConfig.get(column);
+                        switch (SearchTypeEnum.matchValue(searChType)) {
+                            case EQ -> wrapper.eq(toSymbolCase(column), value);
+                            case NE -> wrapper.ne(toSymbolCase(column), value);
+                            case IN -> wrapper.in(toSymbolCase(column),value);
+                            case NOT_IN -> wrapper.notIn(toSymbolCase(column),value);
+                            case LT -> wrapper.lt(toSymbolCase(column), value);
+                            case GT -> wrapper.gt(toSymbolCase(column), value);
+                            case GE -> wrapper.ge(toSymbolCase(column), value);
+                            case LE -> wrapper.le(toSymbolCase(column), value);
+                            case BETWEEN -> {
+                                if (value.getClass().isArray()) {
+                                    Object[] arrayValue = (Object[]) value;
+                                    if (arrayValue.length == arrayValueSize) {
+                                        wrapper.between(toSymbolCase(column), arrayValue[0], arrayValue[1]);
+                                    }
+                                }
+                                if (value instanceof Collection<?>) {
+                                    List<?> collectionValue = ((Collection<?>) value).stream().toList();
+                                    if (collectionValue.size() == arrayValueSize) {
+                                        wrapper.between(toSymbolCase(column), collectionValue.get(0), collectionValue.get(1));
+                                    }
                                 }
                             }
-                            if (value instanceof Collection<?>) {
-                                List<?> collectionValue = ((Collection<?>) value).stream().toList();
-                                if (collectionValue.size() == arrayValueSize) {
-                                    wrapper.between(toSymbolCase(column), collectionValue.get(0), collectionValue.get(1));
+                            case NOT_BETWEEN -> {
+                                if (value.getClass().isArray()) {
+                                    Object[] arrayValue = (Object[]) value;
+                                    if (arrayValue.length == arrayValueSize) {
+                                        wrapper.notBetween(toSymbolCase(column), arrayValue[0], arrayValue[1]);
+                                    }
+                                }
+                                if (value instanceof Collection<?>) {
+                                    List<?> collectionValue = ((Collection<?>) value).stream().toList();
+                                    if (collectionValue.size() == arrayValueSize) {
+                                        wrapper.notBetween(toSymbolCase(column), collectionValue.get(0), collectionValue.get(1));
+                                    }
                                 }
                             }
+                            case LIKE -> wrapper.like(toSymbolCase(column), value);
+                            case NOT_LIKE -> wrapper.notLike(toSymbolCase(column), value);
+                            case LIKE_LEFT -> wrapper.likeLeft(toSymbolCase(column), value);
+                            case LIKE_RIGHT -> wrapper.likeRight(toSymbolCase(column), value);
+                            default -> wrapper.eq(toSymbolCase(column), value);
                         }
-                        case NOT_BETWEEN -> {
-                            if (value.getClass().isArray()) {
-                                Object[] arrayValue = (Object[]) value;
-                                if (arrayValue.length == arrayValueSize) {
-                                    wrapper.notBetween(toSymbolCase(column), arrayValue[0], arrayValue[1]);
-                                }
-                            }
-                            if (value instanceof Collection<?>) {
-                                List<?> collectionValue = ((Collection<?>) value).stream().toList();
-                                if (collectionValue.size() == arrayValueSize) {
-                                    wrapper.notBetween(toSymbolCase(column), collectionValue.get(0), collectionValue.get(1));
-                                }
-                            }
-                        }
-                        case LIKE -> wrapper.like(toSymbolCase(column), value);
-                        case NOT_LIKE -> wrapper.notLike(toSymbolCase(column), value);
-                        case LIKE_LEFT -> wrapper.likeLeft(toSymbolCase(column), value);
-                        case LIKE_RIGHT -> wrapper.likeRight(toSymbolCase(column), value);
-                        default -> wrapper.eq(toSymbolCase(column), value);
                     }
                 }
             });
@@ -163,12 +167,12 @@ public class MpBaseQo<T> {
     private void buildSelect(QueryWrapper<T> wrapper) {
         if (Objects.nonNull(columns) && !columns.isEmpty()) {
             checkParamColumns(columns);
-            wrapper.select(columns.stream().map(column -> CharSequenceUtil.toSymbolCase(column, '_')).toArray(String[]::new));
+            wrapper.select(columns.stream().map(this::toSymbolCase).toArray(String[]::new));
         }
     }
 
 
-    private String toSymbolCase(String column){
+    private String toSymbolCase(String column) {
         return CharSequenceUtil.toSymbolCase(column, '_');
     }
 
