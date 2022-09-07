@@ -67,8 +67,7 @@ public class SysRoleController {
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/list")
     public R<Object> list() {
-        MpBaseQo<SysRole> mpBaseQo = new MpBaseQo<>();
-        mpBaseQo.setColumns(Arrays.asList("roleId","roleName"));
+        MpBaseQo<SysRole> mpBaseQo = MpBaseQo.<SysRole>builder().columns(Arrays.asList("roleId","roleName")).build();
         LambdaQueryWrapper<SysRole> wrapper = mpBaseQo.buildSearchWrapper();
         wrapper.eq(SysRole::getStatus,0);
         return DataResult.ok(sysRoleService.list(wrapper));
@@ -78,7 +77,8 @@ public class SysRoleController {
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
     public MpDataResult page(@RequestBody MpBaseQo<SysRole> mpBaseQo) {
-        return MpResultUtil.buildPage(sysRoleService.page(mpBaseQo.startPage(),mpBaseQo.buildSearchWrapper()),SysRoleVo.class);
+        mpBaseQo.initInstance(SysRole.class);
+        return MpResultUtil.buildPage(sysRoleService.page(mpBaseQo.getPage(), mpBaseQo.getWrapper()),SysRoleVo.class);
     }
 
 
