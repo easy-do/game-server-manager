@@ -1,3 +1,4 @@
+import './App.css'
 import { Layout } from "@douyinfe/semi-ui";
 import RouteStting from "./pages/routeSetting/routeSetting";
 import { Provider } from "mobx-react";
@@ -7,6 +8,7 @@ import FooterData from "./pages/footerData/footerData";
 import { useEffect } from "react";
 import SideNavigation from "./pages/systemMenu/sideNavigation";
 import TopNavigation from "./pages/systemMenu/topNavigation";
+
 
 export default function App() {
   const { Header, Footer, Content } = Layout;
