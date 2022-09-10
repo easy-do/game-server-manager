@@ -2,12 +2,18 @@ import defaultSettings from '../settings.json';
 export interface GlobalState {
   settings?: typeof defaultSettings;
   userInfo?: {
-    name?: string;
-    avatar?: string;
-    job?: string;
-    organization?: string;
-    location?: string;
+    id?: number;
+    nickName?: string;
+    unionId?: string;
+    secret?: string;
+    points?: number;
+    authorization?: string;
+    platform?: string;
     email?: string;
+    avatarUrl?: string;
+    loginIp?: string;
+    lastLoginTime?: string;
+    roles?: string[];
     permissions: Record<string, string[]>;
   };
   userLoading?: boolean;

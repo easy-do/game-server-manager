@@ -150,6 +150,14 @@ export const routes: IRoute[] = [
       },
     ],
   },
+  {
+    name: '登录成功',
+    key: 'loginSuccess',
+  },
+  {
+    name: '登录失败',
+    key: 'loginError',
+  },
 ];
 
 export const getName = (path: string, routes) => {
@@ -177,6 +185,7 @@ export const generatePermission = (role: string) => {
 };
 
 const useRoute = (userPermission): [IRoute[], string] => {
+  
   const filterRoute = (routes: IRoute[], arr = []): IRoute[] => {
     if (!routes.length) {
       return [];

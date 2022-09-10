@@ -20,7 +20,7 @@ import './mock';
 const store = createStore(rootReducer);
 
 function Index() {
-  const [lang, setLang] = useStorage('arco-lang', 'en-US');
+  const [lang, setLang] = useStorage('arco-lang', 'zh-CN');
   const [theme, setTheme] = useStorage('arco-theme', 'light');
 
   function getArcoLocale() {
@@ -39,12 +39,12 @@ function Index() {
       type: 'update-userInfo',
       payload: { userLoading: true },
     });
-    axios.get('/api/user/userInfo').then((res) => {
+    const userInfoStr = localStorage.getItem("userInfo")
+    console.info(userInfoStr)
       store.dispatch({
         type: 'update-userInfo',
-        payload: { userInfo: res.data, userLoading: false },
+        payload: { userInfo: JSON.parse(userInfoStr), userLoading: false },
       });
-    });
   }
 
   useEffect(() => {
