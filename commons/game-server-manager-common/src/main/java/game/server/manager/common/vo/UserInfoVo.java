@@ -78,6 +78,12 @@ public class UserInfoVo implements Serializable {
     private String loginIp;
 
     /**
+     * 注册时间
+     */
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    private LocalDateTime creatTime;
+
+    /**
      * 最后登录时间
      */
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)

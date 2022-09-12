@@ -1,12 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import cs from 'classnames';
-import { Button } from '@arco-design/web-react';
+import { Button, Typography } from '@arco-design/web-react';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import styles from './style/index.module.less';
 
 function Security() {
+  const { Text } = Typography;
+  
   const t = useLocale(locale);
 
   const userInfo = useSelector((state: any) => {
@@ -15,23 +17,28 @@ function Security() {
 
   const data = [
     {
+      title: t['userSetting.security.secret'],
+      value: <Text copyable >{userInfo.secret}</Text>,
+      placeholder: t['userSetting.security.secret.tips'],
+    },
+    {
       title: t['userSetting.security.password'],
       value: t['userSetting.security.password.tips'],
     },
-    {
-      title: t['userSetting.security.question'],
-      value: '',
-      placeholder: t['userSetting.security.question.placeholder'],
-    },
-    {
-      title: t['userSetting.security.phone'],
-      value: userInfo.phoneNumber
-        ? `${t['userSetting.security.phone.tips']} ${userInfo.phoneNumber}`
-        : '',
-    },
+    // {
+    //   title: t['userSetting.security.question'],
+    //   value: '',
+    //   placeholder: t['userSetting.security.question.placeholder'],
+    // },
+    // {
+    //   title: t['userSetting.security.phone'],
+    //   value: userInfo.phoneNumber
+    //     ? `${t['userSetting.security.phone.tips']} ${userInfo.phoneNumber}`
+    //     : '',
+    // },
     {
       title: t['userSetting.security.email'],
-      value: '',
+      value: userInfo.email,
       placeholder: t['userSetting.security.email.placeholder'],
     },
   ];

@@ -12,12 +12,12 @@ import useLocale from '../../utils/useLocale';
 import styles from './style/index.module.less';
 
 export interface MessageItemData {
-  id: string;
+  id: number;
   title: string;
   subTitle?: string;
   avatar?: string;
   content: string;
-  time?: string;
+  createTime?: string;
   status: number;
   tag?: {
     text?: string;
@@ -111,7 +111,7 @@ function MessageList(props: MessageListProps) {
                     {item.content}
                   </Typography.Paragraph>
                   <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                    {item.time}
+                    {item.createTime}
                   </Typography.Text>
                 </div>
               }

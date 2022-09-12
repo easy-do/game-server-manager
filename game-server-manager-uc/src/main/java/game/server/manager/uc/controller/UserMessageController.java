@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 
+import java.util.List;
+
 /**
  * @author laoyu
  * @version 1.0
@@ -48,6 +50,15 @@ public class UserMessageController {
     }
 
     @SaCheckLogin
+    @GetMapping("/list")
+    public R<List<UserMessage>> list() {
+        LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(UserMessage::getUserId, AuthorizationUtil.getUserId());
+        wrapper.orderByDesc(UserMessage::getCreateTime);
+        return DataResult.ok(userMessageService.list(wrapper));
+    }
+
+    @SaCheckLogin
     @GetMapping("/count")
     public R<Long> page() {
         LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
@@ -59,12 +70,12 @@ public class UserMessageController {
 
     @SaCheckLogin
     @GetMapping("/readMessage/{id}")
-    public R<Long> readMessage(@PathVariable Long id) {
+    public R<Long> readMessage(@PathVariable Long[] id) {
         Long userId = AuthorizationUtil.getUserId();
         LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(UserMessage::getUserId, userId);
         wrapper.eq(UserMessage::getStatus, 0);
-        wrapper.eq(UserMessage::getId, id);
+        wrapper.in(UserMessage::getId, id);
         UserMessage entity = UserMessage.builder().build();
         entity.setStatus(1);
         return userMessageService.update(entity, wrapper) ? DataResult.ok() : DataResult.fail();

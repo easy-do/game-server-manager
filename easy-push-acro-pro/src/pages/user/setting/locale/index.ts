@@ -38,7 +38,7 @@ const i18n = {
       'Please enter your profile, no more than 200 words.',
     'userSetting.security.password': 'Login Password',
     'userSetting.security.password.tips':
-      'Has been set. The password has at least 6 characters, supports numbers, letters and special characters except spaces, and must contain both numbers and uppercase and lowercase letters. ',
+      'The password has at least 6 characters, supports numbers, letters and special characters except spaces, and must contain both numbers and uppercase and lowercase letters. ',
     'userSetting.security.question': 'Secure question',
     'userSetting.security.question.placeholder':
       'You have not set a secret security question, which can effectively protect the security of your account.',
@@ -73,6 +73,21 @@ const i18n = {
     'userSetting.verified.operation.revoke': 'Revoke',
     'userSetting.verified.status.success': 'passed',
     'userSetting.verified.status.waiting': 'under review',
+
+    'userSetting.label.authorization': 'Authentication status',
+    'userSetting.value.isAuthorization': 'authentication',
+    'userSetting.value.notAuthorization': 'Not authentication',
+    'userSetting.label.lastLoginTime': 'Last login time',
+    'userSetting.label.loginIp': 'Login ip',
+    'userSetting.security.secret': 'secret',
+    'userSetting.security.secret.tips': 'Fast login',
+    'userSetting.verified.authorization': 'Authentication details',
+    'userSetting.verified.label.expires': 'Expires time',
+    'userSetting.verified.label.appNum': 'App number',
+    'userSetting.verified.label.serverNum': 'Server number',
+    'userSetting.verified.label.appCreationNum': 'App Creation number',
+    'userSetting.verified.label.scriptCreationNum': 'Script creation Number',
+    'userSetting.verified.label.description': 'Authentication description',   
   },
 
   'zh-CN': {
@@ -113,7 +128,7 @@ const i18n = {
       '请输入您的个人简介，最多不超过200字。',
     'userSetting.security.password': '登陆密码',
     'userSetting.security.password.tips':
-      '已设置。密码至少6位字符，支持数字、字母和除空格外的特殊字符，且必须同时包含数字和大小写字母。',
+      '密码至少6位字符，支持数字、字母和除空格外的特殊字符，且必须同时包含数字和大小写字母。',
     'userSetting.security.question': '密保问题',
     'userSetting.security.question.placeholder':
       '您暂未设置密保问题，密保问题可以有效的保护账号的安全。',
@@ -144,6 +159,21 @@ const i18n = {
     'userSetting.verified.operation.revoke': '撤回',
     'userSetting.verified.status.success': '已通过',
     'userSetting.verified.status.waiting': '审核中',
+
+    'userSetting.label.authorization': '授权状态',
+    'userSetting.value.isAuthorization': '已授权',
+    'userSetting.value.notAuthorization': '未授权',
+    'userSetting.label.lastLoginTime': '最后登录时间',
+    'userSetting.label.loginIp': '登录ip',
+    'userSetting.security.secret': '账户密钥',
+    'userSetting.security.secret.tips': '用于快速登录',
+    'userSetting.verified.authorization': '授权信息',
+    'userSetting.verified.label.expires': '到期时间',
+    'userSetting.verified.label.appNum': 'app数量',
+    'userSetting.verified.label.serverNum': '服务数量',
+    'userSetting.verified.label.appCreationNum': 'app创作数量',
+    'userSetting.verified.label.scriptCreationNum': '脚本创作数量',
+    'userSetting.verified.label.description': '授权描述',    
   },
 };
 

@@ -15,8 +15,8 @@ export const buildMenu = (item, level, push) => {
             level={level + 1}
             indent={true}
           >
-            {item.items
-              ? item.items.map((item1) => {
+            {item.children
+              ? item.children.map((item1) => {
                   return buildMenu(item1, level + 1, push);
                 })
               : null}

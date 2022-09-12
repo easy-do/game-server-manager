@@ -18,10 +18,6 @@ import {
   IconUser,
   IconSettings,
   IconPoweroff,
-  IconExperiment,
-  IconDashboard,
-  IconInteraction,
-  IconTag,
   IconLoading,
 } from '@arco-design/web-react/icon';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,9 +31,10 @@ import Settings from '../Settings';
 import styles from './style/index.module.less';
 import defaultLocale from '@/locale';
 import useStorage from '@/utils/useStorage';
-import { generatePermission } from '@/routes';
+import { generatePermission, IRoute } from '@/routes';
+import { logoutRequest } from '@/api/oauth';
 
-function Navbar({ show }: { show: boolean }) {
+function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
   const t = useLocale();
   const { userInfo, userLoading } = useSelector((state: GlobalState) => state);
   const dispatch = useDispatch();
@@ -48,13 +45,23 @@ function Navbar({ show }: { show: boolean }) {
   const { setLang, lang, theme, setTheme } = useContext(GlobalContext);
 
   function logout() {
-    setUserStatus('logout');
-    window.location.href = '/login';
+    logoutRequest().then((res)=>{
+      const { success } = res.data;
+      if(success){
+        localStorage.clear();
+        setUserStatus('logout');
+        window.location.href = '/login';
+      }
+    })
   }
 
   function onMenuItemClick(key) {
-    if (key === 'logout') {
+    if (key === 'info') {
+      window.location.href='/user/info'
+    } else if (key === 'logout') {
       logout();
+    } else if (key === 'setting') {
+      window.location.href='/user/setting'
     } else {
       Message.info(`You clicked ${key}`);
     }
@@ -84,36 +91,17 @@ function Navbar({ show }: { show: boolean }) {
     );
   }
 
-  const handleChangeRole = () => {
-    const newRole = role === 'admin' ? 'user' : 'admin';
-    setRole(newRole);
-  };
-
   const droplist = (
     <Menu onClickMenuItem={onMenuItemClick}>
-      <Menu.SubMenu
-        key="role"
-        title={
-          <>
-            <IconUser className={styles['dropdown-icon']} />
-            <span className={styles['user-role']}>
-              {role === 'admin'
-                ? t['menu.user.role.admin']
-                : t['menu.user.role.user']}
-            </span>
-          </>
-        }
-      >
-        <Menu.Item onClick={handleChangeRole} key="switch role">
-          <IconTag className={styles['dropdown-icon']} />
-          {t['menu.user.switchRoles']}
-        </Menu.Item>
-      </Menu.SubMenu>
+      <Menu.Item key="info">
+        <IconUser className={styles['dropdown-icon']} />
+        {userInfo.nickName}
+      </Menu.Item>
       <Menu.Item key="setting">
         <IconSettings className={styles['dropdown-icon']} />
         {t['menu.user.setting']}
       </Menu.Item>
-      <Menu.SubMenu
+      {/* <Menu.SubMenu
         key="more"
         title={
           <div style={{ width: 80 }}>
@@ -130,7 +118,7 @@ function Navbar({ show }: { show: boolean }) {
           <IconInteraction className={styles['dropdown-icon']} />
           {t['menu.list.cardList']}
         </Menu.Item>
-      </Menu.SubMenu>
+      </Menu.SubMenu> */}
 
       <Divider style={{ margin: '4px 0' }} />
       <Menu.Item key="logout">
@@ -147,8 +135,13 @@ function Navbar({ show }: { show: boolean }) {
           <Logo />
           <div className={styles['logo-name']}>简单推送</div>
         </div>
+        {topMenu()}
       </div>
+
+
       <ul className={styles.right}>
+
+
         <li>
           <Input.Search
             className={styles.round}

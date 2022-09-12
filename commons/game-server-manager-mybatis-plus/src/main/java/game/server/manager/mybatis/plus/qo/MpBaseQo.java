@@ -76,7 +76,7 @@ public class MpBaseQo<T> {
     /**
      * 查询参数
      */
-    protected Map<String, Object> params;
+    protected Map<String, Object> searchParam;
     /**
      * 查询参数类型配置
      */
@@ -172,15 +172,15 @@ public class MpBaseQo<T> {
      */
     public LambdaQueryWrapper<T> buildSearchWrapper() {
         wrapper = Wrappers.query();
-        if (Objects.isNull(params) || params.isEmpty()) {
+        if (Objects.isNull(searchParam) || searchParam.isEmpty()) {
             log.info("this params is null or empty,break buildSearchWrapper.");
             return wrapper.lambda();
         }
 
         //校验字段是否符合规范
-        checkParamColumns(params.keySet());
+        checkParamColumns(searchParam.keySet());
 
-        for (Map.Entry<String, Object> param : params.entrySet()) {
+        for (Map.Entry<String, Object> param : searchParam.entrySet()) {
             String column = param.getKey();
             Object value = param.getValue();
             if (CharSequenceUtil.isBlank(column) || Objects.isNull(value)) {

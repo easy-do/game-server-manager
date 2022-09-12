@@ -3,6 +3,7 @@ package game.server.manager.server.service;
 import game.server.manager.api.SysDictDataApi;
 import game.server.manager.api.UserInfoApi;
 import game.server.manager.common.constant.SystemConstant;
+import game.server.manager.common.vo.SysDictDataVo;
 import game.server.manager.redis.config.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,10 +61,13 @@ public class TopDataServer {
     }
 
     public long deployCount() {
+        long dictCount = 0;
         long newCount = executeLogService.count();
-        String dictCount = dictDataService.getSingleDictData("system_config","deploy_count").getData().getDictValue();
-        long count = Long.parseLong(dictCount);
-        newCount = newCount + count;
+        SysDictDataVo sysDictDataVo = dictDataService.getSingleDictData("system_config", "deploy_count").getData();
+        if(Objects.nonNull(sysDictDataVo)){
+            dictCount = Long.parseLong(sysDictDataVo.getDictValue());
+        }
+        newCount = newCount + dictCount;
         return newCount;
     }
 }

@@ -121,7 +121,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
         }
         List<Long> menuIds = roleMenuList.stream().map(SysRoleMenu::getMenuId).toList();
         LambdaQueryWrapper<SysMenu> menuWrapper = Wrappers.lambdaQuery();
-        menuWrapper.select(SysMenu::getMenuId,SysMenu::getMenuName,SysMenu::getParentId,SysMenu::getIcon,SysMenu::getPath,SysMenu::getQuery,SysMenu::getMenuType,SysMenu::getStatus,SysMenu::getPerms,SysMenu::getIsFrame);
         menuWrapper.in(SysMenu::getMenuId,menuIds);
         menuWrapper.in(SysMenu::getStatus,0);
         return list(menuWrapper);
@@ -168,9 +167,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
         }
         List<SysMenuVo> voList = SysMenuMapstruct.INSTANCE.entityToVo(sysMenuList);
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
-        treeNodeConfig.setIdKey("itemKey");
-        treeNodeConfig.setNameKey("text");
-        treeNodeConfig.setChildrenKey("items");
         NodeParser<SysMenuVo, Long> nodeParser = (sysMenuVo, treeNode) -> {
             treeNode.setId(sysMenuVo.getMenuId());
             treeNode.setParentId(sysMenuVo.getParentId());
@@ -179,8 +175,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
             treeNode.putExtra("icon",sysMenuVo.getIcon());
             String query = sysMenuVo.getQuery();
             treeNode.putExtra("link",sysMenuVo.getPath() + (CharSequenceUtil.isNotEmpty(query)?query:""));
+            treeNode.putExtra("key",sysMenuVo.getPath() + (CharSequenceUtil.isNotEmpty(query)?query:""));
             treeNode.put("menuType",sysMenuVo.getMenuType());
             treeNode.put("isFrame",sysMenuVo.getIsFrame());
+            treeNode.putExtra("ignore", sysMenuVo.getVisible().equals(StatusEnum.DISABLE.getCode()));
             treeNode.putExtra("disabled", sysMenuVo.getStatus().equals(StatusEnum.DISABLE.getCode()));
         };
         Long min = voList.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();

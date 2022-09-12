@@ -119,18 +119,22 @@ function PageLayout() {
     return function travel(_routes: IRoute[], level, parentNode = []) {
       return _routes.map((route) => {
         const { breadcrumb = true, ignore } = route;
+        //获取菜单图标
         const iconDom = getIconFromKey(route.key);
+        //菜单标题
         const titleDom = (
           <>
             {iconDom} {locale[route.name] || route.name}
           </>
         );
 
+        //菜单的路由地址
         routeMap.current.set(
           `/${route.key}`,
           breadcrumb ? [...parentNode, route.name] : []
         );
 
+        //过滤出显示的菜单？
         const visibleChildren = (route.children || []).filter((child) => {
           const { ignore, breadcrumb = true } = child;
           if (ignore || route.ignore) {
@@ -143,9 +147,11 @@ function PageLayout() {
           return !ignore;
         });
 
+        //如果不展示只是路由则不组装直接返回空
         if (ignore) {
           return '';
         }
+        //如果还有子菜单继续递归构建子菜单
         if (visibleChildren.length) {
           menuMap.current.set(route.key, { subMenu: true });
           return (
@@ -154,18 +160,26 @@ function PageLayout() {
             </SubMenu>
           );
         }
+        //到底了，直接返回子菜单组件
         menuMap.current.set(route.key, { menuItem: true });
         return <MenuItem key={route.key}>{titleDom}</MenuItem>;
       });
     };
   }
 
+  // 点击菜单的回调
   function onClickMenuItem(key) {
+    //如果路径是网址应该跳转
+    if(key.substring(0, 7) === "http://"||key.substring(0, 8) === "https://"){
+      window.open(key);
+      return
+    }
     const currentRoute = flattenRoutes.find((r) => r.key === key);
     const component = currentRoute.component;
     const preload = component.preload();
     NProgress.start();
     preload.then(() => {
+
       history.push(currentRoute.path ? currentRoute.path : `/${key}`);
       NProgress.done();
     });
@@ -205,6 +219,20 @@ function PageLayout() {
     updateMenuStatus();
   }, [pathname]);
 
+
+  const topNav = () =>{
+     return <Menu
+      mode={'horizontal'}
+      collapse={collapsed}
+      onClickMenuItem={onClickMenuItem}
+      selectedKeys={selectedKeys}
+      openKeys={openKeys}
+      onClickSubMenu={(_, openKeys) => setOpenKeys(openKeys)}
+    >
+      {renderRoutes(locale)(routes[1].children, 1)}
+    </Menu>
+  }
+
   return (
     <Layout className={styles.layout}>
       <div
@@ -212,7 +240,7 @@ function PageLayout() {
           [styles['layout-navbar-hidden']]: !showNavbar,
         })}
       >
-        <Navbar show={showNavbar} />
+        <Navbar topMenu={topNav} show={showNavbar} />
       </div>
       {userLoading ? (
         <Spin className={styles['spin']} />
@@ -237,7 +265,7 @@ function PageLayout() {
                   openKeys={openKeys}
                   onClickSubMenu={(_, openKeys) => setOpenKeys(openKeys)}
                 >
-                  {renderRoutes(locale)(routes, 1)}
+                  {renderRoutes(locale)(routes[0].children, 1)}
                 </Menu>
               </div>
               <div className={styles['collapse-btn']} onClick={toggleCollapse}>

@@ -11,7 +11,8 @@ export type IRoute = AuthParams & {
   ignore?: boolean;
 };
 
-export const routes: IRoute[] = [
+
+export const staticRoutes: IRoute[] = [
   {
     name: 'menu.dashboard',
     key: 'dashboard',
@@ -153,12 +154,24 @@ export const routes: IRoute[] = [
   {
     name: '登录成功',
     key: 'loginSuccess',
+    ignore:true,
   },
   {
     name: '登录失败',
     key: 'loginError',
+    ignore:true,
   },
 ];
+
+
+
+const getRoutes = () =>{
+const menu = localStorage.getItem('userMenu');
+  if(menu){
+    return JSON.parse(menu);
+  }
+  return staticRoutes;
+} 
 
 export const getName = (path: string, routes) => {
   return routes.find((item) => {
@@ -172,8 +185,10 @@ export const getName = (path: string, routes) => {
 };
 
 export const generatePermission = (role: string) => {
-  const actions = role === 'admin' ? ['*'] : ['read'];
+  const actions = role === 'supe_admin' ? ['*'] : ['read'];
   const result = {};
+  const routes = getRoutes();
+  console.info(routes)
   routes.forEach((item) => {
     if (item.children) {
       item.children.forEach((child) => {
@@ -185,6 +200,8 @@ export const generatePermission = (role: string) => {
 };
 
 const useRoute = (userPermission): [IRoute[], string] => {
+
+  const routes = getRoutes();
   
   const filterRoute = (routes: IRoute[], arr = []): IRoute[] => {
     if (!routes.length) {
@@ -216,7 +233,9 @@ const useRoute = (userPermission): [IRoute[], string] => {
 
   const [permissionRoute, setPermissionRoute] = useState(routes);
 
+
   useEffect(() => {
+    
     const newRoutes = filterRoute(routes);
     setPermissionRoute(newRoutes);
   }, [JSON.stringify(userPermission)]);

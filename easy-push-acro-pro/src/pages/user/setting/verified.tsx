@@ -1,47 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import {
   Descriptions,
-  Table,
   Typography,
   Skeleton,
-  Tag,
-  Space,
-  Button,
-  Badge,
 } from '@arco-design/web-react';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import axios from 'axios';
 import styles from './style/index.module.less';
 
-function Verified() {
+
+function Verified({
+  userInfo = {},
+}: {
+  userInfo: any;
+}) {
   const t = useLocale(locale);
   const [data, setData] = useState({
-    accountType: '',
-    isVerified: true,
-    verifiedTime: '',
-    legalPersonName: '',
-    certificateType: '',
-    certificationNumber: '',
-    enterpriseName: '',
-    enterpriseCertificateType: '',
-    organizationCode: '',
+    appCreationNum: 0,
+    appNum: 0,
+    description: '',
+    expires: '',
+    scriptCreationNum: 0,
+    serverNum: 0,
   });
 
   const [loading, setLoading] = useState(true);
-  const [tableData, setTableData] = useState([]);
-  const [tableLoading, setTableLoading] = useState(true);
+
 
   const getData = async () => {
-    const { data } = await axios
-      .get('/api/user/verified/enterprise')
-      .finally(() => setLoading(false));
-    setData(data);
+    setLoading(true)
+    const authorizationStr = userInfo.authorization
+    if(authorizationStr){
+      const authorization = JSON.parse(authorizationStr)
+      const data = {
+        appNum: authorization.appNum,
+        serverNum: authorization.serverNum,
+        appCreationNum: authorization.appCreationNum,
+        scriptCreationNum: authorization.scriptCreationNum,
+        expires: authorization.expires,
+        description: authorization.description,
+      }
+      setData(data);
+    }
+    setLoading(false)
 
-    const { data: tableData } = await axios
-      .get('/api/user/verified/authList')
-      .finally(() => setTableLoading(false));
-    setTableData(tableData);
   };
 
   useEffect(() => {
@@ -53,7 +56,7 @@ function Verified() {
   return (
     <div className={styles.verified}>
       <Typography.Title heading={6}>
-        {t['userSetting.verified.enterprise']}
+        {t['userSetting.verified.authorization']}
       </Typography.Title>
       <Descriptions
         className={styles['verified-enterprise']}
@@ -65,19 +68,13 @@ function Verified() {
           label: t[`userSetting.verified.label.${key}`],
           value: loading ? (
             loadingNode
-          ) : typeof value === 'boolean' ? (
-            value ? (
-              <Tag color="green">{t['userSetting.value.verified']}</Tag>
-            ) : (
-              <Tag color="red">{t['userSetting.value.notVerified']}</Tag>
-            )
           ) : (
             value
           ),
         }))}
       />
 
-      <Typography.Title heading={6}>
+      {/* <Typography.Title heading={6}>
         {t['userSetting.verified.records']}
       </Typography.Title>
       <Table
@@ -136,7 +133,7 @@ function Verified() {
         ]}
         data={tableData}
         loading={tableLoading}
-      />
+      /> */}
     </div>
   );
 }

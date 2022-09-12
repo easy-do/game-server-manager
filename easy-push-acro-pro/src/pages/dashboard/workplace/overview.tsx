@@ -18,6 +18,7 @@ import IconCalendar from './assets/calendar.svg';
 import IconComments from './assets/comments.svg';
 import IconContent from './assets/content.svg';
 import IconIncrease from './assets/increase.svg';
+import { hometopData } from '@/api/topData';
 
 const { Row, Col } = Grid;
 
@@ -48,12 +49,12 @@ function StatisticItem(props: StatisticItemType) {
 }
 
 type DataType = {
-  allContents?: string;
-  liveContents?: string;
-  increaseComments?: string;
+  applicationCount?: number;
+  deployCount?: number;
+  onlineCount?: number;
+  userCount?: number;
   growthRate?: string;
-  chartData?: { count?: number; date?: string }[];
-  down?: boolean;
+  // chartData?: { count?: number; date?: string }[];
 };
 
 function Overview() {
@@ -65,10 +66,12 @@ function Overview() {
 
   const fetchData = () => {
     setLoading(true);
-    axios
-      .get('/api/workplace/overview-content')
+    hometopData()
       .then((res) => {
-        setData(res.data);
+        const {success} = res.data
+        if(success){
+          setData(res.data.data);
+        }
       })
       .finally(() => {
         setLoading(false);
@@ -90,8 +93,8 @@ function Overview() {
         <Col flex={1}>
           <StatisticItem
             icon={<IconCalendar />}
-            title={t['workplace.totalOnlyData']}
-            count={data.allContents}
+            title={t['workplace.userCount']}
+            count={data.userCount}
             loading={loading}
             unit={t['workplace.pecs']}
           />
@@ -100,8 +103,8 @@ function Overview() {
         <Col flex={1}>
           <StatisticItem
             icon={<IconContent />}
-            title={t['workplace.contentInMarket']}
-            count={data.liveContents}
+            title={t['workplace.onlineCount']}
+            count={data.onlineCount}
             loading={loading}
             unit={t['workplace.pecs']}
           />
@@ -110,8 +113,8 @@ function Overview() {
         <Col flex={1}>
           <StatisticItem
             icon={<IconComments />}
-            title={t['workplace.comments']}
-            count={data.increaseComments}
+            title={t['workplace.applicationCount']}
+            count={data.applicationCount}
             loading={loading}
             unit={t['workplace.pecs']}
           />
@@ -120,13 +123,11 @@ function Overview() {
         <Col flex={1}>
           <StatisticItem
             icon={<IconIncrease />}
-            title={t['workplace.growth']}
+            title={t['workplace.deployCount']}
+            unit={t['workplace.bout']}
             count={
               <span>
-                {data.growthRate}{' '}
-                <IconCaretUp
-                  style={{ fontSize: 18, color: 'rgb(var(--green-6))' }}
-                />
+                {data.deployCount}
               </span>
             }
             loading={loading}
@@ -134,7 +135,7 @@ function Overview() {
         </Col>
       </Row>
       <Divider />
-      <div>
+      {/* <div>
         <div className={styles.ctw}>
           <Typography.Paragraph
             className={styles['chart-title']}
@@ -148,7 +149,7 @@ function Overview() {
           <Link>{t['workplace.seeMore']}</Link>
         </div>
         <OverviewAreaLine data={data.chartData} loading={loading} />
-      </div>
+      </div> */}
     </Card>
   );
 }
