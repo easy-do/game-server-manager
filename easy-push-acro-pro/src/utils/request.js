@@ -11,7 +11,6 @@ axios.interceptors.request.use(
     return config;
   },
   err => {
-    console.log("请求超时");
     Notification.warning({ content: '请求超时.', duration: 300 })
     return Promise.reject(err);
   }

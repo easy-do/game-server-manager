@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import {
   Button,
   Avatar,
-  Upload,
   Descriptions,
   Tag,
   Skeleton,
   Link,
 } from '@arco-design/web-react';
-import { IconCamera, IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import styles from './style/header.module.less';
+
+import moment from 'moment';
 
 export default function Info({
   userInfo = {},
@@ -22,40 +22,16 @@ export default function Info({
 }) {
   const t = useLocale(locale);
 
-  const [avatar, setAvatar] = useState('');
-
-  function onAvatarChange(_, file) {
-    setAvatar(file.originFile ? URL.createObjectURL(file.originFile) : '');
-  }
-
-  useEffect(() => {
-    setAvatar(userInfo.avatar);
-  }, [userInfo]);
-
-  const loadingImg = (
-    <Skeleton
-      text={{ rows: 0 }}
-      style={{ width: '100px', height: '100px' }}
-      animation
-    />
-  );
 
   const loadingNode = <Skeleton text={{ rows: 1 }} animation />;
   return (
     <div className={styles['info-wrapper']}>
-      <Upload showUploadList={false} onChange={onAvatarChange}>
-        {loading ? (
-          loadingImg
-        ) : (
-          <Avatar
+        <Avatar
             size={100}
-            triggerIcon={<IconCamera />}
             className={styles['info-avatar']}
           >
-            {avatar ? <img src={avatar} /> : <IconPlus />}
+            <img src={userInfo.avatarUrl} />
           </Avatar>
-        )}
-      </Upload>
       <Descriptions
         className={styles['info-content']}
         column={2}
@@ -63,50 +39,55 @@ export default function Info({
         labelStyle={{ textAlign: 'right' }}
         data={[
           {
-            label: t['userSetting.label.name'],
-            value: loading ? loadingNode : userInfo.name,
+            label: t['userSetting.label.accountId'],
+            value: loading ? loadingNode : userInfo.id,
           },
           {
-            label: t['userSetting.label.verified'],
+            label: t['userSetting.label.name'],
+            value: loading ? loadingNode : userInfo.nickName,
+          },
+          {
+            label: t['userSetting.label.authorization'],
             value: loading ? (
               loadingNode
             ) : (
               <span>
-                {userInfo.verified ? (
+                {userInfo.authorization ? (
                   <Tag color="green" className={styles['verified-tag']}>
-                    {t['userSetting.value.verified']}
+                    {t['userSetting.value.isAuthorization']}
                   </Tag>
                 ) : (
                   <Tag color="red" className={styles['verified-tag']}>
-                    {t['userSetting.value.notVerified']}
+                    {t['userSetting.value.notAuthorization']}
                   </Tag>
                 )}
-                <Link role="button" className={styles['edit-btn']}>
+                {/* <Link role="button" className={styles['edit-btn']}>
                   {t['userSetting.btn.edit']}
-                </Link>
+                </Link> */}
               </span>
             ),
           },
           {
-            label: t['userSetting.label.accountId'],
-            value: loading ? loadingNode : userInfo.accountId,
-          },
-          {
-            label: t['userSetting.label.phoneNumber'],
+            label: t['userSetting.info.email'],
             value: loading ? (
               loadingNode
             ) : (
               <span>
-                {userInfo.phoneNumber}
-                <Link role="button" className={styles['edit-btn']}>
-                  {t['userSetting.btn.edit']}
-                </Link>
+                {userInfo.email}
               </span>
             ),
           },
           {
             label: t['userSetting.label.registrationTime'],
-            value: loading ? loadingNode : userInfo.registrationTime,
+            value: loading ? loadingNode : moment(userInfo.creatTime*1000).format("YYYY-MM-DD HH:mm:ss"),
+          },
+          {
+            label: t['userSetting.label.lastLoginTime'],
+            value: loading ? loadingNode : moment(userInfo.lastLoginTime*1000).format("YYYY-MM-DD HH:mm:ss"),
+          },
+          {
+            label: t['userSetting.label.loginIp'],
+            value: loading ? loadingNode : userInfo.loginIp,
           },
         ]}
       ></Descriptions>

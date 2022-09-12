@@ -18,6 +18,7 @@ import {
 import useLocale from '../../utils/useLocale';
 import MessageList, { MessageListType } from './list';
 import styles from './style/index.module.less';
+import { cleanAllMessageRequest, messageList, readMessageRequest } from '@/api/userMessage';
 
 function DropContent() {
   const t = useLocale();
@@ -29,10 +30,9 @@ function DropContent() {
 
   function fetchSourceData(showLoading = true) {
     showLoading && setLoading(true);
-    axios
-      .get('/api/message/list')
+    messageList()
       .then((res) => {
-        setSourceData(res.data);
+        setSourceData(res.data.data);
       })
       .finally(() => {
         showLoading && setLoading(false);
@@ -41,12 +41,19 @@ function DropContent() {
 
   function readMessage(data: MessageListType) {
     const ids = data.map((item) => item.id);
-    axios
-      .post('/api/message/read', {
-        ids,
-      })
+    readMessageRequest(ids)
       .then(() => {
         fetchSourceData();
+      });
+  }
+
+  function cleanMessage() {
+    cleanAllMessageRequest()
+      .then((res) => {
+        const {success} = res.data
+        if(success){
+          setSourceData([]);
+        }
       });
   }
 
@@ -55,7 +62,7 @@ function DropContent() {
   }, []);
 
   useEffect(() => {
-    const groupData: { [key: string]: MessageListType } = groupBy(
+    const groupData: { [key: number]: MessageListType } = groupBy(
       sourceData,
       'type'
     );
@@ -63,26 +70,26 @@ function DropContent() {
   }, [sourceData]);
 
   const tabList = [
+    // {
+    //   key: 'message',
+    //   title: t['message.tab.title.message'],
+    //   titleIcon: <IconMessage />,
+    // },
     {
-      key: 'message',
-      title: t['message.tab.title.message'],
-      titleIcon: <IconMessage />,
-    },
-    {
-      key: 'notice',
+      key: 1,
       title: t['message.tab.title.notice'],
       titleIcon: <IconCustomerService />,
     },
-    {
-      key: 'todo',
-      title: t['message.tab.title.todo'],
-      titleIcon: <IconFile />,
-      avatar: (
-        <Avatar style={{ backgroundColor: '#0FC6C2' }}>
-          <IconDesktop />
-        </Avatar>
-      ),
-    },
+    // {
+    //   key: 'todo',
+    //   title: t['message.tab.title.todo'],
+    //   titleIcon: <IconFile />,
+    //   avatar: (
+    //     <Avatar style={{ backgroundColor: '#0FC6C2' }}>
+    //       <IconDesktop />
+    //     </Avatar>
+    //   ),
+    // },
   ];
 
   return (
@@ -91,16 +98,16 @@ function DropContent() {
         <Tabs
           overflow="dropdown"
           type="rounded"
-          defaultActiveTab="message"
+          defaultActiveTab="1"
           destroyOnHide
           extra={
-            <Button type="text" onClick={() => setSourceData([])}>
+            <Button type="text" onClick={() => cleanMessage()}>
               {t['message.empty']}
             </Button>
           }
         >
           {tabList.map((item) => {
-            const { key, title, avatar } = item;
+            const { key, title } = item;
             const data = groupData[key] || [];
             const unReadData = data.filter((item) => !item.status);
             return (

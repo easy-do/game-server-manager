@@ -35,6 +35,11 @@ const i18n = {
     'workplace.materialMarket': 'MaterialMarket',
     'workplace.react': 'React Quick Start',
     'workplace.vue': 'Vue Quick Start',
+    'workplace.applicationCount': 'Application number',
+    'workplace.deployCount': 'Deployment number',
+    'workplace.onlineCount': 'Online User number',
+    'workplace.userCount': 'User number',
+    'workplace.bout': 'Bout',
   },
   'zh-CN': {
     'workplace.welcomeBack': '欢迎回来，',
@@ -68,10 +73,15 @@ const i18n = {
     'workplace.notice': '通知',
     'workplace.docs': '文档中心',
     'workplace.pecs': '个',
+    'workplace.bout': '次',
     'workplace.designLab': '风格配置平台',
     'workplace.materialMarket': '物料市场',
     'workplace.react': 'React 组件库',
     'workplace.vue': 'Vue 组件库',
+    'workplace.applicationCount': '应用数量',
+    'workplace.deployCount': '累积部署',
+    'workplace.onlineCount': '在线用户',
+    'workplace.userCount': '用户',
   },
 };
 
