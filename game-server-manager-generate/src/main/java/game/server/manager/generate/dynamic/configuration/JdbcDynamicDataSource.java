@@ -144,7 +144,7 @@ public class JdbcDynamicDataSource {
                 logger.info("缓存中未找到数据源,尝试注册：{}", dataSourceManager.getSourceName());
                 DataSource dataSource = createDataSource(BeanUtil.beanToMap(dataSourceManager));
                 testDataSource(dataSource, false);
-                dataSourceNode = put(dataSourceManager.getId(),dataSourceManager.getSourceName(),dataSource);
+                dataSourceNode = put(dataSourceManager.getId().toString(),dataSourceManager.getSourceName(),dataSource);
             }
         }
         if(Objects.isNull(dataSourceNode)){

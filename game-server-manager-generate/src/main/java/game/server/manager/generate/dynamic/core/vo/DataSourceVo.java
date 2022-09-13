@@ -11,7 +11,7 @@ import lombok.Data;
 public class DataSourceVo {
 
     /** 主键 */
-    private String id;
+    private Long id;
 
     /** 数据源名称 */
     private String sourceName;
@@ -35,6 +35,9 @@ public class DataSourceVo {
     private String password;
 
     /** 状态(0停用 1启用) */
-    private Integer state;
+    private Integer status;
+
+    /** 备注 */
+    private String remark;
 
 }

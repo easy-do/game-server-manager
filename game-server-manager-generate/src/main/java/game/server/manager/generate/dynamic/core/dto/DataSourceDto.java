@@ -2,8 +2,8 @@ package game.server.manager.generate.dynamic.core.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -13,12 +13,13 @@ import java.io.Serializable;
  */
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = false)
 public class DataSourceDto implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
-    private String id;
+    private Long id;
 
     /** 数据源名称 */
     private String sourceName;
@@ -42,6 +43,9 @@ public class DataSourceDto implements Serializable {
     private String password;
 
     /** 状态(0停用 1启用) */
-    private Integer state;
+    private Integer status;
+
+    /** 备注 */
+    private String remark;
 
 }

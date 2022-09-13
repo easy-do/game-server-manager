@@ -22,74 +22,62 @@ public class DataSource {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /** 数据源名称 */
-    @TableField(value = "source_name")
     private String sourceName;
 
     /** 数据源编码 */
-    @TableField(value = "source_code")
     private String sourceCode;
 
     /** 数据源类型 */
-    @TableField(value = "source_type")
     private String sourceType;
 
     /** 参数 */
-    @TableField(value = "params")
     private String params;
 
     /** URL */
-    @TableField(value = "url")
     private String url;
 
     /** 用户名 */
-    @TableField(value = "user_name")
     private String userName;
 
     /** 密码 */
-    @TableField(value = "password")
     private String password;
 
     /** 状态(0停用 1启用) */
-    @TableField(value = "state")
-    private Integer state;
+    private Integer status;
 
     /** 备注 */
-    @TableField(value = "state")
     private String remark;
 
-    /** 删除标记 */
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+
+    /**
+     * 创建人
+     */
+    private Long createBy;
+
+    /**
+     * 更新人
+     */
+    private Long updateBy;
+
+    /**
+     * 删除标记
+     */
     @TableLogic
-    @TableField(
-            fill = FieldFill.INSERT
-    )
-    private Integer isDeleted;
-
-    /** 创建时间 */
-    @TableField(
-            fill = FieldFill.INSERT
-    )
-    private LocalDateTime gmtCreate;
-
-    /** 更新时间 */
-    @TableField(
-            fill = FieldFill.INSERT_UPDATE
-    )
-    private LocalDateTime gmtModified;
-
-    /** 创建人 */
-    @TableField(
-            fill = FieldFill.INSERT
-    )
-    private String creator;
-
-    /** 修改人 */
-    @TableField(
-            fill = FieldFill.INSERT_UPDATE
-    )
-    private String modifier;
+    private Integer delFlag;
 
 }
