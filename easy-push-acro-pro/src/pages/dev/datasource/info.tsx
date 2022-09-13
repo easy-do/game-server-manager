@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Descriptions, Modal, Skeleton } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { infoRequest } from '@/api/roleManager';
+import { infoRequest } from '@/api/dataSourceManager';
 import { DataInfoVo } from './constants';
 
 

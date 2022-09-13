@@ -66,7 +66,7 @@ public interface DataSourceManagerService {
      * @param id 数据源管理ID
      * @return 结果
      */
-    Boolean deleteById(String id);
+    Boolean deleteById(Long id);
 
     /**
      * 测试数据源

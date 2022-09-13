@@ -13,16 +13,21 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
+import { Status } from './constants';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
+const TextArea = Input.TextArea;
 
 function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
 }) {
+  
+  
   const { lang } = useContext(GlobalContext);
 
   const t = useLocale(locale);
+  
   const [form] = useForm();
 
   const handleSubmit = () => {
@@ -48,80 +53,87 @@ function SearchForm(props: {
       >
         <Row gutter={24}>
           <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.delFlag']} field="delFlag">
-              <Input placeholder={t['searchForm.delFlag.placeholder']} allowClear />
+            <Form.Item 
+              label={t['searchTable.columns.status']}
+              field="status"
+              rules={[
+                { required: true, message: t['searchTable.rules.status.required'] },
+              ]}
+            >
+              <Select
+                placeholder={t['searchForm.status.placeholder']}
+                options={Status.map((item, index) => ({
+                  label: item,
+                  value: index,
+                }))}
+                // mode="multiple"
+                allowClear
+              />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.remark']} field="remark">
-              <Input placeholder={t['searchForm.remark.placeholder']} allowClear />
+            <Form.Item 
+              label={t['searchTable.columns.params']}
+              field="params"
+              rules={[
+                { required: true, message: t['searchTable.rules.params.required'] },
+              ]}
+            >
+              <TextArea placeholder={t['searchForm.params.placeholder']} />
             </Form.Item>
-          </Col>
+          </Col> 
           <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.updateTime']} field="updateTime">
-              <Input placeholder={t['searchForm.updateTime.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.updateBy']} field="updateBy">
-              <Input placeholder={t['searchForm.updateBy.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.createTime']} field="createTime">
-              <Input placeholder={t['searchForm.createTime.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.createBy']} field="createBy">
-              <Input placeholder={t['searchForm.createBy.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.status']} field="status">
-              <Input placeholder={t['searchForm.status.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.params']} field="params">
-              <Input placeholder={t['searchForm.params.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.password']} field="password">
-              <Input placeholder={t['searchForm.password.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.userName']} field="userName">
-              <Input placeholder={t['searchForm.userName.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.url']} field="url">
+            <Form.Item
+              label={t['searchTable.columns.url']}
+              field="url"
+              rules={[
+                { required: true, message: t['searchTable.rules.url.required'] },
+              ]}
+            >
               <Input placeholder={t['searchForm.url.placeholder']} allowClear />
             </Form.Item>
-          </Col>
+          </Col> 
           <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.sourceType']} field="sourceType">
-              <Input placeholder={t['searchForm.sourceType.placeholder']} allowClear />
+            <Form.Item 
+              label={t['searchTable.columns.sourceType']}
+              field="sourceType"
+              rules={[
+                { required: true, message: t['searchTable.rules.sourceType.required'] },
+              ]}
+            >
+              <Select
+                placeholder={t['searchForm.sourceType.placeholder']}
+                options={Status.map((item, index) => ({
+                  label: item,
+                  value: index,
+                }))}
+                // mode="multiple"
+                allowClear
+              />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.sourceCode']} field="sourceCode">
+            <Form.Item
+              label={t['searchTable.columns.sourceCode']}
+              field="sourceCode"
+              rules={[
+                { required: true, message: t['searchTable.rules.sourceCode.required'] },
+              ]}
+            >
               <Input placeholder={t['searchForm.sourceCode.placeholder']} allowClear />
             </Form.Item>
-          </Col>
+          </Col> 
           <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.sourceName']} field="sourceName">
+            <Form.Item
+              label={t['searchTable.columns.sourceName']}
+              field="sourceName"
+              rules={[
+                { required: true, message: t['searchTable.rules.sourceName.required'] },
+              ]}
+            >
               <Input placeholder={t['searchForm.sourceName.placeholder']} allowClear />
             </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.id']} field="id">
-              <Input placeholder={t['searchForm.id.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
+          </Col> 
         </Row>
       </Form>
       <div className={styles['right-button']}>

@@ -107,10 +107,10 @@ public class DataSourceManagerServiceImpl extends ServiceImpl<DataSourceManagerM
      * @return 结果
      */
     @Override
-    public Boolean deleteById(String id) {
+    public Boolean deleteById(Long id) {
         boolean result = removeById(id);
         if(result){
-            JdbcDataSourceExecTool.removeDataSource(id);
+            JdbcDataSourceExecTool.removeDataSource(id.toString());
         }
         return result;
     }

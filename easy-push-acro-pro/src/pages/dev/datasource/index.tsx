@@ -6,6 +6,7 @@ import {
   Button,
   Space,
   Typography,
+  Notification,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
 import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
@@ -19,6 +20,7 @@ import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
+import AddPage from './add';
 
 const { Title } = Typography;
 
@@ -45,7 +47,7 @@ function SearchTable() {
   const [viewInfoId, setViewInfoId] = useState();
   const [isViewInfo, setisViewInfo] = useState(false);
 
-  //查看
+ //查看
   function viewInfo(id) {
     setViewInfoId(id);
     setisViewInfo(true);
@@ -70,7 +72,9 @@ function SearchTable() {
   //删除
   function removeData(id){
     remove(id).then((res)=>{
-      if(res.data.success){
+      const { success, msg} = res.data
+      if(success){
+        Notification.success({ content: msg, duration: 300 })
         fetchData();
       }
     })
@@ -162,19 +166,19 @@ function SearchTable() {
     <Card>
       <Title heading={6}>{t['list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
-      {/* <PermissionWrapper
+      <PermissionWrapper
         requiredPermissions={[
           { resource: 'dataSourceManager', actions: ['update'] },
         ]}
-      > */}
+      >
         <div className={styles['button-group']}>
           <Space>
-          <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
+            <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
               {t['searchTable.operations.add']}
             </Button>
           </Space>
         </div>
-      {/* </PermissionWrapper> */}
+      </PermissionWrapper>
       <Table
         rowKey="id"
         loading={loading}
@@ -182,6 +186,10 @@ function SearchTable() {
         pagination={pagination}
         columns={columns}
         data={data}
+      />
+      <AddPage
+        visible={isAddData}
+        setVisible={setIsAddData}
       />
       <InfoPage
         id={viewInfoId}

@@ -86,7 +86,7 @@ const i18n = {
     'searchTable.columns.operations.view': '查看',
     'searchTable.columns.operations.update': '修改',
     'searchTable.columns.operations.remove': '删除',
-    'searchTable.columns.operations.remove.confirm': '你确定要删除吗?',
+    'searchTable.columns.operations.remove.confirm': '确定要删除吗?',
     'searchTable.operations.add': '新建',
     'searchForm.all.placeholder': '全部',
     'searchForm.delFlag.placeholder': '请输入删除标志',

@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, FormInstance, Input, Modal, DatePicker, Select, } from '@arco-design/web-react';
+import { Form, FormInstance, Input, Modal, DatePicker, Select, Notification } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { add } from '@/api/dataSourceManager';
@@ -20,7 +20,9 @@ function AddPage(props: { visible; setVisible }) {
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
       add(values).then((res) => {
-        if (res.data.success) {
+        const { success, msg} = res.data
+        if(success){
+          Notification.success({ content: msg, duration: 300 })
           props.setVisible(false);
         }
       });
@@ -74,10 +76,12 @@ function AddPage(props: { visible; setVisible }) {
             { required: true, message: t['searchTable.rules.updateTime.required'] },
           ]}
         >
-          <DatePicker.RangePicker
-            allowClear
+          <DatePicker
             style={{ width: '100%' }}
-            disabledDate={(date) => dayjs(date).isAfter(dayjs())}
+            showTime={{
+              defaultValue: '04:05:06',
+            }}
+            format='YYYY-MM-DD HH:mm:ss'
           />
         </Form.Item>
         <Form.Item
@@ -97,10 +101,12 @@ function AddPage(props: { visible; setVisible }) {
             { required: true, message: t['searchTable.rules.createTime.required'] },
           ]}
         >
-          <DatePicker.RangePicker
-            allowClear
+          <DatePicker
             style={{ width: '100%' }}
-            disabledDate={(date) => dayjs(date).isAfter(dayjs())}
+            showTime={{
+              defaultValue: '04:05:06',
+            }}
+            format='YYYY-MM-DD HH:mm:ss'
           />
         </Form.Item>
         <Form.Item
