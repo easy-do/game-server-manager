@@ -50,7 +50,7 @@ public interface DataSourceManagerService {
      * @author laoyu
      * @date 2022/4/14
      */
-    String saveOrUpdate(DataSourceDto dto);
+    boolean saveOrUpdate(DataSourceDto dto);
 
     /**
      * 批量删除数据源管理

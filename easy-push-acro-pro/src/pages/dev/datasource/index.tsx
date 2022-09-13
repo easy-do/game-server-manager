@@ -14,17 +14,15 @@ import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
 import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
-import { managerPage, remove } from '@/api/template';
+import { managerPage, remove } from '@/api/dataSourceManager';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
-import EditCodePage from './editCode';
 
 const { Title } = Typography;
 
 function SearchTable() {
-  
   const t = useLocale(locale);
 
   //表格操作按钮回调
@@ -42,10 +40,6 @@ function SearchTable() {
     if (type === 'remove') {
       removeData(record.id);
     }
-    //编辑模板
-    if (type === 'editCode') {
-      editCode(record.id);
-    }
   };
 
   const [viewInfoId, setViewInfoId] = useState();
@@ -59,6 +53,13 @@ function SearchTable() {
 
   const [updateId, setUpdateId] = useState();
   const [isUpdateInfo, setisUpdateInfo] = useState(false);
+
+  //新增
+  const [isAddData, setIsAddData] = useState(false);
+
+  function addData(){
+    setIsAddData(true);
+  }
 
   //编辑
   function updateInfo(id) {
@@ -74,15 +75,6 @@ function SearchTable() {
       }
     })
   }
-
-  const [editCodeId, setEditCodeId] = useState();
-  const [isEditCode, setIsEditCode] = useState(false);
-
-  function editCode (id){
-    setEditCodeId(id);
-    setIsEditCode(true);
-  }
-
 
   //获取表格展示列表、绑定操作列回调
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
@@ -168,27 +160,21 @@ function SearchTable() {
 
   return (
     <Card>
-      <Title heading={6}>{t['menu.list.searchTable']}</Title>
+      <Title heading={6}>{t['list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
-      <PermissionWrapper
+      {/* <PermissionWrapper
         requiredPermissions={[
-          { resource: 'menu.list.searchTable', actions: ['write'] },
+          { resource: 'dataSourceManager', actions: ['update'] },
         ]}
-      >
+      > */}
         <div className={styles['button-group']}>
           <Space>
-            <Button type="primary" icon={<IconPlus />}>
+          <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
               {t['searchTable.operations.add']}
-            </Button>
-            <Button>{t['searchTable.operations.upload']}</Button>
-          </Space>
-          <Space>
-            <Button icon={<IconDownload />}>
-              {t['searchTable.operation.download']}
             </Button>
           </Space>
         </div>
-      </PermissionWrapper>
+      {/* </PermissionWrapper> */}
       <Table
         rowKey="id"
         loading={loading}
@@ -206,11 +192,6 @@ function SearchTable() {
         id={updateId}
         visible={isUpdateInfo}
         setVisible={setisUpdateInfo}
-      />
-      <EditCodePage
-        id={editCodeId}
-        visible={isEditCode}
-        setVisible={setIsEditCode}
       />
     </Card>
   );

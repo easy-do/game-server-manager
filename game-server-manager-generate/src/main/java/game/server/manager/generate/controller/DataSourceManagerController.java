@@ -11,7 +11,6 @@ import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +65,7 @@ public class DataSourceManagerController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-    @GetMapping("/{id}")
+    @GetMapping("/info/{id}")
     public R<Object> getInfo(@PathVariable("id") String id) {
         return DataResult.ok(dataSourceManagerService.selectById(id));
     }
@@ -81,19 +80,19 @@ public class DataSourceManagerController {
      */
     @PostMapping("/saveOrUpdate")
     public R<Object> saveOrUpdate(@RequestBody @Validated DataSourceDto dto) {
-        return DataResult.ok(dataSourceManagerService.saveOrUpdate(dto));
+        return dataSourceManagerService.saveOrUpdate(dto)?DataResult.ok():DataResult.fail();
     }
 
     /**
      * 删除数据源管理
      *
-     * @param ids ids
+     * @param id id
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-	@DeleteMapping("/{ids}")
-    public R<Object> remove(@PathVariable String[] ids) {
-        return DataResult.ok(dataSourceManagerService.deleteByIds(ids));
+	@GetMapping("/delete/{id}")
+    public R<Object> remove(@PathVariable("id") String id) {
+        return DataResult.ok(dataSourceManagerService.deleteById(id));
     }
 
     /**

@@ -53,9 +53,9 @@ public class DataSourceManagerServiceImpl extends ServiceImpl<DataSourceManagerM
      */
     @Override
     public IPage<DataSourceVo> page(DataSourceQo qo) {
-        Page<DataSource> page = new Page<>(qo.getCurrentPage(), qo.getPageSize());
-        IPage<DataSource> pageData = baseMapper.selectDataSourceManagerPage(page, qo);
-        return pageData.convert(dataSource -> DataSourceMapstruct.INSTANCE.entityToVo(dataSource));
+        qo.initInstance(DataSource.class);
+        IPage<DataSource> pageData = page(qo.getPage(), qo.getWrapper());
+        return pageData.convert(DataSourceMapstruct.INSTANCE::entityToVo);
     }
 
     /**
@@ -71,7 +71,7 @@ public class DataSourceManagerServiceImpl extends ServiceImpl<DataSourceManagerM
     }
 
     @Override
-    public String saveOrUpdate(DataSourceDto dto) {
+    public boolean saveOrUpdate(DataSourceDto dto) {
         DataSource entity = DataSourceMapstruct.INSTANCE.dtoToEntity(dto);
         boolean updateResult = saveOrUpdate(entity);
         if ("HTTP".equals(dto.getSourceType())) {
@@ -79,10 +79,7 @@ public class DataSourceManagerServiceImpl extends ServiceImpl<DataSourceManagerM
                 entity.setParams(dto.getParams());
             }
         }
-        if(updateResult){
-            return entity.getId();
-        }
-        throw new BizException("500","更新或修改失败");
+        return updateResult;
     }
 
 

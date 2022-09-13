@@ -25,15 +25,6 @@ public interface DataSourceManagerMapper extends BaseMapper<DataSource> {
     DataSource selectDataSourceManagerById(String id);
 
     /**
-     * 分页条件查询数据源管理列表
-     *
-     * @param page 分页数据
-     * @param qo 查询条件封装
-     * @return 数据源管理集合
-     */
-    IPage<DataSource> selectDataSourceManagerPage(IPage<DataSource> page, @Param("qo") DataSourceQo qo);
-
-    /**
      * 查询所有数据源列表
      *
      * @param qo 查询条件封装
