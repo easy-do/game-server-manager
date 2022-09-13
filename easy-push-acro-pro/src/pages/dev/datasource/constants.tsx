@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
 
-
 export const Status = ['正常', '禁用'];
 
 export interface DataInfoVo{

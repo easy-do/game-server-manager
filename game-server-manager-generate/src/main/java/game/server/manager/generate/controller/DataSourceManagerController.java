@@ -91,8 +91,8 @@ public class DataSourceManagerController {
      * @author laoyu
      */
 	@GetMapping("/delete/{id}")
-    public R<Object> remove(@PathVariable("id") String id) {
-        return DataResult.ok(dataSourceManagerService.deleteById(id));
+    public R<Object> remove(@PathVariable("id") Long id) {
+        return dataSourceManagerService.deleteById(id)?DataResult.ok():DataResult.fail();
     }
 
     /**
