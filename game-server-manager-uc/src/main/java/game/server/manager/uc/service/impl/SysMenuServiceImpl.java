@@ -10,8 +10,10 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Maps;
 import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.common.dto.ChangeStatusDto;
+import game.server.manager.common.enums.ResourceTypeEnum;
 import game.server.manager.common.enums.StatusEnum;
 import game.server.manager.common.vo.SysMenuVo;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
@@ -33,7 +35,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -174,12 +179,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
             treeNode.setWeight(sysMenuVo.getOrderNum());
             treeNode.putExtra("icon",sysMenuVo.getIcon());
             String query = sysMenuVo.getQuery();
-            treeNode.putExtra("link",sysMenuVo.getPath() + (CharSequenceUtil.isNotEmpty(query)?query:""));
             treeNode.putExtra("key",sysMenuVo.getPath() + (CharSequenceUtil.isNotEmpty(query)?query:""));
             treeNode.put("menuType",sysMenuVo.getMenuType());
             treeNode.put("isFrame",sysMenuVo.getIsFrame());
-            treeNode.putExtra("ignore", sysMenuVo.getVisible().equals(StatusEnum.DISABLE.getCode()));
             treeNode.putExtra("disabled", sysMenuVo.getStatus().equals(StatusEnum.DISABLE.getCode()));
+            treeNode.putExtra("visible", sysMenuVo.getVisible().equals(StatusEnum.DISABLE.getCode()));
+            treeNode.putExtra("perms", sysMenuVo.getPerms());
         };
         Long min = voList.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();
         List<Tree<Long>> treeList = TreeUtil.build(voList, min, treeNodeConfig, nodeParser);
@@ -251,6 +256,70 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
         Long updateUserId = changeStatusDto.getUpdateUserId();
         SysMenu entity = SysMenu.builder().menuId(menuId).status(status).updateBy(updateUserId).build();
         return updateById(entity);
+    }
+
+    @Override
+    public Map<String,List<String>> userResourceAction(Long userId) {
+        List<Long> roleIds = sysUserRoleService.getRoleIdListByUserId(userId);
+        if(roleIds.isEmpty()){
+            return Maps.newHashMap();
+        }
+        List<SysMenu> menuList = getRoleMenuList(roleIds);
+        if(menuList.isEmpty()){
+            return Maps.newHashMap();
+        }
+        return buildResourceAction(menuList);
+    }
+
+    private Map<String,List<String>> buildResourceAction(List<SysMenu> menus){
+        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        NodeParser<SysMenu, Long> nodeParser = (sysMenu, treeNode) -> {
+            treeNode.setId(sysMenu.getMenuId());
+            treeNode.setParentId(sysMenu.getParentId());
+            treeNode.setName(sysMenu.getMenuName());
+            treeNode.setWeight(sysMenu.getOrderNum());
+            treeNode.putExtra("type",sysMenu.getMenuType());
+            treeNode.putExtra("perms",sysMenu.getPerms());
+        };
+        Long min = menus.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();
+        List<Tree<Long>> treeList = TreeUtil.build(menus, min, treeNodeConfig, nodeParser);
+        Map<String,List<String>> actionMap = Maps.newHashMap();
+        buildResourceAction(actionMap,treeList);
+        return actionMap;
+    }
+
+    private Map<String,List<String>> buildResourceAction(Map<String,List<String>> actionMap,List<Tree<Long>> treeList){
+        treeList.forEach(tree -> {
+            String type = (String) tree.get("type");
+            if(type.equals(ResourceTypeEnum.MENU.getType()) && isChildrenMenu(tree)){
+                //是菜单 并且子节点存在菜单 继续向下遍历
+                buildResourceAction(actionMap,tree.getChildren());
+            }else if(type.equals(ResourceTypeEnum.MENU.getType()) && !isChildrenMenu(tree)){
+                //是菜单 但子节点已经不存在菜单 直接组装
+                String perms = (String) tree.get("perms");
+                List<Tree<Long>> children = tree.getChildren();
+                if(Objects.nonNull(children)){
+                    List<String> actions = children.stream().map(tree1 -> (String)tree1.get("perms")).toList();
+                    actionMap.put(perms,actions);
+                }else {
+                    actionMap.put(perms, List.of("*"));
+                }
+            }
+        });
+        return actionMap;
+    }
+
+    private boolean isChildrenMenu(Tree<Long> tree){
+        List<Tree<Long>> childrenList = tree.getChildren();
+        if(Objects.isNull(childrenList)){
+            return false;
+        }
+        for (Tree<Long> children: childrenList) {
+            if (children.get("type").equals(ResourceTypeEnum.MENU.getType())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

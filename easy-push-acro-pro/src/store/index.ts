@@ -14,7 +14,8 @@ export interface GlobalState {
     loginIp?: string;
     lastLoginTime?: string;
     roles?: string[];
-    permissions: Record<string, string[]>;
+    resourceAction?: Record<string, string[]>;
+    permissions?: string[];
   };
   userLoading?: boolean;
 }
@@ -22,7 +23,7 @@ export interface GlobalState {
 const initialState: GlobalState = {
   settings: defaultSettings,
   userInfo: {
-    permissions: {},
+    resourceAction: {},
   },
 };
 

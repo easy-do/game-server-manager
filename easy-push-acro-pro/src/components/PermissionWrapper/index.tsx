@@ -16,9 +16,9 @@ const PermissionWrapper = (
   const hasPermission = useMemo(() => {
     return authentication(
         {requiredPermissions, oneOfPerm},
-        userInfo.permissions
+        userInfo.resourceAction
     );
-  },[oneOfPerm, requiredPermissions, userInfo.permissions]);
+  },[oneOfPerm, requiredPermissions, userInfo.resourceAction]);
 
   if (hasPermission) {
     return <>{convertReactElement(props.children)}</>;

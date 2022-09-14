@@ -31,7 +31,6 @@ import Settings from '../Settings';
 import styles from './style/index.module.less';
 import defaultLocale from '@/locale';
 import useStorage from '@/utils/useStorage';
-import { generatePermission, IRoute } from '@/routes';
 import { logoutRequest } from '@/api/oauth';
 
 function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
@@ -40,7 +39,6 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
   const dispatch = useDispatch();
 
   const [_, setUserStatus] = useStorage('userStatus');
-  const [role, setRole] = useStorage('userRole', 'admin');
 
   const { setLang, lang, theme, setTheme } = useContext(GlobalContext);
 
@@ -67,17 +65,6 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
     }
   }
 
-  useEffect(() => {
-    dispatch({
-      type: 'update-userInfo',
-      payload: {
-        userInfo: {
-          ...userInfo,
-          permissions: generatePermission(role),
-        },
-      },
-    });
-  }, [role]);
 
   if (!show) {
     return (

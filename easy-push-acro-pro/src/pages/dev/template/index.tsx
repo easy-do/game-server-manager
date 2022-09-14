@@ -172,19 +172,13 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'menu.list.searchTable', actions: ['write'] },
+          { resource: 'template_manager', actions: ['add'] },
         ]}
       >
         <div className={styles['button-group']}>
           <Space>
             <Button type="primary" icon={<IconPlus />}>
               {t['searchTable.operations.add']}
-            </Button>
-            <Button>{t['searchTable.operations.upload']}</Button>
-          </Space>
-          <Space>
-            <Button icon={<IconDownload />}>
-              {t['searchTable.operation.download']}
             </Button>
           </Space>
         </div>

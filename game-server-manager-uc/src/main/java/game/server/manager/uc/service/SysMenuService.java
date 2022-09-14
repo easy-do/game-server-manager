@@ -8,6 +8,7 @@ import game.server.manager.uc.dto.AuthRoleMenuDto;
 import game.server.manager.uc.entity.SysMenu;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author yuzhanfeng
@@ -104,4 +105,14 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2022/7/21
      */
     boolean changeStatus(ChangeStatusDto changeStatusDto);
+
+    /**
+     * 获取用户资源操作权限
+     *
+     * @param userId userId
+     * @return game.server.manager.common.vo.ResourceActionsVo
+     * @author laoyu
+     * @date 2022/9/14
+     */
+    Map<String,List<String>> userResourceAction(Long userId);
 }
