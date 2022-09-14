@@ -8,28 +8,16 @@ export type IRoute = AuthParams & {
   breadcrumb?: boolean;
   children?: IRoute[];
   // 当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问。
-  ignore?: boolean;
+  visible?: boolean;
+  // 是否禁用
+  disabled?: false
+  isFrame?: 1
+  icon?: string;
+  menuType?: string;
 };
 
 
 export const staticRoutes: IRoute[] = [
-  {
-    name: 'menu.dashboard',
-    key: 'dashboard',
-    children: [
-      {
-        name: 'menu.dashboard.workplace',
-        key: 'dashboard/workplace',
-      },
-      {
-        name: 'menu.dashboard.monitor',
-        key: 'dashboard/monitor',
-        requiredPermissions: [
-          { resource: 'menu.dashboard.monitor', actions: ['write'] },
-        ],
-      },
-    ],
-  },
   {
     name: 'menu.visualization',
     key: 'visualization',
@@ -154,12 +142,12 @@ export const staticRoutes: IRoute[] = [
   {
     name: '登录成功',
     key: 'loginSuccess',
-    ignore:true,
+    visible:true,
   },
   {
     name: '登录失败',
     key: 'loginError',
-    ignore:true,
+    visible:true,
   },
 ];
 
@@ -185,19 +173,23 @@ export const getName = (path: string, routes) => {
 };
 
 export const generatePermission = (role: string) => {
-  const actions = role === 'supe_admin' ? ['*'] : ['read'];
+  // const actions = role === 'supe_admin' ? ['*'] : ['read'];
+  const actions = ['*'];
   const result = {};
   const routes = getRoutes();
   console.info(routes)
   routes.forEach((item) => {
     if (item.children) {
       item.children.forEach((child) => {
-        result[child.name] = actions;
+        result[child.perms] = actions;
       });
     }
   });
+  console.info(result)
   return result;
 };
+
+
 
 const useRoute = (userPermission): [IRoute[], string] => {
 

@@ -22,6 +22,7 @@ import game.server.manager.common.exception.BizException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -207,6 +208,8 @@ public class LoginService {
         List<String> permissionList = sysMenuService.userPermissionList(userId);
         userInfoVo.setRoles(roleList);
         userInfoVo.setPermissions(permissionList);
+        Map<String,List<String>> resourceAction = sysMenuService.userResourceAction(userId);
+        userInfoVo.setResourceAction(resourceAction);
     }
 
     public void logout() {

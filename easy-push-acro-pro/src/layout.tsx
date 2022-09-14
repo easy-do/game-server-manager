@@ -89,7 +89,7 @@ function PageLayout() {
     (state: GlobalState) => state
   );
 
-  const [routes, defaultRoute] = useRoute(userInfo?.permissions);
+  const [routes, defaultRoute] = useRoute(userInfo?.resourceAction);
   const defaultSelectedKeys = [currentComponent || defaultRoute];
   const paths = (currentComponent || defaultRoute).split('/');
   const defaultOpenKeys = paths.slice(0, paths.length - 1);
@@ -118,7 +118,7 @@ function PageLayout() {
     routeMap.current.clear();
     return function travel(_routes: IRoute[], level, parentNode = []) {
       return _routes.map((route) => {
-        const { breadcrumb = true, ignore } = route;
+        const { breadcrumb = true, visible: ignore } = route;
         //获取菜单图标
         const iconDom = getIconFromKey(route.key);
         //菜单标题
@@ -136,8 +136,8 @@ function PageLayout() {
 
         //过滤出显示的菜单？
         const visibleChildren = (route.children || []).filter((child) => {
-          const { ignore, breadcrumb = true } = child;
-          if (ignore || route.ignore) {
+          const { visible: ignore, breadcrumb = true } = child;
+          if (ignore || route.visible) {
             routeMap.current.set(
               `/${child.key}`,
               breadcrumb ? [...parentNode, route.name, child.name] : []
