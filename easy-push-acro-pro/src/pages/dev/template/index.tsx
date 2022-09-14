@@ -20,6 +20,7 @@ import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
 import EditCodePage from './editCode';
+import AddPage from './add';
 
 const { Title } = Typography;
 
@@ -55,6 +56,13 @@ function SearchTable() {
   function viewInfo(id) {
     setViewInfoId(id);
     setisViewInfo(true);
+  }
+
+  //新增
+  const [isAddData, setIsAddData] = useState(false);
+
+  function addData(){
+    setIsAddData(true);
   }
 
   const [updateId, setUpdateId] = useState();
@@ -172,12 +180,12 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'template_manager', actions: ['add'] },
+          { resource: 'templateManager', actions: ['add'] },
         ]}
       >
         <div className={styles['button-group']}>
           <Space>
-            <Button type="primary" icon={<IconPlus />}>
+            <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
               {t['searchTable.operations.add']}
             </Button>
           </Space>
@@ -190,6 +198,10 @@ function SearchTable() {
         pagination={pagination}
         columns={columns}
         data={data}
+      />
+      <AddPage
+        visible={isAddData}
+        setVisible={setIsAddData}
       />
       <InfoPage
         id={viewInfoId}

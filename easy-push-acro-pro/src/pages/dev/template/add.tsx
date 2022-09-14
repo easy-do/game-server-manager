@@ -43,73 +43,28 @@ function AddPage(props: { visible; setVisible }) {
         labelAlign="left"
       >
         <Form.Item
-          label={t['searchTable.columns.delFlag']}
-          field="delFlag"
+          label={t['searchTable.columns.templateName']}
+          field="templateName"
           rules={[
-            { required: true, message: t['searchTable.rules.delFlag.required'] },
+            { required: true, message: t['searchTable.rulesmsg.templateName'] },
           ]}
         >
-          <Input placeholder={t['searchForm.delFlag.placeholder']} allowClear />
+          <Input placeholder={t['searchForm.templateName.placeholder']} allowClear />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.createName']}
-          field="createName"
+          label={t['searchTable.columns.templateType']}
+          field="templateType"
           rules={[
-            { required: true, message: t['searchTable.rules.createName.required'] },
+            { required: true, message: t['searchTable.rulesmsg.templateType'] },
           ]}
         >
-          <Input placeholder={t['searchForm.createName.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.updateBy']}
-          field="updateBy"
-          rules={[
-            { required: true, message: t['searchTable.rules.updateBy.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.updateBy.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.createBy']}
-          field="createBy"
-          rules={[
-            { required: true, message: t['searchTable.rules.createBy.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.createBy.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.updateTime']}
-          field="updateTime"
-          rules={[
-            { required: true, message: t['searchTable.rules.updateTime.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.updateTime.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.createTime']}
-          field="createTime"
-          rules={[
-            { required: true, message: t['searchTable.rules.createTime.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.createTime.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.description']}
-          field="description"
-          rules={[
-            { required: true, message: t['searchTable.rules.description.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.description.placeholder']} allowClear />
+          <Input placeholder={t['searchForm.templateType.placeholder']} allowClear />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.filePath']}
           field="filePath"
           rules={[
-            { required: true, message: t['searchTable.rules.filePath.required'] },
+            { required: true, message: t['searchTable.rulesmsg.filePath'] },
           ]}
         >
           <Input placeholder={t['searchForm.filePath.placeholder']} allowClear />
@@ -118,7 +73,7 @@ function AddPage(props: { visible; setVisible }) {
           label={t['searchTable.columns.fileName']}
           field="fileName"
           rules={[
-            { required: true, message: t['searchTable.rules.fileName.required'] },
+            { required: true, message: t['searchTable.rulesmsg.fileName'] },
           ]}
         >
           <Input placeholder={t['searchForm.fileName.placeholder']} allowClear />
@@ -127,7 +82,7 @@ function AddPage(props: { visible; setVisible }) {
           label={t['searchTable.columns.version']}
           field="version"
           rules={[
-            { required: true, message: t['searchTable.rules.version.required'] },
+            { required: true, message: t['searchTable.rulesmsg.version'] },
           ]}
         >
           <Input placeholder={t['searchForm.version.placeholder']} allowClear />
@@ -136,46 +91,20 @@ function AddPage(props: { visible; setVisible }) {
           label={t['searchTable.columns.templateScope']}
           field="templateScope"
           rules={[
-            { required: true, message: t['searchTable.rules.templateScope.required'] },
+            { required: true, message: t['searchTable.rulesmsg.templateScope'] },
           ]}
         >
           <Input placeholder={t['searchForm.templateScope.placeholder']} allowClear />
         </Form.Item>
+
         <Form.Item
-          label={t['searchTable.columns.templateType']}
-          field="templateType"
+          label={t['searchTable.columns.description']}
+          field="description"
           rules={[
-            { required: true, message: t['searchTable.rules.templateType.required'] },
+            { required: true, message: t['searchTable.rulesmsg.description'] },
           ]}
         >
-          <Input placeholder={t['searchForm.templateType.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.templateCode']}
-          field="templateCode"
-          rules={[
-            { required: true, message: t['searchTable.rules.templateCode.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.templateCode.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.templateName']}
-          field="templateName"
-          rules={[
-            { required: true, message: t['searchTable.rules.templateName.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.templateName.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.id']}
-          field="id"
-          rules={[
-            { required: true, message: t['searchTable.rules.id.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.id.placeholder']} allowClear />
+          <Input placeholder={t['searchForm.description.placeholder']} allowClear />
         </Form.Item>
       </Form>
     </Modal>

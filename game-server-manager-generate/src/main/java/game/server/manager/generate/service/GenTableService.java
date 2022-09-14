@@ -3,6 +3,7 @@ package game.server.manager.generate.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.generate.entity.GenTable;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 
 import java.util.List;
 
@@ -46,9 +47,9 @@ public interface GenTableService {
     /**
      * 删除业务信息
      *
-     * @param tableIds 需要删除的表数据ID
+     * @param tableId 需要删除的表数据ID
      */
-    void deleteGenTableByIds(Long[] tableIds);
+    void deleteGenTableByIds(Long tableId);
 
     /**
      * 导入表结构
@@ -78,11 +79,11 @@ public interface GenTableService {
     /**
      * 非分页查询业务列表
      *
-     * @param genTable genTable
+     * @param mpBaseQo mpBaseQo
      * @return com.baomidou.mybatisplus.core.metadata.IPage
      * @author laoyu
      */
-    IPage<GenTable> pageGenTableList(GenTable genTable);
+    IPage<GenTable> pageGenTableList(MpBaseQo<GenTable> mpBaseQo);
 
     /**
      * 根据表名查询

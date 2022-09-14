@@ -32,7 +32,7 @@ public class GenTable {
     private Long pageSize = 10L;
 
     @TableField(exist = false)
-    private Long pageCurrent = 1L;
+    private Long currentPage = 1L;
 
     @TableId(type = IdType.AUTO)
     private Long tableId;
