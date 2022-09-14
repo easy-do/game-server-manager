@@ -25,21 +25,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, source_name, source_code, source_type, url, user_name, password, params, state, gmt_modified, modifier, gmt_create, creator, is_deleted, remark from data_source_manager
     </sql>
 
-    <select id="selectDataSourceManagerList" parameterType="game.server.manager.generate.dynamic.core.qo.DataSourceQo" resultMap="DataSourceManagerResult">
-        <include refid="selectDataSourceManagerVo"/>
-        <where>
-            <if test="qo.id != null  and qo.id != ''"> and id = #{qo.id}</if>
-            <if test="qo.sourceName != null  and qo.sourceName != ''"> and source_name like concat('%', #{qo.sourceName}, '%')</if>
-            <if test="qo.sourceCode != null  and qo.sourceCode != ''"> and source_code like concat('%', #{qo.sourceCode}, '%')</if>
-            <if test="qo.sourceType != null  and qo.sourceType != ''"> and source_type = #{qo.sourceType}</if>
-            <if test="qo.url != null  and qo.url != ''"> and url = #{qo.url}</if>
-            <if test="qo.password != null  and qo.password != ''"> and password = #{qo.password}</if>
-            <if test="qo.state != null "> and state = #{qo.state}</if>
-            and is_deleted = 0
-        </where>
-    </select>
-
-
     <select id="selectDataSourceManagerById" parameterType="String" resultMap="DataSourceManagerResult">
         <include refid="selectDataSourceManagerVo"/>
         where id = #{id}

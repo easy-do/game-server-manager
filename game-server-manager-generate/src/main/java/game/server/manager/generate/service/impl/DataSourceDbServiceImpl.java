@@ -79,13 +79,9 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
             stringBuilder.append("AND lower(table_name) like lower(concat('%', ").append("'").append(genTable.getTableName()).append("'").append(", '%'))");
         }
         if (isPage) {
-            Long pageNum = genTable.getPageCurrent();
-            Long pageSize = genTable.getPageSize();
-            if (pageNum != null && pageNum > 0 && pageSize != null && pageSize > 0) {
-                stringBuilder.append(" LIMIT " + (pageNum - 1) + "," + pageSize);
-            } else {
-                stringBuilder.append(" LIMIT " + 0 + "," + 10);
-            }
+            long pageNum = Math.max(genTable.getCurrentPage(),1);
+            long pageSize = Math.max(genTable.getPageSize(),5);
+            stringBuilder.append(" LIMIT ").append(pageNum - 1).append(",").append(pageSize);
         }
         return stringBuilder.toString();
     }

@@ -13,6 +13,7 @@ import game.server.manager.generate.service.GenTableColumnService;
 import game.server.manager.generate.service.GenTableService;
 import game.server.manager.generate.service.GenerateService;
 import game.server.manager.generate.util.WordPdfUtils;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ import java.util.Map;
  *
  * @author laoyu
  */
-@RequestMapping("/gen")
+@RequestMapping("/genTable")
 @RestController
 public class GenController {
 
@@ -79,13 +80,13 @@ public class GenController {
     /**
      * 分页查询代码生成列表
      *
-     * @param genTable genTable
+     * @param mpBaseQo mpBaseQo
      * @return plus.easydo.core.R.DataR
      * @author laoyu
      */
-    @GetMapping("/page")
-    public MpDataResult page(GenTable genTable) {
-        IPage<GenTable> page = genTableService.pageGenTableList(genTable);
+    @PostMapping("/page")
+    public MpDataResult page(MpBaseQo<GenTable> mpBaseQo) {
+        IPage<GenTable> page = genTableService.pageGenTableList(mpBaseQo);
         return MpResultUtil.buildPage(page);
     }
 
@@ -115,15 +116,17 @@ public class GenController {
      * @return plus.easydo.core.R.DataR
      * @author laoyu
      */
-    @GetMapping("/db/list")
-    public R<Object> dataList(GenTable genTable) {
+    @PostMapping("/db/list")
+    public MpDataResult dataList(@RequestBody GenTable genTable) {
         List<GenTable> list = dataSourceDbService.selectDbTableList(genTable);
         long total = dataSourceDbService.countDbTableList(genTable);
-        Map<String, Object> map = new HashMap<>();
-        map.put("data",list);
-        map.put("count",list.size());
-        map.put("total",total);
-        return DataResult.ok(map);
+        MpDataResult result = MpResultUtil.empty();
+        result.setData(list);
+        result.setCount(list.size());
+        result.setTotal(total);
+        result.setCurrentPage(genTable.getCurrentPage());
+        result.setPages(genTable.getPageSize());
+        return result;
     }
 
     /**
@@ -177,9 +180,9 @@ public class GenController {
      * @return plus.easydo.core.R.DataR
      * @author laoyu
      */
-    @DeleteMapping("/{tableIds}")
-    public R<Object> remove(@PathVariable Long[] tableIds) {
-        genTableService.deleteGenTableByIds(tableIds);
+    @GetMapping("/delete/{tableId}")
+    public R<Object> remove(@PathVariable Long tableId) {
+        genTableService.deleteGenTableByIds(tableId);
         return DataResult.ok();
     }
 

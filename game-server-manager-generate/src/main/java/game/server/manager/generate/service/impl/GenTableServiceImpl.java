@@ -18,6 +18,7 @@ import game.server.manager.generate.mapper.GenTableMapper;
 import game.server.manager.generate.service.DataSourceDbService;
 import game.server.manager.generate.service.GenTableService;
 import game.server.manager.generate.util.GenUtils;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +49,14 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     /**
      * 分页查询
      *
-     * @param genTable genTable
+     * @param mpBaseQo mpBaseQo
      * @return com.baomidou.mybatisplus.core.metadata.IPage
      * @author laoyu
      */
     @Override
-    public IPage<GenTable> pageGenTableList(GenTable genTable) {
-        IPage<GenTable> page = new Page<>(genTable.getPageCurrent(), genTable.getPageSize());
-        Wrapper<GenTable> wrapper = buildQueryWrapper(genTable);
-        return baseMapper.selectPage(page, wrapper);
+    public IPage<GenTable> pageGenTableList(MpBaseQo<GenTable> mpBaseQo) {
+        mpBaseQo.initInstance(GenTable.class);
+        return baseMapper.selectPage(mpBaseQo.getPage(), mpBaseQo.getWrapper());
     }
 
     @Override
@@ -193,14 +193,14 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     /**
      * 删除业务对象
      *
-     * @param tableIds 需要删除的数据ID
+     * @param tableId 需要删除的数据ID
      */
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void deleteGenTableByIds(Long[] tableIds) {
-        baseMapper.deleteBatchIds(Arrays.asList(tableIds));
+    public void deleteGenTableByIds(Long tableId) {
+        baseMapper.deleteById(tableId);
         LambdaQueryWrapper<GenTableColumn> wrapper = Wrappers.lambdaQuery();
-        wrapper.in(GenTableColumn::getTableId, tableIds);
+        wrapper.eq(GenTableColumn::getTableId, tableId);
         genTableColumnMapper.delete(wrapper);
     }
 
