@@ -93,13 +93,13 @@ public class GenController {
     }
 
     /**
-     * 修改代码生成业务
+     * 获取表详情
      *
      * @param tableId talbleId
      * @return plus.easydo.core.R.DataR
      * @author laoyu
      */
-    @GetMapping(value = "/{tableId}")
+    @GetMapping(value = "/info/{tableId}")
     public R<Object> getInfo(@PathVariable Long tableId) {
         GenTable table = genTableService.selectGenTableById(tableId);
         List<GenTable> tables = genTableService.selectGenTableAll();
@@ -168,7 +168,7 @@ public class GenController {
      * @return plus.easydo.core.R.DataR
      * @author laoyu
      */
-    @PutMapping
+    @PostMapping("/edit")
     public R<Object> editSave(@Validated @RequestBody GenTable genTable) {
         genTableService.validateEdit(genTable);
         genTableService.updateGenTable(genTable);
