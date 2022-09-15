@@ -4,6 +4,8 @@ package game.server.manager.generate.service;
 import game.server.manager.generate.entity.GenTable;
 import game.server.manager.generate.entity.GenTableColumn;
 import game.server.manager.generate.entity.GenTableIndex;
+import game.server.manager.generate.qo.DbListQo;
+import game.server.manager.generate.vo.DbListVo;
 
 import java.util.List;
 
@@ -17,29 +19,29 @@ public interface DataSourceDbService {
     /**
      * 查询据库列表
      *
-     * @param genTable 业务信息
+     * @param dbListQo dbListQo
      * @return 数据库表集合
      */
-    List<GenTable> selectDbTableList(GenTable genTable);
+    List<DbListVo> selectDbTableList(DbListQo dbListQo);
 
     /**
      * 查询据库表总数
      *
-     * @param genTable 业务信息
+     * @param dbListQo dbListQo
      * @return 数据库表集合
      */
-    long countDbTableList(GenTable genTable);
+    long countDbTableList(DbListQo dbListQo);
 
     /**
      * 数据库列表查询语句的动态构建
      *
-     * @param genTable genTable
+     * @param dbListQo dbListQo
      * @param sql sql
      * @param isPage isPage
      * @return java.lang.String
      * @author laoyu
      */
-    String dbListDynamicSQLBuild(GenTable genTable, String sql, boolean isPage);
+    String dbListDynamicSqlBuild(DbListQo dbListQo, String sql, boolean isPage);
 
     /**
      * 查询据库列表
@@ -48,7 +50,7 @@ public interface DataSourceDbService {
      * @param tableNames   表名称组
      * @return 数据库表集合
      */
-    List<GenTable> selectDbTableListByNames(String dataSourceId, String[] tableNames);
+    List<DbListVo> selectDbTableListByNames(String dataSourceId, String[] tableNames);
 
 
     /**

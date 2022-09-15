@@ -3,6 +3,7 @@ package game.server.manager.generate.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.generate.entity.GenTable;
+import game.server.manager.generate.vo.DbListVo;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public interface GenTableService {
      * @param dataSourceId 数据源
      * @param tableList    导入表列表
      */
-    void importGenTable(String dataSourceId, List<GenTable> tableList);
+    void importGenTable(String dataSourceId, List<DbListVo> tableList);
 
 
     /**

@@ -5,10 +5,12 @@ import game.server.manager.generate.dynamic.utils.JdbcDataSourceExecTool;
 import game.server.manager.generate.entity.GenTable;
 import game.server.manager.generate.entity.GenTableColumn;
 import game.server.manager.generate.entity.GenTableIndex;
+import game.server.manager.generate.qo.DbListQo;
 import game.server.manager.generate.rowmapper.GenTableColumnRowMapper;
 import game.server.manager.generate.rowmapper.GenTableIndexRowMapper;
-import game.server.manager.generate.rowmapper.GenTableRowMapper;
+import game.server.manager.generate.rowmapper.DbListRowMapper;
 import game.server.manager.generate.service.DataSourceDbService;
+import game.server.manager.generate.vo.DbListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapperResultSetExtractor;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ import java.util.List;
 @Service
 public class DataSourceDbServiceImpl implements DataSourceDbService {
 
-    private static final RowMapperResultSetExtractor<GenTable> genTableSetExtractor = new RowMapperResultSetExtractor<>(new GenTableRowMapper());
+    private static final RowMapperResultSetExtractor<DbListVo> genTableSetExtractor = new RowMapperResultSetExtractor<>(new DbListRowMapper());
     private static final RowMapperResultSetExtractor<GenTableColumn> genTableColumnSetExtractor = new RowMapperResultSetExtractor<>(new GenTableColumnRowMapper());
     private static final RowMapperResultSetExtractor<GenTableIndex> genTableIndexSetExtractor = new RowMapperResultSetExtractor<>(new GenTableIndexRowMapper());
     @Autowired
@@ -31,25 +33,25 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
     /**
      * 查询据库列表
      *
-     * @param genTable 业务信息
+     * @param dbListQo dbListQo
      * @return 数据库表集合
      */
     @Override
-    public List<GenTable> selectDbTableList(GenTable genTable) {
+    public List<DbListVo> selectDbTableList(DbListQo dbListQo) {
         String sql = "select table_name, table_comment, create_time, update_time from information_schema.tables where table_schema = (select database())  AND table_name NOT LIKE 'gen_%'";
-        return jdbcDataSourceExecTool.query(genTable.getDataSourceId(), dbListDynamicSQLBuild(genTable, sql, true), genTableSetExtractor);
+        return jdbcDataSourceExecTool.query(dbListQo.getDataSourceId(), dbListDynamicSqlBuild(dbListQo, sql, true), genTableSetExtractor);
     }
 
     /**
      * 查询据库表总数
      *
-     * @param genTable 业务信息
+     * @param dbListQo 业务信息
      * @return 数据库表集合
      */
     @Override
-    public long countDbTableList(GenTable genTable) {
+    public long countDbTableList(DbListQo dbListQo) {
         String countSql = "select count(1) AS count from information_schema.tables where table_schema = (select database()) AND table_name NOT LIKE 'gen_%'";
-        return jdbcDataSourceExecTool.query(genTable.getDataSourceId(), dbListDynamicSQLBuild(genTable, countSql, false), rs -> {
+        return jdbcDataSourceExecTool.query(dbListQo.getDataSourceId(), dbListDynamicSqlBuild(dbListQo, countSql, false), rs -> {
             while (rs.next()) {
                 return rs.getLong("count");
             }
@@ -60,28 +62,26 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
     /**
      * 数据库列表查询语句的动态构建
      *
-     * @param genTable genTable
+     * @param dbListQo dbListQo
      * @param sql      sql
      * @return SQL
      * @author laoyu
      */
     @Override
-    public String dbListDynamicSQLBuild(GenTable genTable, String sql, boolean isPage) {
+    public String dbListDynamicSqlBuild(DbListQo dbListQo, String sql, boolean isPage) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(sql);
-        if (CharSequenceUtil.isNotBlank(genTable.getTableName())) {
-            stringBuilder.append(" AND lower(table_name) like lower(concat('%', ").append("'").append(genTable.getTableName()).append("'").append(", '%')) ");
+        if (CharSequenceUtil.isNotBlank(dbListQo.getTableName())) {
+            stringBuilder.append(" AND lower(table_name) like lower(concat('%', ").append("'").append(dbListQo.getTableName()).append("'").append(", '%')) ");
         }
-        if (CharSequenceUtil.isNotBlank(genTable.getTableComment())) {
-            stringBuilder.append(" AND lower(table_comment) like lower(concat('%', ").append("'").append(genTable.getTableComment()).append("'").append(", '%')) ");
+        if (CharSequenceUtil.isNotBlank(dbListQo.getTableComment())) {
+            stringBuilder.append(" AND lower(table_comment) like lower(concat('%', ").append("'").append(dbListQo.getTableComment()).append("'").append(", '%')) ");
         }
-        if (CharSequenceUtil.isNotBlank(genTable.getTableName())) {
-            stringBuilder.append("AND lower(table_name) like lower(concat('%', ").append("'").append(genTable.getTableName()).append("'").append(", '%'))");
-        }
+        stringBuilder.append(" ORDER BY create_time");
         if (isPage) {
-            long pageNum = Math.max(genTable.getCurrentPage(),1);
-            long pageSize = Math.max(genTable.getPageSize(),5);
-            stringBuilder.append(" LIMIT ").append(pageNum - 1).append(",").append(pageSize);
+            long pageNum = Math.max(dbListQo.getCurrentPage(),1);
+            long pageSize = Math.max(dbListQo.getPageSize(),5);
+            stringBuilder.append(" LIMIT ").append((pageNum - 1)*pageSize).append(",").append(pageSize);
         }
         return stringBuilder.toString();
     }
@@ -94,7 +94,7 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
      * @return 数据库表集合
      */
     @Override
-    public List<GenTable> selectDbTableListByNames(String dataSourceId, String[] tableNames) {
+    public List<DbListVo> selectDbTableListByNames(String dataSourceId, String[] tableNames) {
         StringBuilder startBuilder = new StringBuilder();
         StringBuilder endBuilder = new StringBuilder();
         String sql = "select table_name, table_comment, create_time, update_time from information_schema.tables where table_name NOT LIKE 'gen_%' and table_schema = (select database()) ";

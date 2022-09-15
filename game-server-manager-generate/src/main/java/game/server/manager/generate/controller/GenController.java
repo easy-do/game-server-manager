@@ -8,11 +8,13 @@ import game.server.manager.generate.dto.GenerateDatabaseDocDto;
 import game.server.manager.generate.dto.JsonGenerateDto;
 import game.server.manager.generate.entity.GenTable;
 import game.server.manager.generate.entity.GenTableColumn;
+import game.server.manager.generate.qo.DbListQo;
 import game.server.manager.generate.service.DataSourceDbService;
 import game.server.manager.generate.service.GenTableColumnService;
 import game.server.manager.generate.service.GenTableService;
 import game.server.manager.generate.service.GenerateService;
 import game.server.manager.generate.util.WordPdfUtils;
+import game.server.manager.generate.vo.DbListVo;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
@@ -112,20 +114,20 @@ public class GenController {
     /**
      * 查询数据库列表
      *
-     * @param genTable genTable
+     * @param dbListQo dbListQo
      * @return plus.easydo.core.R.DataR
      * @author laoyu
      */
     @PostMapping("/db/list")
-    public MpDataResult dataList(@RequestBody GenTable genTable) {
-        List<GenTable> list = dataSourceDbService.selectDbTableList(genTable);
-        long total = dataSourceDbService.countDbTableList(genTable);
+    public MpDataResult dataList(@RequestBody DbListQo dbListQo) {
+        List<DbListVo> list = dataSourceDbService.selectDbTableList(dbListQo);
+        long total = dataSourceDbService.countDbTableList(dbListQo);
         MpDataResult result = MpResultUtil.empty();
         result.setData(list);
         result.setCount(list.size());
         result.setTotal(total);
-        result.setCurrentPage(genTable.getCurrentPage());
-        result.setPages(genTable.getPageSize());
+        result.setCurrentPage(dbListQo.getCurrentPage());
+        result.setPages(dbListQo.getPageSize());
         return result;
     }
 
@@ -154,7 +156,7 @@ public class GenController {
     public R<Object> importTableSave(String tables, String dataSourceId) {
         String[] tableNames = tables.split(",");
         // 查询表信息
-        List<GenTable> tableList = dataSourceDbService.selectDbTableListByNames(dataSourceId, tableNames);
+        List<DbListVo> tableList = dataSourceDbService.selectDbTableListByNames(dataSourceId, tableNames);
         genTableService.importGenTable(dataSourceId, tableList);
         return DataResult.ok();
     }
@@ -176,7 +178,7 @@ public class GenController {
     /**
      * 删除代码生成
      *
-     * @param tableIds tableIds
+     * @param tableId tableId
      * @return plus.easydo.core.R.DataR
      * @author laoyu
      */

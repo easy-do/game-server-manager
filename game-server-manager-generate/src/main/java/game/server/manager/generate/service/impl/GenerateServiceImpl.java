@@ -1,5 +1,6 @@
 package game.server.manager.generate.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
@@ -19,6 +20,7 @@ import game.server.manager.generate.util.GenUtils;
 import game.server.manager.generate.util.VelocityInitializer;
 import game.server.manager.generate.util.VelocityUtils;
 import game.server.manager.generate.util.WordPdfUtils;
+import game.server.manager.generate.vo.DbListVo;
 import game.server.manager.generate.vo.TemplateManagementVo;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -290,8 +292,9 @@ public class GenerateServiceImpl implements GenerateService {
         String dataSourceId = dto.getDataSourceId();
         String templateId = dto.getTemplateId();
         String tables = dto.getTables();
-        List<GenTable> genTables = dataSourceDbService.selectDbTableListByNames(dataSourceId, tables.split(","));
+        List<DbListVo> dbList = dataSourceDbService.selectDbTableListByNames(dataSourceId, tables.split(","));
         try {
+            List<GenTable> genTables = BeanUtil.copyToList(dbList, GenTable.class);
             processTableListForDataBase(dataSourceId, genTables);
             //开始生成文档
             return generateDataBaseDocZipByte(templateId, genTables);
@@ -314,7 +317,8 @@ public class GenerateServiceImpl implements GenerateService {
             String dataSourceId = dto.getDataSourceId();
             String templateId = dto.getTemplateId();
             String tables = dto.getTables();
-            List<GenTable> genTables = dataSourceDbService.selectDbTableListByNames(dataSourceId, tables.split(","));
+            List<DbListVo> dbList = dataSourceDbService.selectDbTableListByNames(dataSourceId, tables.split(","));
+            List<GenTable> genTables = BeanUtil.copyToList(dbList, GenTable.class);
             processTableListForDataBase(dataSourceId, genTables);
             return generateDataBaseDocByte(templateId, genTables);
         } catch (IOException e) {

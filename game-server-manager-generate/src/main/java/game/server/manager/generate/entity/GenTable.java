@@ -1,6 +1,7 @@
 package game.server.manager.generate.entity;
 
 import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -28,15 +30,8 @@ public class GenTable {
     @TableField(exist = false)
     private Map<String, Object> params;
 
-    @TableField(exist = false)
-    private Long pageSize = 10L;
-
-    @TableField(exist = false)
-    private Long currentPage = 1L;
-
     @TableId(type = IdType.AUTO)
     private Long tableId;
-
 
     /**
      * 数据源
@@ -205,6 +200,18 @@ public class GenTable {
      * 使用的模板id
      */
     private String templateIds;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
     /**
      * 索引集合
