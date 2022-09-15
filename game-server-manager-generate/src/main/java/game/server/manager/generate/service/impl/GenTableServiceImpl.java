@@ -1,5 +1,6 @@
 package game.server.manager.generate.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -18,6 +19,7 @@ import game.server.manager.generate.mapper.GenTableMapper;
 import game.server.manager.generate.service.DataSourceDbService;
 import game.server.manager.generate.service.GenTableService;
 import game.server.manager.generate.util.GenUtils;
+import game.server.manager.generate.vo.DbListVo;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -212,19 +214,21 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
      */
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void importGenTable(String dataSourceId, List<GenTable> tableList) {
+    public void importGenTable(String dataSourceId, List<DbListVo> tableList) {
         String operationName = "easy-do";
         try {
-            for (GenTable table : tableList) {
+            for (DbListVo table : tableList) {
+                GenTable genTable = new GenTable();
+                BeanUtil.copyProperties(table,genTable);
                 String tableName = table.getTableName();
-                GenUtils.initTable(table, operationName);
-                table.setDataSourceId(dataSourceId);
-                int row = baseMapper.insert(table);
+                GenUtils.initTable(genTable, operationName);
+                genTable.setDataSourceId(dataSourceId);
+                int row = baseMapper.insert(genTable);
                 if (row > 0) {
                     // 保存列信息
                     List<GenTableColumn> genTableColumns = dataSourceDbService.selectDbTableColumnsByName(dataSourceId, tableName);
                     for (GenTableColumn column : genTableColumns) {
-                        GenUtils.initColumnField(column, table);
+                        GenUtils.initColumnField(column, genTable);
                         genTableColumnMapper.insert(column);
                     }
                 }

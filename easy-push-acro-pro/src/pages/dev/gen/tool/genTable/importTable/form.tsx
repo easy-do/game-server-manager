@@ -26,7 +26,7 @@ function SearchForm(props: {
 
   const [loading, setLoading] = useState(true);
 
-  const [ dataSourceList, setDataSourceList ] = useState([]);
+  const [ dataSourceList, setDataSourceList ] = useState([{sourceName:'系统默认',id:'default'}]);
 
   const fetchData = () => {
     setLoading(true);
@@ -35,6 +35,7 @@ function SearchForm(props: {
     }).then((res) => {
       const { success, data } = res.data;
       if(success){
+        data.push({sourceName:'系统默认',id:'default'})
         setDataSourceList(data);
       }
       setLoading(false);
