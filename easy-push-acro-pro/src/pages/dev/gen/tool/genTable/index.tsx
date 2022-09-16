@@ -15,7 +15,7 @@ import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
 import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
-import { managerPage, remove } from '@/api/genTable';
+import { batchGenCode, managerPage, remove } from '@/api/genTable';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import UpdatePage from './update';
@@ -37,6 +37,14 @@ function SearchTable() {
     if (type === 'update') {
       updateInfo(record.tableId);
     }
+    //生成
+    if (type === 'generate') {
+      generateCode(record.tableId);
+    }
+    //同步
+    if (type === 'sync') {
+      syncData(record.tableId);
+    } 
     //删除
     if (type === 'remove') {
       removeData(record.tableId);
@@ -59,6 +67,11 @@ function SearchTable() {
     setIsImportTable(true);
   }
 
+  function importSuccess(){
+    setIsImportTable(false);
+    fetchData();
+  }
+
   const [updateId, setUpdateId] = useState();
   const [isUpdateInfo, setisUpdateInfo] = useState(false);
 
@@ -67,6 +80,24 @@ function SearchTable() {
     setUpdateId(id);
     setisUpdateInfo(true);
   }
+
+  function updateSuccess() {
+    setisUpdateInfo(false);
+    fetchData();
+  }
+
+  function generateCode(id){
+    batchGenCode(id).then((res)=>{
+      if(res.data.success){
+        Notification.success({ content: '成功', duration: 300 });
+      }
+    })
+  }
+
+  function syncData(id){
+ //
+  }
+
 
   //删除
   function removeData(id) {
@@ -192,10 +223,12 @@ function SearchTable() {
         id={updateId}
         visible={isUpdateInfo}
         setVisible={setisUpdateInfo}
+        successCallBack={updateSuccess}
       />
       <ImportTable
         visible={isImportTable}
-        setVisible={setIsImportTable}
+        setVisible = {setIsImportTable}
+        importSuccess={importSuccess}
       />
     </Card>
   );

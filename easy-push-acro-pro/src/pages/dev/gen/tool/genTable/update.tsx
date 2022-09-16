@@ -12,7 +12,7 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import FormItem from '@arco-design/web-react/es/Form/form-item';
 import EditColumnsPage from './editColumns';
 
-function UpdatePage(props: { id: number; visible; setVisible }) {
+function UpdatePage({ id, visible, setVisible, successCallBack }) {
 
   const RadioGroup = Radio.Group;
 
@@ -27,8 +27,7 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
   const yesOrNo = [{key:'否',value:'0'},{key:'是',value:'1'}]
 
   const [info, setInfo] = useState({})
-  const [colums, setColumns] = useState()
-  const [genInfo, setGenInfo] = useState()
+  const [genInfo, setGenInfo] = useState({})
 
   const [columnTableData,setColumnTableData] = useState([])
 
@@ -38,15 +37,14 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
 
   //加载数据
   function fetchData() {
-    if (props.id !== undefined) {
+    if (id !== undefined) {
       setLoading(true)
-      infoRequest(props.id).then((res) => {
+      infoRequest(id).then((res) => {
         const { success, data } = res.data;
         if (success) {
-          infoForm.setFieldsValue(data.info);
-          genInfoForm.setFieldsValue(data.info);
-          setColumnTableData(data.info.columns)
-          setColumns(data.info.c)
+          infoForm.setFieldsValue(data);
+          genInfoForm.setFieldsValue(data);
+          setColumnTableData(data.columns)
         }
         setLoading(false)
       });
@@ -55,25 +53,20 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
 
   useEffect(() => {
     fetchData();
-  }, [props.id]);
+  }, [id]);
 
  
 
   //提交修改
   const handleSubmit = () => {
-    // formRef.current.validate().then((values) => {
-    //   console.info(values)
-    //   // edit(values).then((res) => {
-    //   //   const { success, msg} = res.data
-    //   //   if(success){
-    //   //     Notification.success({ content: msg, duration: 300 })
-    //   //     props.setVisible(false);
-    //   //   }
-    //   // });
+      edit({...info, ...genInfo, columns:columnTableData}).then((res) => {
+        const { success, msg} = res.data
+        if(success){
+          Notification.success({ content: msg, duration: 300 })
+          successCallBack();
+        }
+      });
 
-    // }).catch((e)=>{
-    //   Notification.warning({content:'补全必填项',duration:3000})
-    // });
   };
   
 
@@ -81,12 +74,12 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
   return (
     <Modal
       title={t['searchTable.update.title']}
-      visible={props.visible}
+      visible={visible}
       onOk={() => {
         handleSubmit();
       }}
       onCancel={() => {
-        props.setVisible(false);
+        setVisible(false);
       }}
       autoFocus={false}
       focusLock={true}
@@ -95,13 +88,9 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
     >
 
      <Form.Provider
-        onFormValuesChange={(name, changedValues, info) => {
-          console.log('onFormValuesChange: ', name, changedValues, info);
+        onFormValuesChange={(name, changedValues) => {
           if(name === 'infoForm'){
             setInfo(changedValues)
-          }
-          if(name === 'columnsForm'){
-            setColumns(changedValues)
           }
           if(name === 'genInfoForm'){
             setGenInfo(changedValues)

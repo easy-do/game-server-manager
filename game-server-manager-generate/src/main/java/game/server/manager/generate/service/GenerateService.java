@@ -25,10 +25,10 @@ public interface GenerateService {
     /**
      * 生成代码（下载方式）
      *
-     * @param tableName 表名称
+     * @param ids ids
      * @return 数据
      */
-    byte[] downloadCode(String tableName);
+    byte[] downloadCode(String ids);
 
     /**
      * 生成代码（自定义路径）
@@ -41,10 +41,10 @@ public interface GenerateService {
     /**
      * 批量生成代码（下载方式）
      *
-     * @param tableNames 表数组
+     * @param id id
      * @return 数据
      */
-    byte[] downloadCode(String[] tableNames);
+    byte[] downloadCode(Long id);
 
 
     /**

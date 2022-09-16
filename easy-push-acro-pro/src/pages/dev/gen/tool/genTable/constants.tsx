@@ -125,6 +125,20 @@ export function getColumns(
           >
             {t['searchTable.columns.operations.update']}
           </Button>
+          <Button
+            type="text"
+            size="small"
+            onClick={() => callback(record, 'generate')}
+          >
+            {t['searchTable.columns.operations.generate']}
+          </Button>
+          <Button
+            type="text"
+            size="small"
+            onClick={() => callback(record, 'sync')}
+          >
+            {t['searchTable.columns.operations.sync']}
+          </Button>
           <Popconfirm
             title={t['searchTable.columns.operations.remove.confirm']}
             onOk={() => callback(record, 'remove')}

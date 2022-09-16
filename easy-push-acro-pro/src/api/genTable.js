@@ -8,4 +8,6 @@ export const add = (param) => postRequestBody("/gen/genTable/add",param);
 export const edit = (param) => postRequestBody("/gen/genTable/edit",param);
 export const dbList = (param) => postRequestBody("/gen/genTable/db/list",param);
 export const importTable = (param) => postRequestParam("/gen/genTable/importTable",param);
+export const batchGenCode = (ids) => get("/gen/genTable/batchGenCode?ids=" + ids);
+
 
