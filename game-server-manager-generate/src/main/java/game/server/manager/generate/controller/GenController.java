@@ -100,15 +100,9 @@ public class GenController {
      * @author laoyu
      */
     @GetMapping(value = "/info/{tableId}")
-    public R<Object> getInfo(@PathVariable Long tableId) {
+    public R<GenTable> getInfo(@PathVariable Long tableId) {
         GenTable table = genTableService.selectGenTableById(tableId);
-//        List<GenTable> tables = genTableService.selectGenTableAll();
-//        List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
-        Map<String, Object> map = new HashMap<>(2);
-        map.put("info", table);
-//        map.put("rows", list);
-//        map.put("tables", tables);
-        return DataResult.ok(map);
+        return DataResult.ok(table);
     }
 
     /**
@@ -245,15 +239,14 @@ public class GenController {
      * 批量生成代码
      *
      * @param response response
-     * @param tables   tables
+     * @param ids   ids
      * @throws IOException IOException
      * @author laoyu
      */
     @GetMapping("/batchGenCode")
-    public void batchGenCode(HttpServletResponse response, String tables) throws IOException {
-        String[] tableNames = tables.split(",");
-        byte[] data = generateService.downloadCode(tableNames);
-        genCode(response, data, OCTET_STREAM, tables + ".zip");
+    public void batchGenCode(HttpServletResponse response, @RequestParam("ids") String ids) throws IOException {
+        byte[] data = generateService.downloadCode(ids);
+        genCode(response, data, OCTET_STREAM, ids + ".zip");
     }
 
     /**

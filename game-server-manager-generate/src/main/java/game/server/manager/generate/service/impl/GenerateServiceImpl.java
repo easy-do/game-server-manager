@@ -39,6 +39,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -168,14 +169,17 @@ public class GenerateServiceImpl implements GenerateService {
     /**
      * 生成代码（下载方式）
      *
-     * @param tableName 表名称
+     * @param ids ids
      * @return 数据
      */
     @Override
-    public byte[] downloadCode(String tableName) {
+    public byte[] downloadCode(String ids) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
-        generatorCode(tableName, zip);
+        String[] idsArray = ids.split(",");
+        for (int i = 0; i < idsArray.length; i++) {
+            generatorCode(idsArray[i], zip);
+        }
         try {
             zip.close();
         } catch (IOException e) {
@@ -221,16 +225,14 @@ public class GenerateServiceImpl implements GenerateService {
     /**
      * 批量生成代码（下载方式）
      *
-     * @param tableNames 表数组
+     * @param id id
      * @return 数据
      */
     @Override
-    public byte[] downloadCode(String[] tableNames) {
+    public byte[] downloadCode(Long id) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
-        for (String tableName : tableNames) {
-            generatorCode(tableName, zip);
-        }
+            generatorCode(id, zip);
         try {
             zip.close();
         } catch (IOException e) {
@@ -242,13 +244,13 @@ public class GenerateServiceImpl implements GenerateService {
     /**
      * 查询表信息并生成代码
      *
-     * @param tableName tableName
+     * @param id id
      * @param zip       zip
      * @author laoyu
      */
-    private void generatorCode(String tableName, ZipOutputStream zip) {
+    private void generatorCode(Serializable id, ZipOutputStream zip) {
         // 查询表信息
-        GenTable table = genTableService.selectGenTableByName(tableName);
+        GenTable table = genTableService.selectGenTableById(Long.parseLong((String) id));
 
         // 设置主子表信息
         setSubTable(table);

@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import game.server.manager.common.exception.BizException;
 import game.server.manager.generate.constant.GenConstants;
@@ -27,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -74,6 +72,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         setTableFromOptions(genTable);
        return genTable;
     }
+
 
     /**
      * 查询业务列表
@@ -130,9 +129,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
      */
     @Override
     public GenTable selectGenTableById(Long id) {
-        GenTable genTable = selectGenTableByIdJoin(id);
-        setTableFromOptions(genTable);
-        return genTable;
+        return selectGenTableByIdJoin(id);
     }
 
     /**
@@ -184,8 +181,8 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     public void updateGenTable(GenTable genTable) {
         String options = JSON.toJSONString(genTable.getParams());
         genTable.setOptions(options);
-        int row = baseMapper.updateById(genTable);
-        if (row > 0) {
+        boolean result = updateById(genTable);
+        if (result) {
             for (GenTableColumn cenTableColumn : genTable.getColumns()) {
                 genTableColumnMapper.updateById(cenTableColumn);
             }

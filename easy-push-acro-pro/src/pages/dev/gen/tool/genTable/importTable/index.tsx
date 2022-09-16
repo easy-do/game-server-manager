@@ -16,7 +16,7 @@ import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 
 const { Title } = Typography;
 
-function ImportTable(props: { visible; setVisible }) {
+function ImportTable({ visible, setVisible, importSuccess }) {
   
   const t = useLocale(locale);
 
@@ -107,7 +107,7 @@ function ImportTable(props: { visible; setVisible }) {
       const { success, msg } = res.data;
       if (success) {
         Notification.success({ content: msg, duration: 300 });
-        props.setVisible(false);
+        importSuccess(false);
       }
     });
   };
@@ -115,12 +115,12 @@ function ImportTable(props: { visible; setVisible }) {
   return (
     <Modal
       title={t['searchTable.operations.importTable']}
-      visible={props.visible}
+      visible={visible}
       onOk={() => {
         handleSubmit();
       }}
       onCancel={() => {
-        props.setVisible(false);
+        setVisible(false);
       }}
       style={{height:'auto',width:'80%'}}
       autoFocus={false}
@@ -145,11 +145,6 @@ function ImportTable(props: { visible; setVisible }) {
             onSelect: (selected, record, selectedRows) => {
               console.log('onSelect:', selected, record, selectedRows);
             },
-            // checkboxProps: (record) => {
-            //   return {
-            //     disabled: record.id === '4',
-            //   };
-            // },
           }}
         />
       </Card>
