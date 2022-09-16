@@ -146,7 +146,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         GenTable genTable = baseMapper.selectById(id);
         LambdaQueryWrapper<GenTableColumn> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GenTableColumn::getTableId, id);
-        wrapper.orderByDesc(GenTableColumn::getSort);
+        wrapper.orderByAsc(GenTableColumn::getSort);
         List<GenTableColumn> genTableColumns = genTableColumnMapper.selectList(wrapper);
         genTable.setColumns(genTableColumns);
         setTableFromOptions(genTable);

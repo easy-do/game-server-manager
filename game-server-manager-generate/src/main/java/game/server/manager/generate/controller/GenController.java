@@ -102,12 +102,12 @@ public class GenController {
     @GetMapping(value = "/info/{tableId}")
     public R<Object> getInfo(@PathVariable Long tableId) {
         GenTable table = genTableService.selectGenTableById(tableId);
-        List<GenTable> tables = genTableService.selectGenTableAll();
-        List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
+//        List<GenTable> tables = genTableService.selectGenTableAll();
+//        List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
         Map<String, Object> map = new HashMap<>(2);
         map.put("info", table);
-        map.put("rows", list);
-        map.put("tables", tables);
+//        map.put("rows", list);
+//        map.put("tables", tables);
         return DataResult.ok(map);
     }
 
