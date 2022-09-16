@@ -4,11 +4,13 @@ import useLocale from '@/utils/useLocale';
 import { edit, infoRequest } from '@/api/genTable';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import React from 'react';
 import TabPane from '@arco-design/web-react/es/Tabs/tab-pane';
 
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import FormItem from '@arco-design/web-react/es/Form/form-item';
+import EditColumnsPage from './editColumns';
 
 function UpdatePage(props: { id: number; visible; setVisible }) {
 
@@ -28,229 +30,7 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
   const [colums, setColumns] = useState()
   const [genInfo, setGenInfo] = useState()
 
-
   const [columnTableData,setColumnTableData] = useState([])
-
-
-  const columsValueChange = (value,index,field) =>{
-    console.info(value,index,field)
-    const newData = columnTableData;
-    columnTableData[index][field]=value;
-    setColumnTableData(newData)
-    console.info(columnTableData[index])
-  }
-
-
-  const arrayMoveMutate = (array, from, to) => {
-    const startIndex = to < 0 ? array.length + to : to;
-  
-    if (startIndex >= 0 && startIndex < array.length) {
-      const item = array.splice(from, 1)[0];
-      array.splice(startIndex, 0, item);
-    }
-  };
-
-  const arrayMove = (array, from, to) => {
-    array = [...array];
-    arrayMoveMutate(array, from, to);
-    return array;
-  };
-
-  function onSortEnd({ oldIndex, newIndex }) {
-    if (oldIndex !== newIndex) {
-      const newData = arrayMove([].concat(columnTableData), oldIndex, newIndex).filter((el) => !!el);
-      console.log('New Data: ', newData);
-      setColumnTableData(newData);
-    }
-  }
-
-  const SortableWrapper = SortableContainer((props) => {
-    return <tbody {...props} />;
-  });
-  const SortableItem = SortableElement((props) => {
-    return (
-      <tr
-        style={{
-          cursor: 'move',
-        }}
-        {...props}
-      />
-    );
-  });
-
-  const DraggableContainer = (props) => (
-    <SortableWrapper
-      onSortEnd={onSortEnd}
-      helperContainer={() => document.querySelector('.arco-drag-table-container table tbody')}
-      updateBeforeSortStart={({ node }) => {
-        const tds = node.querySelectorAll('td');
-        tds.forEach((td) => {
-          td.style.width = td.clientWidth + 'px';
-        });
-      }}
-      {...props}
-    />
-  );
-
-  const DraggableRow = (props) => {
-    const { record, index, ...rest } = props;
-    return <SortableItem index={index} {...rest} />;
-  };
-
-  const components = {
-    body: {
-      tbody: DraggableContainer,
-      row: DraggableRow,
-    },
-  };
-
-
-  const columnTableColumns = [
-    {
-      title: t['searchTable.columns.columnName'],
-      dataIndex: 'columnName',
-    },
-    {
-      title: t['searchTable.columns.columnType'],
-      dataIndex: 'columnType',
-    },
-    {
-      title: t['searchTable.columns.columnComment'],
-      dataIndex: 'columnComment',
-      render: (_, record, index) => (
-        <Form.Item 
-          field="tableComment"
-          rules={[
-            { required: true, message: t['searchTable.rules.tableComment.required'] },
-          ]}
-        >
-          {/* <Input type='text' size='small' value={record.columnComment} onChange={(value)=>columsValueChange(value,index,'columnComment')} /> */}
-          <Input type='text' size='small' defaultValue={record.columnComment} />
-        </Form.Item>  
-        
-      ),
-    },
-    {
-      title: t['searchTable.columns.javaField'],
-      dataIndex: 'javaField',
-      render: (_, record) => (
-        <Input size='small' value={record.javaField} />
-      ),
-    },
-    {
-      title: t['searchTable.columns.javaType'],
-      dataIndex: 'javaType',
-      render: (_, record) => (
-        <Input size='small' value={record.javaType} />
-      ),
-    },
-    {
-      title: t['searchTable.columns.defaultValue'],
-      dataIndex: 'defaultValue',
-      render: (_, record) => (
-        <Input size='small' value={record.defaultValue} />
-      ),
-    },
-    {
-      title: t['searchTable.columns.sort'],
-      dataIndex: 'sort',
-      render: (_, record) => (
-        <Input size='small' value={record.sort} />
-      ),
-    },
-    {
-      title: t['searchTable.columns.htmlType'],
-      dataIndex: 'htmlType',
-      render: (_, record) => (
-        <Input size='small' value={record.htmlType} />
-      ),
-    },
-    {
-      title: t['searchTable.columns.queryType'],
-      dataIndex: 'queryType',
-      render: (_, record) => (
-        <Input size='small' value={record.queryType} />
-      ),
-    },
-    {
-      title: t['searchTable.columns.isList'],
-      dataIndex: 'isList',
-      render: (_, record) => (
-        <RadioGroup
-        type='button'
-        defaultValue={record.isList}
-        style={{ marginRight: 20, marginBottom: 20 }}
-      >
-        <Radio value={'1'}>是</Radio>
-        <Radio value={'0'}>否</Radio>
-      </RadioGroup>
-      ),
-    },
-    {
-      title: t['searchTable.columns.isEdit'],
-      dataIndex: 'isEdit',
-      render: (_, record) => (
-        <RadioGroup
-        type='button'
-        defaultValue={record.isEdit}
-        style={{ marginRight: 20, marginBottom: 20 }}
-      >
-        <Radio value={'1'}>是</Radio>
-        <Radio value={'0'}>否</Radio>
-      </RadioGroup>
-      ),
-    },
-    {
-      title: t['searchTable.columns.isInsert'],
-      dataIndex: 'isInsert',
-      render: (_, record) => (
-        <RadioGroup
-        type='button'
-        defaultValue={record.isInsert}
-        style={{ marginRight: 20, marginBottom: 20 }}
-      >
-        <Radio value={'1'}>是</Radio>
-        <Radio value={'0'}>否</Radio>
-      </RadioGroup>
-      ),
-    },
-    {
-      title: t['searchTable.columns.isRequired'],
-      dataIndex: 'isRequired',
-      render: (_, record) => (
-        <RadioGroup
-        type='button'
-        defaultValue={record.isRequired}
-        style={{ marginRight: 20, marginBottom: 20 }}
-      >
-        <Radio value={'1'}>是</Radio>
-        <Radio value={'0'}>否</Radio>
-      </RadioGroup>
-      ),
-    },
-    {
-      title: t['searchTable.columns.isPk'],
-      dataIndex: 'isPk',
-      render: (_, record) => (
-        <RadioGroup
-        type='button'
-        defaultValue={record.isPk}
-        style={{ marginRight: 20, marginBottom: 20 }}
-      >
-        <Radio value={'1'}>是</Radio>
-        <Radio value={'0'}>否</Radio>
-      </RadioGroup>
-      ),
-    },
-    {
-      title: t['searchTable.columns.dictType'],
-      dataIndex: 'dictType',
-      render: (_, record) => (
-        <Input size='small' value={record.dictType} />
-      ),
-    },
-  ];
-  
 
   const [infoForm] = Form.useForm()
 
@@ -392,35 +172,7 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
         </TabPane>
         <TabPane key='3' title='字段信息'>
       <Spin tip='loading Data...' loading={loading}>
-      
-      <Form
-        id='columnsForm'
-        size='large'
-        style={{ width: '95%', marginTop: '6px' }}
-        labelCol={{ span: lang === 'en-US' ? 7 : 6 }}
-        wrapperCol={{ span: lang === 'en-US' ? 17 : 18 }}
-        labelAlign="left"
-      >
-        <Form.List field='users'>
-          {(fields, { add, remove, move }) => {
-            return (
-              <Table
-              className='arco-drag-table-container'
-              rowKey="id"
-              loading={loading}
-              pagination={false}
-              columns={columnTableColumns}
-              components={components}
-              data={columnTableData}
-            />
-            );
-          }}
-        </Form.List>
-          
-
-        
-
-      </Form>
+        <EditColumnsPage  loading={loading} columnTableData={columnTableData} setColumnTableData={setColumnTableData}/>
       </Spin>
         </TabPane>
         <TabPane key='4' title='生成信息'>
