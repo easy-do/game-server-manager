@@ -1,3 +1,5 @@
+import { editLanguages } from "@/utils/systemConstant";
+import { Select, Space } from "@arco-design/web-react";
 import React,{ useState } from "react";
 import MonacoEditor from "react-monaco-editor";
 
@@ -43,12 +45,18 @@ function MEditor (props:MEditorProps) {
     console.info('editorWillUnmount')
   };
 
+  const [languages,setLanguages] = useState(props.language)
 
   return (
-    <MonacoEditor
+    <div>
+      <Space>
+      切换语言<Select value={languages} size='small' showSearch style={{width:'120px'}} options={editLanguages} onChange={(value)=>setLanguages(value)} />
+      </Space>
+      
+      <MonacoEditor
       width={props.width}
       height={props.height}
-      language={props.language}
+      language={languages}
       theme={props.theme}
       value={props.value}
       options={props.options}
@@ -57,6 +65,8 @@ function MEditor (props:MEditorProps) {
       onChange={onChange}
       editorWillUnmount={editorWillUnmount}
     />
+    </div>
+    
   );
 }
 

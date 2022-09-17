@@ -10,6 +10,8 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
 
   const { lang } = useContext(GlobalContext);
 
+  const t = useLocale(locale);
+
   const [loading, setLoading] = React.useState(false);
   
   //加载数据
@@ -30,7 +32,6 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
     fetchData();
   }, [props.id]);
 
-  const t = useLocale(locale);
 
   //提交修改
   const handleSubmit = () => {

@@ -88,7 +88,6 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
 
     @Override
     public void pageSelect(LambdaQueryWrapper<ClientInfo> wrapper) {
-        wrapper.select(ClientInfo::getId,ClientInfo::getClientName,ClientInfo::getServerId,ClientInfo::getStatus,ClientInfo::getCreateTime,ClientInfo::getLastUpTime);
     }
 
     @Override
@@ -106,14 +105,12 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
 
     @Override
     public IPage<ClientInfoVo> page(MpBaseQo<ClientInfo> mpBaseQo) {
-        
-        LambdaQueryWrapper<ClientInfo> wrapper = Wrappers.lambdaQuery();
+        mpBaseQo.initInstance(ClientInfo.class);
+        LambdaQueryWrapper<ClientInfo> wrapper = mpBaseQo.getWrapper().lambda();
         if(!isAdmin()){
             wrapper.eq(ClientInfo::getCreateBy,getUserId());
         }
-        wrapper.orderByDesc(ClientInfo::getCreateTime);
-        pageSelect(wrapper);
-        return baseMapper.selectPage(mpBaseQo.startPage(),wrapper).convert(ClientInfoMapstruct.INSTANCE::entityToVo);
+        return baseMapper.selectPage(mpBaseQo.getPage(),wrapper).convert(ClientInfoMapstruct.INSTANCE::entityToVo);
     }
 
     @Override

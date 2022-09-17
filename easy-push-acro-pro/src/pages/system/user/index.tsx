@@ -13,7 +13,7 @@ import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import './mock';
+
 import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
 import { managerPage } from '@/api/userManager';
 import { SearchTypeEnum } from '@/utils/systemConstant';

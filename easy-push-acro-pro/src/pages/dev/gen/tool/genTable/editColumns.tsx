@@ -9,77 +9,37 @@ import dayjs from 'dayjs';
 import {
   Form,
   Input,
-  Select,
-  Grid,
   Table,
   FormInstance,
   Radio,
-  Switch,
+  Button,
 } from '@arco-design/web-react';
 import { GlobalContext } from '@/context';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import {
-  IconDragDotVertical,
-  IconRefresh,
-  IconSearch,
-} from '@arco-design/web-react/icon';
-import { Status } from './constants';
+import { IconDragDotVertical } from '@arco-design/web-react/icon';
 import FormItem from '@arco-design/web-react/es/Form/form-item';
 import {
   SortableContainer,
   SortableElement,
   SortableHandle,
 } from 'react-sortable-hoc';
-import { SearchTypeEnum } from '@/utils/systemConstant';
-
-const { Row, Col } = Grid;
-const { useForm } = Form;
-const TextArea = Input.TextArea;
+import EditColumn from './editColumn';
+import { htmlTypeSelect, queryTypeSelect } from './constants';
 
 function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
   const { lang } = useContext(GlobalContext);
 
   const t = useLocale(locale);
 
-  const queryTypeSelect = [
-    { label: '=', value: SearchTypeEnum.EQ },
-    { label: '!=', value: SearchTypeEnum.NE },
-    { label: 'in', value: SearchTypeEnum.IN },
-    { label: 'notIn', value: SearchTypeEnum.NOT_IN },
-    { label: '>', value: SearchTypeEnum.GT },
-    { label: '>=', value: SearchTypeEnum.GE },
-    { label: '<', value: SearchTypeEnum.LT },
-    { label: '<=', value: SearchTypeEnum.LE },
-    { label: 'like', value: SearchTypeEnum.LIKE },
-    { label: 'notLike', value: SearchTypeEnum.NOT_LIKE },
-    { label: 'likeLeft', value: SearchTypeEnum.LIKE_LEFT },
-    { label: 'likeRight', value: SearchTypeEnum.LIKE_RIGHT },
-    { label: 'LIKE', value: SearchTypeEnum.LIKE_RIGHT },
-    { label: 'between', value: SearchTypeEnum.BETWEEN },
-    { label: 'notBetween', value: SearchTypeEnum.NOT_BETWEEN },
-  ];
+  const [editColumnData, setEditColumnData] = useState(null);
 
-  const javaTypeSelect = [
-    'Long',
-    'String',
-    'Integer',
-    'Double',
-    'BigDecimal',
-    'Date',
-  ];
+  const [isEditColumn, setIsEditColumn] = useState(false);
 
-  const htmlTypeSelect = [
-    { label: '文本框', value: 'input' },
-    { label: '文本域', value: 'textarea' },
-    { label: '下拉框', value: 'select' },
-    { label: '单选框', value: 'radio' },
-    { label: '复选框', value: 'checkbox' },
-    { label: '日期控件', value: 'datetime' },
-    { label: '图片上传', value: 'imageUpload' },
-    { label: '文件上传', value: 'fileUpload' },
-    { label: '富文本控件', value: 'editor' },
-  ];
+  function editColumn(record) {
+    setEditColumnData(record);
+    setIsEditColumn(true);
+  }
 
   const columnTableColumns = [
     {
@@ -97,38 +57,54 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
     {
       title: t['searchTable.columns.columnComment'],
       dataIndex: 'columnComment',
-      editable: true,
-      //   render: (_, record) => <Input value={record.columnComment} />,
     },
     {
       title: t['searchTable.columns.javaField'],
       dataIndex: 'javaField',
-      editable: true,
-      //   render: (_, record) => <Input value={record.javaField} />,
     },
     {
       title: t['searchTable.columns.javaType'],
       dataIndex: 'javaType',
-      editable: true,
-        render: (_, record) => (
-            <Select defaultValue={record.javaType} options={htmlTypeSelect} />
-        ),
     },
     {
       title: t['searchTable.columns.htmlType'],
       dataIndex: 'htmlType',
-      editable: true,
-        render: (_, record) => (
-          <Select defaultValue={record.htmlType} options={htmlTypeSelect} />
-        ),
+      render: (_, record) =>
+        htmlTypeSelect.map((item) => {
+          if (item.value === record.htmlType) {
+            return item.label;
+          }
+        }),
     },
     {
       title: t['searchTable.columns.queryType'],
       dataIndex: 'queryType',
+      render: (_, record) =>
+        queryTypeSelect.map((item) => {
+          if (item.value === record.queryType) {
+            return item.label;
+          }
+        }),
+    },
+    {
+      title: t['searchTable.columns.isPk'],
+      dataIndex: 'isPk',
       editable: true,
-        render: (_, record) => (
-          <Select defaultValue={record.queryType} options={queryTypeSelect} />
-        ),
+      render: (_, record) => (
+        <FormItem
+          style={{ marginBottom: 0 }}
+          labelCol={{ span: 0 }}
+          wrapperCol={{ span: 24 }}
+          initialValue={record.isPk}
+          field="isPk"
+          rules={[{ required: true }]}
+        >
+          <Radio.Group type="button">
+            <Radio value={'1'}>是</Radio>
+            <Radio value={'0'}>否</Radio>
+          </Radio.Group>
+        </FormItem>
+      ),
     },
     {
       title: t['searchTable.columns.isList'],
@@ -231,29 +207,14 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
       ),
     },
     {
-      title: t['searchTable.columns.isPk'],
-      dataIndex: 'isPk',
-      editable: true,
+      title: t['searchTable.update.title'],
       render: (_, record) => (
-        <FormItem
-          style={{ marginBottom: 0 }}
-          labelCol={{ span: 0 }}
-          wrapperCol={{ span: 24 }}
-          initialValue={record.isPk}
-          field="isPk"
-          rules={[{ required: true }]}
-        >
-          <Radio.Group type="button">
-            <Radio value={'1'}>是</Radio>
-            <Radio value={'0'}>否</Radio>
-          </Radio.Group>
-        </FormItem>
+        <div>
+          <Button type="text" size="small" onClick={() => editColumn(record)}>
+            {t['searchTable.columns.operations.update']}
+          </Button>
+        </div>
       ),
-    },
-    {
-      title: t['searchTable.columns.dictType'],
-      dataIndex: 'dictType',
-      editable: true,
     },
   ];
 
@@ -325,7 +286,8 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
           editing &&
           column.editable &&
           ref.current &&
-          !ref.current.contains(e.target)
+          !ref.current.contains(e.target) &&
+          !e.target.classList.contains('js-demo-select-option')
         ) {
           cellValueChangeHandler(rowData[column.dataIndex]);
         }
@@ -341,27 +303,14 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
         document.removeEventListener('click', handleClick, true);
       };
     }, [handleClick]);
-
     const cellValueChangeHandler = (value) => {
-        console.info(value)
-      if (column.dataIndex === 'queryType' ||
-      column.dataIndex === 'javaType' ||
-      column.dataIndex === 'htmlType') {
-        const values = {
-          [column.dataIndex]: value,
-        };
-        console.info(values)
-        onHandleSave && onHandleSave({ ...rowData, ...values });
-        setTimeout(() => setEditing(!editing), 300);
-      } else {
-        const form = getForm();
-        form.validate([column.dataIndex], (errors, values) => {
-          if (!errors || !errors[column.dataIndex]) {
-            setEditing(!editing);
-            onHandleSave && onHandleSave({ ...rowData, ...values });
-          }
-        });
-      }
+      const form = getForm();
+      form.validate([column.dataIndex], (errors, values) => {
+        if (!errors || !errors[column.dataIndex]) {
+          setEditing(!editing);
+          onHandleSave && onHandleSave({ ...rowData, ...values });
+        }
+      });
     };
 
     if (editing) {
@@ -386,30 +335,9 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
                 <Radio value={'0'}>否</Radio>
               </Radio.Group>
             </FormItem>
-          ) : column.dataIndex === 'javaType' ? (
-            <Select
-             labelInValue
-              style={{ width: '150px' }}
-              inputValue={rowData[column.dataIndex]}
-              options={javaTypeSelect}
-              onChange={cellValueChangeHandler}
-            />
-          ) : column.dataIndex === 'htmlType' ? (
-            <Select
-              style={{ width: '150px' }}
-              defaultValue={rowData[column.dataIndex]}
-              options={htmlTypeSelect}
-              onChange={cellValueChangeHandler}
-            />
-          ) : column.dataIndex === 'queryType' ? (
-            <Select
-              defaultValue={rowData[column.dataIndex]}
-              options={queryTypeSelect}
-              onChange={cellValueChangeHandler}
-            />
           ) : (
             <FormItem
-              style={{ height: '100px' }}
+              style={{ width: '120px' }}
               initialValue={rowData[column.dataIndex]}
               field={column.dataIndex}
               rules={[{ required: true }]}
@@ -433,7 +361,6 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
 
   //编辑表格保存回调函数
   function handleSave(row) {
-    console.info(row);
     const newData = [...columnTableData];
     const index = newData.findIndex((item) => row.columnId === item.columnId);
     newData.splice(index, 1, { ...newData[index], ...row });
@@ -530,26 +457,35 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
   };
 
   return (
-    <Table
-      className="arco-drag-table-container-2"
-      rowKey="id"
-      stripe
-      borderCell
-      loading={loading}
-      pagination={false}
-      columns={columnTableColumns.map((column) =>
-        column.editable
-          ? {
-              ...column,
-              onCell: () => ({
-                onHandleSave: handleSave,
-              }),
-            }
-          : column
-      )}
-      components={components}
-      data={columnTableData}
-    />
+    <div>
+      <Table
+        style={{width:'100%'}}
+        className="arco-drag-table-container-2"
+        rowKey="id"
+        stripe
+        borderCell
+        loading={loading}
+        pagination={false}
+        columns={columnTableColumns.map((column) =>
+          column.editable
+            ? {
+                ...column,
+                onCell: () => ({
+                  onHandleSave: handleSave,
+                }),
+              }
+            : column
+        )}
+        components={components}
+        data={columnTableData}
+      />
+      <EditColumn
+        data={editColumnData}
+        visible={isEditColumn}
+        setVisible={setIsEditColumn}
+        successCallBack={handleSave}
+      />
+    </div>
   );
 }
 

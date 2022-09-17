@@ -16,6 +16,7 @@ import game.server.manager.generate.entity.GenTableColumn;
 import game.server.manager.generate.mapper.GenTableColumnMapper;
 import game.server.manager.generate.mapper.GenTableMapper;
 import game.server.manager.generate.service.DataSourceDbService;
+import game.server.manager.generate.service.GenTableColumnService;
 import game.server.manager.generate.service.GenTableService;
 import game.server.manager.generate.util.GenUtils;
 import game.server.manager.generate.vo.DbListVo;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,7 +46,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     private DataSourceDbService dataSourceDbService;
 
     @Autowired
-    private GenTableColumnMapper genTableColumnMapper;
+    private GenTableColumnService genTableColumnService;
 
     /**
      * 分页查询
@@ -67,7 +69,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         LambdaQueryWrapper<GenTableColumn> columnWrapper = Wrappers.lambdaQuery();
         columnWrapper.eq(GenTableColumn::getTableId, genTable.getTableId());
         columnWrapper.orderByDesc(GenTableColumn::getSort);
-        List<GenTableColumn> genTableColumns = genTableColumnMapper.selectList(columnWrapper);
+        List<GenTableColumn> genTableColumns = genTableColumnService.list(columnWrapper);
         genTable.setColumns(genTableColumns);
         setTableFromOptions(genTable);
        return genTable;
@@ -116,9 +118,9 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         return tableList.stream().peek(table -> {
             LambdaQueryWrapper<GenTableColumn> wrapper = Wrappers.lambdaQuery();
             wrapper.eq(GenTableColumn::getTableId, table.getTableId());
-            List<GenTableColumn> genTableColumns = genTableColumnMapper.selectList(wrapper);
+            List<GenTableColumn> genTableColumns = genTableColumnService.list(wrapper);
             table.setColumns(genTableColumns);
-        }).collect(Collectors.toList());
+        }).toList();
     }
 
     /**
@@ -144,7 +146,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         LambdaQueryWrapper<GenTableColumn> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GenTableColumn::getTableId, id);
         wrapper.orderByAsc(GenTableColumn::getSort);
-        List<GenTableColumn> genTableColumns = genTableColumnMapper.selectList(wrapper);
+        List<GenTableColumn> genTableColumns = genTableColumnService.list(wrapper);
         genTable.setColumns(genTableColumns);
         setTableFromOptions(genTable);
         return genTable;
@@ -183,9 +185,14 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         genTable.setOptions(options);
         boolean result = updateById(genTable);
         if (result) {
-            for (GenTableColumn cenTableColumn : genTable.getColumns()) {
-                genTableColumnMapper.updateById(cenTableColumn);
+            List<GenTableColumn> genTableColumnList = genTable.getColumns();
+            //设置字段排序
+            for (int i = 0; i < genTableColumnList.size(); i++) {
+                GenTableColumn genTableColumn = genTableColumnList.get(i);
+                genTableColumn.setSort(i);
+                genTableColumnList.set(i,genTableColumn);
             }
+            genTableColumnService.updateBatchById(genTableColumnList);
         }
     }
 
@@ -200,7 +207,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         baseMapper.deleteById(tableId);
         LambdaQueryWrapper<GenTableColumn> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GenTableColumn::getTableId, tableId);
-        genTableColumnMapper.delete(wrapper);
+        genTableColumnService.remove(wrapper);
     }
 
     /**
@@ -226,7 +233,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
                     List<GenTableColumn> genTableColumns = dataSourceDbService.selectDbTableColumnsByName(dataSourceId, tableName);
                     for (GenTableColumn column : genTableColumns) {
                         GenUtils.initColumnField(column, genTable);
-                        genTableColumnMapper.insert(column);
+                        genTableColumnService.save(column);
                     }
                 }
             }
@@ -245,26 +252,26 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     public void syncDb(String tableName) {
         GenTable table = selectGenTableByName(tableName);
         List<GenTableColumn> tableColumns = table.getColumns();
-        List<String> tableColumnNames = tableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
+        List<String> tableColumnNames = tableColumns.stream().map(GenTableColumn::getColumnName).toList();
 
         List<GenTableColumn> dbTableColumns = dataSourceDbService.selectDbTableColumnsByName(table.getDataSourceId(),tableName);
 
         if (Objects.isNull(dbTableColumns)) {
             throw new BizException("500","同步数据失败，原表结构不存在");
         }
-        List<String> dbTableColumnNames = dbTableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
+        List<String> dbTableColumnNames = dbTableColumns.stream().map(GenTableColumn::getColumnName).toList();
 
         dbTableColumns.forEach(column -> {
             if (!tableColumnNames.contains(column.getColumnName())) {
                 GenUtils.initColumnField(column, table);
-                genTableColumnMapper.insert(column);
+                genTableColumnService.save(column);
             }
         });
 
-        List<GenTableColumn> delColumns = tableColumns.stream().filter(column -> !dbTableColumnNames.contains(column.getColumnName())).collect(Collectors.toList());
+        List<GenTableColumn> delColumns = tableColumns.stream().filter(column -> !dbTableColumnNames.contains(column.getColumnName())).toList();
         if (!delColumns.isEmpty()) {
-            List<Long> ids = delColumns.stream().map(GenTableColumn::getColumnId).collect(Collectors.toList());
-            genTableColumnMapper.deleteBatchIds(ids);
+            List<Long> ids = delColumns.stream().map(GenTableColumn::getColumnId).toList();
+            genTableColumnService.removeBatchByIds(ids);
         }
     }
 

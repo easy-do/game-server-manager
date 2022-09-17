@@ -6,7 +6,7 @@ import locale from './locale';
 import PublicOpinion from './public-opinion';
 import MultiInterval from '@/components/Chart/multi-stack-interval';
 import PeriodLine from '@/components/Chart/period-legend-line';
-import './mock';
+
 
 const { Row, Col } = Grid;
 

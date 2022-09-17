@@ -63,7 +63,7 @@ function EditCodePage(props: { id: number; visible; setVisible }) {
       wrapStyle={{width:'100%',height:'100%'}}
       unmountOnExit={true}
     >
-        <MEditor height={clientHeight/1.2 + 'px'} theme='vs-dark' language='shell' value={templateCode} callBack={mdCallBack} />
+        <MEditor height={clientHeight/1.3 + 'px'} theme='vs-dark' language='shell' value={templateCode} callBack={mdCallBack} />
     </Modal>
   );
 }

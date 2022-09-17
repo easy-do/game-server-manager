@@ -20,6 +20,7 @@ import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import UpdatePage from './update';
 import ImportTable from './importTable';
+import ViewCodePage from './viewCode';
 
 const { Title } = Typography;
 
@@ -28,7 +29,6 @@ function SearchTable() {
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
-    console.log(record, type);
     //查看
     if (type === 'view') {
       viewInfo(record.tableId);
@@ -44,7 +44,7 @@ function SearchTable() {
     //同步
     if (type === 'sync') {
       syncData(record.tableId);
-    } 
+    }
     //删除
     if (type === 'remove') {
       removeData(record.tableId);
@@ -67,7 +67,7 @@ function SearchTable() {
     setIsImportTable(true);
   }
 
-  function importSuccess(){
+  function importSuccess() {
     setIsImportTable(false);
     fetchData();
   }
@@ -86,18 +86,18 @@ function SearchTable() {
     fetchData();
   }
 
-  function generateCode(id){
-    batchGenCode(id).then((res)=>{
-      if(res.data.success){
-        Notification.success({ content: '成功', duration: 300 });
-      }
-    })
+  function generateCode(id) {
+    batchGenCode(id);
+    // .then((res)=>{
+    //   if(res.data.success){
+    //     Notification.success({ content: '成功', duration: 300 });
+    //   }
+    // })
   }
 
-  function syncData(id){
- //
+  function syncData(id) {
+    //
   }
-
 
   //删除
   function removeData(id) {
@@ -227,8 +227,13 @@ function SearchTable() {
       />
       <ImportTable
         visible={isImportTable}
-        setVisible = {setIsImportTable}
+        setVisible={setIsImportTable}
         importSuccess={importSuccess}
+      />
+      <ViewCodePage
+        id={viewInfoId}
+        visible={isViewInfo}
+        setVisible={setisViewInfo}
       />
     </Card>
   );

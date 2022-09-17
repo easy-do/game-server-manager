@@ -1,6 +1,6 @@
 import { get,postRequestBody} from "../utils/request"
 
-export const list = () => get("/gen/template/list");
+export const listRequest = (param) => postRequestBody("/gen/template/list",param);
 export const infoRequest = (id) => get("/gen/template/info/" + id);
 export const remove = (id) => get("/gen/template/delete/" + id);
 export const managerPage = (param) => postRequestBody("/gen/template/page",param);
