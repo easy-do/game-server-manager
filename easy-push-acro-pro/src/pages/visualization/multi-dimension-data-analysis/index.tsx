@@ -9,7 +9,6 @@ import locale from './locale';
 import DataOverview from './data-overview';
 import CardList from './card-list';
 
-import './mock';
 
 const { Row, Col } = Grid;
 const { Title } = Typography;

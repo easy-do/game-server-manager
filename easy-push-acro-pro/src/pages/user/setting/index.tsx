@@ -5,7 +5,7 @@ import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import InfoHeader from './header';
 import Security from './security';
-import './mock';
+
 import Verified from './verified';
 
 function UserInfo() {
