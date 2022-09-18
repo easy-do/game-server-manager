@@ -49,6 +49,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     public List<SysDictDataVo> voList() {
         LambdaQueryWrapper<SysDictData> wrapper = getWrapper();
         listSelect(wrapper);
+        wrapper.eq(SysDictData::getStatus,StatusEnum.ENABLE);
         return SysDictDataMapstruct.INSTANCE.entityToVo(list(wrapper));
     }
 

@@ -2,6 +2,7 @@ package game.server.manager.uc.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import game.server.manager.common.enums.StatusEnum;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.uc.dto.SysDictTypeDto;
@@ -29,7 +30,7 @@ public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, MpBaseQ
 
     @Override
     public void listSelect(LambdaQueryWrapper<SysDictType> wrapper) {
-        wrapper.select(SysDictType::getDictName,SysDictType::getId,SysDictType::getStatus);
+        wrapper.select(SysDictType::getDictName,SysDictType::getId,SysDictType::getDictCode,SysDictType::getStatus);
     }
 
     @Override
@@ -41,6 +42,7 @@ public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, MpBaseQ
     public List<SysDictTypeVo> voList() {
         LambdaQueryWrapper<SysDictType> wrapper = getWrapper();
         listSelect(wrapper);
+        wrapper.eq(SysDictType::getStatus, StatusEnum.ENABLE);
         return SysDictTypeMapstruct.INSTANCE.entityToVo(list(wrapper));
     }
 
