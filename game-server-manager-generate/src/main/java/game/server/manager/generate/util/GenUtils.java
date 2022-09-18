@@ -5,6 +5,7 @@ import game.server.manager.generate.configure.GenerateConfig;
 import game.server.manager.generate.constant.GenConstants;
 import game.server.manager.generate.entity.GenTable;
 import game.server.manager.generate.entity.GenTableColumn;
+import game.server.manager.mybatis.plus.enums.SearchTypeEnum;
 import org.apache.commons.lang3.RegExUtils;
 
 import java.util.Arrays;
@@ -50,15 +51,15 @@ public class GenUtils {
         // 设置默认类型
         column.setJavaType(GenConstants.TYPE_STRING);
 
-        if (arraysContains(GenConstants.COLUMNTYPE_STR, dataType) || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType)) {
+        if (arraysContains(GenConstants.COLUMN_TYPE_STR, dataType) || arraysContains(GenConstants.COLUMN_TYPE_TEXT, dataType)) {
             // 字符串长度超过500设置为文本域
             Integer columnLength = getColumnLength(column.getColumnType());
-            String htmlType = columnLength >= 500 || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType) ? GenConstants.HTML_TEXTAREA : GenConstants.HTML_INPUT;
+            String htmlType = columnLength >= 255 || arraysContains(GenConstants.COLUMN_TYPE_TEXT, dataType) ? GenConstants.HTML_TEXTAREA : GenConstants.HTML_INPUT;
             column.setHtmlType(htmlType);
-        } else if (arraysContains(GenConstants.COLUMNTYPE_TIME, dataType)) {
+        } else if (arraysContains(GenConstants.COLUMN_TYPE_TIME, dataType)) {
             column.setJavaType(GenConstants.LOCAL_DATE_TIME);
             column.setHtmlType(GenConstants.HTML_DATETIME);
-        } else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER, dataType)) {
+        } else if (arraysContains(GenConstants.COLUMN_TYPE_NUMBER, dataType)) {
             column.setHtmlType(GenConstants.HTML_INPUT);
 
             // 如果是浮点型 统一用BigDecimal
@@ -80,21 +81,21 @@ public class GenUtils {
         column.setIsInsert(GenConstants.REQUIRE);
 
         // 编辑字段
-        if (!arraysContains(GenConstants.COLUMNNAME_NOT_EDIT, columnName) && !column.isPk()) {
+        if (!arraysContains(GenConstants.COLUMN_NAME_NOT_EDIT, columnName) && !column.isPk()) {
             column.setIsEdit(GenConstants.REQUIRE);
         }
         // 列表字段
-        if (!arraysContains(GenConstants.COLUMNNAME_NOT_LIST, columnName) && !column.isPk()) {
+        if (!arraysContains(GenConstants.COLUMN_NAME_NOT_LIST, columnName) && !column.isPk()) {
             column.setIsList(GenConstants.REQUIRE);
         }
         // 查询字段
-        if (!arraysContains(GenConstants.COLUMNNAME_NOT_QUERY, columnName) && !column.isPk()) {
+        if (!arraysContains(GenConstants.COLUMN_NAME_NOT_QUERY, columnName) && !column.isPk()) {
             column.setIsQuery(GenConstants.REQUIRE);
         }
 
         // 查询字段类型
         if (CharSequenceUtil.endWithIgnoreCase(columnName, "name")) {
-            column.setQueryType(GenConstants.QUERY_LIKE);
+            column.setQueryType(SearchTypeEnum.LIKE.getValue());
         }
         // 状态字段设置单选框
         if (CharSequenceUtil.endWithIgnoreCase(columnName, "status")) {

@@ -20,6 +20,7 @@ import { yesOrNo } from './constants';
 import { listRequest } from '@/api/template';
 
 function UpdatePage({ id, visible, setVisible, successCallBack }) {
+
   const t = useLocale(locale);
 
   const TextArea = Input.TextArea;
@@ -89,11 +90,14 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
   //提交修改
   const handleSubmit = () => {
     const newGenInfo: any = genInfo;
+    console.info(genInfo)
     if(!newGenInfo.templateIds){
       Notification.warning({ content: '未选择模板', duration: 300 });
       return;
     }
-    newGenInfo.templateIds = newGenInfo.templateIds.join(',');
+    if(typeof newGenInfo.templateIds !== 'string'){
+      newGenInfo.templateIds = newGenInfo.templateIds.join(',');
+    }
     edit({ ...info, ...newGenInfo, columns: columnTableData }).then((res) => {
       const { success, msg } = res.data;
       if (success) {
