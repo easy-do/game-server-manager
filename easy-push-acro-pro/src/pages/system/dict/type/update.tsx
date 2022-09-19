@@ -1,7 +1,7 @@
 import { DatePicker, Form, FormInstance, Input, Modal, Select, Spin, Notification } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { edit, infoRequest } from '@/api/dictType';
+import { updateRequest, infoRequest } from '@/api/dictType';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
 import { useContext, useEffect, useRef } from 'react';
@@ -40,7 +40,7 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
   //提交修改
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
-      edit(values).then((res) => {
+      updateRequest(values).then((res) => {
         const { success, msg} = res.data
         if(success){
           Notification.success({ content: msg, duration: 300 })

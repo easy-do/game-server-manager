@@ -57,7 +57,7 @@ public class AuthorizationCodeController {
     }
 
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "授权码管理", description = "编辑授权码: ?1", expressions = {"#p1.id"},actionType = "编辑")
     public R<Object> edit(@RequestBody AuthorizationCode authorizationCode) {
         return authorizationCodeService.updateById(authorizationCode)? DataResult.ok():DataResult.fail();
@@ -72,7 +72,7 @@ public class AuthorizationCodeController {
     }
 
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "授权码管理", description = "删除授权码: ?1", expressions = {"#p1"}, actionType = "删除")
     public R<Object> delete(@PathVariable("id")String id) {
         return authorizationCodeService.removeById(id)? DataResult.ok():DataResult.fail();

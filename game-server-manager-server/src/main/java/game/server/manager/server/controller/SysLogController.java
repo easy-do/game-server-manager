@@ -56,7 +56,7 @@ public class SysLogController {
      * 删除日志
      */
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "系统日志", description = "删除日志:?1" , expressions = "#p1",actionType = "删除")
     public R<Object> delete(@PathVariable("id")Long id){
         sysLogService.removeById(id);

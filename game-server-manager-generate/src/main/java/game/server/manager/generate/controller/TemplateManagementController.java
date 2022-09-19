@@ -89,7 +89,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-    @PostMapping("/edit")
+    @PostMapping("/update")
     public R<Object> edit(@RequestBody @Validated TemplateManagementDto dto) {
         return templateManagementService.update(dto)?DataResult.ok():DataResult.fail();
     }
@@ -101,7 +101,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     public R<Object> remove(@PathVariable Long id) {
         return DataResult.ok(templateManagementService.deleteById(id));
     }

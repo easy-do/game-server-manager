@@ -9,7 +9,7 @@ import {
 } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { edit, infoRequest } from '@/api/genTable';
+import { updateRequest, infoRequest } from '@/api/genTable';
 import { GlobalContext } from '@/context';
 import { useContext, useEffect, useState } from 'react';
 import React from 'react';
@@ -98,7 +98,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
     if(typeof newGenInfo.templateIds !== 'string'){
       newGenInfo.templateIds = newGenInfo.templateIds.join(',');
     }
-    edit({ ...info, ...newGenInfo, columns: columnTableData }).then((res) => {
+    updateRequest({ ...info, ...newGenInfo, columns: columnTableData }).then((res) => {
       const { success, msg } = res.data;
       if (success) {
         Notification.success({ content: msg, duration: 300 });

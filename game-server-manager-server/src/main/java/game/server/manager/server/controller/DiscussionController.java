@@ -59,17 +59,17 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
     }
 
     @SaCheckLogin
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "编辑话题: ?1", expressions = {"#p1.id"}, actionType = "编辑")
-    public R<Object> edit(@RequestBody @Validated({Update.class}) DiscussionDto discussionDto) {
-        return super.edit(discussionDto);
+    public R<Object> update(@RequestBody @Validated({Update.class}) DiscussionDto discussionDto) {
+        return super.update(discussionDto);
     }
 
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "删除话题: ?1 ", expressions = {"#p1"}, actionType = "删除")
-    public R<Object> delete( @PathVariable("id") Long id) {
-        return super.delete(id);
+    public R<Object> remove(@PathVariable("id") Long id) {
+        return super.remove(id);
     }
 
 }

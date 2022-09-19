@@ -162,7 +162,7 @@ public class GenController {
      * @return plus.easydo.core.R.DataR
      * @author laoyu
      */
-    @PostMapping("/edit")
+    @PostMapping("/update")
     public R<Object> editSave(@Validated @RequestBody GenTable genTable) {
         genTableService.validateEdit(genTable);
         genTableService.updateGenTable(genTable);

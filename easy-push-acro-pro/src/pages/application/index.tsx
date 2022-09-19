@@ -15,7 +15,7 @@ import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
 import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
-import { managerPage, remove } from '@/api/applicationInfo';
+import { managerPage, removeRequest } from '@/api/applicationInfo';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
@@ -65,7 +65,7 @@ function SearchTable() {
 
   //删除
   function removeData(id){
-    remove(id).then((res)=>{
+    removeRequest(id).then((res)=>{
       const { success, msg} = res.data
       if(success){
         Notification.success({ content: msg, duration: 300 })

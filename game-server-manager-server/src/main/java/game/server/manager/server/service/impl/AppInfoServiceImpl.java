@@ -10,7 +10,6 @@ import game.server.manager.server.entity.AppInfo;
 import game.server.manager.common.enums.AuditStatusEnum;
 import game.server.manager.common.enums.ScopeEnum;
 import game.server.manager.server.mapstruct.AppInfoMapstruct;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.mapper.AppInfoMapper;
 import game.server.manager.server.service.ApplicationInfoService;
@@ -59,18 +58,17 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppI
         }
         wrapper.orderByDesc(AppInfo::getCreateTime);
         listSelect(wrapper);
-        return AppInfoMapstruct.INSTANCE.entityToVo(baseMapper.selectList(wrapper));
+        return AppInfoMapstruct.INSTANCE.entityToVo(list(wrapper));
     }
 
     @Override
     public IPage<AppInfoVo> page(AppInfoQo mpBaseQo) {
-        LambdaQueryWrapper<AppInfo> wrapper = getWrapper();
+        mpBaseQo.initInstance(AppInfo.class);
+        LambdaQueryWrapper<AppInfo> wrapper = mpBaseQo.getWrapper().lambda();
         if (!isAdmin()) {
             wrapper.eq(AppInfo::getCreateBy, getUserId());
         }
-        wrapper.orderByDesc(AppInfo::getCreateTime);
-        pageSelect(wrapper);
-        return baseMapper.selectPage(mpBaseQo.startPage(), wrapper).convert(AppInfoMapstruct.INSTANCE::entityToVo);
+        return page(mpBaseQo.getPage(), mpBaseQo.getWrapper()).convert(AppInfoMapstruct.INSTANCE::entityToVo);
     }
 
     @Override

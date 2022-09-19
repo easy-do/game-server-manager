@@ -12,12 +12,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface DataSourceManagerMapper extends BaseMapper<DataSource> {
-    /**
-     * 查询数据源管理
-     *
-     * @param id 数据源管理ID
-     * @return 数据源管理
-     */
-    DataSource selectDataSourceManagerById(String id);
 
 }

@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { Form, FormInstance, Input, Modal, DatePicker, Select, Notification } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { add } from '@/api/dataSourceManager';
+import { addRequest } from '@/api/dataSourceManager';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
 
@@ -19,7 +19,7 @@ function AddPage(props: { visible; setVisible }) {
 
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
-      add(values).then((res) => {
+      addRequest(values).then((res) => {
         const { success, msg} = res.data
         if(success){
           Notification.success({ content: msg, duration: 300 })

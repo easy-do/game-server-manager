@@ -75,17 +75,17 @@ public class AppScriptController extends BaseController<AppScriptService, AppScr
     }
 
     @SaCheckLogin
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = "编辑脚本: ?1 - ?2", expressions = {"#p1.id","#p1.scriptName"},actionType = EDIT_ACTION)
-    public R<Object> edit(@RequestBody @Validated({Update.class}) AppScriptDto appScriptDto) {
-        return super.edit(appScriptDto);
+    public R<Object> update(@RequestBody @Validated({Update.class}) AppScriptDto appScriptDto) {
+        return super.update(appScriptDto);
     }
 
     @SaCheckLogin()
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
-    public R<Object> delete(@PathVariable("id") Long id) {
-        return super.delete(id);
+    public R<Object> remove(@PathVariable("id") Long id) {
+        return super.remove(id);
     }
 
 

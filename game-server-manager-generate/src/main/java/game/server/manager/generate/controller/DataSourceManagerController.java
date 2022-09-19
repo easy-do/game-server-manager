@@ -90,7 +90,7 @@ public class DataSourceManagerController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
-	@GetMapping("/delete/{id}")
+	@GetMapping("/remove/{id}")
     public R<Object> remove(@PathVariable("id") Long id) {
         return dataSourceManagerService.deleteById(id)?DataResult.ok():DataResult.fail();
     }

@@ -187,16 +187,6 @@ public class GenTable {
     private Integer isRemove;
 
     /**
-     * 是否生成Lambda条件语句
-     */
-    private Integer isWrapper;
-
-    /**
-     * 是否生成Manager层
-     */
-    private Integer isManager;
-
-    /**
      * 使用的模板id
      */
     private String templateIds;
