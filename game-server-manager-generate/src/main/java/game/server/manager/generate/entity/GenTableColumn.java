@@ -71,6 +71,11 @@ public class GenTableColumn {
     private String isRequired;
 
     /**
+     * 是否详情展示（1是）
+     */
+    private String isInfo;
+
+    /**
      * 是否为插入字段（1是）
      */
     private String isInsert;

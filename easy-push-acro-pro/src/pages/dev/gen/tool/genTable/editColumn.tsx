@@ -211,6 +211,22 @@ function EditColumn({ data, visible, setVisible, successCallBack }) {
           </Form.Item>
 
           <Form.Item
+            label={t['searchTable.columns.isInfo']}
+            field="isInfo"
+            rules={[
+              {
+                required: true,
+                message: t['searchTable.rules.isInfo.required'],
+              },
+            ]}
+          >
+            <Radio.Group type="button">
+              <Radio value={'1'}>是</Radio>
+              <Radio value={'0'}>否</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item
             label={t['searchTable.columns.isEdit']}
             field="isEdit"
             rules={[

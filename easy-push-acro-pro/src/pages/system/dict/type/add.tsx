@@ -49,66 +49,25 @@ function AddPage(props: { visible; setVisible }) {
         wrapperCol={{ span: lang === 'en-US' ? 17 : 18 }}
         labelAlign="left"
       >
-        <Form.Item
-          label={t['searchTable.columns.remark']}
-          field="remark"
+         <Form.Item
+          label={t['searchTable.columns.dictName']}
+          field="dictName"
           rules={[
-            { required: true, message: t['searchTable.rules.remark.required'] },
+            { required: true, message: t['searchTable.rules.dictName.required'] },
           ]}
         >
-          <Input placeholder={t['searchForm.remark.placeholder']} allowClear />
-        </Form.Item>
-        
-        <Form.Item
-          label={t['searchTable.columns.updateTime']}
-          field="updateTime"
-          rules={[
-            { required: true, message: t['searchTable.rules.updateTime.required'] },
-          ]}
-        >
-          <DatePicker
-            style={{ width: '100%' }}
-            showTime={{
-              defaultValue: '04:05:06',
-            }}
-            format='YYYY-MM-DD HH:mm:ss'
-          />
+          <Input placeholder={t['searchForm.dictName.placeholder']} allowClear />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.updateBy']}
-          field="updateBy"
+          label={t['searchTable.columns.dictCode']}
+          field="dictCode"
           rules={[
-            { required: true, message: t['searchTable.rules.updateBy.required'] },
+            { required: true, message: t['searchTable.rules.dictCode.required'] },
           ]}
         >
-          <Input placeholder={t['searchForm.updateBy.placeholder']} allowClear />
+          <Input placeholder={t['searchForm.dictCode.placeholder']} allowClear />
         </Form.Item>
-        
-        <Form.Item
-          label={t['searchTable.columns.createTime']}
-          field="createTime"
-          rules={[
-            { required: true, message: t['searchTable.rules.createTime.required'] },
-          ]}
-        >
-          <DatePicker
-            style={{ width: '100%' }}
-            showTime={{
-              defaultValue: '04:05:06',
-            }}
-            format='YYYY-MM-DD HH:mm:ss'
-          />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.createBy']}
-          field="createBy"
-          rules={[
-            { required: true, message: t['searchTable.rules.createBy.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.createBy.placeholder']} allowClear />
-        </Form.Item>
-        
+          
         <Form.Item 
           label={t['searchTable.columns.status']}
           field="status"
@@ -126,34 +85,12 @@ function AddPage(props: { visible; setVisible }) {
             allowClear
           />
         </Form.Item>
+    
         <Form.Item
-          label={t['searchTable.columns.dictCode']}
-          field="dictCode"
-          rules={[
-            { required: true, message: t['searchTable.rules.dictCode.required'] },
-          ]}
+          label={t['searchTable.columns.remark']}
+          field="remark"
         >
-          <Input placeholder={t['searchForm.dictCode.placeholder']} allowClear />
-        </Form.Item>
-        
-        <Form.Item
-          label={t['searchTable.columns.dictName']}
-          field="dictName"
-          rules={[
-            { required: true, message: t['searchTable.rules.dictName.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.dictName.placeholder']} allowClear />
-        </Form.Item>
-        
-        <Form.Item
-          label={t['searchTable.columns.id']}
-          field="id"
-          rules={[
-            { required: true, message: t['searchTable.rules.id.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.id.placeholder']} allowClear />
+          <Input placeholder={t['searchForm.remark.placeholder']} allowClear />
         </Form.Item>
         
       </Form>

@@ -55,7 +55,8 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
 
     @Override
     public IPage<SysDictDataVo> page(MpBaseQo<SysDictData> mpBaseQo) {
-        return page(mpBaseQo.startPage(),mpBaseQo.buildSearchWrapper()).convert(SysDictDataMapstruct.INSTANCE::entityToVo);
+        mpBaseQo.initInstance(SysDictData.class);
+        return page(mpBaseQo.getPage(),mpBaseQo.getWrapper()).convert(SysDictDataMapstruct.INSTANCE::entityToVo);
     }
 
     @Override

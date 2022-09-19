@@ -2,19 +2,26 @@ import { listByCode } from '@/api/dictData';
 import { Select } from '@arco-design/web-react';
 import React, { useEffect, useState } from 'react';
 
-function DictDataSelect({ dictCode }) {
+export interface props{
+  dictCode:string
+  value?:string;
+  onChange?:(value)=>void;
+  placeholder?:string
+}
+
+function DictDataSelect(props:props) {
   const [loading, setLoading] = useState(false);
 
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
     setLoading(true);
-    listByCode(dictCode).then((res) => {
+    listByCode(props.dictCode).then((res) => {
       const { success, data } = res.data;
       if (success) {
         const options = [];
         data.map((item) => {
-          if (item.dictValueType === 'str') {
+          if (item.dictValueType === 'string') {
             options.push({
               value: item.dictValue,
               label: item.dictLabel,
@@ -34,6 +41,9 @@ function DictDataSelect({ dictCode }) {
 
   return (
     <Select
+      value={props.value}
+      onChange={props.onChange}
+      placeholder={props.placeholder}
       loading={loading}
       showSearch
       options={options}

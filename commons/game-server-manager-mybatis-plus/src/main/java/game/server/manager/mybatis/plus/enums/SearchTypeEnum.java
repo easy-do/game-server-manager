@@ -10,21 +10,21 @@ package game.server.manager.mybatis.plus.enums;
 public enum SearchTypeEnum {
 
     /**/
-    EQ("eq","等于"),
-    NE("ne","不等于"),
-    IN("in","包含"),
-    NOT_IN("notIn","包含"),
-    LT("lt","小于"),
-    GT("gt","大于"),
-    GE("ge","大于等于 >="),
-    LE("le","小于等于 >="),
-    BETWEEN("between","范围内"),
-    NOT_BETWEEN("notBetween","不在范围内"),
-    LIKE("like","包含"),
-    NOT_LIKE("notLike","不包含"),
-    LIKE_LEFT("likeLeft","起始包含"),
-    LIKE_RIGHT("likeRight","结尾包含"),
-    NULL("null","空");
+    EQ("EQ","等于"),
+    NE("NE","不等于"),
+    IN("IN","包含"),
+    NOT_IN("NOT_IN","包含"),
+    LT("LT","小于"),
+    GT("GT","大于"),
+    GE("GE","大于等于 >="),
+    LE("LE","小于等于 >="),
+    BETWEEN("BETWEEN","范围内"),
+    NOT_BETWEEN("NOT_BETWEEN","不在范围内"),
+    LIKE("LIKE","包含"),
+    NOT_LIKE("NOT_LIKE","不包含"),
+    LIKE_LEFT("LIKE_LEFT","起始包含"),
+    LIKE_RIGHT("LIKE_RIGHT","结尾包含"),
+    NULL("NULL","空");
 
 
     private final String value;

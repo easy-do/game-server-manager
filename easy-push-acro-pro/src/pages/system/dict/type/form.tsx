@@ -56,9 +56,6 @@ function SearchForm(props: {
             <Form.Item 
               label={t['searchTable.columns.status']}
               field="status"
-              rules={[
-                { required: true, message: t['searchTable.rules.status.required'] },
-              ]}
             >
               <Select
                 placeholder={t['searchForm.status.placeholder']}
@@ -75,9 +72,6 @@ function SearchForm(props: {
             <Form.Item
               label={t['searchTable.columns.dictCode']}
               field="dictCode"
-              rules={[
-                { required: true, message: t['searchTable.rules.dictCode.required'] },
-              ]}
             >
               <Input placeholder={t['searchForm.dictCode.placeholder']} allowClear />
             </Form.Item>
@@ -86,9 +80,6 @@ function SearchForm(props: {
             <Form.Item
               label={t['searchTable.columns.dictName']}
               field="dictName"
-              rules={[
-                { required: true, message: t['searchTable.rules.dictName.required'] },
-              ]}
             >
               <Input placeholder={t['searchForm.dictName.placeholder']} allowClear />
             </Form.Item>
