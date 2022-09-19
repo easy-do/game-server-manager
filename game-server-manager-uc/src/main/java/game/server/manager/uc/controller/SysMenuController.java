@@ -89,7 +89,7 @@ public class SysMenuController {
      * 修改菜单
      */
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions = EDIT_EXPRESSIONS, actionType = BaseController.EDIT_ACTION)
     public R<Object> edit(@Validated @RequestBody SysMenuDto sysMenuDto) {
         if (sysMenuDto.getMenuId().equals(sysMenuDto.getParentId())) {

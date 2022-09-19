@@ -14,8 +14,8 @@ import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
-import { managerPage, remove } from '@/api/clientManager';
+import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
+import { managerPage, removeRequest } from '@/api/clientInfo';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
@@ -28,21 +28,23 @@ function SearchTable() {
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
-    console.log(record, type);
     //查看
     if (type === 'view') {
       viewInfo(record.id);
     }
+
+
     //删除
     if (type === 'remove') {
       removeData(record.id);
     }
   };
 
+
+  //查看
   const [viewInfoId, setViewInfoId] = useState();
   const [isViewInfo, setisViewInfo] = useState(false);
 
- //查看
   function viewInfo(id) {
     setViewInfoId(id);
     setisViewInfo(true);
@@ -59,10 +61,11 @@ function SearchTable() {
     setIsAddData(false);
     fetchData();
   }
-  
+
+
   //删除
   function removeData(id){
-    remove(id).then((res)=>{
+    removeRequest(id).then((res)=>{
       const { success, msg} = res.data
       if(success){
         Notification.success({ content: msg, duration: 300 })
@@ -105,10 +108,7 @@ function SearchTable() {
       searchParam: formParams,
       orders: orders,
       columns: getSearChColumns(),
-      searchConfig: {
-        clientName: SearchTypeEnum.LIKE,
-        serverName: SearchTypeEnum.LIKE,
-      },
+      searchConfig: searchConfig,
     }).then((res) => {
       setData(res.data.data);
       setPatination({
@@ -159,7 +159,7 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'clientInfo', actions: ['update'] },
+          { resource: 'clientInfo', actions: ['add'] },
         ]}
       >
         <div className={styles['button-group']}>

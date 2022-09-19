@@ -93,17 +93,17 @@ public class ClientController extends BaseController<ClientInfoService, ClientIn
     }
 
     @SaCheckLogin
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions = {"#p1.applicationId","#p1.applicationName"},  actionType = EDIT_ACTION)
-    public R<Object> edit(@RequestBody @Validated({Update.class}) ClientInfoDto applicationInfoDto) {
-        return super.edit(applicationInfoDto);
+    public R<Object> update(@RequestBody @Validated({Update.class}) ClientInfoDto applicationInfoDto) {
+        return super.update(applicationInfoDto);
     }
 
     @SaCheckLogin
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
-    public R<Object> delete(@PathVariable("id")String id) {
-        return super.delete(id);
+    public R<Object> remove(@PathVariable("id")String id) {
+        return super.remove(id);
     }
 
 

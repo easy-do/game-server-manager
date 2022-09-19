@@ -69,40 +69,6 @@ public class GenerateServiceImpl implements GenerateService {
     @Autowired
     private DataSourceDbService dataSourceDbService;
 
-    /**
-     * 获取代码生成地址
-     *
-     * @param table    业务表信息
-     * @param template 模板文件路径
-     * @return 生成地址
-     */
-    @Deprecated
-    public static String getGenPath(GenTable table, String template) {
-        String genPath = table.getGenPath();
-        if (CharSequenceUtil.equals(genPath, "/")) {
-            return System.getProperty("user.dir") + File.separator + "src" + File.separator + VelocityUtils.getFileName(template, table);
-        }
-        return genPath + File.separator + VelocityUtils.getFileName(template, table);
-    }
-
-    /**
-     * 从本地文件获取模板
-     *
-     * @param genTable genTable
-     * @return java.util.List
-     * @author laoyu
-     */
-    Map<String, Template> getTemplatesForLocalhost(GenTable genTable) {
-        Map<String, Template> templates = new HashMap<>();
-        // 获取本地模板列表
-        VelocityInitializer.initVelocityClasspathResourceLoader();
-        List<String> filePaths = VelocityUtils.getTemplatePathList(genTable.getIsManager(), genTable.getTplCategory());
-        for (String filePath : filePaths) {
-            // 渲染模板
-            templates.put(filePath, Velocity.getTemplate(filePath, GenConstants.UTF8));
-        }
-        return templates;
-    }
 
     /**
      * 从数据库获取模板

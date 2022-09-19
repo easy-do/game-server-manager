@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { Form, FormInstance, Input, Modal, Spin } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { edit, infoRequest } from '@/api/template';
+import { updateRequest, infoRequest } from '@/api/template';
 import { GlobalContext } from '@/context';
 
 function UpdatePage(props: { id: number; visible; setVisible }) {
@@ -36,7 +36,7 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
   //提交修改
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
-      edit(values).then((res) => {
+      updateRequest(values).then((res) => {
         if (res.data.success) {
           props.setVisible(false);
         }
@@ -130,9 +130,6 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
         <Form.Item
           label={t['searchTable.columns.description']}
           field="description"
-          rules={[
-            { required: true, message: t['searchTable.rulesmsg.description'] },
-          ]}
         >
           <Input placeholder={t['searchForm.description.placeholder']} allowClear />
         </Form.Item>

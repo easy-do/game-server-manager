@@ -2,15 +2,12 @@ package game.server.manager.server.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import game.server.manager.log.SaveLog;
-import game.server.manager.server.dto.CommentDetailsDto;
 import game.server.manager.server.qo.AppInfoQo;
-import game.server.manager.server.qo.CommentDetailsQo;
 import game.server.manager.web.base.BaseController;
 import game.server.manager.common.vaild.Insert;
 import game.server.manager.common.vaild.Update;
 import game.server.manager.server.dto.AppInfoDto;
 import game.server.manager.server.entity.AppInfo;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.common.vo.AppInfoVo;
@@ -64,14 +61,14 @@ public class AppInfoController extends BaseController<AppInfoService, AppInfo, L
 
     @SaCheckLogin
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions = EDIT_EXPRESSIONS, actionType = EDIT_ACTION)
-    public R<Object> edit(@RequestBody @Validated({Update.class}) AppInfoDto appInfoDto) {
-        return super.edit(appInfoDto);
+    public R<Object> update(@RequestBody @Validated({Update.class}) AppInfoDto appInfoDto) {
+        return super.update(appInfoDto);
     }
 
     @SaCheckLogin
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
-    public R<Object> delete(@PathVariable("id") Long id) {
-        return super.delete(id);
+    public R<Object> remove(@PathVariable("id") Long id) {
+        return super.remove(id);
     }
 
 

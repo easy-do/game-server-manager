@@ -2,7 +2,6 @@ package game.server.manager.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
-import cn.dev33.satoken.exception.IdTokenInvalidException;
 import cn.dev33.satoken.id.SaIdUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.text.CharSequenceUtil;
@@ -77,15 +76,15 @@ public class SysDictDataController extends BaseController<SysDictDataService, Sy
     @Override
     @SaCheckLogin
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions = EDIT_EXPRESSIONS, actionType = EDIT_ACTION)
-    public R<Object> edit(@RequestBody @Validated({Update.class}) SysDictDataDto sysDictDataDto) {
-        return super.edit(sysDictDataDto);
+    public R<Object> update(@RequestBody @Validated({Update.class}) SysDictDataDto sysDictDataDto) {
+        return super.update(sysDictDataDto);
     }
 
     @Override
     @SaCheckLogin
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
-    public R<Object> delete(@PathVariable("id") Long id) {
-        return super.delete(id);
+    public R<Object> remove(@PathVariable("id") Long id) {
+        return super.remove(id);
     }
 
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)

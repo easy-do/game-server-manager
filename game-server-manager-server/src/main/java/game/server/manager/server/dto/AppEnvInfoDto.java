@@ -12,6 +12,9 @@ import java.io.Serializable;
 @Data
 public class AppEnvInfoDto implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     /**
      * 自增id
      */
@@ -52,6 +55,4 @@ public class AppEnvInfoDto implements Serializable {
      */
     private String description;
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { edit, infoRequest } from '@/api/template';
+import { updateRequest, infoRequest } from '@/api/template';
 import MEditor from '@/components/MEdit/mEdit';
 
 function EditCodePage(props: { id: number; visible; setVisible }) {
@@ -37,7 +37,7 @@ function EditCodePage(props: { id: number; visible; setVisible }) {
         id:props.id,
         templateCode:templateCode
       }
-      edit(param).then((res) => {
+      updateRequest(param).then((res) => {
         if (res.data.success) {
           props.setVisible(false);
         }

@@ -98,8 +98,8 @@ public abstract class BaseController<SERVICE extends BaseService<Entity, QO, VO,
      * @author laoyu
      * @date 2022/7/6
      */
-    @PostMapping("/edit")
-    public R<Object> edit(@RequestBody @Validated({Update.class}) DTO dto) {
+    @PostMapping("/update")
+    public R<Object> update(@RequestBody @Validated({Update.class}) DTO dto) {
     return baseService.edit(dto) ? DataResult.ok() : DataResult.fail();
     }
 
@@ -111,8 +111,8 @@ public abstract class BaseController<SERVICE extends BaseService<Entity, QO, VO,
      * @author laoyu
      * @date 2022/7/6
      */
-    @GetMapping("/delete/{id}")
-    public R<Object> delete( @PathVariable("id") ID id){
+    @GetMapping("/remove/{id}")
+    public R<Object> remove(@PathVariable("id") ID id){
         return baseService.delete(id) ? DataResult.ok() : DataResult.fail();
     }
 

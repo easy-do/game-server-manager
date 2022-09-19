@@ -59,17 +59,17 @@ return super.info(id);
     }
 
     @SaCheckLogin
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "服务管理", description = "编辑服务器: ?1 - ?2", expressions = {"#p1.id","#p1.serverName"},actionType = "编辑")
-    public R<Object> edit(@RequestBody @Validated({Update.class}) ServerInfoDto serverInfoDto) {
-        return super.edit(serverInfoDto);
+    public R<Object> update(@RequestBody @Validated({Update.class}) ServerInfoDto serverInfoDto) {
+        return super.update(serverInfoDto);
     }
 
     @SaCheckLogin
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "服务管理", description = "删除服务器: ?1", expressions = {"#p1"}, actionType = "删除")
-    public R<Object> delete(@PathVariable("id")Long id) {
-        return super.delete(id);
+    public R<Object> remove(@PathVariable("id")Long id) {
+        return super.remove(id);
     }
 
     @SaCheckLogin

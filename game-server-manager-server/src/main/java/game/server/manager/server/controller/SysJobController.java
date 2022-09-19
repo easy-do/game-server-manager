@@ -19,7 +19,6 @@ import game.server.manager.mybatis.plus.result.MpResultUtil;
 import game.server.manager.server.service.SysJobService;
 import game.server.manager.server.job.util.CronUtils;
 import game.server.manager.common.vo.SysJobVo;
-import game.server.manager.common.vo.UserInfoVo;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -111,7 +110,7 @@ public class SysJobController {
      * 修改定时任务
      */
     @SaCheckLogin
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "任务管理", description = "编辑任务: ?1 - ?2", expressions = {"#p1.jobId","#p1.jobName"}, actionType = "编辑")
     public R<Object> edit(@RequestBody @Validated({Update.class}) SysJobDto sysJobDto) throws TaskException, SchedulerException {
         SysJob sysJob = BeanUtil.copyProperties(sysJobDto, SysJob.class);

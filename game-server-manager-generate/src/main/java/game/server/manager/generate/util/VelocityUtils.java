@@ -53,8 +53,6 @@ public class VelocityUtils {
         Integer isInsert = genTable.getIsInsert();
         Integer isUpdate = genTable.getIsUpdate();
         Integer isRemove = genTable.getIsRemove();
-        Integer isWrapper = genTable.getIsWrapper();
-        Integer isManager = genTable.getIsManager();
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("tplCategory", genTable.getTplCategory());
@@ -78,8 +76,7 @@ public class VelocityUtils {
         velocityContext.put("isInsert", isInsert);
         velocityContext.put("isUpdate", isUpdate);
         velocityContext.put("isRemove", isRemove);
-        velocityContext.put("isWrapper", isWrapper);
-        velocityContext.put("isManager", isManager);
+
 
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory)) {
@@ -145,105 +142,6 @@ public class VelocityUtils {
         context.put("subClassName", subClassName);
         context.put("subclassName", CharSequenceUtil.lowerFirst(subClassName));
         context.put("subImportList", getImportList(genTable.getSubTable()));
-    }
-
-    /**
-     * 获取模板信息
-     *
-     * @param isManager   isManager
-     * @param tplCategory tplCategory
-     * @return java.util.List
-     * @author laoyu
-     */
-    @Deprecated
-    public static List<String> getTemplatePathList(Integer isManager, String tplCategory) {
-        List<String> templates = new ArrayList<>();
-        templates.add("vm/mp/java/entity.java.vm");
-        templates.add("vm/mp/java/qo.java.vm");
-        templates.add("vm/mp/java/vo.java.vm");
-        templates.add("vm/mp/java/dto.java.vm");
-        templates.add("vm/mp/java/mapper.java.vm");
-        templates.add("vm/mp/java/controller.java.vm");
-        templates.add("vm/mp/java/service.java.vm");
-        templates.add("vm/mp/java/serviceImpl.java.vm");
-        if (isManager == 1) {
-            templates.add("vm/mp/java/manager.java.vm");
-        }
-        templates.add("vm/mp/xml/mapper.xml.vm");
-        templates.add("vm/mp/sql/sql.vm");
-        templates.add("vm/mp/js/api.js.vm");
-        if (GenConstants.TPL_CRUD.equals(tplCategory)) {
-            templates.add("vm/mp/vue/index.vue.vm");
-        } else if (GenConstants.TPL_TREE.equals(tplCategory)) {
-            templates.add("vm/mp/vue/index-tree.vue.vm");
-        } else if (GenConstants.TPL_SUB.equals(tplCategory)) {
-            templates.add("vm/mp/vue/index.vue.vm");
-            templates.add("vm/mp/java/sub-domain.java.vm");
-        }
-        return templates;
-    }
-
-    /**
-     * 获取文件名
-     *
-     * @param template template
-     * @param genTable genTable
-     * @return java.lang.String
-     * @author laoyu
-     */
-    @Deprecated
-    public static String getFileName(String template, GenTable genTable) {
-        // 文件名称
-        String fileName = "";
-        // 包路径
-        String packageName = genTable.getPackageName();
-        // 模块名
-        String moduleName = genTable.getModuleName();
-        // 大写类名
-        String className = genTable.getClassName();
-        // 业务名称
-        String businessName = genTable.getBusinessName();
-
-        String javaPath = PROJECT_PATH + "/" + CharSequenceUtil.replace(packageName, ".", "/");
-        String mybatisPath = MYBATIS_PATH + "/" + moduleName;
-        String vuePath = "vue";
-
-        if (template.contains("domain.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/domain/{}.java", javaPath, className);
-        }
-        if (template.contains("entity.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/entity/{}.java", javaPath, className);
-        } else if (template.contains("qo.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/qo/{}Qo.java", javaPath, className);
-        } else if (template.contains("vo.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/vo/{}Vo.java", javaPath, className);
-        } else if (template.contains("dto.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/dto/{}Dto.java", javaPath, className);
-        }
-        if (template.contains("sub-domain.java.vm") && CharSequenceUtil.equals(GenConstants.TPL_SUB, genTable.getTplCategory())) {
-            fileName = CharSequenceUtil.format("{}/domain/{}.java", javaPath, genTable.getSubTable().getClassName());
-        } else if (template.contains("mapper.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/mapper/{}Mapper.java", javaPath, className);
-        } else if (template.contains("service.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/service/I{}Service.java", javaPath, className);
-        } else if (template.contains("serviceImpl.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
-        } else if (template.contains("manager.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/manager/{}Manager.java", javaPath, className);
-        } else if (template.contains("controller.java.vm")) {
-            fileName = CharSequenceUtil.format("{}/controller/{}Controller.java", javaPath, className);
-        } else if (template.contains("mapper.xml.vm")) {
-            fileName = CharSequenceUtil.format("{}/{}Mapper.xml", mybatisPath, className);
-        } else if (template.contains("sql.vm")) {
-            fileName = businessName + "Menu.sql";
-        } else if (template.contains("api.js.vm")) {
-            fileName = CharSequenceUtil.format("{}/api/{}/{}.js", vuePath, moduleName, businessName);
-        } else if (template.contains("index.vue.vm")) {
-            fileName = CharSequenceUtil.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
-        } else if (template.contains("index-tree.vue.vm")) {
-            fileName = CharSequenceUtil.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
-        }
-        return fileName;
     }
 
     /**

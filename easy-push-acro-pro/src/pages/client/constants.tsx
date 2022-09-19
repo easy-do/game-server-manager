@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { SearchTypeEnum } from '@/utils/systemConstant';
 
 export const Status = ['正常', '禁用'];
 
@@ -31,8 +32,24 @@ export function getSearChColumns(){
     'userName',
     'status',
     'clientData',
+    'createTime',
+    'updateTime',
     'lastUpTime',
+    'delFlag',
+    'publicKey',
+    'privateKey',
+    'createBy',
+    'updateBy',
       ];
+}
+
+// 搜索配置
+export function searchConfig() {
+  return {
+        'clientName': SearchTypeEnum.LIKE,
+        'serverName': SearchTypeEnum.LIKE,
+        'status': SearchTypeEnum.EQ,
+  }
 }
 
 //默认排序字段
@@ -48,36 +65,31 @@ export function getColumns(
 ) {
   return [
     {
-      title: t['searchTable.columns.id'],
-      dataIndex: 'id',
-      ellipsis:true
-    },
-    {
       title: t['searchTable.columns.clientName'],
       dataIndex: 'clientName',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.serverName'],
       dataIndex: 'serverName',
-    },
-    {
-      title: t['searchTable.columns.userName'],
-      dataIndex: 'userName',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.lastUpTime'],
       dataIndex: 'lastUpTime',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => (
-        <div>
+        <div>  
           <Button
             type="text"
             size="small"

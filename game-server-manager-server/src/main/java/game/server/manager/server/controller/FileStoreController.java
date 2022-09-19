@@ -72,7 +72,7 @@ public class FileStoreController {
     }
 
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     public R<FileStore> delete(@PathVariable("id") Long id) {
         return fileStoreService.removeById(id)?DataResult.ok():DataResult.fail();
     }

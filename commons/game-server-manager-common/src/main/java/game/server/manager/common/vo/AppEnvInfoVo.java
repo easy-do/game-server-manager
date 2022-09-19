@@ -18,6 +18,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class AppEnvInfoVo implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
+
 
     /**
      * 变量名称
@@ -49,6 +52,4 @@ public class AppEnvInfoVo implements Serializable {
      */
     private String description;
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 }

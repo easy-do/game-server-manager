@@ -111,7 +111,7 @@ public class SysRoleController {
      * 修改保存角色
      */
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions =  EDIT_EXPRESSIONS, actionType = BaseController.ADD_ACTION)
     public R<Object> edit(@Validated @RequestBody SysRoleDto dto) {
         if (sysRoleService.checkRoleNameUnique(dto)) {

@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react';
 import { Form, FormInstance, Input, Modal } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { add } from '@/api/roleManager';
+import { addRequest } from '@/api/roleManager';
 import { GlobalContext } from '@/context';
 
 function AddPage(props: { visible; setVisible }) {
@@ -14,7 +14,7 @@ function AddPage(props: { visible; setVisible }) {
 
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
-      add(values).then((res) => {
+      addRequest(values).then((res) => {
         if (res.data.success) {
           props.setVisible(false);
         }
