@@ -55,36 +55,36 @@ function SearchForm(props: {
         <Row gutter={24}>
           <Col span={colSpan}>
             <Form.Item
-              label={t['searchTable.columns.clientName']}
-              field="clientName"
+              label={t['searchTable.columns.dictLabel']}
+              field="dictLabel"
             >
-              <Input placeholder={t['searchForm.clientName.placeholder']} allowClear />
+              <Input placeholder={t['searchForm.dictLabel.placeholder']} allowClear />
             </Form.Item>
           </Col> 
           <Col span={colSpan}>
             <Form.Item
-              label={t['searchTable.columns.serverName']}
-              field="serverName"
+              label={t['searchTable.columns.dictKey']}
+              field="dictKey"
             >
-              <Input placeholder={t['searchForm.serverName.placeholder']} allowClear />
+              <Input placeholder={t['searchForm.dictKey.placeholder']} allowClear />
             </Form.Item>
           </Col> 
           <Col span={colSpan}>
-            <Form.Item 
+            <Form.Item
+              label={t['searchTable.columns.dictValueType']}
+              field="dictValueType"
+            >
+              <DictDataSelect dictCode={'dict_value_type'} placeholder={t['searchForm.dictValueType.placeholder']} />
+            </Form.Item>
+          </Col> 
+          <Col span={colSpan}>
+            <Form.Item
               label={t['searchTable.columns.status']}
               field="status"
             >
-              <Select
-                placeholder={t['searchForm.status.placeholder']}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                // mode="multiple"
-                allowClear
-              />
+              <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.status.placeholder']} />
             </Form.Item>
-          </Col>
+          </Col> 
         </Row>
       </Form>
       <div className={styles['right-button']}>

@@ -2,7 +2,13 @@ import { list } from '@/api/dictType';
 import { Select } from '@arco-design/web-react';
 import React, { useEffect, useState } from 'react';
 
-function DictTypeCodeSelect() {
+export interface props{
+  value?:string;
+  onChange?:(value)=>void;
+  placeholder?:string
+}
+
+function DictTypeCodeSelect(props?:props) {
 
   const [loading, setLoading] = useState(false);
 
@@ -29,9 +35,12 @@ function DictTypeCodeSelect() {
 
   return (
     <Select
+      value={props.value}
+      placeholder={props.placeholder}
       loading={loading}
       showSearch
       options={options}
+      onChange={props.onChange}
       filterOption={(inputValue, option) =>
         option.props.children.toLowerCase().indexOf(inputValue.toLowerCase()) >=
         0

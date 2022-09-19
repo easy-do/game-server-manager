@@ -7,7 +7,6 @@ import {
   Space,
   Typography,
   Notification,
-  Modal,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
 import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
@@ -15,72 +14,86 @@ import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
-import { managerPage, remove } from '@/api/dictType';
+import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
+import { managerPage, remove } from '@/api/dictData';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
+import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
-import DictDataSearchTable from '../data';
 
 const { Title } = Typography;
 
-function SearchTable() {
+export interface props{
+  dictTypeId:number
+}
+
+function DictDataSearchTable(props:props) {
   const t = useLocale(locale);
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
-    console.log(record, type);
+    //查看
+    if (type === 'view') {
+      viewInfo(record.id);
+    }
+
     //编辑
     if (type === 'update') {
       updateInfo(record.id);
     }
+
     //删除
     if (type === 'remove') {
       removeData(record.id);
     }
-    //编辑字典数据
-    if (type === 'updateDictData') {
-      updateDictData(record.id);
-    }
-
   };
 
 
-  const [updateId, setUpdateId] = useState();
-  const [isUpdateInfo, setisUpdateInfo] = useState(false);
+  //查看
+  const [viewInfoId, setViewInfoId] = useState();
+  const [isViewInfo, setisViewInfo] = useState(false);
+
+  function viewInfo(id) {
+    setViewInfoId(id);
+    setisViewInfo(true);
+  }
 
   //新增
   const [isAddData, setIsAddData] = useState(false);
 
-  function addData() {
+  function addData(){
     setIsAddData(true);
   }
+  
+  function addDataSuccess() {
+    setIsAddData(false);
+    fetchData();
+  }
+
+  const [updateId, setUpdateId] = useState();
+  const [isUpdateInfo, setisUpdateInfo] = useState(false);
 
   //编辑
   function updateInfo(id) {
     setUpdateId(id);
     setisUpdateInfo(true);
   }
+  
+  function updateSuccess() {
+    setisUpdateInfo(false);
+    fetchData();
+  }
 
   //删除
-  function removeData(id) {
-    remove(id).then((res) => {
-      const { success, msg } = res.data
-      if (success) {
+  function removeData(id){
+    remove(id).then((res)=>{
+      const { success, msg} = res.data
+      if(success){
         Notification.success({ content: msg, duration: 300 })
         fetchData();
       }
     })
-  }
-
-  const [dictId, setDictId] = useState();
-  const [isUpdateDictData, setIsUpdateDictData] = useState(false);
-
-  //编辑字典数据
-  function updateDictData(dictId) {
-    setDictId(dictId)
-    setIsUpdateDictData(true)
   }
 
   //获取表格展示列表、绑定操作列回调
@@ -105,19 +118,25 @@ function SearchTable() {
     pagination.pageSize,
     JSON.stringify(formParams),
     orders,
+    props.dictTypeId
   ]);
 
   // 获取数据
   function fetchData() {
+    const newDormParams:any = formParams;
+    newDormParams.dictTypeId = props.dictTypeId;
     const { current, pageSize } = pagination;
     setLoading(true);
     managerPage({
       currentPage: current,
       pageSize,
-      searchParam: formParams,
+      searchParam: newDormParams,
       orders: orders,
       columns: getSearChColumns(),
-      searchConfig: searchConfig
+      searchConfig: {
+        nickName: SearchTypeEnum.LIKE,
+        createTime: SearchTypeEnum.BETWEEN,
+      },
     }).then((res) => {
       setData(res.data.data);
       setPatination({
@@ -168,12 +187,12 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'dictType', actions: ['update'] },
+          { resource: 'sysDictData', actions: ['add'] },
         ]}
       >
         <div className={styles['button-group']}>
           <Space>
-            <Button type="primary" icon={<IconPlus />} onClick={() => addData()}>
+            <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
               {t['searchTable.operations.add']}
             </Button>
           </Space>
@@ -190,30 +209,21 @@ function SearchTable() {
       <AddPage
         visible={isAddData}
         setVisible={setIsAddData}
+        successCallBack={addDataSuccess}
+      />
+      <InfoPage
+        id={viewInfoId}
+        visible={isViewInfo}
+        setVisible={setisViewInfo}
       />
       <UpdatePage
         id={updateId}
         visible={isUpdateInfo}
         setVisible={setisUpdateInfo}
+        successCallBack={updateSuccess}
       />
-      <Modal
-        style={{minHeight:'100%',width:'100%'}}
-        title={t['searchTable.update.title']}
-        visible={isUpdateDictData}
-        onOk={() => {
-          setIsUpdateDictData(false);
-        }}
-        onCancel={() => {
-          setIsUpdateDictData(false);
-        }}
-        autoFocus={false}
-        focusLock={true}
-      >
-        <DictDataSearchTable dictTypeId={dictId} />
-      </Modal>
-
     </Card>
   );
 }
 
-export default SearchTable;
+export default DictDataSearchTable;

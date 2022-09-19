@@ -1,42 +1,45 @@
 import React from 'react';
-import { Button, Typography, Badge, Popconfirm, Link } from '@arco-design/web-react';
-import { SearchTypeEnum } from '@/utils/systemConstant';
+import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
 
-export const Status = ['正常', '禁用'];
+
+export const Status = ['开启', '禁用'];
+
 
 export interface DataInfoVo{
-    remark: string,
-    updateTime: string,
-    updateBy: string,
-    createTime: string,
-    createBy: string,
-    status: string,
-    dictCode: string,
-    dictName: string,
     id: string,
+    dictTypeId: string,
+    dictSort: string,
+    dictLabel: string,
+    dictKey: string,
+    dictValue: string,
+    dictValueType: string,
+    isDefault: string,
+    status: string,
+    createBy: string,
+    createTime: string,
+    updateBy: string,
+    updateTime: string,
+    remark: string,
 }
 
 // 后台sql查询字段
 export function getSearChColumns(){
     return [
-    'remark',
-    'updateTime',
-    'updateBy',
-    'createTime',
-    'createBy',
-    'status',
-    'dictCode',
-    'dictName',
     'id',
+    'dictTypeId',
+    'dictSort',
+    'dictLabel',
+    'dictKey',
+    'dictValue',
+    'dictValueType',
+    'isDefault',
+    'status',
+    'createBy',
+    'createTime',
+    'updateBy',
+    'updateTime',
+    'remark',
       ];
-}
-
-// 搜索配置
-export function searchConfig() {
-  return {
-    nickName: SearchTypeEnum.LIKE,
-    createTime: SearchTypeEnum.BETWEEN,
-  }
 }
 
 //默认排序字段
@@ -52,44 +55,51 @@ export function getColumns(
 ) {
   return [
     {
-      title: t['searchTable.columns.id'],
-      dataIndex: 'id',
+      title: t['searchTable.columns.dictLabel'],
+      dataIndex: 'dictLabel',
+      ellipsis:true,
     },
     {
-      title: t['searchTable.columns.dictName'],
-      dataIndex: 'dictName',
+      title: t['searchTable.columns.dictKey'],
+      dataIndex: 'dictKey',
+      ellipsis:true,
     },
     {
-      title: t['searchTable.columns.dictCode'],
-      // dataIndex: 'dictCode',
-      render: (_col, record) => (
-        <div>
-         <Link onClick={() => callback(record, 'updateDictData')}>{record.dictCode}</Link>
-        </div>
-      ),
+      title: t['searchTable.columns.dictValueType'],
+      dataIndex: 'dictValueType',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
+      ellipsis:true,
+      render:(_cell,record)=>(
+        Status[record.status]
+      ),
     },
     {
-      title: t['searchTable.columns.createTime'],
-      dataIndex: 'createTime',
-    },
-    {
-      title: t['searchTable.columns.updateTime'],
-      dataIndex: 'updateTime',
+      title: t['searchTable.columns.dictSort'],
+      dataIndex: 'dictSort',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.remark'],
       dataIndex: 'remark',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => (
-        <div>
+        <div>  
+          <Button
+            type="text"
+            size="small"
+            onClick={() => callback(record, 'view')}
+          >
+            {t['searchTable.columns.operations.view']}
+          </Button>
           <Button
             type="text"
             size="small"

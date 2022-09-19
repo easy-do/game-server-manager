@@ -161,7 +161,7 @@ public class GenerateServiceImpl implements GenerateService {
             TemplateManagementVo vo = entry.getKey();
             Template template = entry.getValue();
             template.merge(context, stringWriter);
-            dataMap.put(vo.getFilePath(), stringWriter.toString());
+            dataMap.put(vo.getTemplateName(), stringWriter.toString());
         }
         return dataMap;
     }

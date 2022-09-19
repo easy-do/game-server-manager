@@ -127,6 +127,26 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
       ),
     },
     {
+      title: t['searchTable.columns.isInfo'],
+      dataIndex: 'isInfo',
+      editable: true,
+      render: (_, record) => (
+        <FormItem
+          style={{ marginBottom: 0 }}
+          labelCol={{ span: 0 }}
+          wrapperCol={{ span: 24 }}
+          initialValue={record.isInfo}
+          field="isInfo"
+          rules={[{ required: true }]}
+        >
+          <Radio.Group type="button">
+            <Radio value={'1'}>是</Radio>
+            <Radio value={'0'}>否</Radio>
+          </Radio.Group>
+        </FormItem>
+      ),
+    },
+    {
       title: t['searchTable.columns.isQuery'],
       dataIndex: 'isQuery',
       editable: true,
@@ -321,6 +341,7 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
           column.dataIndex === 'isRequired' ||
           column.dataIndex === 'isQuery' ||
           column.dataIndex === 'isInsert' ||
+          column.dataIndex === 'isInfo' ||
           column.dataIndex === 'isEdit' ? (
             <FormItem
               style={{ marginBottom: 0 }}
@@ -361,6 +382,7 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
 
   //编辑表格保存回调函数
   function handleSave(row) {
+    console.info(row)
     const newData = [...columnTableData];
     const index = newData.findIndex((item) => row.columnId === item.columnId);
     newData.splice(index, 1, { ...newData[index], ...row });
@@ -455,6 +477,7 @@ function EditColumnsPage({ loading, columnTableData, setColumnTableData }) {
       cell: EditableCell,
     },
   };
+  
 
   return (
     <div>
