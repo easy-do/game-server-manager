@@ -10,7 +10,8 @@ public enum ResourceTypeEnum {
     /**/
     MENU("M","菜单"),
     INTERFACE("I","接口"),
-    ACTION("A","操作");
+    ACTION("A","操作"),
+    LINK("L","链接");
 
 
     private final String type;
