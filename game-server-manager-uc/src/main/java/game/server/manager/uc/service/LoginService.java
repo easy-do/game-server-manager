@@ -17,6 +17,7 @@ import game.server.manager.uc.entity.UserInfo;
 import game.server.manager.uc.mapstruct.UserInfoMapstruct;
 import me.zhyd.oauth.model.AuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import game.server.manager.common.exception.BizException;
@@ -175,7 +176,8 @@ public class LoginService {
     }
 
     //TODO 改造为消息发布
-    private UserInfoVo setUserLastLoginDetails(UserInfoVo userInfoVo){
+    @Async
+    public void setUserLastLoginDetails(UserInfoVo userInfoVo){
         LocalDateTime loginTime = LocalDateTime.now();
         String ip = IpRegionSearchUtil.searchRequestIp();
         UserInfo userinfo = UserInfo.builder()
@@ -185,11 +187,11 @@ public class LoginService {
             userInfoVo.setLoginIp(ip);
         }
         userInfoService.updateById(userinfo);
-        return userInfoVo;
     }
 
     //TODO 改造为消息发布
-    private UserInfo setUserLastLoginDetails(UserInfo userInfo){
+    @Async
+    public void setUserLastLoginDetails(UserInfo userInfo){
         LocalDateTime loginTime = LocalDateTime.now();
         String ip = IpRegionSearchUtil.searchRequestIp();
         UserInfo userinfoEntity = UserInfo.builder()
@@ -200,9 +202,16 @@ public class LoginService {
             userInfo.setLoginIp(ip);
         }
         userInfoService.updateById(userinfoEntity);
-        return userInfo;
     }
 
+    /**
+     * 构建用户角色和权限信息
+     *
+     * @param userInfoVo userInfoVo
+     * @return void
+     * @author laoyu
+     * @date 2022/9/20
+     */
     private void buildUserRoleAndPermission(UserInfoVo userInfoVo) {
         Long userId = userInfoVo.getId();
         List<String> roleList = sysRoleService.selectRolesByUserId(userId).stream().map(SysRoleVo::getRoleKey).toList();

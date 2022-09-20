@@ -7,6 +7,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -29,7 +30,6 @@ import game.server.manager.uc.mapstruct.SysResourceMapstruct;
 import game.server.manager.uc.mapper.SysResourceMapper;
 import game.server.manager.uc.service.SysResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 /**
@@ -188,7 +187,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      * @date 2022/9/20
      */
     @Override
-    public List<Tree<Long>> resourceTreeSelect() {
+    public List<Tree<Long>> resourceTree() {
         LambdaQueryWrapper<SysResource> wrapper = Wrappers.lambdaQuery();
         wrapper.select(SysResource::getId, SysResource::getResourceName, SysResource::getParentId, SysResource::getStatus);
         wrapper.eq(SysResource::getStatus, StatusEnum.ENABLE);
@@ -314,17 +313,40 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     }
 
     @Override
-    @Cacheable(value = "userPermission", key = "#userId")
     public List<String> userPermissionList(Long userId) {
         List<Long> roleIds = sysUserRoleService.getRoleIdListByUserId(userId);
         if(roleIds.isEmpty()){
             return ListUtil.empty();
         }
         List<SysResource> menuList = getRoleResourceList(roleIds);
-        return menuList.stream().map(SysResource::getResourceCode).toList();
+        List<Tree<Long>> treeList = buildResourceTree(menuList);
+        List<String> permissions = new ArrayList<>();
+        buildPermissions("",permissions,treeList);
+        return permissions;
     }
 
-    @Override
+    private void buildPermissions(String prefix, List<String> permissions, List<Tree<Long>> treeList) {
+        String p = ":";
+        treeList.forEach(longTree -> {
+            String permissionCode = "";
+            if(longTree.getParentId() != 0){
+                Object code = longTree.get("perms");
+                if(Objects.nonNull(code)){
+                    if(CharSequenceUtil.isBlank(prefix)){
+                        permissionCode = (String) code;
+                    }else {
+                        permissionCode = prefix + p + code;
+                    }
+                    permissions.add(permissionCode);
+                }
+            }
+            if(Objects.nonNull(longTree.getChildren())){
+                buildPermissions(permissionCode,permissions,longTree.getChildren());
+            }
+        });
+    }
+
+        @Override
     public Map<String, List<String>> userResourceAction(Long userId) {
         List<Long> roleIds = sysUserRoleService.getRoleIdListByUserId(userId);
         if(roleIds.isEmpty()){
@@ -345,7 +367,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
             treeNode.setName(sysResource.getResourceName());
             treeNode.setWeight(sysResource.getOrderNumber());
             treeNode.putExtra("type",sysResource.getResourceType());
-            treeNode.putExtra("perms",sysResource.getResourceCode());
+            treeNode.putExtra("resourceCode",sysResource.getResourceCode());
         };
         Long min = resourceList.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();
         List<Tree<Long>> treeList = TreeUtil.build(resourceList, min, treeNodeConfig, nodeParser);
@@ -362,13 +384,14 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
                 buildResourceAction(actionMap,tree.getChildren());
             }else if(type.equals(ResourceTypeEnum.MENU.getType()) && !isChildrenMenu(tree)){
                 //是菜单 但子节点已经不存在菜单 直接组装
-                String perms = (String) tree.get("perms");
+                String perms = (String) tree.get("resourceCode");
                 List<Tree<Long>> children = tree.getChildren();
                 if(Objects.nonNull(children)){
-                    List<String> actions = children.stream().map(tree1 -> (String)tree1.get("perms")).toList();
-                    actionMap.put(perms,actions);
-                }else {
-                    actionMap.put(perms, List.of("*"));
+                    List<Tree<Long>> actionsResource = children.stream().filter(longTree -> ResourceTypeEnum.ACTION.getType().equals(longTree.get("type").toString())).toList();
+                    if(!actionsResource.isEmpty()){
+                        List<String> actions = actionsResource.stream().map(tree1 -> tree1.get("resourceCode").toString()).toList();
+                        actionMap.put(perms,actions);
+                    }
                 }
             }
         });
@@ -400,11 +423,11 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     private List<SysResource> getRoleResourceList(List<Long> roleIds) {
         LambdaQueryWrapper<SysRoleResource> roleMenuWrapper = Wrappers.lambdaQuery();
         roleMenuWrapper.in(SysRoleResource::getRoleId, roleIds);
-        List<SysRoleResource> roleMenuList = sysRoleResourceService.list(roleMenuWrapper);
-        if (roleMenuList.isEmpty()) {
+        List<SysRoleResource> roleResources = sysRoleResourceService.list(roleMenuWrapper);
+        if (roleResources.isEmpty()) {
             return ListUtil.empty();
         }
-        List<Long> resourceIds = roleMenuList.stream().map(SysRoleResource::getResourceId).toList();
+        List<Long> resourceIds = roleResources.stream().map(SysRoleResource::getResourceId).toList();
         LambdaQueryWrapper<SysResource> menuWrapper = Wrappers.lambdaQuery();
         menuWrapper.in(SysResource::getId, resourceIds);
         menuWrapper.in(SysResource::getStatus, StatusEnum.ENABLE);
@@ -426,17 +449,15 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
         }
         List<SysResourceVo> voList = SysResourceMapstruct.INSTANCE.entityToVo(sysResourceList);
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
-        treeNodeConfig.setIdKey("value");
-        treeNodeConfig.setNameKey("label");
-        treeNodeConfig.setChildrenKey("children");
         NodeParser<SysResourceVo, Long> nodeParser = (sysResourceVo, treeNode) -> {
             treeNode.setId(sysResourceVo.getId());
             treeNode.setParentId(sysResourceVo.getParentId());
             treeNode.setName(sysResourceVo.getResourceName());
             treeNode.setWeight(sysResourceVo.getOrderNumber());
             treeNode.putExtra("details", sysResourceVo);
-            treeNode.putExtra("key", sysResourceVo.getId());
-            treeNode.putExtra("visible", sysResourceVo.getVisible());
+            treeNode.putExtra("key", sysResourceVo.getPath());
+            treeNode.putExtra("resourceCode", sysResourceVo.getResourceCode());
+            treeNode.putExtra("visible", StatusEnum.DISABLE.getCode().equals(sysResourceVo.getVisible()));
         };
         Long min = voList.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();
         return TreeUtil.build(voList, min, treeNodeConfig, nodeParser);

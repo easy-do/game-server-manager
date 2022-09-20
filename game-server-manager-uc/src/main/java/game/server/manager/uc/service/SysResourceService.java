@@ -48,7 +48,7 @@ public interface SysResourceService extends BaseService<SysResource, SysResource
      * @author laoyu
      * @date 2022/9/20
      */
-    List<Tree<Long>> resourceTreeSelect();
+    List<Tree<Long>> resourceTree();
 
     /**
      * 根据类型获取资源列表(带详情)

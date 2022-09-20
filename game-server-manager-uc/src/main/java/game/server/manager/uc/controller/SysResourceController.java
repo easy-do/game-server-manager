@@ -136,9 +136,9 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
      * 获取所有资源下拉树
      */
     @SaCheckLogin
-    @GetMapping("/resourceTreeSelect")
-    public R<List<Tree<Long>>> resourceTreeSelect() {
-        return DataResult.ok(baseService.resourceTreeSelect());
+    @GetMapping("/resourceTree")
+    public R<List<Tree<Long>>> resourceTree() {
+        return DataResult.ok(baseService.resourceTree());
     }
 
 

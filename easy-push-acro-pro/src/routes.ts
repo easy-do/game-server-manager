@@ -11,9 +11,8 @@ export type IRoute = AuthParams & {
   visible?: boolean;
   // 是否禁用
   disabled?: false
-  isFrame?: 1
   icon?: string;
-  menuType?: string;
+  details?: any;
 };
 
 
