@@ -12,6 +12,7 @@ import game.server.manager.common.utils.IpRegionSearchUtil;
 import game.server.manager.common.vo.SysRoleVo;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.uc.dto.LoginModel;
+import game.server.manager.uc.entity.SysResource;
 import game.server.manager.uc.entity.UserInfo;
 import game.server.manager.uc.mapstruct.UserInfoMapstruct;
 import me.zhyd.oauth.model.AuthUser;
@@ -41,7 +42,7 @@ public class LoginService {
     private SysRoleService sysRoleService;
 
     @Autowired
-    private SysMenuService sysMenuService;
+    private SysResourceService sysResourceService;
 
     @Autowired
     private EmailService emailService;
@@ -205,12 +206,14 @@ public class LoginService {
     private void buildUserRoleAndPermission(UserInfoVo userInfoVo) {
         Long userId = userInfoVo.getId();
         List<String> roleList = sysRoleService.selectRolesByUserId(userId).stream().map(SysRoleVo::getRoleKey).toList();
-        List<String> permissionList = sysMenuService.userPermissionList(userId);
+        List<String> permissionList = sysResourceService.userPermissionList(userId);
         userInfoVo.setRoles(roleList);
         userInfoVo.setPermissions(permissionList);
-        Map<String,List<String>> resourceAction = sysMenuService.userResourceAction(userId);
+        Map<String,List<String>> resourceAction = sysResourceService.userResourceAction(userId);
         userInfoVo.setResourceAction(resourceAction);
     }
+
+
 
     public void logout() {
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();

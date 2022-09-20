@@ -49,6 +49,8 @@ public class SysResourceVo implements Serializable {
     private String param;
     /** 是否缓存 */
     private Long isCache;
+    /** 是否隐藏 */
+    private Integer visible;
     /** 状态 */
     private Long status;
     /** 图标 */

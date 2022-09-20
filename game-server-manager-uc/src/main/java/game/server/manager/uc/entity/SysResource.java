@@ -62,8 +62,11 @@ public class SysResource implements Serializable {
     /** 是否缓存 */
     private Long isCache;
 
+    /** 是否隐藏 */
+    private Integer visible;
+
     /** 状态 */
-    private Long status;
+    private Integer status;
 
     /** 图标 */
     private String icon;

@@ -70,6 +70,10 @@ public class SysResourceDto implements Serializable {
     @NotNull(message = "是否缓存必填",groups = {Insert.class, Update.class})
     private Long isCache;
 
+
+    /** 是否隐藏 */
+    private Integer visible;
+
     /** 状态 */
 
     @NotNull(message = "状态必填",groups = {Insert.class, Update.class})
@@ -77,7 +81,6 @@ public class SysResourceDto implements Serializable {
 
     /** 图标 */
 
-    @NotNull(message = "图标必填",groups = {Insert.class, Update.class})
     private String icon;
 
     /** 创建者 */
@@ -94,7 +97,6 @@ public class SysResourceDto implements Serializable {
 
     /** 备注 */
 
-    @NotNull(message = "备注必填",groups = {Insert.class, Update.class})
     private String remark;
 
     /** 删除标记 */
