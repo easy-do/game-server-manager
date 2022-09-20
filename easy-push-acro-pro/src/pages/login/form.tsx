@@ -1,7 +1,6 @@
 import {
   Form,
   Input,
-  Checkbox,
   Link,
   Button,
   Space,
@@ -17,8 +16,8 @@ import styles from './style/index.module.less';
 import { loginRequst } from '@/api/oauth';
 import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
-import { userMenu } from '@/api/menuManager';
 import { IRoute, staticRoutes } from '@/routes';
+import { userResource } from '@/api/resource';
 
 export default function LoginForm() {
   const formRef = useRef<FormInstance>();
@@ -85,7 +84,7 @@ export default function LoginForm() {
       });
 
       // 获取菜单
-      userMenu().then((res) => {
+      userResource().then((res) => {
         const { success } = res.data;
         const data: IRoute[] = res.data.data;
         if (success) {

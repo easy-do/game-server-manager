@@ -118,7 +118,9 @@ function PageLayout() {
     routeMap.current.clear();
     return function travel(_routes: IRoute[], level, parentNode = []) {
       return _routes.map((route) => {
-        const { breadcrumb = true, visible: ignore } = route;
+        const { breadcrumb = true, visible: ignore, details } = route;
+        //是菜单类型才构建
+        if(details && details.resourceType === 'M'){
         //获取菜单图标
         const iconDom = getIconFromKey(route.key);
         //菜单标题
@@ -134,17 +136,17 @@ function PageLayout() {
           breadcrumb ? [...parentNode, route.name] : []
         );
 
-        //过滤出显示的菜单？
+        //过滤出需要继续递归的菜单？
         const visibleChildren = (route.children || []).filter((child) => {
-          const { visible: ignore, breadcrumb = true } = child;
-          if (ignore || route.visible) {
+          const { visible: ignore, breadcrumb = true, details } = child;
+          if (ignore || route.visible || details.resourceType !== 'M') {
             routeMap.current.set(
               `/${child.key}`,
               breadcrumb ? [...parentNode, route.name, child.name] : []
             );
           }
-
-          return !ignore;
+          //未设置隐藏、并且是菜单
+          return !ignore && details.resourceType === 'M';
         });
 
         //如果不展示只是路由则不组装直接返回空
@@ -163,6 +165,7 @@ function PageLayout() {
         //到底了，直接返回子菜单组件
         menuMap.current.set(route.key, { menuItem: true });
         return <MenuItem key={route.key}>{titleDom}</MenuItem>;
+        }
       });
     };
   }
