@@ -15,6 +15,7 @@ import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
 import { Status } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
+import ResourceTreeSelect from './resourceSelectTree';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
@@ -70,21 +71,13 @@ function SearchForm(props: {
             </Form.Item>
           </Col> 
           <Col span={colSpan}>
-            <Form.Item 
+            <Form.Item
               label={t['searchTable.columns.resourceType']}
               field="resourceType"
             >
-              <Select
-                placeholder={t['searchForm.resourceType.placeholder']}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                // mode="multiple"
-                allowClear
-              />
+              <DictDataSelect dictCode={'system_resource_type'} placeholder={t['searchForm.resourceType.placeholder']} />
             </Form.Item>
-          </Col>
+          </Col> 
           <Col span={colSpan}>
             <Form.Item
               label={t['searchTable.columns.path']}
@@ -107,6 +100,14 @@ function SearchForm(props: {
               field="status"
             >
               <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.status.placeholder']} />
+            </Form.Item>
+          </Col> 
+          <Col span={colSpan}>
+            <Form.Item
+              label={t['searchTable.columns.parentId']}
+              field="parentId"
+            >
+              <ResourceTreeSelect/>
             </Form.Item>
           </Col> 
         </Row>

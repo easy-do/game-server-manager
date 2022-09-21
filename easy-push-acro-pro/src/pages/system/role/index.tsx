@@ -6,20 +6,22 @@ import {
   Button,
   Space,
   Typography,
+  Notification,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { IconPlus } from '@arco-design/web-react/icon';
+import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
-import { managerPage } from '@/api/roleManager';
+import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
+import { managerPage, removeRequest } from '@/api/role';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
+import RoleAuthPage from './roleAuth';
 
 const { Title } = Typography;
 
@@ -28,40 +30,86 @@ function SearchTable() {
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
-    console.log(record, type);
     //查看
     if (type === 'view') {
       viewInfo(record.roleId);
     }
+
     //编辑
     if (type === 'update') {
       updateInfo(record.roleId);
     }
+
+    //删除
+    if (type === 'remove') {
+      removeData(record.roleId);
+    }
+
+    //授权
+    if (type === 'auth') {
+      roleAuth(record.roleId);
+    }
   };
 
-  const [viewInfoId, setViewInfoId] = useState();
-  const [isViewInfo, setIsViewInfo] = useState(false);
 
   //查看
+  const [viewInfoId, setViewInfoId] = useState();
+  const [isViewInfo, setisViewInfo] = useState(false);
+
   function viewInfo(id) {
     setViewInfoId(id);
-    setIsViewInfo(true);
+    setisViewInfo(true);
   }
 
   //新增
   const [isAddData, setIsAddData] = useState(false);
 
-  function addData(){
+  function addData() {
     setIsAddData(true);
   }
 
+  function addDataSuccess() {
+    setIsAddData(false);
+    fetchData();
+  }
+
   const [updateId, setUpdateId] = useState();
-  const [isUpdateInfo, setIsUpdateInfo] = useState(false);
+  const [isUpdateInfo, setisUpdateInfo] = useState(false);
 
   //编辑
   function updateInfo(id) {
     setUpdateId(id);
-    setIsUpdateInfo(true);
+    setisUpdateInfo(true);
+  }
+
+  function updateSuccess() {
+    setisUpdateInfo(false);
+    fetchData();
+  }
+
+  //删除
+  function removeData(id) {
+    removeRequest(id).then((res) => {
+      const { success, msg } = res.data
+      if (success) {
+        Notification.success({ content: msg, duration: 300 })
+        fetchData();
+      }
+    })
+  }
+
+  //授权
+  const [roleAuthId, setRoleAuthId] = useState();
+  const [isRoleAuth, setisRoleAuth] = useState(false);
+
+  function roleAuth(id) {
+    setRoleAuthId(id);
+    setisRoleAuth(true);
+  }
+
+  function roleAuthSuccessCallback() {
+    setisRoleAuth(false);
+    fetchData();
   }
 
   //获取表格展示列表、绑定操作列回调
@@ -98,10 +146,7 @@ function SearchTable() {
       searchParam: formParams,
       orders: orders,
       columns: getSearChColumns(),
-      searchConfig: {
-        nickName: SearchTypeEnum.LIKE,
-        createTime: SearchTypeEnum.BETWEEN,
-      },
+      searchConfig: searchConfig,
     }).then((res) => {
       setData(res.data.data);
       setPatination({
@@ -148,23 +193,21 @@ function SearchTable() {
 
   return (
     <Card>
-      <Title heading={6}>{t['menu.list.searchTable']}</Title>
+      <Title heading={6}>{t['list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
-      
-      {/* 按钮权限控制 */}
-      {/* <PermissionWrapper
+      <PermissionWrapper
         requiredPermissions={[
-          { resource: 'menu.list.searchTable', actions: ['read'] },
+          { resource: 'uc:role', actions: ['add'] },
         ]}
-      > */}
+      >
         <div className={styles['button-group']}>
           <Space>
-            <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
+            <Button type="primary" icon={<IconPlus />} onClick={() => addData()}>
               {t['searchTable.operations.add']}
             </Button>
           </Space>
         </div>
-      {/* </PermissionWrapper> */}
+      </PermissionWrapper>
       <Table
         rowKey="id"
         loading={loading}
@@ -173,20 +216,23 @@ function SearchTable() {
         columns={columns}
         data={data}
       />
-      <InfoPage
-        id={viewInfoId}
-        visible={isViewInfo}
-        setVisible={setIsViewInfo}
-      />
       <AddPage
         visible={isAddData}
         setVisible={setIsAddData}
+        successCallBack={addDataSuccess}
+      />
+      <InfoPage
+        id={viewInfoId}
+        visible={isViewInfo}
+        setVisible={setisViewInfo}
       />
       <UpdatePage
         id={updateId}
         visible={isUpdateInfo}
-        setVisible={setIsUpdateInfo}
+        setVisible={setisUpdateInfo}
+        successCallBack={updateSuccess}
       />
+      <RoleAuthPage roleId={roleAuthId} visible={isRoleAuth} setVisible={setisRoleAuth} successCallBack={roleAuthSuccessCallback} />
     </Card>
   );
 }

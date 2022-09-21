@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author laoyu
@@ -94,7 +95,7 @@ public class UserInfoVo implements Serializable {
 
     private List<String> roles;
 
-    private List<String> permissions;
+    private Set<String> permissions;
 
     private Map<String,List<String>> resourceAction;
 

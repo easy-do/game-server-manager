@@ -22,5 +22,5 @@ public class AuthRoleMenuDto  implements Serializable {
     private Long roleId;
 
     @NotNull(message = "授权资源不能为空")
-    private List<Long> menuIds;
+    private List<Long> resourceIds;
 }

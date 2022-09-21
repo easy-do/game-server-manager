@@ -11,6 +11,7 @@ import game.server.manager.uc.entity.SysResource;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -117,7 +118,7 @@ public interface SysResourceService extends BaseService<SysResource, SysResource
      * @author laoyu
      * @date 2022/9/20
      */
-    List<String> userPermissionList(Long userId);
+    Set<String> userPermissionList(Long userId);
 
     /**
      * 获取用户资源权限结构数据

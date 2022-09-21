@@ -3,6 +3,8 @@ import dayjs from 'dayjs';
 import {
   Form,
   Input,
+  Select,
+  DatePicker,
   Button,
   Grid,
 } from '@arco-design/web-react';
@@ -11,16 +13,22 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
+import { Status } from './constants';
+import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
+const TextArea = Input.TextArea;
 
 function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
 }) {
+  
+  
   const { lang } = useContext(GlobalContext);
 
   const t = useLocale(locale);
+  
   const [form] = useForm();
 
   const handleSubmit = () => {
@@ -46,65 +54,21 @@ function SearchForm(props: {
       >
         <Row gutter={24}>
           <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.delFlag']} field="delFlag">
-              <Input placeholder={t['searchForm.delFlag.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.remark']} field="remark">
-              <Input placeholder={t['searchForm.remark.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.updateTime']} field="updateTime">
-              <Input placeholder={t['searchForm.updateTime.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.updateBy']} field="updateBy">
-              <Input placeholder={t['searchForm.updateBy.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.createTime']} field="createTime">
-              <Input placeholder={t['searchForm.createTime.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.createBy']} field="createBy">
-              <Input placeholder={t['searchForm.createBy.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.status']} field="status">
-              <Input placeholder={t['searchForm.status.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.isDefault']} field="isDefault">
-              <Input placeholder={t['searchForm.isDefault.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.roleSort']} field="roleSort">
-              <Input placeholder={t['searchForm.roleSort.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.roleKey']} field="roleKey">
-              <Input placeholder={t['searchForm.roleKey.placeholder']} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.roleName']} field="roleName">
+            <Form.Item
+              label={t['searchTable.columns.roleName']}
+              field="roleName"
+            >
               <Input placeholder={t['searchForm.roleName.placeholder']} allowClear />
             </Form.Item>
-          </Col>
+          </Col> 
           <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.roleId']} field="roleId">
-              <Input placeholder={t['searchForm.roleId.placeholder']} allowClear />
+            <Form.Item
+              label={t['searchTable.columns.status']}
+              field="status"
+            >
+              <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.status.placeholder']} />
             </Form.Item>
-          </Col>
+          </Col> 
         </Row>
       </Form>
       <div className={styles['right-button']}>

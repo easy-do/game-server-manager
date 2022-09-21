@@ -7,6 +7,7 @@ import { addRequest } from '@/api/resource';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
+import ResourceTreeSelect from './resourceSelectTree';
 
 function AddPage({ visible, setVisible, successCallBack }) {
   
@@ -76,7 +77,7 @@ function AddPage({ visible, setVisible, successCallBack }) {
             { required: true, message: t['searchTable.rules.parentId.required'] },
           ]}
         >
-          <Input placeholder={t['searchForm.parentId.placeholder']} allowClear />
+          <ResourceTreeSelect/>
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.resourceType']}
@@ -85,15 +86,7 @@ function AddPage({ visible, setVisible, successCallBack }) {
             { required: true, message: t['searchTable.rules.resourceType.required'] },
           ]}
         >
-          <Select
-            placeholder={t['searchForm.resourceType.placeholder']}
-            options={Status.map((item, index) => ({
-              label: item,
-              value: index,
-            }))}
-            // mode="multiple"
-            allowClear
-          />
+           <DictDataSelect dictCode={'system_resource_type'} placeholder={t['searchForm.resourceType.placeholder']} />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.orderNumber']}

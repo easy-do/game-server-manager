@@ -197,7 +197,7 @@ function SearchTable() {
       <Title heading={6}>{t['list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
-        requiredPermissions={[{ resource: 'genTable', actions: ['update'] }]}
+        requiredPermissions={[{ resource: 'genTable', actions: ['importTable'] }]}
       >
         <div className={styles['button-group']}>
           <Space>

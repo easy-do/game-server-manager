@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author laoyu
@@ -208,14 +209,13 @@ public class LoginService {
      * 构建用户角色和权限信息
      *
      * @param userInfoVo userInfoVo
-     * @return void
      * @author laoyu
      * @date 2022/9/20
      */
     private void buildUserRoleAndPermission(UserInfoVo userInfoVo) {
         Long userId = userInfoVo.getId();
         List<String> roleList = sysRoleService.selectRolesByUserId(userId).stream().map(SysRoleVo::getRoleKey).toList();
-        List<String> permissionList = sysResourceService.userPermissionList(userId);
+        Set<String> permissionList = sysResourceService.userPermissionList(userId);
         userInfoVo.setRoles(roleList);
         userInfoVo.setPermissions(permissionList);
         Map<String,List<String>> resourceAction = sysResourceService.userResourceAction(userId);

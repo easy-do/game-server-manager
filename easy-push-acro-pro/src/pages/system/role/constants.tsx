@@ -1,45 +1,56 @@
 import React from 'react';
-import { Button, Typography, Badge } from '@arco-design/web-react';
+import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { SearchTypeEnum } from '@/utils/systemConstant';
+import PermissionWrapper from '@/components/PermissionWrapper';
 
-const { Text } = Typography;
+export const Status = ['开启', '关闭'];
 
-export interface DataInfoVo {
-  delFlag: string;
-  remark: string;
-  updateTime: string;
-  updateBy: string;
-  createTime: string;
-  createBy: string;
-  status: string;
-  isDefault: string;
-  roleSort: string;
-  roleKey: string;
-  roleName: string;
-  roleId: string;
+export interface DataInfoVo{
+    roleId: string,
+    roleName: string,
+    roleKey: string,
+    roleSort: string,
+    isDefault: string,
+    status: string,
+    createBy: string,
+    createTime: string,
+    updateBy: string,
+    updateTime: string,
+    remark: string,
+    delFlag: string,
 }
 
 // 后台sql查询字段
-export function getSearChColumns() {
-  return [
-    'delFlag',
-    'remark',
-    'updateTime',
-    'updateBy',
-    'createTime',
-    'createBy',
-    'status',
-    'isDefault',
-    'roleSort',
-    'roleKey',
-    'roleName',
+export function getSearChColumns(){
+    return [
     'roleId',
-  ];
+    'roleName',
+    'roleKey',
+    'roleSort',
+    'isDefault',
+    'status',
+    'createBy',
+    'createTime',
+    'updateBy',
+    'updateTime',
+    'remark',
+    'delFlag',
+      ];
+}
+
+// 搜索配置
+export function searchConfig() {
+  return {
+        'roleName': SearchTypeEnum.LIKE,
+        'status': SearchTypeEnum.EQ,
+  }
 }
 
 //默认排序字段
-export function getDefaultOrders() {
-  return [{ column: 'createTime', asc: false }];
+export function getDefaultOrders(){
+  return [{column: 'createTime', asc: false}];
 }
+
 
 //表单展示字段
 export function getColumns(
@@ -47,76 +58,95 @@ export function getColumns(
   callback: (record: Record<string, any>, type: string) => Promise<void>
 ) {
   return [
-    {
-      title: t['searchTable.columns.delFlag'],
-      dataIndex: 'delFlag',
-    },
-    {
-      title: t['searchTable.columns.remark'],
-      dataIndex: 'remark',
-    },
-    {
-      title: t['searchTable.columns.updateTime'],
-      dataIndex: 'updateTime',
-    },
-    {
-      title: t['searchTable.columns.updateBy'],
-      dataIndex: 'updateBy',
-    },
-    {
-      title: t['searchTable.columns.createTime'],
-      dataIndex: 'createTime',
-    },
-    {
-      title: t['searchTable.columns.createBy'],
-      dataIndex: 'createBy',
-    },
-    {
-      title: t['searchTable.columns.status'],
-      dataIndex: 'status',
-    },
-    {
-      title: t['searchTable.columns.isDefault'],
-      dataIndex: 'isDefault',
-    },
-    {
-      title: t['searchTable.columns.roleSort'],
-      dataIndex: 'roleSort',
-    },
-    {
-      title: t['searchTable.columns.roleKey'],
-      dataIndex: 'roleKey',
-    },
+
     {
       title: t['searchTable.columns.roleName'],
       dataIndex: 'roleName',
+      ellipsis:true,
     },
+
     {
-      title: t['searchTable.columns.roleId'],
-      dataIndex: 'roleId',
+      title: t['searchTable.columns.roleKey'],
+      dataIndex: 'roleKey',
+      ellipsis:true,
+    },
+
+    {
+      title: t['searchTable.columns.status'],
+      dataIndex: 'status',
+      ellipsis:true,
+      render: (_, record) => (
+        Status[record.status]
+      ),
+    },
+
+    {
+      title: t['searchTable.columns.remark'],
+      dataIndex: 'remark',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => (
-        <div>
-          <Button
-            type="text"
-            size="small"
-            onClick={() => callback(record, 'view')}
+        <div>  
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'uc:role', actions: ['info'] },
+            ]}
           >
-            {t['searchTable.columns.operations.view']}
-          </Button>
-          <Button
-            type="text"
-            size="small"
-            onClick={() => callback(record, 'update')}
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'view')}
+            >
+                {t['searchTable.columns.operations.view']}
+            </Button>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'uc:role', actions: ['auth'] },
+            ]}
           >
-            {t['searchTable.columns.operations.update']}
-          </Button>
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'auth')}
+            >
+                {t['searchTable.columns.operations.auth']}
+            </Button>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'uc:role', actions: ['update'] },
+            ]}
+          >
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'update')}
+            >
+                {t['searchTable.columns.operations.update']}
+            </Button>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'uc:role', actions: ['remove'] },
+            ]}
+          >
+            <Popconfirm
+                title={t['searchTable.columns.operations.remove.confirm']}
+                onOk={() => callback(record, 'remove')}
+            >
+                <Button type="text" status="warning" size="small">
+                {t['searchTable.columns.operations.remove']}
+                </Button>
+            </Popconfirm>
+          </PermissionWrapper>
         </div>
       ),
     },
   ];
 }
+

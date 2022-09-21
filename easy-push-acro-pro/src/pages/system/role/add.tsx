@@ -1,11 +1,17 @@
 import React, { useContext, useRef } from 'react';
-import { Form, FormInstance, Input, Modal } from '@arco-design/web-react';
+import dayjs from 'dayjs';
+import { Form, FormInstance, Input, Modal, DatePicker, Select, Notification } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { addRequest } from '@/api/roleManager';
+import { addRequest } from '@/api/role';
 import { GlobalContext } from '@/context';
+import { Status } from './constants';
+import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
-function AddPage(props: { visible; setVisible }) {
+function AddPage({ visible, setVisible, successCallBack }) {
+  
+  const TextArea = Input.TextArea;
+  
   const formRef = useRef<FormInstance>();
 
   const { lang } = useContext(GlobalContext);
@@ -15,8 +21,10 @@ function AddPage(props: { visible; setVisible }) {
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
       addRequest(values).then((res) => {
-        if (res.data.success) {
-          props.setVisible(false);
+        const { success, msg} = res.data
+        if(success){
+          Notification.success({ content: msg, duration: 300 })
+          successCallBack();
         }
       });
     });
@@ -25,15 +33,16 @@ function AddPage(props: { visible; setVisible }) {
   return (
     <Modal
       title={t['searchTable.operations.add']}
-      visible={props.visible}
+      visible={visible}
       onOk={() => {
         handleSubmit();
       }}
       onCancel={() => {
-        props.setVisible(false);
+        setVisible(false);
       }}
       autoFocus={false}
       focusLock={true}
+      maskClosable={false}
     >
       <Form
         ref={formRef}
@@ -43,84 +52,49 @@ function AddPage(props: { visible; setVisible }) {
         labelAlign="left"
       >
         <Form.Item
-          label={t['searchTable.columns.delFlag']}
-          field="delFlag"
+          label={t['searchTable.columns.roleName']}
+          field="roleName"
           rules={[
-            { required: true, message: t['searchTable.columns.delFlag'] },
+            { required: true, message: t['searchTable.rules.roleName.required'] },
           ]}
         >
-          <Input placeholder={t['searchForm.delFlag.placeholder']} allowClear />
+          <Input placeholder={t['searchForm.roleName.placeholder']} allowClear />
         </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.remark']} field="remark">
-          <Input placeholder={t['searchForm.remark.placeholder']} allowClear />
-        </Form.Item>
-
         <Form.Item
-          label={t['searchTable.columns.updateTime']}
-          field="updateTime"
+          label={t['searchTable.columns.roleKey']}
+          field="roleKey"
+          rules={[
+            { required: true, message: t['searchTable.rules.roleKey.required'] },
+          ]}
         >
-          <Input
-            placeholder={t['searchForm.updateTime.placeholder']}
-            allowClear
-          />
-        </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.updateBy']} field="updateBy">
-          <Input
-            placeholder={t['searchForm.updateBy.placeholder']}
-            allowClear
-          />
-        </Form.Item>
-
-        <Form.Item
-          label={t['searchTable.columns.createTime']}
-          field="createTime"
-        >
-          <Input
-            placeholder={t['searchForm.createTime.placeholder']}
-            allowClear
-          />
-        </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.createBy']} field="createBy">
-          <Input
-            placeholder={t['searchForm.createBy.placeholder']}
-            allowClear
-          />
-        </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.status']} field="status">
-          <Input placeholder={t['searchForm.status.placeholder']} allowClear />
-        </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.isDefault']} field="isDefault">
-          <Input
-            placeholder={t['searchForm.isDefault.placeholder']}
-            allowClear
-          />
-        </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.roleSort']} field="roleSort">
-          <Input
-            placeholder={t['searchForm.roleSort.placeholder']}
-            allowClear
-          />
-        </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.roleKey']} field="roleKey">
           <Input placeholder={t['searchForm.roleKey.placeholder']} allowClear />
         </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.roleName']} field="roleName">
-          <Input
-            placeholder={t['searchForm.roleName.placeholder']}
-            allowClear
-          />
+        <Form.Item
+          label={t['searchTable.columns.roleSort']}
+          field="roleSort"
+        >
+          <Input placeholder={t['searchForm.roleSort.placeholder']} allowClear />
         </Form.Item>
-
-        <Form.Item label={t['searchTable.columns.roleId']} field="roleId">
-          <Input placeholder={t['searchForm.roleId.placeholder']} allowClear />
+        <Form.Item
+          label={t['searchTable.columns.isDefault']}
+          field="isDefault"
+          rules={[
+            { required: true, message: t['searchTable.rules.isDefault.required'] },
+          ]}
+        >
+           <DictDataSelect dictCode={'is_no_select'} placeholder={t['searchForm.isDefault.placeholder']} />
+        </Form.Item>
+        <Form.Item
+          label={t['searchTable.columns.status']}
+          field="status"
+        >
+           <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.status.placeholder']} />
+        </Form.Item>
+        <Form.Item
+          label={t['searchTable.columns.remark']}
+          field="remark"
+        >
+          <TextArea placeholder={t['searchForm.remark.placeholder']} />
         </Form.Item>
       </Form>
     </Modal>
