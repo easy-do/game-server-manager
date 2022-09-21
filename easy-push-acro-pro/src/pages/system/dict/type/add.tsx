@@ -7,7 +7,7 @@ import { addRequest } from '@/api/dictType';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
 
-function AddPage(props: { visible; setVisible }) {
+function AddPage(props: { visible; setVisible; successCallback }) {
   
   const TextArea = Input.TextArea;
   
@@ -23,7 +23,7 @@ function AddPage(props: { visible; setVisible }) {
         const { success, msg} = res.data
         if(success){
           Notification.success({ content: msg, duration: 300 })
-          props.setVisible(false);
+          props.successCallback()
         }
       });
     });

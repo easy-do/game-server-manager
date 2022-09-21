@@ -15,7 +15,7 @@ import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
 import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
-import { managerPage, removeRequest } from '@/api/resource';
+import { changeStatus, managerPage, removeRequest } from '@/api/resource';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
@@ -42,6 +42,11 @@ function SearchTable() {
     //删除
     if (type === 'remove') {
       removeData(record.id);
+    }
+
+    //更改开启状态
+    if (type === 'chageStatus') {
+      chageStatus(record.id, record.status);
     }
   };
 
@@ -91,6 +96,18 @@ function SearchTable() {
       }
     })
   }
+
+    //开启或关闭
+    function chageStatus(id,status){
+
+      changeStatus({id:id,status:status === 1 ? 0:1}).then((res)=>{
+        const { success, msg} = res.data
+        if(success){
+          Notification.success({ content: msg, duration: 300 })
+          fetchData();
+        }
+      })
+    }
 
   //获取表格展示列表、绑定操作列回调
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
@@ -177,7 +194,7 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'resource', actions: ['add'] },
+          { resource: 'uc:resource', actions: ['add'] },
         ]}
       >
         <div className={styles['button-group']}>

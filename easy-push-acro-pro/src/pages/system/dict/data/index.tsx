@@ -185,11 +185,11 @@ function DictDataSearchTable(props:props) {
     <Card>
       <Title heading={6}>{t['list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
-      <PermissionWrapper
+      {/* <PermissionWrapper
         requiredPermissions={[
-          { resource: 'sysDictData', actions: ['add'] },
+          { resource: 'uc:dictData', actions: ['add'] },
         ]}
-      >
+      > */}
         <div className={styles['button-group']}>
           <Space>
             <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
@@ -197,7 +197,7 @@ function DictDataSearchTable(props:props) {
             </Button>
           </Space>
         </div>
-      </PermissionWrapper>
+      {/* </PermissionWrapper> */}
       <Table
         rowKey="id"
         loading={loading}
@@ -207,6 +207,7 @@ function DictDataSearchTable(props:props) {
         data={data}
       />
       <AddPage
+        dictTypeId={props.dictTypeId}
         visible={isAddData}
         setVisible={setIsAddData}
         successCallBack={addDataSuccess}

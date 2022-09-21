@@ -60,7 +60,7 @@ function getFlattenRoutes(routes) {
   function travel(_routes) {
     _routes.forEach((route) => {
       const visibleChildren = (route.children || []).filter(
-        (child) => !child.ignore
+        (child) => !child.ignore && child.details &&child.details.resourceType === 'M'
       );
       if (route.key && (!route.children || !visibleChildren.length)) {
         try {
@@ -139,7 +139,7 @@ function PageLayout() {
         //过滤出需要继续递归的菜单？
         const visibleChildren = (route.children || []).filter((child) => {
           const { visible: ignore, breadcrumb = true, details } = child;
-          if (ignore || route.visible || details.resourceType !== 'M') {
+          if (ignore || route.visible) {
             routeMap.current.set(
               `/${child.key}`,
               breadcrumb ? [...parentNode, route.name, child.name] : []

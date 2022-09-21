@@ -8,7 +8,7 @@ import { GlobalContext } from '@/context';
 import { Status } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
-function AddPage({ visible, setVisible, successCallBack }) {
+function AddPage({ dictTypeId, visible, setVisible, successCallBack }) {
   
   const TextArea = Input.TextArea;
   
@@ -20,6 +20,7 @@ function AddPage({ visible, setVisible, successCallBack }) {
 
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
+      values.dictTypeId = dictTypeId;
       addRequest(values).then((res) => {
         const { success, msg} = res.data
         if(success){
@@ -51,12 +52,6 @@ function AddPage({ visible, setVisible, successCallBack }) {
         wrapperCol={{ span: lang === 'en-US' ? 17 : 18 }}
         labelAlign="left"
       >
-        <Form.Item
-          label={t['searchTable.columns.dictSort']}
-          field="dictSort"
-        >
-          <Input placeholder={t['searchForm.dictSort.placeholder']} allowClear />
-        </Form.Item>
         <Form.Item
           label={t['searchTable.columns.dictLabel']}
           field="dictLabel"
@@ -108,6 +103,12 @@ function AddPage({ visible, setVisible, successCallBack }) {
         >
            <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.status.placeholder']} />
         </Form.Item>
+        <Form.Item
+          label={t['searchTable.columns.dictSort']}
+          field="dictSort"
+        >
+          <Input placeholder={t['searchForm.dictSort.placeholder']} allowClear />
+        </Form.Item> 
         <Form.Item
           label={t['searchTable.columns.remark']}
           field="remark"

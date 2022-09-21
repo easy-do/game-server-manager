@@ -10,6 +10,9 @@ export const updateRequest = (param) => postRequestBody("/uc/resource/update",pa
 
 
 export const roleResource = (id) => get("/uc/resource/roleResource/"+id);
-export const roleMenuIds = (id) => get("/uc/resource/roleResourceIds/"+id);
-export const authRoleMenu = (param) => postRequestBody("/uc/resource/authRoleMenu",param);
+export const roleResourceIds = (id) => get("/uc/resource/roleResourceIds/"+id);
+export const authRoleResource = (param) => postRequestBody("/uc/resource/authRoleResource",param);
 export const userResource = () => get("/uc/resource/userResource");
+export const resourceInfoTree = () => get("/uc/resource/resourceInfoTree");
+export const changeStatus = (param) => postRequestBody("/uc/resource/changeStatus",param);
+

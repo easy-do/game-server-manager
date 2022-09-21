@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { Button, Typography, Badge, Popconfirm, Switch } from '@arco-design/web-react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import PermissionWrapper from '@/components/PermissionWrapper';
 
@@ -89,6 +89,9 @@ export function getColumns(
       title: t['searchTable.columns.resourceType'],
       dataIndex: 'resourceType',
       ellipsis:true,
+      render: (_, record) => (
+        record.resourceType === 'M' ?  "菜单" : record.resourceType === 'I' ?  "接口" : record.resourceType === 'A'? "按钮": record.resourceType
+        ),
     },
 
     {
@@ -96,17 +99,13 @@ export function getColumns(
       dataIndex: 'path',
       ellipsis:true,
     },
-
-    {
-      title: t['searchTable.columns.isCache'],
-      dataIndex: 'isCache',
-      ellipsis:true,
-    },
-
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis:true,
+      render: (_, record) => (
+        <Switch type='round' checkedText='开启' onClick={() => callback(record, 'chageStatus')} uncheckedText='关闭' checked={record.status === 0}  />
+        ),
     },
 
     {
@@ -128,7 +127,7 @@ export function getColumns(
         <div>  
           <PermissionWrapper
             requiredPermissions={[
-              { resource: '系统资源', actions: ['info'] },
+              { resource: 'uc:resource', actions: ['info'] },
             ]}
           >
             <Button
@@ -141,7 +140,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: '系统资源', actions: ['update'] },
+              { resource: 'uc:resource', actions: ['update'] },
             ]}
           >
             <Button
@@ -154,7 +153,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: '系统资源', actions: ['remove'] },
+              { resource: 'uc:resource', actions: ['remove'] },
             ]}
           >
             <Popconfirm

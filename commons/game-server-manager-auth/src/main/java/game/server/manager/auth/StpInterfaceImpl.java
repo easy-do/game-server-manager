@@ -20,7 +20,7 @@ public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         UserInfoVo user = AuthorizationUtil.getUser();
-        return user.getPermissions();
+        return user.getPermissions().stream().toList();
     }
 
     /**

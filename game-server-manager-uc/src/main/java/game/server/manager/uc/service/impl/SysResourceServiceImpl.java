@@ -17,7 +17,6 @@ import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.common.enums.ResourceTypeEnum;
 import game.server.manager.common.enums.StatusEnum;
 import game.server.manager.uc.dto.AuthRoleMenuDto;
-import game.server.manager.uc.entity.SysMenu;
 import game.server.manager.uc.entity.SysRoleResource;
 import game.server.manager.uc.service.SysRoleResourceService;
 import game.server.manager.uc.service.SysUserRoleService;
@@ -35,9 +34,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -91,9 +93,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      */
     @Override
     public IPage<SysResourceVo> page(SysResourceQo mpBaseQo) {
-        LambdaQueryWrapper<SysResource> wrapper = getWrapper();
-        wrapper.orderByDesc(SysResource::getCreateTime);
-        pageSelect(wrapper);
+        mpBaseQo.initInstance(SysResource.class);
         return page(mpBaseQo.getPage(), mpBaseQo.getWrapper()).convert(SysResourceMapstruct.INSTANCE::entityToVo);
     }
 
@@ -243,9 +243,9 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     public boolean authRoleResource(AuthRoleMenuDto authRoleMenuDto) {
         ArrayList<SysRoleResource> entityList = new ArrayList<>();
         Long roleId = authRoleMenuDto.getRoleId();
-        List<Long> menuIds = authRoleMenuDto.getMenuIds();
+        List<Long> resourceIds = authRoleMenuDto.getResourceIds();
         sysRoleResourceService.removeByRoleId(roleId);
-        menuIds.forEach(menuId -> entityList.add(SysRoleResource.builder().roleId(roleId).resourceId(menuId).build()));
+        resourceIds.forEach(menuId -> entityList.add(SysRoleResource.builder().roleId(roleId).resourceId(menuId).build()));
         return sysRoleResourceService.saveBatch(entityList);
     }
 
@@ -313,24 +313,24 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     }
 
     @Override
-    public List<String> userPermissionList(Long userId) {
+    public Set<String> userPermissionList(Long userId) {
         List<Long> roleIds = sysUserRoleService.getRoleIdListByUserId(userId);
         if(roleIds.isEmpty()){
-            return ListUtil.empty();
+            return Collections.emptySet();
         }
         List<SysResource> menuList = getRoleResourceList(roleIds);
         List<Tree<Long>> treeList = buildResourceTree(menuList);
-        List<String> permissions = new ArrayList<>();
+        Set<String> permissions = new HashSet<>();
         buildPermissions("",permissions,treeList);
         return permissions;
     }
 
-    private void buildPermissions(String prefix, List<String> permissions, List<Tree<Long>> treeList) {
+    private void buildPermissions(String prefix, Set<String> permissions, List<Tree<Long>> treeList) {
         String p = ":";
         treeList.forEach(longTree -> {
             String permissionCode = "";
             if(longTree.getParentId() != 0){
-                Object code = longTree.get("perms");
+                Object code = longTree.get("resourceCode");
                 if(Objects.nonNull(code)){
                     if(CharSequenceUtil.isBlank(prefix)){
                         permissionCode = (String) code;

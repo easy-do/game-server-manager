@@ -7,7 +7,7 @@ import { Status } from './constants';
 import { useContext, useEffect, useRef } from 'react';
 import React from 'react';
 
-function UpdatePage(props: { id: number; visible; setVisible }) {
+function UpdatePage(props: { id: number; visible; setVisible; successCallback }) {
 
   const TextArea = Input.TextArea;
 
@@ -44,7 +44,7 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
         const { success, msg} = res.data
         if(success){
           Notification.success({ content: msg, duration: 300 })
-          props.setVisible(false);
+          props.successCallback();
         }
       });
     });

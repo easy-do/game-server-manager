@@ -57,11 +57,22 @@ function SearchTable() {
     setIsAddData(true);
   }
 
+  function addSuccessCallback(){
+    setIsAddData(false);
+    fetchData();
+  }
+
   //编辑
   function updateInfo(id) {
     setUpdateId(id);
     setisUpdateInfo(true);
   }
+
+  function updateSuccessCallback(){
+    setisUpdateInfo(false);
+    fetchData();
+  }
+
 
   //删除
   function removeData(id) {
@@ -166,11 +177,11 @@ function SearchTable() {
     <Card>
       <Title heading={6}>{t['list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
-      <PermissionWrapper
+      {/* <PermissionWrapper
         requiredPermissions={[
-          { resource: 'dictType', actions: ['update'] },
+          { resource: 'uc:dictType', actions: ['add'] },
         ]}
-      >
+      > */}
         <div className={styles['button-group']}>
           <Space>
             <Button type="primary" icon={<IconPlus />} onClick={() => addData()}>
@@ -178,7 +189,7 @@ function SearchTable() {
             </Button>
           </Space>
         </div>
-      </PermissionWrapper>
+      {/* </PermissionWrapper> */}
       <Table
         rowKey="id"
         loading={loading}
@@ -190,11 +201,13 @@ function SearchTable() {
       <AddPage
         visible={isAddData}
         setVisible={setIsAddData}
+        successCallback={addSuccessCallback}
       />
       <UpdatePage
         id={updateId}
         visible={isUpdateInfo}
         setVisible={setisUpdateInfo}
+        successCallback={updateSuccessCallback}
       />
       <Modal
         style={{minHeight:'100%',width:'100%'}}
