@@ -45,7 +45,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 获取所有系统资源列表
      */
-    @SaCheckPermission("uc:resource:list")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @RequestMapping("/list")
     public R<List<SysResourceVo>> list() {
         return super.list();
@@ -54,7 +54,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 分页条件查询系统资源列表
      */
-    @SaCheckPermission("uc:resource:list")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
     public MpDataResult page(@RequestBody SysResourceQo sysResourceQo) {
         return super.page(sysResourceQo);
@@ -64,7 +64,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 获取系统资源详细信息
      */
-    @SaCheckPermission("uc:resource:info")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/info/{id}")
     public R<SysResourceVo> info(@PathVariable("id")Long id) {
         return super.info(id);
@@ -73,7 +73,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 新增系统资源
      */
-    @SaCheckPermission("uc:resource:add")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "系统资源", description = "添加系统资源", actionType = "添加")
     public R<Object> add(@RequestBody @Validated({Insert.class}) SysResourceDto sysResourceDto) {
@@ -83,7 +83,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 修改系统资源
      */
-    @SaCheckPermission("uc:resource:update")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "系统资源", description = "编辑系统资源: ?1", expressions = {"#p1.id"},actionType = "编辑")
     public R<Object> update(@RequestBody @Validated({Update.class}) SysResourceDto sysResourceDto) {
@@ -93,8 +93,8 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 删除系统资源
      */
-    @SaCheckPermission("uc:resource:remove")
-	@GetMapping("/{id}")
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
+	@GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "系统资源", description = "删除系统资源: ?1", expressions = {"#p1"}, actionType = "删除")
     public R<Object> remove(@PathVariable("id")Long id) {
         return super.remove(id);
@@ -126,7 +126,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 获取所有资源下拉树(带详情)
      */
-    @SaCheckLogin
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/resourceInfoTree")
     public R<List<Tree<Long>>> resourceInfoTree() {
         return DataResult.ok(baseService.resourceInfoTree());
@@ -135,7 +135,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 获取所有资源下拉树
      */
-    @SaCheckLogin
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/resourceTree")
     public R<List<Tree<Long>>> resourceTree() {
         return DataResult.ok(baseService.resourceTree());
@@ -145,7 +145,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     /**
      * 根据类型获取资源列表(带详情)
      */
-    @SaCheckLogin
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/resourceInfoTreeByType")
     public R<List<Tree<Long>>> resourceInfoTreeByType(@RequestParam String type) {
         return DataResult.ok(baseService.resourceInfoTreeByType(type));

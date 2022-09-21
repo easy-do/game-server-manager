@@ -143,7 +143,7 @@ function SearchTable() {
       searchParam: formParams,
       orders: orders,
       columns: getSearChColumns(),
-      searchConfig: searchConfig,
+      searchConfig: searchConfig(),
     }).then((res) => {
       setData(res.data.data);
       setPatination({

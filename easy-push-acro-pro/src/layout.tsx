@@ -85,11 +85,11 @@ function PageLayout() {
   const pathname = history.location.pathname;
   const currentComponent = qs.parseUrl(pathname).url.slice(1);
   const locale = useLocale();
-  const { settings, userLoading, userInfo } = useSelector(
+  const { settings, userLoading, systemRoutes } = useSelector(
     (state: GlobalState) => state
   );
-
-  const [routes, defaultRoute] = useRoute(userInfo?.resourceAction);
+  //通过useRoute 获取所有具有权限的路由地址和默认路由(/)
+  const [routes, defaultRoute] = useRoute(systemRoutes);
   const defaultSelectedKeys = [currentComponent || defaultRoute];
   const paths = (currentComponent || defaultRoute).split('/');
   const defaultOpenKeys = paths.slice(0, paths.length - 1);
@@ -117,20 +117,21 @@ function PageLayout() {
   function renderRoutes(locale) {
     routeMap.current.clear();
     return function travel(_routes: IRoute[], level, parentNode = []) {
+      console.info(_routes)
       return _routes.map((route) => {
         const { breadcrumb = true, visible: ignore, details } = route;
         //是菜单类型才构建
         if(details && details.resourceType === 'M'){
         //获取菜单图标
         const iconDom = getIconFromKey(route.key);
-        //菜单标题
+        //菜单显示的文字
         const titleDom = (
           <>
             {iconDom} {locale[route.name] || route.name}
           </>
         );
 
-        //菜单的路由地址
+        //设置面包屑
         routeMap.current.set(
           `/${route.key}`,
           breadcrumb ? [...parentNode, route.name] : []
