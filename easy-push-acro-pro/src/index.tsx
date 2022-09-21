@@ -14,6 +14,8 @@ import Login from './pages/login';
 import checkLogin from './utils/checkLogin';
 import changeTheme from './utils/changeTheme';
 import useStorage from './utils/useStorage';
+import { userResource } from './api/resource';
+import { IRoute, staticRoutes } from './routes';
 
 
 const store = createStore(rootReducer);
@@ -48,9 +50,27 @@ function Index() {
   useEffect(() => {
     if (checkLogin()) {
       fetchUserInfo();
-    } else if (window.location.pathname.replace(/\//g, '') !== 'login') {
-      window.location.pathname = '/login';
+    } 
+    else{
+      userResource().then((res)=>{
+        const {success,data} = res.data
+        if(success){
+          const side: IRoute = data[0];
+          staticRoutes.forEach((item) => {
+            side.children.push(item);
+          });   
+          data[0] = side;  
+          localStorage.setItem('userMenu',JSON.stringify(data));
+          store.dispatch({
+            type: 'update-routes',
+            payload: { systemRoutes: data},
+          });
+        }
+      })
     }
+    // else if (window.location.pathname.replace(/\//g, '') !== 'login') {
+    //   window.location.pathname = '/login';
+    // }
   }, []);
 
   useEffect(() => {

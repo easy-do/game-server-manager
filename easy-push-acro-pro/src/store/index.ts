@@ -1,3 +1,4 @@
+import { IRoute } from '@/routes';
 import defaultSettings from '../settings.json';
 export interface GlobalState {
   settings?: typeof defaultSettings;
@@ -18,15 +19,21 @@ export interface GlobalState {
     permissions?: string[];
   };
   userLoading?: boolean;
+  systemRoutes:IRoute[];
 }
 
+
+//初始化state属性
 const initialState: GlobalState = {
   settings: defaultSettings,
   userInfo: {
     resourceAction: {},
   },
+  systemRoutes: []
 };
 
+
+//创建store？
 export default function store(state = initialState, action) {
   switch (action.type) {
     case 'update-settings': {
@@ -42,6 +49,13 @@ export default function store(state = initialState, action) {
         ...state,
         userLoading,
         userInfo,
+      };
+    }
+    case 'update-routes': {
+      const { systemRoutes } = action.payload;
+      return {
+        ...state,
+        systemRoutes:systemRoutes,
       };
     }
     default:
