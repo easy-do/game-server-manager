@@ -1,5 +1,9 @@
 package game.server.manager.uc.service.impl;
 
+import com.alicp.jetcache.anno.CacheInvalidate;
+import com.alicp.jetcache.anno.CacheRefresh;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.web.base.BaseServiceImpl;
@@ -14,8 +18,6 @@ import game.server.manager.uc.mapper.SysDictDataMapper;
 import game.server.manager.uc.service.SysDictTypeService;
 import game.server.manager.common.vo.SysDictDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import game.server.manager.common.exception.BizException;
 
@@ -65,25 +67,29 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     }
 
     @Override
-    @CacheEvict(value = "sysDict", allEntries = true)
+    @CacheInvalidate(name = "SysDictDataService.listByCode")
+    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
     public boolean add(SysDictDataDto sysDictDataDto) {
         return save(SysDictDataMapstruct.INSTANCE.dtoToEntity(sysDictDataDto));
     }
 
     @Override
-    @CacheEvict(value = "sysDict", allEntries = true)
+    @CacheInvalidate(name = "SysDictDataService.listByCode")
+    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
     public boolean edit(SysDictDataDto sysDictDataDto) {
         return updateById(SysDictDataMapstruct.INSTANCE.dtoToEntity(sysDictDataDto));
     }
 
     @Override
-    @CacheEvict(value = "sysDict", allEntries = true)
+    @CacheInvalidate(name = "SysDictDataService.listByCode")
+    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
     public boolean delete(Serializable id) {
         return removeById(id);
     }
 
     @Override
-    @CacheEvict(value = "sysDict", allEntries = true)
+    @CacheInvalidate(name = "SysDictDataService.listByCode")
+    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
     public boolean changeStatus(ChangeStatusDto changeStatusDto) {
         Long id = changeStatusDto.getId();
         Integer status = changeStatusDto.getStatus();
@@ -93,7 +99,8 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     }
 
     @Override
-    @Cacheable(value = "sysDict", key = "#dictCode")
+    @Cached(name = "SysDictDataService.listByCode", expire = 300, cacheType = CacheType.BOTH)
+    @CacheRefresh(refresh = 60)
     public List<SysDictDataVo> listByCode(String dictCode) {
         Long dictTypeId = sysDictTypeService.getIdByCode(dictCode);
         LambdaQueryWrapper<SysDictData> wrapper = getWrapper();
@@ -104,7 +111,8 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     }
 
     @Override
-    @Cacheable(value = "sysDict", key = "#dictCode+':'+#dictDataKey")
+    @Cached(name = "SysDictDataService.getSingleDictData", expire = 300, cacheType = CacheType.BOTH)
+    @CacheRefresh(refresh = 60)
     public SysDictDataVo getSingleDictData(String dictCode, String dictDataKey) {
         Long dictTypeId = sysDictTypeService.getIdByCode(dictCode);
         LambdaQueryWrapper<SysDictData> wrapper = getWrapper();

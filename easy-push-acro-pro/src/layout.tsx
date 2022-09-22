@@ -60,7 +60,7 @@ function getFlattenRoutes(routes) {
   function travel(_routes) {
     _routes.forEach((route) => {
       const visibleChildren = (route.children || []).filter(
-        (child) => !child.ignore && child.details &&child.details.resourceType === 'M'
+        (child) => !child.ignore && child.type === 'M'
       );
       if (route.key && (!route.children || !visibleChildren.length)) {
         try {
@@ -117,11 +117,10 @@ function PageLayout() {
   function renderRoutes(locale) {
     routeMap.current.clear();
     return function travel(_routes: IRoute[], level, parentNode = []) {
-      console.info(_routes)
       return _routes.map((route) => {
-        const { breadcrumb = true, visible: ignore, details } = route;
+        const { breadcrumb = true, visible: ignore, type } = route;
         //是菜单类型才构建
-        if(details && details.resourceType === 'M'){
+        if(type === 'M'){
         //获取菜单图标
         const iconDom = getIconFromKey(route.key);
         //菜单显示的文字
@@ -139,7 +138,7 @@ function PageLayout() {
 
         //过滤出需要继续递归的菜单？
         const visibleChildren = (route.children || []).filter((child) => {
-          const { visible: ignore, breadcrumb = true, details } = child;
+          const { visible: ignore, breadcrumb = true, type } = child;
           if (ignore || route.visible) {
             routeMap.current.set(
               `/${child.key}`,
@@ -147,7 +146,7 @@ function PageLayout() {
             );
           }
           //未设置隐藏、并且是菜单
-          return !ignore && details.resourceType === 'M';
+          return !ignore && type === 'M';
         });
 
         //如果不展示只是路由则不组装直接返回空

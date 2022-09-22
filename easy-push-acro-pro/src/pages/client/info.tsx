@@ -6,55 +6,80 @@ import { infoRequest } from '@/api/clientInfo';
 import { DataInfoVo } from './constants';
 
 
-function InfoPage(props: {id:number,visible,setVisible}) {
-  
-    const [loading,setLoading] = useState(false)
+function InfoPage(props: { id: number, visible, setVisible }) {
 
-    const [infoData, setInfoData] = useState<DataInfoVo>();
-    
-    function fetchData() {
-      setLoading(true)
-      if (props.id !== undefined) {
-        infoRequest(props.id).then((res) => {
-          const { success, data } = res.data;
-          if (success) {
-            setInfoData(data);
-          }
-          setLoading(false)
-        });
-      }
+  const [loading, setLoading] = useState(false)
+
+  const [clientData, setClientData] = useState({
+    version: '',
+    systemInfo: {
+      osName: '',
+      cpuInfo: '',
+      memory: ''
     }
+  })
 
-    useEffect(() => {
-        fetchData();
-      }, [props.id]);
+  const [infoData, setInfoData] = useState<DataInfoVo>();
+
+  function fetchData() {
+    setLoading(true)
+    if (props.id !== undefined) {
+      infoRequest(props.id).then((res) => {
+        const { success, data } = res.data;
+        if (success) {
+          setInfoData(data);
+        }
+        setLoading(false)
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [props.id]);
 
   const t = useLocale(locale);
+
+  if (infoData && infoData.clientData) {
+    setClientData(JSON.parse(infoData.clientData))
+  }
 
   const data = [
     {
       label: t['searchTable.columns.clientName'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.clientName:'',
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.clientName : '',
     },
     {
       label: t['searchTable.columns.serverName'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.serverName:'',
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.serverName : '',
     },
     {
       label: t['searchTable.columns.status'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.status:'',
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.status : '',
     },
     {
-      label: t['searchTable.columns.clientData'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.clientData:'',
+      label: t['searchTable.columns.clientData.version'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.version ? clientData.version : '未同步',
+    },
+    {
+      label: t['searchTable.columns.clientData.systemInfo.osName'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.osName : '未同步',
+    },
+    {
+      label: t['searchTable.columns.clientData.systemInfo.cpuInfo'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.cpuInfo : '未同步',
+    },
+    {
+      label: t['searchTable.columns.clientData.systemInfo.memory'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.memory : '未同步',
     },
     {
       label: t['searchTable.columns.createTime'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.createTime:'',
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.createTime : '',
     },
     {
       label: t['searchTable.columns.lastUpTime'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.lastUpTime:'',
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.lastUpTime : '',
     },
   ];
 

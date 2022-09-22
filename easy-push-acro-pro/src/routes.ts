@@ -13,6 +13,8 @@ export type IRoute = AuthParams & {
   disabled?: false
   icon?: string;
   details?: any;
+  type?:string;
+  resourceCode?:string;
 };
 
 
@@ -20,10 +22,12 @@ export const staticRoutes: IRoute[] = [
   {
     name: 'menu.visualization',
     key: 'visualization',
+    type: "M",
     children: [
       {
         name: 'menu.visualization.dataAnalysis',
         key: 'visualization/data-analysis',
+        type: "M",
         requiredPermissions: [
           { resource: 'menu.visualization.dataAnalysis', actions: ['read'] },
         ],
@@ -31,6 +35,7 @@ export const staticRoutes: IRoute[] = [
       {
         name: 'menu.visualization.multiDimensionDataAnalysis',
         key: 'visualization/multi-dimension-data-analysis',
+        type: "M",
         requiredPermissions: [
           {
             resource: 'menu.visualization.dataAnalysis',
@@ -48,24 +53,29 @@ export const staticRoutes: IRoute[] = [
   {
     name: 'menu.list',
     key: 'list',
+    type: "M",
     children: [
       {
         name: 'menu.list.searchTable',
         key: 'list/search-table',
+        type: "M",
       },
       {
         name: 'menu.list.cardList',
         key: 'list/card',
+        type: "M",
       },
     ],
   },
   {
     name: 'menu.form',
     key: 'form',
+    type: "M",
     children: [
       {
         name: 'menu.form.group',
         key: 'form/group',
+        type: "M",
         requiredPermissions: [
           { resource: 'menu.form.group', actions: ['read', 'write'] },
         ],
@@ -73,6 +83,7 @@ export const staticRoutes: IRoute[] = [
       {
         name: 'menu.form.step',
         key: 'form/step',
+        type: "M",
         requiredPermissions: [
           { resource: 'menu.form.step', actions: ['read'] },
         ],
@@ -82,10 +93,12 @@ export const staticRoutes: IRoute[] = [
   {
     name: 'menu.profile',
     key: 'profile',
+    type: "M",
     children: [
       {
         name: 'menu.profile.basic',
         key: 'profile/basic',
+        type: "M",
       },
     ],
   },
@@ -93,15 +106,18 @@ export const staticRoutes: IRoute[] = [
   {
     name: 'menu.result',
     key: 'result',
+    type: "M",
     children: [
       {
         name: 'menu.result.success',
         key: 'result/success',
+        type: "M",
         breadcrumb: false,
       },
       {
         name: 'menu.result.error',
         key: 'result/error',
+        type: "M",
         breadcrumb: false,
       },
     ],
@@ -109,43 +125,52 @@ export const staticRoutes: IRoute[] = [
   {
     name: 'menu.exception',
     key: 'exception',
+    type: "M",
     children: [
       {
         name: 'menu.exception.403',
         key: 'exception/403',
+        type: "M",
       },
       {
         name: 'menu.exception.404',
         key: 'exception/404',
+        type: "M",
       },
       {
         name: 'menu.exception.500',
         key: 'exception/500',
+        type: "M",
       },
     ],
   },
   {
     name: 'menu.user',
     key: 'user',
+    type: "M",
     children: [
       {
         name: 'menu.user.info',
         key: 'user/info',
+        type: "M",
       },
       {
         name: 'menu.user.setting',
         key: 'user/setting',
+        type: "M",
       },
     ],
   },
   {
     name: '登录成功',
     key: 'loginSuccess',
+    type: "M",
     visible:true,
   },
   {
     name: '登录失败',
     key: 'loginError',
+    type: "M",
     visible:true,
   },
 ];
@@ -184,7 +209,6 @@ export const generatePermission = (role: string) => {
       });
     }
   });
-  console.info(result)
   return result;
 };
 
@@ -194,42 +218,7 @@ const useRoute = (systemRoutes): [IRoute[], string] => {
 
   const routes = getRoutes();
   
-  // const filterRoute = (routes: IRoute[], arr = []): IRoute[] => {
-  //   if (!routes.length) {
-  //     return [];
-  //   }
-  //   for (const route of routes) {
-  //     const { requiredPermissions, oneOfPerm } = route;
-  //     let visible = true;
-  //     if (requiredPermissions) {
-  //       visible = auth({ requiredPermissions, oneOfPerm }, userPermission);
-  //     }
-
-  //     if (!visible) {
-  //       continue;
-  //     }
-  //     if (route.children && route.children.length) {
-  //       const newRoute = { ...route, children: [] };
-  //       filterRoute(route.children, newRoute.children);
-  //       if (newRoute.children.length) {
-  //         arr.push(newRoute);
-  //       }
-  //     } else {
-  //       arr.push({ ...route });
-  //     }
-  //   }
-
-  //   return arr;
-  // };
-
   const [permissionRoute, setPermissionRoute] = useState(routes);
-
-
-  // useEffect(() => {
-    
-  //   const newRoutes = filterRoute(routes);
-  //   setPermissionRoute(newRoutes);
-  // }, [JSON.stringify(userPermission)]);
 
   const defaultRoute = useMemo(() => {
     const first = permissionRoute[0];

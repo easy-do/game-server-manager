@@ -12,15 +12,15 @@ function Announcement() {
   const t = useLocale(locale);
 
   const fetchData = () => {
-    setLoading(true);
-    axios
-      .get('/api/workplace/announcement')
-      .then((res) => {
-        setData(res.data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    // setLoading(true);
+    // axios
+    //   .get('/api/workplace/announcement')
+    //   .then((res) => {
+    //     setData(res.data);
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   };
 
   useEffect(() => {
