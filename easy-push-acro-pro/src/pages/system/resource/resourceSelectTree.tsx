@@ -24,7 +24,12 @@ const [resourceTree, setResourceTree] = useState([]);
     resourceInfoTree().then((res) => {
       const { success, data } = res.data
       if (success) {
-        setResourceTree(data);
+        const newData = [{
+          id: 0,
+          name: '根节点',
+          children: data,
+        }]
+        setResourceTree(newData);
       }
     })   
   }

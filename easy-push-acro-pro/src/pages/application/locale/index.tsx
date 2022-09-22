@@ -93,6 +93,13 @@ const i18n = {
     'searchTable.columns.updateTime': '更新时间',
     'searchTable.columns.lastUpTime': '最后在线时间',
     'searchTable.columns.delFlag': '删除标记',
+
+    'searchTable.columns.pluingsData.ip': 'ip',
+    'searchTable.columns.pluingsData.version': '版本',
+    'searchTable.columns.pluingsData.systemInfo.osName': '系统',
+    'searchTable.columns.pluingsData.systemInfo.cpuInfo': 'cpu信息',
+    'searchTable.columns.pluingsData.systemInfo.memory': '内存',
+
     'searchTable.columns.operations': '操作',
     'searchTable.columns.operations.view': '查看',
     'searchTable.columns.operations.update': '修改',

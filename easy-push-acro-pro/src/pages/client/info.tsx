@@ -46,6 +46,10 @@ function InfoPage(props: { id: number, visible, setVisible }) {
 
   const data = [
     {
+      label: t['searchTable.columns.id'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.id : '',
+    },
+    {
       label: t['searchTable.columns.clientName'],
       value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.clientName : '',
     },
