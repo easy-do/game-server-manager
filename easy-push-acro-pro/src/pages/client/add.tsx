@@ -7,6 +7,8 @@ import { addRequest } from '@/api/clientInfo';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
+import RequestSelect from '@/components/RequestSelect/RequestSelect';
+import { list } from '@/api/serverInfo';
 
 function AddPage({ visible, setVisible, successCallBack }) {
   
@@ -64,14 +66,11 @@ function AddPage({ visible, setVisible, successCallBack }) {
           label={t['searchTable.columns.serverId']}
           field="serverId"
         >
-          <Select
-            placeholder={t['searchForm.serverId.placeholder']}
-            options={Status.map((item, index) => ({
-              label: item,
-              value: index,
-            }))}
-            // mode="multiple"
-            allowClear
+          <RequestSelect 
+           placeholder={t['searchForm.serverId.placeholder']}
+           lableFiled="serverName"
+           valueFiled="id"
+           request={()=>list()}
           />
         </Form.Item>
       </Form>

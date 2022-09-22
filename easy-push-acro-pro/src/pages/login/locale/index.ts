@@ -1,6 +1,6 @@
 const i18n = {
   'en-US': {
-    'login.form.title': 'Login to Arco Design Pro',
+    'login.form.title': 'Login to Easy Push',
     'login.form.loginType.errMsg': 'login type cannot be empty',
     'login.form.userName.errMsg': 'Username cannot be empty',
     'login.form.password.errMsg': 'Password cannot be empty',
@@ -22,7 +22,7 @@ const i18n = {
     'login.banner.subSlogan3': 'Realize flexible block development',
   },
   'zh-CN': {
-    'login.form.title': '登录 Arco Design Pro',
+    'login.form.title': '登录 简单推送',
     'login.form.loginType.errMsg': '登录方式不能为空',
     'login.form.userName.errMsg': '用户名不能为空',
     'login.form.password.errMsg': '密码/密钥/验证码不能为空',
