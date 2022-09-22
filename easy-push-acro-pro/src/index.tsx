@@ -23,6 +23,7 @@ const store = createStore(rootReducer);
 function Index() {
   const [lang, setLang] = useStorage('arco-lang', 'zh-CN');
   const [theme, setTheme] = useStorage('arco-theme', 'light');
+  const [userInfo, _setUserInfo] = useStorage('userInfo','');
 
   function getArcoLocale() {
     switch (lang) {
@@ -40,10 +41,9 @@ function Index() {
       type: 'update-userInfo',
       payload: { userLoading: true },
     });
-    const userInfoStr = localStorage.getItem("userInfo")
       store.dispatch({
         type: 'update-userInfo',
-        payload: { userInfo: JSON.parse(userInfoStr), userLoading: false },
+        payload: { userInfo: userInfo?JSON.parse(userInfo):{}, userLoading: false },
       });
   }
 
@@ -52,6 +52,7 @@ function Index() {
       fetchUserInfo();
     } 
     else{
+      //发起请求获取系统路由
       userResource().then((res)=>{
         const {success,data} = res.data
         if(success){
@@ -65,12 +66,17 @@ function Index() {
             type: 'update-routes',
             payload: { systemRoutes: data},
           });
+        }else{
+          const emptydata = []
+          emptydata[0] = staticRoutes;
+          emptydata[1] = [];
+          store.dispatch({
+            type: 'update-routes',
+            payload: { systemRoutes: emptydata},
+          });
         }
       })
     }
-    // else if (window.location.pathname.replace(/\//g, '') !== 'login') {
-    //   window.location.pathname = '/login';
-    // }
   }, []);
 
   useEffect(() => {

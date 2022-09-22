@@ -9,17 +9,17 @@ import {
   Notification,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
+import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
 import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
 import { managerPage, removeRequest } from '@/api/clientInfo';
-import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import AddPage from './add';
+import InstallClientPage from './installClient';
 
 const { Title } = Typography;
 
@@ -32,6 +32,13 @@ function SearchTable() {
     if (type === 'view') {
       viewInfo(record.id);
     }
+
+    
+        //安装
+        if (type === 'install') {
+          installClient(record.id);
+        }
+    
 
 
     //删除
@@ -62,6 +69,16 @@ function SearchTable() {
     fetchData();
   }
 
+
+    //安装
+    const [installClientId, setInstallClientId] = useState();
+    const [isInstallClient, setIsInstallClient] = useState(false);
+  
+    function installClient(id) {
+      setInstallClientId(id);
+      setIsInstallClient(true);
+    }
+  
 
   //删除
   function removeData(id){
@@ -159,7 +176,7 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'clientInfo', actions: ['add'] },
+          { resource: 'server:client', actions: ['add'] },
         ]}
       >
         <div className={styles['button-group']}>
@@ -187,6 +204,12 @@ function SearchTable() {
         id={viewInfoId}
         visible={isViewInfo}
         setVisible={setisViewInfo}
+      />
+      <InstallClientPage
+        id={installClientId}
+        visible={isInstallClient}
+        setVisible={setIsInstallClient}
+        successCallBack={setIsInstallClient}
       />
     </Card>
   );

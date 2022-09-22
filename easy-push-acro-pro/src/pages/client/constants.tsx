@@ -11,7 +11,7 @@ export interface DataInfoVo{
     serverName: string,
     userName: string,
     status: string,
-    clientData: string,
+    clientData: any,
     createTime: string,
     updateTime: string,
     lastUpTime: string,
@@ -96,6 +96,13 @@ export function getColumns(
             onClick={() => callback(record, 'view')}
           >
             {t['searchTable.columns.operations.view']}
+          </Button>
+          <Button
+            type="text"
+            size="small"
+            onClick={() => callback(record, 'install')}
+          >
+            {t['searchTable.columns.operations.install']}
           </Button>
           <Popconfirm
             title={t['searchTable.columns.operations.remove.confirm']}

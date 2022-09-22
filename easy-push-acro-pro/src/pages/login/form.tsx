@@ -26,10 +26,10 @@ export default function LoginForm() {
 
   const t = useLocale(locale);
 
-  const [loginType, setLoginType] = useState('secret');
+  const [loginType, setLoginType] = useState('password');
   const [sendMail, setSendMail] = useState(false);
 
-  const [userStatus] = useStorage('userStatus');
+  const [token,setToken] = useStorage('token');
 
   const dispatch = useDispatch();
 
@@ -65,15 +65,16 @@ export default function LoginForm() {
 
   // 读取 localStorage，设置初始值
   useEffect(() => {
-    if (userStatus === 'login') {
-      window.location.href = '/';
-    }
+
+    // if (token) {
+    //   window.location.href = '/';
+    // }
 
     const search = window.location.search;
     const param = new URLSearchParams(search);
     const token = param.get('token');
     if (token) {
-      localStorage.setItem('token', token);
+      setToken(token)
       const tokenInfo: any = decode(token);
       localStorage.setItem('userInfo', JSON.stringify(tokenInfo.userInfo));
       dispatch({
@@ -99,10 +100,6 @@ export default function LoginForm() {
           // 保存菜单
           localStorage.setItem('userMenu', JSON.stringify(staticRoutes));
         }
-        
-        
-        // 记录登录状态
-        localStorage.setItem('userStatus', 'login');
         // 跳转登录成功页
         window.location.href = '/loginSuccess';
       });
@@ -124,7 +121,7 @@ export default function LoginForm() {
       >
         <Form.Item
           field="loginType"
-          initialValue={'secret'}
+          initialValue={'password'}
           rules={[
             { required: true, message: t['login.form.loginType.errMsg'] },
           ]}

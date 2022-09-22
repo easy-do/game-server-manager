@@ -19,6 +19,7 @@ import {
   IconSettings,
   IconPoweroff,
   IconLoading,
+  IconImport,
 } from '@arco-design/web-react/icon';
 import { useSelector, useDispatch } from 'react-redux';
 import { GlobalState } from '@/store';
@@ -30,15 +31,14 @@ import IconButton from './IconButton';
 import Settings from '../Settings';
 import styles from './style/index.module.less';
 import defaultLocale from '@/locale';
-import useStorage from '@/utils/useStorage';
 import { logoutRequest } from '@/api/oauth';
+import checkLogin from '@/utils/checkLogin';
 
 function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
   const t = useLocale();
   const { userInfo, userLoading } = useSelector((state: GlobalState) => state);
-  const dispatch = useDispatch();
 
-  const [_, setUserStatus] = useStorage('userStatus');
+  const dispatch = useDispatch();
 
   const { setLang, lang, theme, setTheme } = useContext(GlobalContext);
 
@@ -47,14 +47,16 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
       const { success } = res.data;
       if(success){
         localStorage.clear();
-        setUserStatus('logout');
         window.location.href = '/login';
       }
     })
   }
 
   function onMenuItemClick(key) {
-    if (key === 'info') {
+    
+    if (key === 'login') {
+      window.location.href='/login'
+    } else if (key === 'info') {
       window.location.href='/user/info'
     } else if (key === 'logout') {
       logout();
@@ -79,40 +81,31 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
   }
 
   const droplist = (
-    <Menu onClickMenuItem={onMenuItemClick}>
-      <Menu.Item key="info">
-        <IconUser className={styles['dropdown-icon']} />
-        {userInfo.nickName}
-      </Menu.Item>
-      <Menu.Item key="setting">
-        <IconSettings className={styles['dropdown-icon']} />
-        {t['menu.user.setting']}
-      </Menu.Item>
-      {/* <Menu.SubMenu
-        key="more"
-        title={
-          <div style={{ width: 80 }}>
-            <IconExperiment className={styles['dropdown-icon']} />
-            {t['message.seeMore']}
-          </div>
-        }
-      >
-        <Menu.Item key="workplace">
-          <IconDashboard className={styles['dropdown-icon']} />
-          {t['menu.dashboard.workplace']}
-        </Menu.Item>
-        <Menu.Item key="card list">
-          <IconInteraction className={styles['dropdown-icon']} />
-          {t['menu.list.cardList']}
-        </Menu.Item>
-      </Menu.SubMenu> */}
+    
+      <Menu onClickMenuItem={onMenuItemClick}>
+        {!checkLogin() ? 
+                  <Menu.Item key="login">
+                  <IconImport className={styles['dropdown-icon']} />
+                  {t['navbar.login']}
+                </Menu.Item> :
+        <>
+          <Menu.Item key="info">
+            <IconUser className={styles['dropdown-icon']} />
+            {userInfo.nickName}
+          </Menu.Item>
+          <Menu.Item key="setting">
+            <IconSettings className={styles['dropdown-icon']} />
+            {t['menu.user.setting']}
+          </Menu.Item>
+          <Divider style={{ margin: '4px 0' }} />
+          <Menu.Item key="logout">
+            <IconPoweroff className={styles['dropdown-icon']} />
+            {t['navbar.logout']}
+          </Menu.Item>
+        </>
+        } 
 
-      <Divider style={{ margin: '4px 0' }} />
-      <Menu.Item key="logout">
-        <IconPoweroff className={styles['dropdown-icon']} />
-        {t['navbar.logout']}
-      </Menu.Item>
-    </Menu>
+      </Menu>
   );
 
   return (
@@ -182,7 +175,9 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
               <Avatar size={32} style={{ cursor: 'pointer' }}>
                 {userLoading ? (
                   <IconLoading />
-                ) : (
+                ) : !checkLogin() ? (
+                  <div>未登录</div>
+                ): (
                   <img alt="avatar" src={userInfo.avatarUrl} />
                 )}
               </Avatar>

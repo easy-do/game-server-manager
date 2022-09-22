@@ -8,6 +8,10 @@ import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
 import cn.hutool.core.text.CharSequenceUtil;
+import com.alicp.jetcache.anno.CacheInvalidate;
+import com.alicp.jetcache.anno.CacheRefresh;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -117,6 +121,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      * @return 结果
      */
     @Override
+    @CacheInvalidate(name = "SysResourceService.roleResource")
     public boolean add(SysResourceDto sysResourceDto) {
         SysResource entity = SysResourceMapstruct.INSTANCE.dtoToEntity(sysResourceDto);
         entity.setCreateBy(getUserId());
@@ -130,6 +135,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      * @return 结果
      */
     @Override
+    @CacheInvalidate(name = "SysResourceService.roleResource")
     public boolean edit(SysResourceDto sysResourceDto) {
         SysResource entity = SysResourceMapstruct.INSTANCE.dtoToEntity(sysResourceDto);
         return updateById(entity);
@@ -142,6 +148,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      * @return 结果
      */
     @Override
+    @CacheInvalidate(name = "SysResourceService.roleResource")
     public boolean delete(Serializable id) {
         return removeById(id);
     }
@@ -156,6 +163,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      * @date 2022/9/20
      */
     @Override
+    @CacheInvalidate(name = "SysResourceService.roleResource")
     public boolean changeStatus(ChangeStatusDto changeStatusDto) {
         Long id = changeStatusDto.getId();
         Integer status = changeStatusDto.getStatus();
@@ -240,6 +248,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      * @date 2022/9/20
      */
     @Override
+    @CacheInvalidate(name = "SysResourceService.roleResource")
     public boolean authRoleResource(AuthRoleMenuDto authRoleMenuDto) {
         ArrayList<SysRoleResource> entityList = new ArrayList<>();
         Long roleId = authRoleMenuDto.getRoleId();
@@ -272,6 +281,8 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      * @author laoyu
      * @date 2022/9/20
      */
+    @Cached(name = "SysResourceService.roleResource", expire = 3200, cacheType = CacheType.BOTH)
+    @CacheRefresh(refresh = 60)
     public List<Tree<Long>> roleResource(List<Long> roleIds) {
         List<SysResource> menuList = getRoleResourceList(roleIds);
         return buildResourceTree(menuList);
@@ -456,6 +467,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
             treeNode.setWeight(sysResourceVo.getOrderNumber());
             treeNode.putExtra("details", sysResourceVo);
             treeNode.putExtra("key", sysResourceVo.getPath());
+            treeNode.putExtra("type", sysResourceVo.getResourceType());
             treeNode.putExtra("resourceCode", sysResourceVo.getResourceCode());
             treeNode.putExtra("visible", StatusEnum.DISABLE.getCode().equals(sysResourceVo.getVisible()));
         };
