@@ -26,6 +26,7 @@ const i18n = {
     'searchTable.columns.delFlag': '删除标记',
     'searchTable.columns.operations': 'Operation',
     'searchTable.columns.operations.view': 'View',
+    'searchTable.columns.operations.log': 'Log',
     'searchTable.columns.operations.update': 'Edit',
     'searchTable.columns.operations.remove': 'Remove',
     'searchTable.columns.operations.remove.confirm': 'Are you sure you want to delete?',
@@ -102,6 +103,7 @@ const i18n = {
 
     'searchTable.columns.operations': '操作',
     'searchTable.columns.operations.view': '查看',
+    'searchTable.columns.operations.log': '日志',
     'searchTable.columns.operations.update': '修改',
     'searchTable.columns.operations.remove': '删除',
     'searchTable.columns.operations.remove.confirm': '确定要删除吗?', 

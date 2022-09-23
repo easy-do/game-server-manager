@@ -1,8 +1,7 @@
 package game.server.manager.uc.controller;
 
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.annotation.SaCheckPermission;
+
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.hutool.core.lang.tree.Tree;
 import game.server.manager.common.constant.SystemConstant;

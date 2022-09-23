@@ -2,9 +2,13 @@ package game.server.manager.auth;
 
 import cn.dev33.satoken.stp.StpInterface;
 import game.server.manager.common.vo.UserInfoVo;
+import game.server.manager.redis.config.RedisUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static game.server.manager.common.constant.SystemConstant.USER_PERMISSION;
 
 /**
  * @author yuzhanfeng
@@ -14,13 +18,15 @@ import java.util.List;
 @Component
 public class StpInterfaceImpl implements StpInterface {
 
+    @Autowired
+    private RedisUtils<List<String>> redisUtils;
+
     /**
      * 返回一个账号所拥有的权限码集合
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        UserInfoVo user = AuthorizationUtil.getUser();
-        return user.getPermissions().stream().toList();
+        return redisUtils.get(USER_PERMISSION+loginId);
     }
 
     /**
