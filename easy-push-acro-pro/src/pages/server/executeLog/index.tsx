@@ -14,65 +14,35 @@ import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
-import { managerPage, removeRequest } from '@/api/applicationInfo';
+import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
+import { managerPage } from '@/api/executeLog';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
-import AddPage from './add';
 
 const { Title } = Typography;
 
-function SearchTable() {
+function ExecuteLogSearchTable(props:{applicationId?:string}) {
   const t = useLocale(locale);
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
-    console.log(record, type);
     //查看
     if (type === 'view') {
-      viewInfo(record.applicationId);
-    }
-    //删除
-    if (type === 'remove') {
-      removeData(record.applicationId);
+      viewInfo(record.id);
     }
   };
 
+
+  //查看
   const [viewInfoId, setViewInfoId] = useState();
   const [isViewInfo, setisViewInfo] = useState(false);
 
- //查看
   function viewInfo(id) {
     setViewInfoId(id);
     setisViewInfo(true);
   }
 
-  const [updateId, setUpdateId] = useState();
-  const [isUpdateInfo, setisUpdateInfo] = useState(false);
-
-  //新增
-  const [isAddData, setIsAddData] = useState(false);
-
-  function addData(){
-    setIsAddData(true);
-  }
-  
-  function addDataSuccess() {
-    setIsAddData(false);
-    fetchData();
-  }
-
-  //删除
-  function removeData(id){
-    removeRequest(id).then((res)=>{
-      const { success, msg} = res.data
-      if(success){
-        Notification.success({ content: msg, duration: 300 })
-        fetchData();
-      }
-    })
-  }
 
   //获取表格展示列表、绑定操作列回调
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
@@ -102,18 +72,14 @@ function SearchTable() {
   function fetchData() {
     const { current, pageSize } = pagination;
     setLoading(true);
+    const newFormParams:any = {...formParams, applicationId:props.applicationId}
     managerPage({
       currentPage: current,
       pageSize,
-      searchParam: formParams,
+      searchParam: newFormParams,
       orders: orders,
       columns: getSearChColumns(),
-      searchConfig: {
-        applicationName: SearchTypeEnum.LIKE,
-        deviceName: SearchTypeEnum.LIKE,
-        appName: SearchTypeEnum.LIKE,
-        lastUpTime: SearchTypeEnum.BETWEEN,
-      },
+      searchConfig: searchConfig(),
     }).then((res) => {
       setData(res.data.data);
       setPatination({
@@ -162,19 +128,6 @@ function SearchTable() {
     <Card>
       <Title heading={6}>{t['list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
-      <PermissionWrapper
-        requiredPermissions={[
-          { resource: 'applicationInfo', actions: ['update'] },
-        ]}
-      >
-        <div className={styles['button-group']}>
-          <Space>
-            <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
-              {t['searchTable.operations.add']}
-            </Button>
-          </Space>
-        </div>
-      </PermissionWrapper>
       <Table
         rowKey="id"
         loading={loading}
@@ -183,18 +136,14 @@ function SearchTable() {
         columns={columns}
         data={data}
       />
-      <AddPage
-        visible={isAddData}
-        setVisible={setIsAddData}
-        successCallBack={addDataSuccess}
-      />
       <InfoPage
         id={viewInfoId}
         visible={isViewInfo}
         setVisible={setisViewInfo}
+        applicationId={props.applicationId}
       />
     </Card>
   );
 }
 
-export default SearchTable;
+export default ExecuteLogSearchTable;

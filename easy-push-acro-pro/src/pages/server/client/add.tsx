@@ -6,9 +6,9 @@ import useLocale from '@/utils/useLocale';
 import { addRequest } from '@/api/clientInfo';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
-import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
-import RequestSelect from '@/components/RequestSelect/RequestSelect';
+
 import { list } from '@/api/serverInfo';
+import RequestSelect from '@/components/RequestSelect/requestSelect';
 
 function AddPage({ visible, setVisible, successCallBack }) {
   
