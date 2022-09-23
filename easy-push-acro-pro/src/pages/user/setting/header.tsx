@@ -79,7 +79,7 @@ export default function Info({
           },
           {
             label: t['userSetting.label.registrationTime'],
-            value: loading ? loadingNode : moment(userInfo.creatTime*1000).format("YYYY-MM-DD HH:mm:ss"),
+            value: loading ? loadingNode : userInfo.creatTime,
           },
           {
             label: t['userSetting.label.lastLoginTime'],
