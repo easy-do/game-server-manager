@@ -28,7 +28,7 @@ axios.interceptors.response.use(
         cookie.remove('token');
         localStorage.clear()
         sessionStorage.clear()
-        window.location.pathname = '/'
+        window.location.pathname = '/login'
       } else {
         Notification.warning({ content: data.data.errorMessage, duration: 3000 })
       }

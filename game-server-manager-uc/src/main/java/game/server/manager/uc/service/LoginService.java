@@ -11,6 +11,7 @@ import game.server.manager.common.enums.LoginTypeEnums;
 import game.server.manager.common.utils.IpRegionSearchUtil;
 import game.server.manager.common.vo.SysRoleVo;
 import game.server.manager.common.vo.UserInfoVo;
+import game.server.manager.redis.config.RedisUtils;
 import game.server.manager.uc.dto.LoginModel;
 import game.server.manager.uc.entity.SysResource;
 import game.server.manager.uc.entity.UserInfo;
@@ -27,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
+import static game.server.manager.common.constant.SystemConstant.USER_PERMISSION;
 
 /**
  * @author laoyu
@@ -48,6 +51,9 @@ public class LoginService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private RedisUtils<Object> redisUtils;
 
     /**
      * 登录
@@ -216,8 +222,8 @@ public class LoginService {
         Long userId = userInfoVo.getId();
         List<String> roleList = sysRoleService.selectRolesByUserId(userId).stream().map(SysRoleVo::getRoleKey).toList();
         Set<String> permissionList = sysResourceService.userPermissionList(userId);
+        redisUtils.set(USER_PERMISSION+userId,permissionList);
         userInfoVo.setRoles(roleList);
-        userInfoVo.setPermissions(permissionList);
         Map<String,List<String>> resourceAction = sysResourceService.userResourceAction(userId);
         userInfoVo.setResourceAction(resourceAction);
     }
@@ -227,5 +233,6 @@ public class LoginService {
     public void logout() {
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         StpUtil.logout(tokenInfo.loginId);
+        redisUtils.delete(USER_PERMISSION+tokenInfo.loginId);
     }
 }

@@ -98,6 +98,13 @@ export function getColumns(
           >
             {t['searchTable.columns.operations.view']}
           </Button>
+          <Button
+            type="text"
+            size="small"
+            onClick={() => callback(record, 'log')}
+          >
+            {t['searchTable.columns.operations.log']}
+          </Button>
           <Popconfirm
             title={t['searchTable.columns.operations.remove.confirm']}
             onOk={() => callback(record, 'remove')}
