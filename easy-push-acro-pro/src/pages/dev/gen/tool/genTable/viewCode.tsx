@@ -27,7 +27,7 @@ function ViewCodePage({ id, visible, setVisible }) {
           map.forEach((value:string, key: string) => {
             list.push(
               <TabPane key={key} title={key}>
-                <MEditor height={'600px'} width={'950px'} theme='vs-dark' language='typescript' value={value} callBack={null} />
+                <MEditor showLanguageSelect={true} height={'600px'} width={'950px'} theme='vs-dark' language='typescript' value={value} callBack={null} />
               </TabPane>
             );
           });
