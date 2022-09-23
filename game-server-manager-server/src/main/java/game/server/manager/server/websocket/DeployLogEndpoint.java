@@ -8,6 +8,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.vo.DeployLogResultVo;
+import game.server.manager.redis.config.RedisUtils;
 import game.server.manager.server.application.DeploymentLogServer;
 import game.server.manager.server.service.ApplicationInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ public class DeployLogEndpoint {
     private Session session;
 
     private static ApplicationInfoService applicationInfoService;
+
     /**
      * ServerEndpoint无法直接 Autowired static方式
      *
@@ -61,9 +63,25 @@ public class DeployLogEndpoint {
      * @date 2022/9/2
      */
     @Autowired
-    private void setApplicationInfoService(DeploymentLogServer deploymentLogServer){
+    private void setDeploymentLogServer(DeploymentLogServer deploymentLogServer){
         DeployLogEndpoint.deploymentLogServer =deploymentLogServer;
     }
+//
+//    private static RedisUtils<Object> redisUtils;
+//
+//    /**
+//     * ServerEndpoint无法直接 Autowired static方式
+//     *
+//     * @param redisUtils redisUtils
+//     * @author laoyu
+//     * @date 2022/9/2
+//     */
+//    @Autowired
+//    private void setRedisUtils(RedisUtils<Object> redisUtils){
+//        DeployLogEndpoint.redisUtils =redisUtils;
+//    }
+
+
 
     /**
      * 打开websocket连接
@@ -118,7 +136,7 @@ public class DeployLogEndpoint {
         StpLogicJwtForSimple stpLogic = (StpLogicJwtForSimple) StpUtil.stpLogic;
         cn.hutool.json.JSONObject payloads = SaJwtUtil.getPayloadsNotCheck((String) token, stpLogic.loginType, stpLogic.jwtSecretKey());
         cn.hutool.json.JSONObject info = payloads.getJSONObject(SystemConstant.TOKEN_USER_INFO);
-        boolean isAdmin = info.getJSONArray(SystemConstant.TOKEN_USER_PERMISSIONS).contains(SystemConstant.SUPER_ADMIN_ROLE);
+        boolean isAdmin = info.getJSONArray(SystemConstant.TOKEN_USER_ROLES).contains(SystemConstant.SUPER_ADMIN_ROLE);
         Long userId = info.getLong("id");
 
         if (!isAdmin) {

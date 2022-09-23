@@ -7,6 +7,7 @@ import {
   Space,
   Typography,
   Notification,
+  Modal,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
 import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
@@ -20,6 +21,7 @@ import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import AddPage from './add';
+import ExecuteLogSearchTable from '../executeLog';
 
 const { Title } = Typography;
 
@@ -37,6 +39,10 @@ function SearchTable() {
     if (type === 'remove') {
       removeData(record.applicationId);
     }
+        //查看日志
+        if (type === 'log') {
+          viewLog(record.applicationId);
+        }
   };
 
   const [viewInfoId, setViewInfoId] = useState();
@@ -73,6 +79,16 @@ function SearchTable() {
       }
     })
   }
+
+  const [viewLogId, setViewLogId] = useState();
+  const [isViewLog, setIsViewLog] = useState(false);
+
+ //查看日志
+  function viewLog(id) {
+    setViewLogId(id);
+    setIsViewLog(true);
+  }
+
 
   //获取表格展示列表、绑定操作列回调
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
@@ -164,7 +180,7 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'applicationInfo', actions: ['update'] },
+          { resource: 'server:application', actions: ['update'] },
         ]}
       >
         <div className={styles['button-group']}>
@@ -193,6 +209,22 @@ function SearchTable() {
         visible={isViewInfo}
         setVisible={setisViewInfo}
       />
+      <Modal
+      title={t['searchTable.operations.add']}
+      visible={isViewLog}
+      onOk={() => {
+        setIsViewLog(false);
+      }}
+      onCancel={() => {
+        setIsViewLog(false);
+      }}
+      autoFocus={false}
+      focusLock={true}
+      maskClosable={false}
+      style={{ width: "100%", minHeight: "100%" }}
+    >
+    <ExecuteLogSearchTable applicationId={viewLogId} />
+    </Modal>
     </Card>
   );
 }
