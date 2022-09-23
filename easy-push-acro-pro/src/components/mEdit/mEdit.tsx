@@ -5,6 +5,8 @@ import MonacoEditor from "react-monaco-editor";
 
 export interface MEditorProps{
 
+  showLanguageSelect?:boolean;
+
   value:string;
 
   language?: string;
@@ -16,7 +18,8 @@ export interface MEditorProps{
   theme?: string;
 
   options? : {
-    selectOnLineNumbers: true,
+    selectOnLineNumbers?: boolean,
+    readonly?:boolean,
   };
 
   callBack:(value:string)=>void
@@ -50,7 +53,11 @@ function MEditor (props:MEditorProps) {
   return (
     <div>
       <Space>
-      切换语言<Select value={languages} size='small' showSearch style={{width:'120px'}} options={editLanguages} onChange={(value)=>setLanguages(value)} />
+      {
+        props.showLanguageSelect?
+        ( <Select value={languages} size='small' showSearch style={{width:'120px'}} options={editLanguages} onChange={(value)=>setLanguages(value)} />)
+        :null
+      }
       </Space>
       
       <MonacoEditor
