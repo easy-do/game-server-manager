@@ -17,7 +17,7 @@
         <mapstruct.version>1.5.2.Final</mapstruct.version>
         <lombok.version>1.18.24</lombok.version>
         <spring-cloud.version>2021.0.1</spring-cloud.version>
-        <sa-token-version>1.30.0</sa-token-version>
+        <sa-token-version>1.31.0</sa-token-version>
     </properties>
 
 
@@ -32,6 +32,7 @@
         <module>commons/game-server-manager-mybatis-plus</module>
         <module>commons/game-server-manager-web</module>
         <module>commons/game-server-manager-doc</module>
+        <module>game-server-manager-oss</module>
         <module>game-server-manager-plugins</module>
         <module>game-server-manager-client</module>
         <module>game-server-manager-gateway</module>

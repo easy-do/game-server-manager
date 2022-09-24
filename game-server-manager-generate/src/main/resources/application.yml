@@ -36,10 +36,10 @@ spring:
       cache-null-values: true
   servlet:
     multipart:
-      # 文件最大限制
-      max-file-size: 1024MB
-      # 请求最大限制
-      max-request-size: 1024MB
+      # 单个文件大小
+      max-file-size: ${MAX_FILE_SIZE:1024MB}
+      # 设置总上传的文件大小
+      max-request-size: ${MAX_REQUEST_SIZE:1024MB}
       enabled: true
       # 设置文件缓存的临界点,超过则先保存到临时目录,默认为0,所有文件都会进行缓存
       file-size-threshold: 0

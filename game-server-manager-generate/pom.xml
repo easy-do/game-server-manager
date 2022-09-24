@@ -93,7 +93,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>3.5.1</version>
+            <version>3.5.2</version>
         </dependency>
 
         <dependency>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>5.3.22</version>
+            <version>5.3.23</version>
         </dependency>
 
         <!--velocity代码生成使用模板 -->
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>com.googlecode.aviator</groupId>
             <artifactId>aviator</artifactId>
-            <version>5.3.1</version>
+            <version>5.3.2</version>
         </dependency>
 
         <dependency>
@@ -148,7 +148,7 @@
         <dependency>
             <groupId>org.docx4j</groupId>
             <artifactId>docx4j-export-fo</artifactId>
-            <version>11.4.7</version>
+            <version>11.4.8</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-io</artifactId>
