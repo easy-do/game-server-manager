@@ -4,7 +4,6 @@ import game.server.manager.api.feign.SysDictDataClient;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.common.vo.SysDictDataVo;
-import org.springframework.stereotype.Service;
 
 /**
  * @author laoyu

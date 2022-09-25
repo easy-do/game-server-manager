@@ -1,6 +1,6 @@
 package game.server.manager.oss.minio;
 
-import game.server.manager.oss.exception.OssStoreException;
+import game.server.manager.common.exception.OssException;
 import game.server.manager.oss.minio.config.MinioProperties;
 import io.minio.*;
 import io.minio.messages.Bucket;
@@ -215,7 +215,7 @@ public class MinioTemplate {
             client.removeObject(removeObjectArgs);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new OssStoreException("删除文件发生异常");
+            throw new OssException("删除文件发生异常");
         }
     }
 
@@ -235,7 +235,7 @@ public class MinioTemplate {
             client.copyObject(copyObjectArgs);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new OssStoreException("复制文件发生异常");
+            throw new OssException("复制文件发生异常");
         }
     }
 
@@ -258,7 +258,7 @@ public class MinioTemplate {
             client.removeObject(removeObjectArgs);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new OssStoreException("移动文件发生异常");
+            throw new OssException("移动文件发生异常");
         }
     }
 

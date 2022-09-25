@@ -3,10 +3,10 @@ package game.server.manager.oss.minio;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.RandomUtil;
 import game.server.manager.common.result.R;
-import game.server.manager.oss.OssResult;
+import game.server.manager.common.result.OssResult;
 import game.server.manager.oss.OssObject;
 import game.server.manager.oss.OssUtil;
-import game.server.manager.oss.exception.OssStoreException;
+import game.server.manager.common.exception.OssException;
 import game.server.manager.oss.service.AbstractOssService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,13 +48,13 @@ public class MinioOssStoreServer extends AbstractOssService<String, MultipartFil
     @Override
     public InputStream getFile(String groupName, String fileIndex) {
         if (CharSequenceUtil.isBlank(fileIndex)) {
-            throw new OssStoreException("fileIndex is empty");
+            throw new OssException("fileIndex is empty");
         }
         try {
             return template.getObject(buildGroupName(groupName), fileIndex);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new OssStoreException("File does not exist");
+            throw new OssException("File does not exist");
         }
     }
 
@@ -62,7 +62,7 @@ public class MinioOssStoreServer extends AbstractOssService<String, MultipartFil
     @Override
     public Boolean remove(String groupName, String fileIndex) {
         if (CharSequenceUtil.isBlank(fileIndex)) {
-            throw new OssStoreException("fileIndex is empty");
+            throw new OssException("fileIndex is empty");
         }
         if (CharSequenceUtil.isBlank(groupName)) {
             try {
@@ -98,7 +98,7 @@ public class MinioOssStoreServer extends AbstractOssService<String, MultipartFil
     public void validationFile(MultipartFile multipartFile) {
         super.validationFile(multipartFile);
         if (multipartFile.getSize() == 0) {
-            throw new OssStoreException("fileId is empty");
+            throw new OssException("fileId is empty");
         }
     }
 

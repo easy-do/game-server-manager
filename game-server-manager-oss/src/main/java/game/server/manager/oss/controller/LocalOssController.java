@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.oss.OssObject;
-import game.server.manager.oss.OssResult;
+import game.server.manager.common.result.OssResult;
 import game.server.manager.oss.OssUtil;
 import game.server.manager.oss.local.LocalOssService;
 import org.apache.commons.io.IOUtils;

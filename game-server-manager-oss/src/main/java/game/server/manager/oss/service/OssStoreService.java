@@ -1,7 +1,7 @@
 package game.server.manager.oss.service;
 
 import game.server.manager.common.result.R;
-import game.server.manager.oss.OssResult;
+import game.server.manager.common.result.OssResult;
 import game.server.manager.oss.OssObject;
 
 import java.math.BigDecimal;

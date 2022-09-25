@@ -34,7 +34,12 @@ spring:
             - Path=/gen/**
           filters:
             - StripPrefix=1
-
+        - id: oss
+          uri: http://localhost:30004
+          predicates:
+            - Path=/oss/**
+          filters:
+            - StripPrefix=1
 
 management:
   server:

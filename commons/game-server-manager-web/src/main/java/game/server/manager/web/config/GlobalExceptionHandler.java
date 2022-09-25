@@ -7,6 +7,7 @@ import game.server.manager.common.constant.HttpStatus;
 import game.server.manager.common.exception.BaseException;
 import game.server.manager.common.exception.CustomException;
 import game.server.manager.common.exception.HasPermissionException;
+import game.server.manager.common.exception.OssException;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import org.slf4j.Logger;
@@ -103,6 +104,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HasPermissionException.class)
     public Object validExceptionHandler(HasPermissionException e) {
+        log.error(e.getMessage(), e);
         if (Validator.isNull(e.getMessage())) {
             return DataResult.fail(HttpStatus.FORBIDDEN, "没有访问权限。");
         }
@@ -138,6 +140,20 @@ public class GlobalExceptionHandler {
         }
         return DataResult.fail(HttpStatus.FORBIDDEN, nle.getMessage());
     }
+
+
+    /**
+     * 功能描述
+     *
+     * @param e e
+     * @return plus.easydo.core.result.R
+     * @author laoyu
+     */
+    @ExceptionHandler(OssException.class)
+    public R<Object> ossException(OssException e) {
+        return DataResult.fail(e.getMessage());
+    }
+
 
 
 }
