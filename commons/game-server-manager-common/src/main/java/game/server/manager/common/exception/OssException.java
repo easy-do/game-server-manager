@@ -1,14 +1,12 @@
-package game.server.manager.oss.exception;
+package game.server.manager.common.exception;
 
-
-import game.server.manager.common.exception.BaseException;
 
 /**
  * 文件存储异常异常
  *
  * @author ruoyi
  */
-public class OssStoreException extends BaseException {
+public class OssException extends BaseException {
 
     private static final long serialVersionUID = 1L;
 
@@ -16,23 +14,23 @@ public class OssStoreException extends BaseException {
 
     private static final String DEFAULT_ERR_MESSAGE = "文件存储异常";
 
-    public OssStoreException() {
+    public OssException() {
         super(DEFAULT_ERR_CODE,DEFAULT_ERR_MESSAGE);
     }
 
-    public OssStoreException(String message) {
+    public OssException(String message) {
         super(message);
     }
 
-    public OssStoreException(String errCode, String message) {
+    public OssException(String errCode, String message) {
         super(errCode, message);
     }
 
-    public OssStoreException(String errCode, String message, Throwable cause) {
+    public OssException(String errCode, String message, Throwable cause) {
         super(errCode, message, cause);
     }
 
-    public OssStoreException(String errCode, Throwable cause) {
+    public OssException(String errCode, Throwable cause) {
         super(errCode, cause);
     }
 }

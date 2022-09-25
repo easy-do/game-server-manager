@@ -1,10 +1,11 @@
 package game.server.manager.oss.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.google.common.collect.Lists;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.oss.OssObject;
-import game.server.manager.oss.OssResult;
+import game.server.manager.common.result.OssResult;
 import game.server.manager.oss.OssUtil;
 import game.server.manager.oss.minio.MinioOssStoreServer;
 import lombok.extern.java.Log;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +39,20 @@ public class MinoOssController {
     @Autowired
     private MinioOssStoreServer minioOssStoreServer;
 
-    @ResponseBody
+
+
+    /**
+     * 单个文件上传
+     *
+     * @param file file
+     * @param fileName fileName
+     * @param filePath filePath
+     * @param groupName groupName
+     * @return game.server.manager.common.result.R<game.server.manager.common.result.OssResult<java.lang.String>>
+     * @author laoyu
+     * @date 2022/9/25
+     */
+    @SaCheckLogin
     @PostMapping("/upload")
     public R<OssResult<String>> upload(@RequestParam(name = "file", required = false) MultipartFile file,
                             @RequestParam(name = "fileName", required = false, defaultValue = "") String fileName,
@@ -59,14 +72,45 @@ public class MinoOssController {
         return DataResult.fail("上传失败");
     }
 
+
+    /**
+     * 删除文件
+     *
+     * @param response response
+     * @param groupName groupName
+     * @param filePath filePath
+     * @param fileName fileName
+     * @return game.server.manager.common.result.R<java.lang.Object>
+     * @author laoyu
+     * @date 2022/9/25
+     */
+    @SaCheckLogin
+    @GetMapping("/remove/{groupName}/{filePath}/{fileName}")
+    public R<Object> remove(HttpServletResponse response, @PathVariable(name = "groupName") String groupName,
+                         @PathVariable(name = "filePath") String filePath,
+                         @PathVariable(name = "fileName") String fileName) {
+            return minioOssStoreServer.remove(groupName,OssUtil.endWithSlash(filePath) + fileName)?DataResult.ok():DataResult.fail();
+    }
+
+
+
+    /**
+     * 下载文件
+     *
+     * @param response response
+     * @param groupName groupName
+     * @param filePath filePath
+     * @param fileName fileName
+     * @author laoyu
+     * @date 2022/9/25
+     */
     @GetMapping("/{groupName}/{filePath}/{fileName}")
     public void download(HttpServletResponse response, @PathVariable(name = "groupName") String groupName,
                          @PathVariable(name = "filePath") String filePath,
                          @PathVariable(name = "fileName") String fileName) {
         InputStream in=null;
         try {
-            filePath = OssUtil.endWithSlash(filePath);
-            in = minioOssStoreServer.getFile(groupName,filePath + fileName);
+            in = minioOssStoreServer.getFile(groupName,OssUtil.endWithSlash(filePath) + fileName);
             IOUtils.copy(in,response.getOutputStream());
         }catch (Exception e){
             e.printStackTrace();
@@ -82,6 +126,7 @@ public class MinoOssController {
     }
 
 
+
     /**
      * 多上传文件
      *
@@ -91,7 +136,7 @@ public class MinoOssController {
      * @author laoyu
      * @date 2021/11/14
      */
-    @PostMapping("/list")
+    @PostMapping("/uploads")
     public Object uploadList( @RequestParam("files") List<MultipartFile> files, @RequestParam(name = "groupName", required = false, defaultValue = "") String groupName) {
         List<OssResult<String>> resultList = Lists.newArrayList();
         for (MultipartFile file : files) {

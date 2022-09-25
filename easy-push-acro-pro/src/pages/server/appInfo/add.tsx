@@ -1,17 +1,30 @@
 import React, { useContext, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, FormInstance, Input, Modal, DatePicker, Select, Notification } from '@arco-design/web-react';
+import {
+  Form,
+  FormInstance,
+  Input,
+  Modal,
+  DatePicker,
+  Select,
+  Notification,
+  Upload,
+} from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { addRequest } from '@/api/appInfo';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
+import {
+  customRequest,
+  onPreview,
+  onRemove,
+} from '@/components/Upload/uploadImage';
 
 function AddPage({ visible, setVisible, successCallBack }) {
-  
   const TextArea = Input.TextArea;
-  
+
   const formRef = useRef<FormInstance>();
 
   const { lang } = useContext(GlobalContext);
@@ -20,10 +33,21 @@ function AddPage({ visible, setVisible, successCallBack }) {
 
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
-      addRequest(values).then((res) => {
-        const { success, msg} = res.data
-        if(success){
-          Notification.success({ content: msg, duration: 300 })
+      const icon = values.icon;
+      const picture = values.picture;
+      const iocnStr = icon[0].response.url;
+      const pictureStrs = [];
+      picture.map((item) => {
+        pictureStrs.push(item.response.url);
+      });
+      addRequest({
+        ...values,
+        icon: iocnStr,
+        picture: pictureStrs.join(','),
+      }).then((res) => {
+        const { success, msg } = res.data;
+        if (success) {
+          Notification.success({ content: msg, duration: 300 });
           successCallBack();
         }
       });
@@ -55,7 +79,10 @@ function AddPage({ visible, setVisible, successCallBack }) {
           label={t['searchTable.columns.appName']}
           field="appName"
           rules={[
-            { required: true, message: t['searchTable.rules.appName.required'] },
+            {
+              required: true,
+              message: t['searchTable.rules.appName.required'],
+            },
           ]}
         >
           <Input placeholder={t['searchForm.appName.placeholder']} allowClear />
@@ -64,7 +91,10 @@ function AddPage({ visible, setVisible, successCallBack }) {
           label={t['searchTable.columns.version']}
           field="version"
           rules={[
-            { required: true, message: t['searchTable.rules.version.required'] },
+            {
+              required: true,
+              message: t['searchTable.rules.version.required'],
+            },
           ]}
         >
           <Input placeholder={t['searchForm.version.placeholder']} allowClear />
@@ -76,18 +106,15 @@ function AddPage({ visible, setVisible, successCallBack }) {
             { required: true, message: t['searchTable.rules.state.required'] },
           ]}
         >
-           <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.state.placeholder']} />
+          <DictDataSelect
+            dictCode={'status_select'}
+            placeholder={t['searchForm.state.placeholder']}
+          />
         </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.startCmd']}
-          field="startCmd"
-        >
+        <Form.Item label={t['searchTable.columns.startCmd']} field="startCmd">
           <TextArea placeholder={t['searchForm.startCmd.placeholder']} />
         </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.stopCmd']}
-          field="stopCmd"
-        >
+        <Form.Item label={t['searchTable.columns.stopCmd']} field="stopCmd">
           <TextArea placeholder={t['searchForm.stopCmd.placeholder']} />
         </Form.Item>
         <Form.Item
@@ -103,31 +130,59 @@ function AddPage({ visible, setVisible, successCallBack }) {
             { required: true, message: t['searchTable.rules.icon.required'] },
           ]}
         >
-          <TextArea placeholder={t['searchForm.icon.placeholder']} />
+          <Upload
+            listType="picture-card"
+            multiple={false}
+            limit={1}
+            autoUpload={true}
+            onRemove={onRemove}
+            customRequest={customRequest}
+            onPreview={onPreview}
+          />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.picture']}
           field="picture"
           rules={[
-            { required: true, message: t['searchTable.rules.picture.required'] },
+            {
+              required: true,
+              message: t['searchTable.rules.picture.required'],
+            },
           ]}
         >
-          <TextArea placeholder={t['searchForm.picture.placeholder']} />
+          <Upload
+            listType="picture-card"
+            multiple={false}
+            limit={3}
+            autoUpload={true}
+            onRemove={onRemove}
+            customRequest={customRequest}
+            onPreview={onPreview}
+          />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.appScope']}
           field="appScope"
           rules={[
-            { required: true, message: t['searchTable.rules.appScope.required'] },
+            {
+              required: true,
+              message: t['searchTable.rules.appScope.required'],
+            },
           ]}
         >
-           <DictDataSelect dictCode={'scope_select'} placeholder={t['searchForm.appScope.placeholder']} />
+          <DictDataSelect
+            dictCode={'scope_select'}
+            placeholder={t['searchForm.appScope.placeholder']}
+          />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.description']}
           field="description"
           rules={[
-            { required: true, message: t['searchTable.rules.description.required'] },
+            {
+              required: true,
+              message: t['searchTable.rules.description.required'],
+            },
           ]}
         >
           <TextArea placeholder={t['searchForm.description.placeholder']} />

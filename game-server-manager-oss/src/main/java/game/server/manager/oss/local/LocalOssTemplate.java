@@ -3,7 +3,7 @@ package game.server.manager.oss.local;
 import cn.hutool.core.io.FileUtil;
 import game.server.manager.oss.OssObject;
 import game.server.manager.oss.OssUtil;
-import game.server.manager.oss.exception.OssStoreException;
+import game.server.manager.common.exception.OssException;
 import game.server.manager.oss.local.config.LocalOssProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -122,7 +122,7 @@ public class LocalOssTemplate {
             FileUtil.writeFromStream(file.getInputStream(), files);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new OssStoreException("存储文件发生异常");
+            throw new OssException("存储文件发生异常");
         }
     }
 }

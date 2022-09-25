@@ -3,10 +3,10 @@ package game.server.manager.oss.local;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.RandomUtil;
 import game.server.manager.common.result.R;
-import game.server.manager.oss.OssResult;
+import game.server.manager.common.result.OssResult;
 import game.server.manager.oss.OssObject;
 import game.server.manager.oss.OssUtil;
-import game.server.manager.oss.exception.OssStoreException;
+import game.server.manager.common.exception.OssException;
 import game.server.manager.oss.service.AbstractOssService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +38,7 @@ public class LocalOssService extends AbstractOssService<String, MultipartFile, I
     @Override
     public InputStream getFile(String groupName, String fileIndex) {
         if (CharSequenceUtil.isBlank(fileIndex)) {
-            throw new OssStoreException("fileId is empty");
+            throw new OssException("fileId is empty");
         }
         return template.getFile(groupName, fileIndex);
     }

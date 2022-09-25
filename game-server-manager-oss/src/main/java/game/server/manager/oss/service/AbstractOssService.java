@@ -5,9 +5,9 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
-import game.server.manager.oss.OssResult;
+import game.server.manager.common.result.OssResult;
 import game.server.manager.oss.OssObject;
-import game.server.manager.oss.exception.OssStoreException;
+import game.server.manager.common.exception.OssException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
@@ -55,7 +55,7 @@ public abstract class AbstractOssService <INDEX, INPUT_FILE, RESULT_FILE, TEMPLA
     @Override
     public void validationFile(INPUT_FILE inputFile) {
         if(Objects.isNull(inputFile)){
-            throw new OssStoreException("file is empty");
+            throw new OssException("file is empty");
         }
 
     }

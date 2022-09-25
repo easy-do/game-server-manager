@@ -1,4 +1,4 @@
-package game.server.manager.oss;
+package game.server.manager.common.result;
 
 import lombok.Data;
 
