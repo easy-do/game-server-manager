@@ -222,7 +222,7 @@ public class LoginService {
         Long userId = userInfoVo.getId();
         List<String> roleList = sysRoleService.selectRolesByUserId(userId).stream().map(SysRoleVo::getRoleKey).toList();
         Set<String> permissionList = sysResourceService.userPermissionList(userId);
-        redisUtils.set(USER_PERMISSION+userId,permissionList);
+        redisUtils.set(USER_PERMISSION+userId,permissionList.stream().toList());
         userInfoVo.setRoles(roleList);
         Map<String,List<String>> resourceAction = sysResourceService.userResourceAction(userId);
         userInfoVo.setResourceAction(resourceAction);

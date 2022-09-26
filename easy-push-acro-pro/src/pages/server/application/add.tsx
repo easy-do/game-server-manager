@@ -6,7 +6,7 @@ import useLocale from '@/utils/useLocale';
 import { addRequest } from '@/api/applicationInfo';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
-import RequestSelect from '@/components/RequestSelect/requestSelect';
+import RequestSelect from '@/components/RequestSelect/RequestSelect';
 import { list as serverList } from '@/api/serverInfo';
 import { list as appList } from '@/api/appInfo';
 import { list as clientList } from '@/api/clientInfo';

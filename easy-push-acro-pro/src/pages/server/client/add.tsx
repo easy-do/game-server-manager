@@ -8,7 +8,7 @@ import { GlobalContext } from '@/context';
 import { Status } from './constants';
 
 import { list } from '@/api/serverInfo';
-import RequestSelect from '@/components/RequestSelect/requestSelect';
+import RequestSelect from '@/components/RequestSelect/RequestSelect';
 
 function AddPage({ visible, setVisible, successCallBack }) {
   

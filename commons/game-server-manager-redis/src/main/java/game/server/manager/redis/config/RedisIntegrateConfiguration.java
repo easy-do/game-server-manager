@@ -30,8 +30,8 @@ public class RedisIntegrateConfiguration extends CachingConfigurerSupport {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${system.redis.fastJson.package.white}")
-    private String whitePackages;
+//    @Value("${system.redis.fastJson.package.white}")
+//    private String whitePackages;
 
     @Value("${system.redis.cache.timout:60}")
     private Integer cacheTimout;
