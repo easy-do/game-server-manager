@@ -7,16 +7,21 @@ export const Status = ['正常', '禁用'];
 
 export interface DataInfoVo{
     id: string,
-    groupName: string,
-    filePath: string,
-    fileName: string,
-    fileSize: string,
-    ossType: string,
+    adaptationAppId: string,
+    adaptationAppName: string,
+    scriptName: string,
+    scriptType: string,
+    scriptScope: string,
+    basicScript: string,
+    version: string,
+    scriptFile: string,
+    description: string,
+    heat: string,
     createTime: string,
     updateTime: string,
     createBy: string,
+    author: string,
     updateBy: string,
-    remark: string,
     delFlag: string,
 }
 
@@ -24,28 +29,22 @@ export interface DataInfoVo{
 export function getSearChColumns(){
     return [
     'id',
-    'groupName',
-    'filePath',
-    'fileName',
-    'fileSize',
-    'ossType',
-    'createTime',
-    'updateTime',
-    'createBy',
-    'updateBy',
-    'remark',
-    'delFlag',
+    'scriptName',
+    'scriptType',
+    'scriptScope',
+    'version',
+    'description',
+    'author',
       ];
 }
 
 // 搜索配置
 export function searchConfig() {
   return {
-        'groupName': SearchTypeEnum.LIKE,
-        'filePath': SearchTypeEnum.LIKE,
-        'fileName': SearchTypeEnum.LIKE,
-        'fileSize': SearchTypeEnum.EQ,
-        'ossType': SearchTypeEnum.EQ,
+        'adaptationAppId': SearchTypeEnum.EQ,
+        'scriptName': SearchTypeEnum.LIKE,
+        'scriptType': SearchTypeEnum.EQ,
+        'scriptScope': SearchTypeEnum.EQ,
   }
 }
 
@@ -63,35 +62,33 @@ export function getColumns(
   return [
 
     {
-      title: t['searchTable.columns.groupName'],
-      dataIndex: 'groupName',
+      title: t['searchTable.columns.scriptName'],
+      dataIndex: 'scriptName',
       ellipsis:true,
     },
 
     {
-      title: t['searchTable.columns.fileName'],
-      dataIndex: 'fileName',
+      title: t['searchTable.columns.scriptType'],
+      dataIndex: 'scriptType',
       ellipsis:true,
     },
 
     {
-      title: t['searchTable.columns.fileSize'],
-      dataIndex: 'fileSize',
+      title: t['searchTable.columns.scriptScope'],
+      dataIndex: 'scriptScope',
       ellipsis:true,
     },
 
     {
-      title: t['searchTable.columns.ossType'],
-      dataIndex: 'ossType',
+      title: t['searchTable.columns.version'],
+      dataIndex: 'version',
       ellipsis:true,
     },
-
     {
-      title: t['searchTable.columns.createTime'],
-      dataIndex: 'createTime',
+      title: t['searchTable.columns.author'],
+      dataIndex: 'author',
       ellipsis:true,
     },
-
     {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',
@@ -100,7 +97,7 @@ export function getColumns(
         <div>  
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'oss:ossManagement', actions: ['info'] },
+              { resource: 'server:appScript', actions: ['info'] },
             ]}
           >
             <Button
@@ -113,7 +110,20 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'oss:ossManagement', actions: ['remove'] },
+              { resource: 'server:appScript', actions: ['update'] },
+            ]}
+          >
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'update')}
+            >
+                {t['searchTable.columns.operations.update']}
+            </Button>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'server:appScript', actions: ['remove'] },
             ]}
           >
             <Popconfirm

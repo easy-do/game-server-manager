@@ -63,7 +63,7 @@ const i18n = {
     'searchTable.columns.fileName': '文件名',
     'searchTable.columns.fileSize': '文件大小/kb',
     'searchTable.columns.ossType': 'oss类型',
-    'searchTable.columns.createTime': '创建时间',
+    'searchTable.columns.createTime': '上传时间',
     'searchTable.columns.updateTime': '更新时间',
     'searchTable.columns.createBy': '创建人',
     'searchTable.columns.updateBy': '更新人',

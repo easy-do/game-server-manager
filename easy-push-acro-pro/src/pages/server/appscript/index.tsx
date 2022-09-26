@@ -3,17 +3,28 @@ import {
   Table,
   Card,
   PaginationProps,
+  Button,
+  Space,
   Typography,
   Notification,
 } from '@arco-design/web-react';
+import PermissionWrapper from '@/components/PermissionWrapper';
+import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
-import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
-import { managerPage, removeRequest } from '@/api/ossManagement';
+import styles from './style/index.module.less';
+import {
+  getColumns,
+  getDefaultOrders,
+  getSearChColumns,
+  searchConfig,
+} from './constants';
+import { managerPage, removeRequest } from '@/api/appScript';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
-
+import UpdatePage from './update';
+import AddPage from './add';
 
 const { Title } = Typography;
 
@@ -27,12 +38,16 @@ function SearchTable() {
       viewInfo(record.id);
     }
 
+    //编辑
+    if (type === 'update') {
+      updateInfo(record.id);
+    }
+
     //删除
     if (type === 'remove') {
       removeData(record.id);
     }
   };
-
 
   //查看
   const [viewInfoId, setViewInfoId] = useState();
@@ -43,18 +58,41 @@ function SearchTable() {
     setisViewInfo(true);
   }
 
+  //新增
+  const [isAddData, setIsAddData] = useState(false);
+
+  function addData() {
+    setIsAddData(true);
+  }
+
+  function addDataSuccess() {
+    setIsAddData(false);
+    fetchData();
+  }
+
   const [updateId, setUpdateId] = useState();
   const [isUpdateInfo, setisUpdateInfo] = useState(false);
 
+  //编辑
+  function updateInfo(id) {
+    setUpdateId(id);
+    setisUpdateInfo(true);
+  }
+
+  function updateSuccess() {
+    setisUpdateInfo(false);
+    fetchData();
+  }
+
   //删除
-  function removeData(id){
-    removeRequest(id).then((res)=>{
-      const { success, msg} = res.data
-      if(success){
-        Notification.success({ content: msg, duration: 300 })
+  function removeData(id) {
+    removeRequest(id).then((res) => {
+      const { success, msg } = res.data;
+      if (success) {
+        Notification.success({ content: msg, duration: 300 });
         fetchData();
       }
-    })
+    });
   }
 
   //获取表格展示列表、绑定操作列回调
@@ -140,6 +178,23 @@ function SearchTable() {
     <Card>
       <Title heading={6}>{t['list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
+      <PermissionWrapper
+        requiredPermissions={[
+          { resource: 'server:appScript', actions: ['add'] },
+        ]}
+      >
+        <div className={styles['button-group']}>
+          <Space>
+            <Button
+              type="primary"
+              icon={<IconPlus />}
+              onClick={() => addData()}
+            >
+              {t['searchTable.operations.add']}
+            </Button>
+          </Space>
+        </div>
+      </PermissionWrapper>
       <Table
         rowKey="id"
         loading={loading}
@@ -148,10 +203,21 @@ function SearchTable() {
         columns={columns}
         data={data}
       />
+      <AddPage
+        visible={isAddData}
+        setVisible={setIsAddData}
+        successCallBack={addDataSuccess}
+      />
       <InfoPage
         id={viewInfoId}
         visible={isViewInfo}
         setVisible={setisViewInfo}
+      />
+      <UpdatePage
+        id={updateId}
+        visible={isUpdateInfo}
+        setVisible={setisUpdateInfo}
+        successCallBack={updateSuccess}
       />
     </Card>
   );

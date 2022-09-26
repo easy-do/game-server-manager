@@ -54,35 +54,51 @@ function SearchForm(props: {
       >
         <Row gutter={24}>
           <Col span={colSpan}>
-            <Form.Item
-              label={t['searchTable.columns.groupName']}
-              field="groupName"
+            <Form.Item 
+              label={t['searchTable.columns.adaptationAppId']}
+              field="adaptationAppId"
             >
-              <Input placeholder={t['searchForm.groupName.placeholder']} allowClear />
+              <Select
+                placeholder={t['searchForm.adaptationAppId.placeholder']}
+                options={Status.map((item, index) => ({
+                  label: item,
+                  value: index,
+                }))}
+                // mode="multiple"
+                allowClear
+              />
+            </Form.Item>
+          </Col>
+          <Col span={colSpan}>
+            <Form.Item
+              label={t['searchTable.columns.scriptName']}
+              field="scriptName"
+            >
+              <Input placeholder={t['searchForm.scriptName.placeholder']} allowClear />
             </Form.Item>
           </Col> 
           <Col span={colSpan}>
-            <Form.Item
-              label={t['searchTable.columns.filePath']}
-              field="filePath"
+            <Form.Item 
+              label={t['searchTable.columns.scriptType']}
+              field="scriptType"
             >
-              <Input placeholder={t['searchForm.filePath.placeholder']} allowClear />
+              <Select
+                placeholder={t['searchForm.scriptType.placeholder']}
+                options={Status.map((item, index) => ({
+                  label: item,
+                  value: index,
+                }))}
+                // mode="multiple"
+                allowClear
+              />
             </Form.Item>
-          </Col> 
+          </Col>
           <Col span={colSpan}>
             <Form.Item
-              label={t['searchTable.columns.fileName']}
-              field="fileName"
+              label={t['searchTable.columns.scriptScope']}
+              field="scriptScope"
             >
-              <Input placeholder={t['searchForm.fileName.placeholder']} allowClear />
-            </Form.Item>
-          </Col> 
-          <Col span={colSpan}>
-            <Form.Item
-              label={t['searchTable.columns.ossType']}
-              field="ossType"
-            >
-              <Input placeholder={t['searchForm.ossType.placeholder']} allowClear />
+              <DictDataSelect dictCode={'scope_select'} placeholder={t['searchForm.scriptScope.placeholder']} />
             </Form.Item>
           </Col> 
         </Row>

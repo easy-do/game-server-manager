@@ -9,6 +9,8 @@ export interface props{
   lableFiled:string;
   valueFiled:string;
   request?:()=>AxiosPromise<any>;
+  valueType?:'string'|'number';
+  mode?: 'multiple' | 'tags';
 }
 
 function RequestSelect(props?:props) {
@@ -24,11 +26,20 @@ function RequestSelect(props?:props) {
       if (success) {
         const newOptions = [];
         data.map((item) => {
-          newOptions.push({
-              value: item[props.valueFiled],
+          if(props.valueType === 'number'){
+            
+            newOptions.push({
+              value: Number(item[props.valueFiled]),
               label: item[props.lableFiled],
               key: item[props.lableFiled],
             });
+          }else{
+            newOptions.push({
+              value: item[props.valueFiled]+'',
+              label: item[props.lableFiled],
+              key: item[props.lableFiled],
+            });
+          }
         });
         setOptions(newOptions);
       }
@@ -38,6 +49,7 @@ function RequestSelect(props?:props) {
 
   return (
     <Select
+      mode={props.mode}
       value={props.value}
       placeholder={props.placeholder}
       loading={loading}
