@@ -4,6 +4,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { infoRequest } from '@/api/ossManagement';
 import { DataInfoVo } from './constants';
+import { downloadPath } from '@/api/oss';
 
 
 function InfoPage(props: {id:number,visible,setVisible}) {
@@ -57,20 +58,15 @@ function InfoPage(props: {id:number,visible,setVisible}) {
       value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.createTime:'',
     },
     {
-      label: t['searchTable.columns.updateTime'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.updateTime:'',
-    },
-    {
-      label: t['searchTable.columns.createBy'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.createBy:'',
-    },
-    {
-      label: t['searchTable.columns.updateBy'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.updateBy:'',
-    },
-    {
-      label: t['searchTable.columns.remark'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.remark:'',
+      label: t[''],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? 
+      (<img
+      src={downloadPath + infoData.groupName +'/'+infoData.filePath+'/'+infoData.fileName}
+      style={{
+        maxWidth: '100%',
+      }}
+    ></img>)
+      :'',
     },
   ];
 
