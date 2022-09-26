@@ -41,7 +41,7 @@ public class R<T> implements Serializable {
 
     protected String msg;
 
-    protected Boolean success;
+    protected boolean success;
 
     protected int errorCode;
 
@@ -71,15 +71,15 @@ public class R<T> implements Serializable {
         this.data = data;
     }
 
-    public Boolean getSuccess() {
+    public boolean getSuccess() {
         return success;
     }
 
-    public void setSuccess(Boolean success) {
+    public void setSuccess(boolean success) {
         this.success = success;
     }
 
-    public Boolean isSuccess() {
+    public boolean isSuccess() {
         return success;
     }
 

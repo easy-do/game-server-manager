@@ -1,4 +1,3 @@
-import { list } from '@/api/dictType';
 import { Select } from '@arco-design/web-react';
 import { AxiosPromise } from 'axios';
 import React, { useEffect, useState } from 'react';
