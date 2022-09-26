@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 
 export interface props{
   value?:string;
-  onChange?:(value)=>void;
   placeholder?:string;
+  onChange?:(value)=>void;
   lableFiled:string;
   valueFiled:string;
-  request:()=>AxiosPromise<any>
+  request?:()=>AxiosPromise<any>;
 }
 
 function RequestSelect(props?:props) {
