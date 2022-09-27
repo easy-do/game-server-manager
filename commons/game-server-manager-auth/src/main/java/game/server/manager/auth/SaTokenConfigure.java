@@ -1,6 +1,6 @@
 package game.server.manager.auth;
 
-import cn.dev33.satoken.interceptor.SaAnnotationInterceptor;
+import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.StpLogic;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +39,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册注解拦截器，并排除不需要注解鉴权的接口地址 (与登录拦截器无关)
-        registry.addInterceptor(new SaAnnotationInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new SaInterceptor()).addPathPatterns("/**");
     }
 
 }

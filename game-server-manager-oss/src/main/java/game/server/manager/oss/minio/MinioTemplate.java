@@ -3,6 +3,12 @@ package game.server.manager.oss.minio;
 import game.server.manager.common.exception.OssException;
 import game.server.manager.oss.minio.config.MinioProperties;
 import io.minio.*;
+import io.minio.errors.ErrorResponseException;
+import io.minio.errors.InsufficientDataException;
+import io.minio.errors.InternalException;
+import io.minio.errors.InvalidResponseException;
+import io.minio.errors.ServerException;
+import io.minio.errors.XmlParserException;
 import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import lombok.Data;
@@ -12,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,8 +56,7 @@ public class MinioTemplate {
      * @return boolean
      * @author laoyu
      */
-    @SneakyThrows
-    public boolean bucketExists(String bucketName){
+    public boolean bucketExists(String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return client.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
     }
 
@@ -58,8 +66,7 @@ public class MinioTemplate {
      * @param bucketName bucketName
      * @author laoyu
      */
-    @SneakyThrows
-    public void createBucket(String bucketName) {
+    public void createBucket(String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         if (!bucketExists(bucketName)) {
             client.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
         }
@@ -72,8 +79,7 @@ public class MinioTemplate {
      * @author laoyu
      * https://docs.minio.io/cn/java-client-api-reference.html#listBuckets
      */
-    @SneakyThrows
-    public List<Bucket> getAllBuckets() {
+    public List<Bucket> getAllBuckets() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return client.listBuckets();
     }
 
@@ -84,8 +90,7 @@ public class MinioTemplate {
      * @return java.util.Optional
      * @author laoyu
      */
-    @SneakyThrows
-    public Optional<Bucket> getBucket(String bucketName) {
+    public Optional<Bucket> getBucket(String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return client.listBuckets().stream().filter(b -> b.name().equals(bucketName)).findFirst();
     }
 
@@ -93,8 +98,7 @@ public class MinioTemplate {
      * 根据bucketName删除信息
      * @param bucketName bucket名称
      */
-    @SneakyThrows
-    public void removeBucket(String bucketName) {
+    public void removeBucket(String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         client.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
     }
 
@@ -106,8 +110,7 @@ public class MinioTemplate {
      * @param recursive  是否递归查询
      * @return MinioItem 列表
      */
-    @SneakyThrows
-    public List<MinioItem> getAllObjectsByPrefix(String bucketName, String prefix, boolean recursive) {
+    public List<MinioItem> getAllObjectsByPrefix(String bucketName, String prefix, boolean recursive) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         List<MinioItem> objectList = new ArrayList<>();
         ListObjectsArgs listObjectsArgs = ListObjectsArgs.builder().bucket(bucketName).prefix(prefix).recursive(recursive).build();
         Iterable<Result<Item>> objectsIterator = client.listObjects(listObjectsArgs);
@@ -125,8 +128,7 @@ public class MinioTemplate {
      * @param expires    过期时间 小于等于7
      * @return url
      */
-    @SneakyThrows
-    public String getObjectURL(String bucketName, String objectName, Integer expires) {
+    public String getObjectURL(String bucketName, String objectName, Integer expires) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
                 .bucket(bucketName).object(objectName).expiry(expires).build();
         return client.getPresignedObjectUrl(getPresignedObjectUrlArgs);
@@ -139,8 +141,7 @@ public class MinioTemplate {
      * @param objectName 文件名称
      * @return url
      */
-    @SneakyThrows
-    public String getObjectURL(String bucketName, String objectName) {
+    public String getObjectURL(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
                 .bucket(bucketName).object(objectName).build();
         return client.getPresignedObjectUrl(getPresignedObjectUrlArgs);
@@ -153,8 +154,7 @@ public class MinioTemplate {
      * @param objectName 文件名称
      * @return 二进制流
      */
-    @SneakyThrows
-    public InputStream getObject(String bucketName, String objectName) {
+    public InputStream getObject(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         GetObjectArgs getObjectArgs = GetObjectArgs.builder().bucket(bucketName).object(objectName).build();
         return client.getObject(getObjectArgs);
     }

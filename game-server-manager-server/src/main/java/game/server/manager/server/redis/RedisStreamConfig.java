@@ -28,7 +28,7 @@ import java.util.Map;
 @Configuration
 public class RedisStreamConfig {
 
-    private static final int subCount = 2;
+    private static final int SUB_COUNT = 2;
 
     @Autowired
     private ApplicationDeployListenerMessage applicationDeployListenerMessage;
@@ -72,7 +72,7 @@ public class RedisStreamConfig {
         if(!redisStreamUtils.existGroup(streamName,groupName)){
             redisStreamUtils.createGroup(streamName,groupName);
         }
-        for (int i = 0; i < subCount; i++) {
+        for (int i = 0; i < SUB_COUNT; i++) {
             log.info("注册stream消费者" + i);
             streamMessageListenerContainer.receive(
                     Consumer.from(groupName,ApplicationDeployListenerMessage.DEFAULT_NAME + i),
