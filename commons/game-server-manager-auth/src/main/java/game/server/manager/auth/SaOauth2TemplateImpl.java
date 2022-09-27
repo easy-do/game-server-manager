@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @date 2022/9/1
  */
 @Component
-public class SaOAuth2TemplateImpl extends SaOAuth2Template {
+public class SaOauth2TemplateImpl extends SaOAuth2Template {
 
     /**
      * 根据ClientId 和 LoginId 获取openid

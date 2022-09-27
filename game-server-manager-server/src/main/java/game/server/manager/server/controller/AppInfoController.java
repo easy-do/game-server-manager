@@ -44,29 +44,34 @@ public class AppInfoController extends BaseController<AppInfoService, AppInfo, L
 
 
     @SaCheckLogin
+    @Override
     public MpDataResult page(@RequestBody AppInfoQo appInfoQo){
         return super.page(appInfoQo);
     }
 
     @SaCheckLogin
+    @Override
     public R<AppInfoVo> info(@PathVariable("id") Long id) {
         return super.info(id);
     }
 
     @SaCheckLogin
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = ADD_DESCRIPTION, expressions = ADD_EXPRESSIONS, actionType = ADD_ACTION)
+    @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) AppInfoDto appInfoDto) {
         return super.add(appInfoDto);
     }
 
     @SaCheckLogin
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions = EDIT_EXPRESSIONS, actionType = EDIT_ACTION)
+    @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) AppInfoDto appInfoDto) {
         return super.update(appInfoDto);
     }
 
     @SaCheckLogin
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
+    @Override
     public R<Object> remove(@PathVariable("id") Long id) {
         return super.remove(id);
     }

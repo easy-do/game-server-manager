@@ -20,11 +20,9 @@ import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +33,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -325,7 +322,7 @@ public class GenController {
     public void wordToPdf(HttpServletResponse response, @RequestParam(name = "file") MultipartFile file) throws IOException {
         InputStream in = file.getInputStream();
         ServletOutputStream op = response.getOutputStream();
-        WordPdfUtils.toPDF(in, op);
+        WordPdfUtils.toPdf(in, op);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=R.pdf");
         response.setContentType(PDF);

@@ -93,12 +93,13 @@ public class OssUtil {
     public static FileItem createFileItem(File file) {
         FileItemFactory factory = new DiskFileItemFactory(16, null);
         FileItem item = factory.createItem("textField", "text/plain", true, file.getName());
-        int bytesRead = 0;
-        byte[] buffer = new byte[8192];
+        int bytesRead;
+        int cacheSize = 8192;
+        byte[] buffer = new byte[cacheSize];
         try {
             FileInputStream fis = new FileInputStream(file);
             OutputStream os = item.getOutputStream();
-            while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
+            while ((bytesRead = fis.read(buffer, 0, cacheSize)) != -1) {
                 os.write(buffer, 0, bytesRead);
             }
             os.close();

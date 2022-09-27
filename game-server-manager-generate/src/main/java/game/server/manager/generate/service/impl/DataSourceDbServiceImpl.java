@@ -24,8 +24,8 @@ import java.util.List;
 public class DataSourceDbServiceImpl implements DataSourceDbService {
 
     private static final RowMapperResultSetExtractor<DbListVo> GEN_TABLE_SET_EXTRACTOR = new RowMapperResultSetExtractor<>(new DbListRowMapper());
-    private static final RowMapperResultSetExtractor<GenTableColumn> genTableColumnSetExtractor = new RowMapperResultSetExtractor<>(new GenTableColumnRowMapper());
-    private static final RowMapperResultSetExtractor<GenTableIndex> genTableIndexSetExtractor = new RowMapperResultSetExtractor<>(new GenTableIndexRowMapper());
+    private static final RowMapperResultSetExtractor<GenTableColumn> GEN_TABLE_COLUMN_ROW_MAPPER_RESULT_SET_EXTRACTOR = new RowMapperResultSetExtractor<>(new GenTableColumnRowMapper());
+    private static final RowMapperResultSetExtractor<GenTableIndex> GEN_TABLE_INDEX_ROW_MAPPER_RESULT_SET_EXTRACTOR = new RowMapperResultSetExtractor<>(new GenTableIndexRowMapper());
     @Autowired
     private JdbcDataSourceExecTool jdbcDataSourceExecTool;
 
@@ -120,7 +120,7 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
     public List<GenTableColumn> selectDbTableColumnsByName(String dataSourceId, String tableName) {
         String sql = "select column_name, (case when (is_nullable = 'no' && column_key != 'PRI') then '1' else null end) as is_required, (case when column_key = 'PRI' then '1' else '0' end) as is_pk, ordinal_position as sort, column_comment, (case when extra = 'auto_increment' then '1' else '0' end) as is_increment, column_type, column_default" +
                 " from information_schema.columns where table_schema = (select database()) and table_name = '" + tableName + "' order by ordinal_position";
-        return jdbcDataSourceExecTool.query(dataSourceId, sql, genTableColumnSetExtractor);
+        return jdbcDataSourceExecTool.query(dataSourceId, sql, GEN_TABLE_COLUMN_ROW_MAPPER_RESULT_SET_EXTRACTOR);
     }
 
     /**
@@ -134,7 +134,7 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
     public List<GenTableColumn> selectDbTableColumnsByName(String tableName) {
         String sql = "select column_name, (case when (is_nullable = 'no' && column_key != 'PRI') then '1' else null end) as is_required, (case when column_key = 'PRI' then '1' else '0' end) as is_pk, ordinal_position as sort, column_comment, (case when extra = 'auto_increment' then '1' else '0' end) as is_increment, column_type, column_default" +
                 " from information_schema.columns where table_schema = (select database()) and table_name = '" + tableName + "' order by ordinal_position";
-        return jdbcDataSourceExecTool.query("default", sql, genTableColumnSetExtractor);
+        return jdbcDataSourceExecTool.query("default", sql, GEN_TABLE_COLUMN_ROW_MAPPER_RESULT_SET_EXTRACTOR);
     }
 
 
@@ -149,7 +149,7 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
     @Override
     public List<GenTableIndex> selectIndexByTableName(String dataSourceId, String tableName) {
         String sql = "SHOW INDEX FROM " + tableName;
-        return jdbcDataSourceExecTool.query(dataSourceId, sql, genTableIndexSetExtractor);
+        return jdbcDataSourceExecTool.query(dataSourceId, sql, GEN_TABLE_INDEX_ROW_MAPPER_RESULT_SET_EXTRACTOR);
     }
 
 }

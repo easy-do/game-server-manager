@@ -40,7 +40,7 @@ public class SpringDocConfig {
     private String externalDocsUrl;
 
     @Bean
-    public OpenAPI mallTinyOpenAPI() {
+    public OpenAPI mallTinyOpenApi() {
         return new OpenAPI()
                 .info(new Info().title(title)
                         .description(description)

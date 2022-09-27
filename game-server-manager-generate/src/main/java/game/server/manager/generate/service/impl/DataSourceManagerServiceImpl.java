@@ -32,6 +32,7 @@ import java.util.Objects;
 @Service
 public class DataSourceManagerServiceImpl extends ServiceImpl<DataSourceManagerMapper, DataSource> implements DataSourceManagerService {
 
+    private static final String HTTP = "HTTP";
 
     /**
      * 查询数据源管理
@@ -75,7 +76,7 @@ public class DataSourceManagerServiceImpl extends ServiceImpl<DataSourceManagerM
     public boolean saveOrUpdate(DataSourceDto dto) {
         DataSource entity = DataSourceMapstruct.INSTANCE.dtoToEntity(dto);
         boolean updateResult = saveOrUpdate(entity);
-        if ("HTTP".equals(dto.getSourceType())) {
+        if (HTTP.equals(dto.getSourceType())) {
             if(Objects.nonNull(dto.getParams())){
                 entity.setParams(dto.getParams());
             }

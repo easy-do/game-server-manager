@@ -35,18 +35,21 @@ public class ServerInfoController extends BaseController<ServerInfoService,Serve
 
     @SaCheckLogin
     @RequestMapping("/list")
+    @Override
     public R<List<ServerInfoVo>> list() {
         return super.list();
     }
 
     @SaCheckLogin
     @PostMapping("/page")
+    @Override
     public MpDataResult page(@RequestBody MpBaseQo<ServerInfo> mpBaseQo) {
         return super.page(mpBaseQo);
     }
 
     @SaCheckLogin
     @RequestMapping("/info/{id}")
+    @Override
     public R<ServerInfoVo> info(@PathVariable("id")Long id) {
 return super.info(id);
     }
@@ -54,6 +57,7 @@ return super.info(id);
     @SaCheckLogin
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "服务管理", description = "添加服务器: ?1", expressions = {"#p1.serverName"}, actionType = "添加")
+    @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) ServerInfoDto serverInfoDto) {
         return super.add(serverInfoDto);
     }
@@ -61,6 +65,7 @@ return super.info(id);
     @SaCheckLogin
     @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "服务管理", description = "编辑服务器: ?1 - ?2", expressions = {"#p1.id","#p1.serverName"},actionType = "编辑")
+    @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) ServerInfoDto serverInfoDto) {
         return super.update(serverInfoDto);
     }
@@ -68,6 +73,7 @@ return super.info(id);
     @SaCheckLogin
     @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "服务管理", description = "删除服务器: ?1", expressions = {"#p1"}, actionType = "删除")
+    @Override
     public R<Object> remove(@PathVariable("id")Long id) {
         return super.remove(id);
     }

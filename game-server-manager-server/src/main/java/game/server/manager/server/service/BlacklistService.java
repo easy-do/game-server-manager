@@ -12,12 +12,12 @@ public interface BlacklistService extends IService<Blacklist> {
 
 
     /**
-     * getByIP
+     * getByIp
      *
      * @param ip ip
      * @return game.server.manager.server.entity.Blacklist
      * @author laoyu
      * @date 2022/8/24
      */
-    Blacklist getByIP(String ip);
+    Blacklist getByIp(String ip);
 }

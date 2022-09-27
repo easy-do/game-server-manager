@@ -31,5 +31,6 @@ public interface AuthorizationCodeService  extends IService<AuthorizationCode> ,
      * @author laoyu
      * @date 2022/5/21
      */
+    @Override
     void checkAuthorization(UserInfoVo user, String type);
 }

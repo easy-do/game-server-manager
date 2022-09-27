@@ -53,7 +53,7 @@ public class UserUrlInterceptor implements HandlerInterceptor {
         // 获取请求的url
         String url = request.getRequestURI();
         String ip = IpUtil.getIpAddress();
-        Blacklist domain = blacklistService.getByIP(ip);
+        Blacklist domain = blacklistService.getByIp(ip);
         if (domain != null) {
             LocalDateTime disableTime = domain.getDisableTime();
             long between = LocalDateTimeUtil.between(LocalDateTime.now(), disableTime).toMillis();

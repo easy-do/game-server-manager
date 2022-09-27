@@ -58,7 +58,7 @@ public class WordPdfUtils {
      * @param outputStream outputStream  转换后的输出目标
      * @author laoyu
      */
-    public static void toPDF(InputStream inputStream, OutputStream outputStream) {
+    public static void toPdf(InputStream inputStream, OutputStream outputStream) {
         try {
             WordprocessingMLPackage pkg = Docx4J.load(inputStream);
             pkg.setFontMapper(fontMapper);

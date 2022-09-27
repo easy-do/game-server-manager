@@ -5,6 +5,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.google.common.collect.Maps;
 import game.server.manager.common.exception.BizException;
 import game.server.manager.generate.constant.GenConstants;
 import game.server.manager.generate.dto.GenerateDatabaseDocDto;
@@ -79,12 +80,12 @@ public class GenerateServiceImpl implements GenerateService {
      */
     Map<TemplateManagementVo, Template> getTemplatesForDb(String templateIds) {
         VelocityInitializer.initVelocityStringResourceLoader();
-        Map<TemplateManagementVo, Template> templates = new HashMap<>();
         if (CharSequenceUtil.isEmpty(templateIds)) {
             throw new BizException("500","未选择模板");
         }
         String[] ids = templateIds.split(",");
         List<TemplateManagementVo> templateManagementVos = templateManagementService.selectByIds(ids);
+        Map<TemplateManagementVo, Template> templates = Maps.newHashMapWithExpectedSize(templateManagementVos.size());
         //临时文件夹
         for (TemplateManagementVo vo : templateManagementVos) {
             String code = vo.getTemplateCode();
@@ -308,7 +309,7 @@ public class GenerateServiceImpl implements GenerateService {
         byte[] wordByte = generateDataBaseDocx(response, dto);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ByteArrayInputStream inputStream = new ByteArrayInputStream(wordByte);
-        WordPdfUtils.toPDF(inputStream, outputStream);
+        WordPdfUtils.toPdf(inputStream, outputStream);
         return outputStream.toByteArray();
     }
 

@@ -696,11 +696,11 @@ public class RedisUtils<T> {
         return null;
     }
 
-    public T lBLeftPop(String key, long timeout, TimeUnit unit) {
+    public T lbLeftPop(String key, long timeout, TimeUnit unit) {
         try {
             return this.redisTemplate.opsForList().leftPop(key, timeout, unit);
         } catch (Exception var9) {
-            log.error("lBLeftPop error", var9);
+            log.error("lbLeftPop error", var9);
         } finally {
             RedisConnectionUtils.unbindConnection(Objects.requireNonNull(this.redisTemplate.getConnectionFactory()));
         }
@@ -720,11 +720,11 @@ public class RedisUtils<T> {
         return null;
     }
 
-    public T lBRightPop(String key, long timeout, TimeUnit unit) {
+    public T lbRightPop(String key, long timeout, TimeUnit unit) {
         try {
             return this.redisTemplate.opsForList().rightPop(key, timeout, unit);
         } catch (Exception var9) {
-            log.error("lBRightPop error", var9);
+            log.error("lbRightPop error", var9);
         } finally {
             RedisConnectionUtils.unbindConnection(Objects.requireNonNull(this.redisTemplate.getConnectionFactory()));
         }
@@ -744,11 +744,11 @@ public class RedisUtils<T> {
         return null;
     }
 
-    public T lBRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout, TimeUnit unit) {
+    public T lbRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout, TimeUnit unit) {
         try {
             return this.redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout, unit);
         } catch (Exception var10) {
-            log.error("lBRightPopAndLeftPush error", var10);
+            log.error("lbRightPopAndLeftPush error", var10);
         } finally {
             RedisConnectionUtils.unbindConnection(Objects.requireNonNull(this.redisTemplate.getConnectionFactory()));
         }
@@ -1283,11 +1283,11 @@ public class RedisUtils<T> {
         return 0L;
     }
 
-    public Long zZCard(String key) {
+    public Long zzCard(String key) {
         try {
             return this.redisTemplate.opsForZSet().zCard(key);
         } catch (Exception var6) {
-            log.error("zZCard error", var6);
+            log.error("zzCard error", var6);
         } finally {
             RedisConnectionUtils.unbindConnection(Objects.requireNonNull(this.redisTemplate.getConnectionFactory()));
         }

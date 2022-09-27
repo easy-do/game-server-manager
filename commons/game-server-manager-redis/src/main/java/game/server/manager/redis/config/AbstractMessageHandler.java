@@ -25,6 +25,14 @@ public abstract class AbstractMessageHandler<T> implements MessageListener {
         this.handleMessage(convertedMessage, convertedChannel);
     }
 
+    /**
+     * 功能描述
+     *
+     * @param message message
+     * @param topic topic
+     * @author laoyu
+     * @date 2022/9/27
+     */
     public abstract void handleMessage(T message, String topic);
 
     private T extractMessage(Message message) {

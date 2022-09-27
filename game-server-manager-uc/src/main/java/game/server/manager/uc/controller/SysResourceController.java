@@ -46,6 +46,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
      */
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @RequestMapping("/list")
+    @Override
     public R<List<SysResourceVo>> list() {
         return super.list();
     }
@@ -55,6 +56,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
      */
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
+    @Override
     public MpDataResult page(@RequestBody SysResourceQo sysResourceQo) {
         return super.page(sysResourceQo);
     }
@@ -65,6 +67,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
      */
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/info/{id}")
+    @Override
     public R<SysResourceVo> info(@PathVariable("id")Long id) {
         return super.info(id);
     }
@@ -75,6 +78,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "系统资源", description = "添加系统资源", actionType = "添加")
+    @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) SysResourceDto sysResourceDto) {
         return super.add(sysResourceDto);
     }
@@ -85,6 +89,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "系统资源", description = "编辑系统资源: ?1", expressions = {"#p1.id"},actionType = "编辑")
+    @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) SysResourceDto sysResourceDto) {
         return super.update(sysResourceDto);
     }
@@ -95,6 +100,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
 	@GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "系统资源", description = "删除系统资源: ?1", expressions = {"#p1"}, actionType = "删除")
+    @Override
     public R<Object> remove(@PathVariable("id")Long id) {
         return super.remove(id);
     }

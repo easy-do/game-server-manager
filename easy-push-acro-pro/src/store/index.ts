@@ -1,4 +1,4 @@
-import { IRoute } from '@/routes';
+import { IRoute, staticRoutes } from '@/routes';
 import defaultSettings from '../settings.json';
 export interface GlobalState {
   settings?: typeof defaultSettings;
@@ -29,7 +29,7 @@ const initialState: GlobalState = {
   userInfo: {
     resourceAction: {},
   },
-  systemRoutes: []
+  systemRoutes: staticRoutes
 };
 
 

@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 角色信息表
+ * @author yuzhanfeng
  * @TableName sys_role
  */
 @TableName(value ="sys_role")

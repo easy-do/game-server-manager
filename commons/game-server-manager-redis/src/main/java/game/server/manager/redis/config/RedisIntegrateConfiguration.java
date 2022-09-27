@@ -28,16 +28,8 @@ import java.time.Duration;
 @ConditionalOnClass({RedisConnectionFactory.class})
 public class RedisIntegrateConfiguration extends CachingConfigurerSupport {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-//    @Value("${system.redis.fastJson.package.white}")
-//    private String whitePackages;
-
     @Value("${system.redis.cache.timout:60}")
     private Integer cacheTimout;
-
-
-    private static final String SPLIT = ",";
 
     @Resource
     FastJson2RedisSerializer fastJsonRedisSerializer;
@@ -51,9 +43,6 @@ public class RedisIntegrateConfiguration extends CachingConfigurerSupport {
                 RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory),
                 /*默认策略，未配置的 key 会使用这个*/
                 this.getRedisCacheConfigurationWithTtl(cacheTimout)
-//                ,
-                /*指定 key 策略*/
-//                this.getRedisCacheConfigurationMap()
         );
     }
 

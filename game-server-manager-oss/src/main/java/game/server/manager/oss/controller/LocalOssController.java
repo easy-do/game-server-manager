@@ -42,13 +42,13 @@ public class LocalOssController {
                             @RequestParam(name = "filePath", required = false, defaultValue = "") String filePath,
                             @RequestParam(name = "groupName", required = false, defaultValue = "")String groupName){
         try {
-            OssObject<String,MultipartFile> OssObject = new OssObject<>();
-            OssObject.setFileName(fileName);
-            OssObject.setFilePath(filePath);
-            OssObject.setGroupName(groupName);
-            OssObject.setIndex(fileName);
-            OssObject.setFile(file);
-            R<OssResult<String>> result = localOssService.save(OssObject);
+            OssObject<String,MultipartFile> ossObject = new OssObject<>();
+            ossObject.setFileName(fileName);
+            ossObject.setFilePath(filePath);
+            ossObject.setGroupName(groupName);
+            ossObject.setIndex(fileName);
+            ossObject.setFile(file);
+            R<OssResult<String>> result = localOssService.save(ossObject);
             return DataResult.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,10 +94,10 @@ public class LocalOssController {
         List<OssResult<String>> resultList = Lists.newArrayList();
         for (MultipartFile file : files) {
             try {
-                OssObject<String,MultipartFile> OssObject = new OssObject<>();
-                OssObject.setFile(file);
-                OssObject.setGroupName(groupName);
-                R<OssResult<String>> result = localOssService.save(OssObject);
+                OssObject<String,MultipartFile> ossObject = new OssObject<>();
+                ossObject.setFile(file);
+                ossObject.setGroupName(groupName);
+                R<OssResult<String>> result = localOssService.save(ossObject);
                 resultList.add(result.getData());
             } catch (Exception e) {
                 e.printStackTrace();

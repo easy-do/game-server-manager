@@ -87,13 +87,13 @@ public class ClientDeploymentCallBackService extends AbstractDefaultServer {
             DeploymentCallBackData deploymentCallBackData = JSON.to(DeploymentCallBackData.class, data);
             String type = deploymentCallBackData.getType();
             if (type.equals(DeploymentCallBackTypeEnum.BEFORE.getType())) {
-                return DeploymentCallBackTypeBefore(deploymentCallBackData,clientId);
+                return deploymentCallBackTypeBefore(deploymentCallBackData,clientId);
             }
             if (type.equals(DeploymentCallBackTypeEnum.EXCEPTION.getType())) {
-                return DeploymentCallBackTypeException(deploymentCallBackData);
+                return deploymentCallBackTypeException(deploymentCallBackData);
             }
             if (type.equals(DeploymentCallBackTypeEnum.FINISH.getType())) {
-                return DeploymentCallBackTypeFinish(deploymentCallBackData);
+                return deploymentCallBackTypeFinish(deploymentCallBackData);
             }
         } catch (Exception exception) {
             logger.error("接收客户端部署回调发生异常{}", ExceptionUtil.getMessage(exception));
@@ -102,7 +102,7 @@ public class ClientDeploymentCallBackService extends AbstractDefaultServer {
         return DataResult.fail();
     }
 
-    private R<Object> DeploymentCallBackTypeFinish(DeploymentCallBackData deploymentCallBackData) {
+    private R<Object> deploymentCallBackTypeFinish(DeploymentCallBackData deploymentCallBackData) {
         AppScript appScript = appScriptService.getById(deploymentCallBackData.getAppScriptId());
         if (Objects.isNull(appScript)) {
             return DataResult.fail("脚本已不存在。");
@@ -129,7 +129,7 @@ public class ClientDeploymentCallBackService extends AbstractDefaultServer {
         return DataResult.ok();
     }
 
-    private R<Object> DeploymentCallBackTypeException(DeploymentCallBackData deploymentCallBackData) {
+    private R<Object> deploymentCallBackTypeException(DeploymentCallBackData deploymentCallBackData) {
         if(!deploymentCallBackData.isUninstall()){
             // 执行异常 设置应用状态
             String applicationId = deploymentCallBackData.getApplicationId();
@@ -149,7 +149,7 @@ public class ClientDeploymentCallBackService extends AbstractDefaultServer {
         return DataResult.ok();
     }
 
-    private R<Object> DeploymentCallBackTypeBefore(DeploymentCallBackData deploymentCallBackData,String clientId) {
+    private R<Object> deploymentCallBackTypeBefore(DeploymentCallBackData deploymentCallBackData, String clientId) {
         //设置日志为部署中
         ExecuteLogModal executeLogModal = deploymentCallBackData.getExecuteLogModal();
         executeLogService.updateById(ExecuteLog.builder()

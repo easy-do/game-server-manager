@@ -62,7 +62,7 @@ public class IpRegionSearchUtil {
     }
 
     public static String searchServerIp() {
-        String ip = MyWebIpUtil.getNowIP();
+        String ip = MyWebIpUtil.getnowIp();
         return search(ip);
     }
 

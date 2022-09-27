@@ -19,28 +19,28 @@ import java.util.regex.Pattern;
 public class MyWebIpUtil {
     private static final Pattern PATTERN = Pattern.compile("\\<dd class\\=\"fz24\">(.*?)\\<\\/dd>");
 
-    public static String getNowIP(){
+    public static String getnowIp(){
         String ip = null;
         try {
-            ip = getNowIP1();
+            ip = getNowIp1();
             if(Objects.nonNull(ip)){
                 return ip;
             }
         } catch (Exception e) {
             try {
-                ip = getNowIP2();
+                ip = getNowIp2();
                 if(Objects.nonNull(ip)){
                     return ip;
                 }
             } catch (Exception ex) {
                 try {
-                    ip = getNowIP3();
+                    ip = getNowIp3();
                     if(Objects.nonNull(ip)){
                         return ip;
                     }
                 } catch (Exception exc) {
                     try {
-                        ip = getNowIP4();
+                        ip = getNowIp4();
                         if(Objects.nonNull(ip)){
                             return ip;
                         }
@@ -54,7 +54,7 @@ public class MyWebIpUtil {
         return "";
     }
 
-    public static String getNowIP1() throws IOException {
+    public static String getNowIp1() throws IOException {
         String ip = null;
         String china = "http://ip.chinaz.com";
         StringBuilder inputLine = new StringBuilder();
@@ -85,7 +85,7 @@ public class MyWebIpUtil {
         return ip;
     }
 
-    public static String getNowIP2() throws IOException {
+    public static String getNowIp2() throws IOException {
         String ip = null;
         BufferedReader br = null;
         try {
@@ -114,12 +114,12 @@ public class MyWebIpUtil {
     }
 
 
-    public static String getNowIP3() throws IOException {
+    public static String getNowIp3() throws IOException {
         String ip = null;
-        String objWebURL = "https://ip.900cha.com/";
+        String objWebUrl = "https://ip.900cha.com/";
         BufferedReader br = null;
         try {
-            URL url = new URL(objWebURL);
+            URL url = new URL(objWebUrl);
             br = new BufferedReader(new InputStreamReader(url.openStream()));
             String s = "";
             String webContent = "";
@@ -139,17 +139,16 @@ public class MyWebIpUtil {
         }
         return ip;
     }
-    public static String getNowIP4() throws IOException {
+    public static String getNowIp4() throws IOException {
         String ip = null;
-        String objWebURL = "https://bajiu.cn/ip/";
+        String objWebUrl = "https://bajiu.cn/ip/";
         BufferedReader br = null;
         try {
-            URL url = new URL(objWebURL);
+            URL url = new URL(objWebUrl);
             br = new BufferedReader(new InputStreamReader(url.openStream()));
             String s = "";
-            String webContent = "";
             while ((s = br.readLine()) != null) {
-                if (s.indexOf("互联网IP") != -1) {
+                if (s.contains("互联网IP")) {
                     ip = s.substring(s.indexOf("'") + 1, s.lastIndexOf("'"));
                     break;
                 }

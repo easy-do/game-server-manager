@@ -292,13 +292,13 @@ public class VelocityUtils {
      * 生成路径
      *
      * @param filePath      filePath
-     * @param Json          Json
+     * @param json          Json
      * @param fileNameFiled fileNameFiled
      * @return java.lang.String
      * @author laoyu
      */
-    public static String generatePath(String filePath, JSONObject Json, String fileNameFiled) {
-        String fileName = Json.getString(fileNameFiled);
+    public static String generatePath(String filePath, JSONObject json, String fileNameFiled) {
+        String fileName = json.getString(fileNameFiled);
         if (CharSequenceUtil.isNotBlank(fileName)) {
             filePath = filePath.replace("#{fileName}", fileName);
         }

@@ -36,6 +36,7 @@ public class CommentDetailsController extends BaseController<CommentDetailsServi
     
 
     @PostMapping("/page")
+    @Override
     public MpDataResult page(@RequestBody CommentDetailsQo commentDetailsQo) {
         return super.page(commentDetailsQo);
     }
@@ -50,6 +51,7 @@ public class CommentDetailsController extends BaseController<CommentDetailsServi
 
     @SaCheckLogin
     @RequestMapping("/info/{id}")
+    @Override
     public R<CommentDetailsVo> info(@PathVariable("id") Long id) {
         return super.info(id);
     }
@@ -57,6 +59,7 @@ public class CommentDetailsController extends BaseController<CommentDetailsServi
     @SaCheckLogin
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "评论", description = "发起评论: ?1",expressions = {"#p1.content"}, actionType = "添加")
+    @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) CommentDetailsDto commentDetailsDto) {
         return super.add(commentDetailsDto);
     }
@@ -65,6 +68,7 @@ public class CommentDetailsController extends BaseController<CommentDetailsServi
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "评论", description = "删除评论: ?1 ", expressions = {"#p1"}, actionType = "删除")
+    @Override
     public R<Object> remove(@PathVariable("id") Long id) {
         return super.remove(id);
     }

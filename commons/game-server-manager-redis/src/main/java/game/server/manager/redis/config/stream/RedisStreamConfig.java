@@ -101,7 +101,6 @@ public class RedisStreamConfig implements ApplicationContextAware {
                     streamOperations.acknowledge(annotation.topic(), consumer.getGroup(), recordId);
                     log.warn("----Redis Stream  acknowledge message={}", recordId);
                 } else {
-//                    redisTemplate.execute((connection) -> connection.streamCommands().xClaim(annotation.topic().getBytes(StandardCharsets.UTF_8), consumer.getGroup(), consumer.getName(), Duration.ofSeconds(10L), new RecordId[]{recordId}));
                     log.info("----Redis Stream  xClaim message={}", recordId);
                 }
 

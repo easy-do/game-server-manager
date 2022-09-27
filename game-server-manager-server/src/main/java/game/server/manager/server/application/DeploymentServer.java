@@ -17,6 +17,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import game.server.manager.api.SysDictDataApi;
 import game.server.manager.common.application.DeployParam;
+import game.server.manager.common.enums.ConvertExceptionEnum;
 import game.server.manager.common.exception.BizException;
 import game.server.manager.common.utils.AppScriptUtils;
 import game.server.manager.common.vo.SysDictDataVo;
@@ -372,32 +373,20 @@ public class DeploymentServer {
         }
     }
 
+    /**
+     * 将异常消息转为中文错误
+     *
+     * @param exception exception
+     * @return java.lang.String
+     * @author laoyu
+     * @date 2022/9/27
+     */
     public static String convertExceptionMessage(Exception exception){
-        //具体细化 将异常消息转为用户可理解的错误
         String message = ExceptionUtil.getMessage(exception);
-        if(message.contains("Auth fail")){
-            return "服务器账号密码验证失败。";
-        }
-        if(message.contains("Connection timed out")){
-            return "连接超时,请确保服务器地址可访问。";
-        }
-        if(message.contains("timeout")){
-            return "连接超时。";
-        }
-        if(message.contains("Connection refused")){
-            return "尝试与服务器连接被拒绝,请确保服务器地址可访问。";
-        }
-        if(message.contains("Connection reset")){
-            return "服务器连接被重置,请确保服务器地址可访问。";
-        }
-        if(message.contains("channel is not opened")){
-            return "脚本执行中断,与服务器的通信异常关闭,无法跟踪脚本后续执行情况。";
-        }
-        if(message.contains("SftpException: Permission denied")){
-            return "上传脚本失败，没有目录访问权限。";
-        }
-        if(message.contains("SftpException: Failure")){
-            return "上传脚本失败，磁盘空间不足。";
+        for (ConvertExceptionEnum exceptionEnum:ConvertExceptionEnum.values()) {
+            if(message.contains(exceptionEnum.getEn())){
+                return exceptionEnum.getEn() +","+ exceptionEnum.getCn();
+            }
         }
         return message;
     }
