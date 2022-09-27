@@ -50,24 +50,29 @@ public class ApplicationController extends BaseController<ApplicationInfoService
 
     @SaCheckLogin
     @RequestMapping("/list")
+    @Override
     public R<List<ApplicationInfoVo>> list() {
         return super.list();
     }
 
     @SaCheckLogin
     @PostMapping("/page")
+    @Override
     public MpDataResult page(@RequestBody MpBaseQo<ApplicationInfo> mpBaseQo) {
         return super.page(mpBaseQo);
     }
 
     @SaCheckLogin
     @RequestMapping("/info/{id}")
+    @Override
     public R<ApplicationInfoVo> info(@PathVariable("id")String id) {
         return super.info(id);
     }
+
     @SaCheckLogin
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = MODULE_NAME, description = "添加应用: ?1",expressions = ADD_EXPRESSIONS,  actionType = ADD_ACTION)
+    @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) ApplicationInfoDto applicationInfoDto) {
         return super.add(applicationInfoDto);
     }
@@ -75,6 +80,7 @@ public class ApplicationController extends BaseController<ApplicationInfoService
     @SaCheckLogin
     @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions = {"#p1.applicationId","#p1.applicationName"},  actionType = EDIT_ACTION)
+    @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) ApplicationInfoDto applicationInfoDto) {
         return super.update(applicationInfoDto);
     }
@@ -82,6 +88,7 @@ public class ApplicationController extends BaseController<ApplicationInfoService
     @SaCheckLogin
     @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
+    @Override
     public R<Object> remove(@PathVariable("id")String id) {
         return super.remove(id);
     }

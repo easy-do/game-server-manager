@@ -51,7 +51,6 @@ function Index() {
     if (checkLogin()) {
       fetchUserInfo();
     } 
-    else{
       //发起请求获取系统路由
       userResource().then((res)=>{
         const {success,data} = res.data
@@ -61,22 +60,17 @@ function Index() {
             side.children.push(item);
           });   
           data[0] = side;  
-          localStorage.setItem('userMenu',JSON.stringify(data));
-          store.dispatch({
+            store.dispatch({
             type: 'update-routes',
             payload: { systemRoutes: data},
           });
         }else{
-          const emptydata = []
-          emptydata[0] = staticRoutes;
-          emptydata[1] = [];
           store.dispatch({
             type: 'update-routes',
-            payload: { systemRoutes: emptydata},
+            payload: { systemRoutes: staticRoutes},
           });
         }
       })
-    }
   }, []);
 
   useEffect(() => {

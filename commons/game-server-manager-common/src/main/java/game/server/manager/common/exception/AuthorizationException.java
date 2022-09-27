@@ -33,6 +33,7 @@ public class AuthorizationException extends BaseException {
         this.errCode = errCode;
     }
 
+    @Override
     public String getErrCode() {
         return this.errCode;
     }

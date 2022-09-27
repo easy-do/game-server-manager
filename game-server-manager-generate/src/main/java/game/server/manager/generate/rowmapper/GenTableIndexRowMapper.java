@@ -24,7 +24,6 @@ public class GenTableIndexRowMapper implements RowMapper<GenTableIndex> {
         genTableIndex.setCardinality(rs.getString("CARDINALITY"));
         genTableIndex.setSubPart(rs.getString("SUB_PART"));
         genTableIndex.setPacked(rs.getString("PACKED"));
-//        genTableIndex.setNullable(rs.getString("NULLABLE"));
         genTableIndex.setIndexType(rs.getString("INDEX_TYPE"));
         genTableIndex.setComment(rs.getString("COMMENT"));
         genTableIndex.setIndexComment(rs.getString("INDEX_COMMENT"));

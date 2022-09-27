@@ -62,8 +62,10 @@ public interface GenerateService {
      * 预览数据库文档-docx
      *
      * @param response response
-     * @param dto      dto
+     * @param dto dto
+     * @return byte[]
      * @author laoyu
+     * @date 2022/9/27
      */
     byte[] generateDataBaseDocx(HttpServletResponse response, GenerateDatabaseDocDto dto);
 

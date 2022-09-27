@@ -19,7 +19,7 @@ import qs from 'query-string';
 import NProgress from 'nprogress';
 import Navbar from './components/NavBar';
 import Footer from './components/Footer';
-import useRoute, { IRoute } from '@/routes';
+import { defaultRoute, IRoute } from '@/routes';
 import useLocale from './utils/useLocale';
 import getUrlParams from './utils/getUrlParams';
 import lazyload from './utils/lazyload';
@@ -55,6 +55,7 @@ function getIconFromKey(key) {
   }
 }
 
+//加载扁平化路由
 function getFlattenRoutes(routes) {
   const res = [];
   function travel(_routes) {
@@ -88,13 +89,13 @@ function PageLayout() {
   const { settings, userLoading, systemRoutes } = useSelector(
     (state: GlobalState) => state
   );
-  //通过useRoute 获取所有具有权限的路由地址和默认路由(/)
-  const [routes, defaultRoute] = useRoute(systemRoutes);
+
   const defaultSelectedKeys = [currentComponent || defaultRoute];
   const paths = (currentComponent || defaultRoute).split('/');
   const defaultOpenKeys = paths.slice(0, paths.length - 1);
 
   const [breadcrumb, setBreadCrumb] = useState([]);
+ 
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [selectedKeys, setSelectedKeys] =
     useState<string[]>(defaultSelectedKeys);
@@ -112,7 +113,8 @@ function PageLayout() {
   const showMenu = settings.menu && urlParams.menu !== false;
   const showFooter = settings.footer && urlParams.footer !== false;
 
-  const flattenRoutes = useMemo(() => getFlattenRoutes(routes) || [], [routes]);
+
+  const flattenRoutes = getFlattenRoutes(systemRoutes);
 
   function renderRoutes(locale) {
     routeMap.current.clear();
@@ -218,9 +220,11 @@ function PageLayout() {
 
   useEffect(() => {
     const routeConfig = routeMap.current.get(pathname);
+    //展示面包屑
     setBreadCrumb(routeConfig || []);
     updateMenuStatus();
   }, [pathname]);
+
 
 
   const topNav = () =>{
@@ -232,7 +236,7 @@ function PageLayout() {
       openKeys={openKeys}
       onClickSubMenu={(_, openKeys) => setOpenKeys(openKeys)}
     >
-      {renderRoutes(locale)(routes[1].children, 1)}
+      {renderRoutes(locale)(systemRoutes[1].children || [], 1)}
     </Menu>
   }
 
@@ -268,7 +272,7 @@ function PageLayout() {
                   openKeys={openKeys}
                   onClickSubMenu={(_, openKeys) => setOpenKeys(openKeys)}
                 >
-                  {renderRoutes(locale)(routes[0].children, 1)}
+                  {renderRoutes(locale)(systemRoutes[0].children, 1)}
                 </Menu>
               </div>
               <div className={styles['collapse-btn']} onClick={toggleCollapse}>

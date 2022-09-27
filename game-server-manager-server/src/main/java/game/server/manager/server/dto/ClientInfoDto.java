@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 /**
  * 客户端信息
+ * @author yuzhanfeng
  * @TableName client_info
  */
 @Data

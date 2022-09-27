@@ -44,7 +44,7 @@ public class BloomFilterHelper<T> {
     }
 
     private int optimalNumOfBits(long n, double p) {
-        if (p == 0.0D) {
+        if (p == 0.0d) {
             p = 4.9E-324D;
         }
 

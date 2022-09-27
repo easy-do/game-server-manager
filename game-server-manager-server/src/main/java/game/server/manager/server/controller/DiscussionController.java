@@ -36,6 +36,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
 
 
     @PostMapping("/page")
+    @Override
     public MpDataResult page(@RequestBody MpBaseQo<Discussion> mpBaseQo) {
         return super.page(mpBaseQo);
     }
@@ -47,6 +48,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
     }
 
     @RequestMapping("/info/{id}")
+    @Override
     public R<DiscussionVo> info(@PathVariable("id") Long id) {
         return super.info(id);
     }
@@ -54,6 +56,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
     @SaCheckLogin
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "添加话题: ?1",expressions = {"#p1.appName"}, actionType = "添加")
+    @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) DiscussionDto discussionDto) {
         return super.add(discussionDto);
     }
@@ -61,6 +64,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
     @SaCheckLogin
     @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "编辑话题: ?1", expressions = {"#p1.id"}, actionType = "编辑")
+    @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) DiscussionDto discussionDto) {
         return super.update(discussionDto);
     }
@@ -68,6 +72,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "删除话题: ?1 ", expressions = {"#p1"}, actionType = "删除")
+    @Override
     public R<Object> remove(@PathVariable("id") Long id) {
         return super.remove(id);
     }

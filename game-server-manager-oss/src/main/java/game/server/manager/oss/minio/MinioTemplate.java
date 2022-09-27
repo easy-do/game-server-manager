@@ -13,7 +13,6 @@ import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -128,7 +127,7 @@ public class MinioTemplate {
      * @param expires    过期时间 小于等于7
      * @return url
      */
-    public String getObjectURL(String bucketName, String objectName, Integer expires) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public String getObjectUrl(String bucketName, String objectName, Integer expires) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
                 .bucket(bucketName).object(objectName).expiry(expires).build();
         return client.getPresignedObjectUrl(getPresignedObjectUrlArgs);
@@ -141,7 +140,7 @@ public class MinioTemplate {
      * @param objectName 文件名称
      * @return url
      */
-    public String getObjectURL(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public String getObjectUrl(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
                 .bucket(bucketName).object(objectName).build();
         return client.getPresignedObjectUrl(getPresignedObjectUrlArgs);

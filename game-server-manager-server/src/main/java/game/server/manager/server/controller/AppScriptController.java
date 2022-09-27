@@ -44,6 +44,7 @@ public class AppScriptController extends BaseController<AppScriptService, AppScr
 
     @SaCheckLogin
     @RequestMapping("/list")
+    @Override
     public R<List<AppScriptVo>> list() {
         return super.list();
     }
@@ -57,12 +58,14 @@ public class AppScriptController extends BaseController<AppScriptService, AppScr
 
     @SaCheckLogin
     @PostMapping("/page")
+    @Override
     public MpDataResult page(@RequestBody MpBaseQo mpBaseQo) {
         return super.page(mpBaseQo);
     }
 
     @SaCheckLogin
     @RequestMapping("/info/{id}")
+    @Override
     public R<AppScriptVo> info(@PathVariable("id") Long id) {
         return super.info(id);
     }
@@ -70,6 +73,7 @@ public class AppScriptController extends BaseController<AppScriptService, AppScr
     @SaCheckLogin
     @PostMapping("/add")
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = ADD_DESCRIPTION, expressions = ADD_EXPRESSIONS,actionType = ADD_ACTION)
+    @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) AppScriptDto appScriptDto) {
         return super.add(appScriptDto);
     }
@@ -77,6 +81,7 @@ public class AppScriptController extends BaseController<AppScriptService, AppScr
     @SaCheckLogin
     @PostMapping("/update")
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = "编辑脚本: ?1 - ?2", expressions = {"#p1.id","#p1.scriptName"},actionType = EDIT_ACTION)
+    @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) AppScriptDto appScriptDto) {
         return super.update(appScriptDto);
     }
@@ -84,6 +89,7 @@ public class AppScriptController extends BaseController<AppScriptService, AppScr
     @SaCheckLogin()
     @GetMapping("/remove/{id}")
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
+    @Override
     public R<Object> remove(@PathVariable("id") Long id) {
         return super.remove(id);
     }

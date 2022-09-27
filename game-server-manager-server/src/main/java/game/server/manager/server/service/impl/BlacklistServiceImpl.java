@@ -18,7 +18,7 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
     implements BlacklistService{
 
     @Override
-    public Blacklist getByIP(String ip) {
+    public Blacklist getByIp(String ip) {
         LambdaQueryWrapper<Blacklist> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(Blacklist::getIp,ip);
         return getOne(wrapper);

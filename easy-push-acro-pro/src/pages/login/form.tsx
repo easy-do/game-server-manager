@@ -16,8 +16,8 @@ import styles from './style/index.module.less';
 import { loginRequst } from '@/api/oauth';
 import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
-import { IRoute, staticRoutes } from '@/routes';
 import { userResource } from '@/api/resource';
+import { IRoute, staticRoutes } from '@/routes';
 
 export default function LoginForm() {
   const formRef = useRef<FormInstance>();
@@ -32,6 +32,7 @@ export default function LoginForm() {
   const [token,setToken] = useStorage('token');
 
   const dispatch = useDispatch();
+
 
   /**登录 */
   function login(params) {
@@ -83,7 +84,6 @@ export default function LoginForm() {
           userInfo: tokenInfo.userInfo,
         },
       });
-
       // 获取菜单
       userResource().then((res) => {
         const { success } = res.data;
@@ -94,14 +94,14 @@ export default function LoginForm() {
             side.children.push(item);
           });   
           data[0] = side;  
-          // 保存菜单
-          localStorage.setItem('userMenu', JSON.stringify(data));
-        }else{
-          // 保存菜单
-          localStorage.setItem('userMenu', JSON.stringify(staticRoutes));
-        }
+          // 更新菜单
+          dispatch({
+            type: 'update-routes',
+            payload: { systemRoutes: data},
+          });
         // 跳转登录成功页
-        window.location.href = '/loginSuccess';
+         window.location.href = '/loginSuccess';
+        }
       });
     }
   }, []);
