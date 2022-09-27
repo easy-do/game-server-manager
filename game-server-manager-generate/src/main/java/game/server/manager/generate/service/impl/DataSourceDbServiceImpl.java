@@ -2,7 +2,6 @@ package game.server.manager.generate.service.impl;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import game.server.manager.generate.dynamic.utils.JdbcDataSourceExecTool;
-import game.server.manager.generate.entity.GenTable;
 import game.server.manager.generate.entity.GenTableColumn;
 import game.server.manager.generate.entity.GenTableIndex;
 import game.server.manager.generate.qo.DbListQo;
@@ -24,7 +23,7 @@ import java.util.List;
 @Service
 public class DataSourceDbServiceImpl implements DataSourceDbService {
 
-    private static final RowMapperResultSetExtractor<DbListVo> genTableSetExtractor = new RowMapperResultSetExtractor<>(new DbListRowMapper());
+    private static final RowMapperResultSetExtractor<DbListVo> GEN_TABLE_SET_EXTRACTOR = new RowMapperResultSetExtractor<>(new DbListRowMapper());
     private static final RowMapperResultSetExtractor<GenTableColumn> genTableColumnSetExtractor = new RowMapperResultSetExtractor<>(new GenTableColumnRowMapper());
     private static final RowMapperResultSetExtractor<GenTableIndex> genTableIndexSetExtractor = new RowMapperResultSetExtractor<>(new GenTableIndexRowMapper());
     @Autowired
@@ -39,7 +38,7 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
     @Override
     public List<DbListVo> selectDbTableList(DbListQo dbListQo) {
         String sql = "select table_name, table_comment, create_time, update_time from information_schema.tables where table_schema = (select database())  AND table_name NOT LIKE 'gen_%'";
-        return jdbcDataSourceExecTool.query(dbListQo.getDataSourceId(), dbListDynamicSqlBuild(dbListQo, sql, true), genTableSetExtractor);
+        return jdbcDataSourceExecTool.query(dbListQo.getDataSourceId(), dbListDynamicSqlBuild(dbListQo, sql, true), GEN_TABLE_SET_EXTRACTOR);
     }
 
     /**
@@ -105,7 +104,7 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
         }
         String endSql = endBuilder.substring(0, endBuilder.length() - 1);
         startBuilder.append(endSql).append(")");
-        return jdbcDataSourceExecTool.query(dataSourceId, startBuilder.toString(), genTableSetExtractor);
+        return jdbcDataSourceExecTool.query(dataSourceId, startBuilder.toString(), GEN_TABLE_SET_EXTRACTOR);
     }
 
 

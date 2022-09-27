@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * @date 2022/5/4
  */
 public class MyWebIpUtil {
-    private static final Pattern pattern = Pattern.compile("\\<dd class\\=\"fz24\">(.*?)\\<\\/dd>");
+    private static final Pattern PATTERN = Pattern.compile("\\<dd class\\=\"fz24\">(.*?)\\<\\/dd>");
 
     public static String getNowIP(){
         String ip = null;
@@ -69,7 +69,7 @@ public class MyWebIpUtil {
             while ((read = in.readLine()) != null) {
                 inputLine.append(read + "\r\n");
             }
-            Matcher m = pattern.matcher(inputLine.toString());
+            Matcher m = PATTERN.matcher(inputLine.toString());
             if (m.find()) {
                 String ipstr = m.group(1);
                 ip = ipstr;
