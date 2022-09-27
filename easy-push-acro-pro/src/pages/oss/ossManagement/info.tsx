@@ -15,7 +15,7 @@ function InfoPage(props: {id:number,visible,setVisible}) {
     
     function fetchData() {
       setLoading(true)
-      if (props.id !== undefined) {
+      if (props.id !== undefined && props.visible) {
         infoRequest(props.id).then((res) => {
           const { success, data } = res.data;
           if (success) {
@@ -28,7 +28,7 @@ function InfoPage(props: {id:number,visible,setVisible}) {
 
     useEffect(() => {
         fetchData();
-      }, [props.id]);
+      }, [props.id,props.visible]);
 
   const t = useLocale(locale);
 

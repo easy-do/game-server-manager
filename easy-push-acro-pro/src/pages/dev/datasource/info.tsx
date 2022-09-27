@@ -27,7 +27,7 @@ function InfoPage(props: {id:number,visible,setVisible}) {
 
     useEffect(() => {
         fetchData();
-      }, [props.id]);
+      }, [props.id,props.visible]);
 
   const t = useLocale(locale);
 

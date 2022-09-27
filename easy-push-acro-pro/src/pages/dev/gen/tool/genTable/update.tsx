@@ -59,7 +59,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
 
   //加载数据
   function fetchData() {
-    if (id !== undefined) {
+    if (id !== undefined && visible) {
       setLoading(true);
       getTemplateList();
       infoRequest(id).then((res) => {
@@ -85,7 +85,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id,visible]);
 
   //提交修改
   const handleSubmit = () => {

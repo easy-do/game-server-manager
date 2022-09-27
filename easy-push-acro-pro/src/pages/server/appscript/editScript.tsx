@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { updateRequest, infoRequest } from '@/api/template';
+import { updateRequest, infoRequest } from '@/api/appScript';
 import MEditor from '@/components/MEdit/mEdit';
 
-function EditCodePage(props: { id: number; visible; setVisible }) {
+function EditScriptPage(props: { id: number; visible; setVisible }) {
 
 
   function fetchData() {
@@ -14,7 +14,7 @@ function EditCodePage(props: { id: number; visible; setVisible }) {
       infoRequest(props.id).then((res) => {
         const { success, data } = res.data;
         if (success) {
-            setTemplateCode(data.templateCode)
+            setTemplateCode(data.scriptFile)
         }
       });
     }
@@ -68,4 +68,4 @@ function EditCodePage(props: { id: number; visible; setVisible }) {
   );
 }
 
-export default EditCodePage;
+export default EditScriptPage;

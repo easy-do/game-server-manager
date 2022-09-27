@@ -29,7 +29,7 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
 
   //加载数据
   function fetchData() {
-    if (id !== undefined) {
+    if (id !== undefined && visible) {
       setLoading(true);
       getInstallCmd(id).then((res) => {
         const { success, data } = res.data;
@@ -49,7 +49,7 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id,visible]);
 
   return (
     <Modal
