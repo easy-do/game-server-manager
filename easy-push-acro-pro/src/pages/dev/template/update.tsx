@@ -16,7 +16,7 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
   
   //加载数据
   function fetchData() {
-    if (props.id !== undefined) {
+    if (props.id !== undefined && props.visible) {
       setLoading(true)
       infoRequest(props.id).then((res) => {
         const { success, data } = res.data;
@@ -30,7 +30,7 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
 
   useEffect(() => {
     fetchData();
-  }, [props.id]);
+  }, [props.id,props.visible]);
 
 
   //提交修改

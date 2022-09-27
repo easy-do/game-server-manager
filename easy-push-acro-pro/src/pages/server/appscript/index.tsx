@@ -25,6 +25,7 @@ import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
+import EditScriptPage from './editScript';
 
 const { Title } = Typography;
 
@@ -41,6 +42,11 @@ function SearchTable() {
     //编辑
     if (type === 'update') {
       updateInfo(record.id);
+    }
+
+    //编辑脚本
+    if (type === 'updateScript') {
+      editScript(record.id);
     }
 
     //删除
@@ -93,6 +99,15 @@ function SearchTable() {
         fetchData();
       }
     });
+  }
+
+  //编辑脚本
+  const [editScriptId, setEditScriptId] = useState();
+  const [isEditScript, setIsEditScript] = useState(false);
+
+  function editScript(id) {
+    setEditScriptId(id);
+    setIsEditScript(true);
   }
 
   //获取表格展示列表、绑定操作列回调
@@ -218,6 +233,11 @@ function SearchTable() {
         visible={isUpdateInfo}
         setVisible={setisUpdateInfo}
         successCallBack={updateSuccess}
+      />
+      <EditScriptPage
+        id={editScriptId}
+        visible={isEditScript}
+        setVisible={setIsEditScript}
       />
     </Card>
   );

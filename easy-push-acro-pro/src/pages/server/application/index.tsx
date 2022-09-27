@@ -22,6 +22,7 @@ import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import AddPage from './add';
 import ExecuteLogSearchTable from '../executeLog';
+import ExecScriptPage from './execScript';
 
 const { Title } = Typography;
 
@@ -30,7 +31,6 @@ function SearchTable() {
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
-    console.log(record, type);
     //查看
     if (type === 'view') {
       viewInfo(record.applicationId);
@@ -39,16 +39,21 @@ function SearchTable() {
     if (type === 'remove') {
       removeData(record.applicationId);
     }
-        //查看日志
-        if (type === 'log') {
-          viewLog(record.applicationId);
-        }
+    //查看日志
+    if (type === 'log') {
+      viewLog(record.applicationId);
+    }
+
+    //执行脚本
+    if (type === 'execScript') {
+      execScript(record.applicationId,record.appId);
+    }
   };
 
   const [viewInfoId, setViewInfoId] = useState();
   const [isViewInfo, setisViewInfo] = useState(false);
 
- //查看
+  //查看
   function viewInfo(id) {
     setViewInfoId(id);
     setisViewInfo(true);
@@ -60,33 +65,51 @@ function SearchTable() {
   //新增
   const [isAddData, setIsAddData] = useState(false);
 
-  function addData(){
+  function addData() {
     setIsAddData(true);
   }
-  
+
   function addDataSuccess() {
     setIsAddData(false);
     fetchData();
   }
 
   //删除
-  function removeData(id){
-    removeRequest(id).then((res)=>{
-      const { success, msg} = res.data
-      if(success){
+  function removeData(id) {
+    removeRequest(id).then((res) => {
+      const { success, msg } = res.data
+      if (success) {
         Notification.success({ content: msg, duration: 300 })
         fetchData();
       }
     })
   }
 
+  //查看日志
   const [viewLogId, setViewLogId] = useState();
   const [isViewLog, setIsViewLog] = useState(false);
 
- //查看日志
+
   function viewLog(id) {
     setViewLogId(id);
     setIsViewLog(true);
+  }
+
+  //执行脚本
+  const [execScriptApplicationId, setExecScriptApplicationId] = useState();
+  const [execScriptAppId, setExecScriptAppId] = useState();
+  const [isExscScript, setIsExscScript] = useState(false);
+
+
+  function execScript(applicationId,appId) {
+    setExecScriptApplicationId(applicationId);
+    setExecScriptAppId(appId);
+    setIsExscScript(true);
+  }
+
+  function execScriptSuccess() {
+    setIsExscScript(false);
+    fetchData();
   }
 
 
@@ -185,7 +208,7 @@ function SearchTable() {
       >
         <div className={styles['button-group']}>
           <Space>
-            <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
+            <Button type="primary" icon={<IconPlus />} onClick={() => addData()}>
               {t['searchTable.operations.add']}
             </Button>
           </Space>
@@ -209,22 +232,29 @@ function SearchTable() {
         visible={isViewInfo}
         setVisible={setisViewInfo}
       />
+      <ExecScriptPage        
+        applicationId={execScriptApplicationId}
+        appId={execScriptAppId}
+        visible={isExscScript}
+        setVisible={setIsExscScript}
+        successCallBack={execScriptSuccess}
+        />
       <Modal
-      title={t['searchTable.operations.add']}
-      visible={isViewLog}
-      onOk={() => {
-        setIsViewLog(false);
-      }}
-      onCancel={() => {
-        setIsViewLog(false);
-      }}
-      autoFocus={false}
-      focusLock={true}
-      maskClosable={false}
-      style={{ width: "100%", minHeight: "100%" }}
-    >
-    <ExecuteLogSearchTable applicationId={viewLogId} />
-    </Modal>
+        title={t['searchTable.operations.add']}
+        visible={isViewLog}
+        onOk={() => {
+          setIsViewLog(false);
+        }}
+        onCancel={() => {
+          setIsViewLog(false);
+        }}
+        autoFocus={false}
+        focusLock={true}
+        maskClosable={false}
+        style={{ width: "100%", minHeight: "100%" }}
+      >
+        <ExecuteLogSearchTable applicationId={viewLogId} />
+      </Modal>
     </Card>
   );
 }

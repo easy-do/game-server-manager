@@ -123,6 +123,19 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
+              { resource: 'server:appScript', actions: ['update'] },
+            ]}
+          >
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'updateScript')}
+            >
+                {t['searchTable.columns.operations.updateScript']}
+            </Button>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
               { resource: 'server:appScript', actions: ['remove'] },
             ]}
           >

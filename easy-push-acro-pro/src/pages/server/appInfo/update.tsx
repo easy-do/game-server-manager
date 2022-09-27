@@ -25,7 +25,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
   
   //加载数据
   function fetchData() {
-    if (id !== undefined) {
+    if (id !== undefined && visible) {
       setLoading(true)
       infoRequest(id).then((res) => {
         const { success, data } = res.data;
@@ -43,7 +43,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id,visible]);
 
   const t = useLocale(locale);
 

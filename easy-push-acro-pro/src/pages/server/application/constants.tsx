@@ -101,6 +101,13 @@ export function getColumns(
           <Button
             type="text"
             size="small"
+            onClick={() => callback(record, 'execScript')}
+          >
+            {t['searchTable.columns.operations.execScript']}
+          </Button>
+          <Button
+            type="text"
+            size="small"
             onClick={() => callback(record, 'log')}
           >
             {t['searchTable.columns.operations.log']}

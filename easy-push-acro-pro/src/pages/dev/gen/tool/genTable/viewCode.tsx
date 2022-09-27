@@ -17,7 +17,7 @@ function ViewCodePage({ id, visible, setVisible }) {
 
   //加载数据
   function fetchData() {
-    if (id !== undefined) {
+    if (id !== undefined && visible) {
       setLoading(true);
       preview(id).then((res) => {
         const { success, data } = res.data;
@@ -42,7 +42,7 @@ function ViewCodePage({ id, visible, setVisible }) {
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id,visible]);
 
   return (
     <Modal
