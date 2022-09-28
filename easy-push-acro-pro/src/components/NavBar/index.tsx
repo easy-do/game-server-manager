@@ -21,7 +21,7 @@ import {
   IconLoading,
   IconImport,
 } from '@arco-design/web-react/icon';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { GlobalState } from '@/store';
 import { GlobalContext } from '@/context';
 import useLocale from '@/utils/useLocale';
@@ -38,7 +38,6 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
   const t = useLocale();
   const { userInfo, userLoading } = useSelector((state: GlobalState) => state);
 
-  const dispatch = useDispatch();
 
   const { setLang, lang, theme, setTheme } = useContext(GlobalContext);
 
