@@ -3,7 +3,7 @@ import { Modal } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { updateRequest, infoRequest } from '@/api/appScript';
-import MEditor from '@/components/MEdit/mEdit';
+// import MEditor from '@/components/MEdit/mEdit';
 
 function EditScriptPage(props: { id: number; visible; setVisible }) {
 
@@ -63,7 +63,7 @@ function EditScriptPage(props: { id: number; visible; setVisible }) {
       wrapStyle={{width:'100%',height:'100%'}}
       unmountOnExit={true}
     >
-        <MEditor height={clientHeight/1.3 + 'px'} theme='vs-dark' language='shell' value={templateCode} callBack={mdCallBack} />
+        {/* <MEditor height={clientHeight/1.3 + 'px'} theme='vs-dark' language='shell' value={templateCode} callBack={mdCallBack} /> */}
     </Modal>
   );
 }
