@@ -1,4 +1,4 @@
-import { DatePicker, Form, FormInstance, Input, Modal, Select, Spin, Notification } from '@arco-design/web-react';
+import { Form, FormInstance, Input, Modal, Select, Spin, Notification } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { updateRequest, infoRequest } from '@/api/dictType';
@@ -8,8 +8,6 @@ import { useContext, useEffect, useRef } from 'react';
 import React from 'react';
 
 function UpdatePage(props: { id: number; visible; setVisible; successCallback }) {
-
-  const TextArea = Input.TextArea;
 
   const formRef = useRef<FormInstance>();
 
