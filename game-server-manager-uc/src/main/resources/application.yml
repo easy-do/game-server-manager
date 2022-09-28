@@ -291,7 +291,7 @@ springdoc:
       description: 外部文档
       url: https://push.easydo.plus
 
-tcache:
+jetcache:
   statIntervalMinutes: 15
   areaInCacheName: false
   local:
