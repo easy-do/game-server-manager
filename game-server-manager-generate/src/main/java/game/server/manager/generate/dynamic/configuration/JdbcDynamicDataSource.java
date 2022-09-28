@@ -135,7 +135,7 @@ public class JdbcDynamicDataSource {
             id = DEFAULT;
         }
         DataSourceNode dataSourceNode = DATA_SOURCE_MAP.get(id);
-        if (!id.equals(DEFAULT) && Objects.isNull(dataSourceNode)){
+        if (!DEFAULT.equals(id) && Objects.isNull(dataSourceNode)){
             if(Objects.isNull(dataSourceManagerService)){
                 throw new BizException("500","You need to implement : "+ DataSourceManagerService.class.getName());
             }

@@ -37,7 +37,7 @@ public class HttpDataSourceExecTool {
                 throw new BizException("500","测试失败,返回结果非JSON格式");
             }
         }
-        if(url.equals(POST)){
+        if(POST.equals(url)){
             String result = post(CharSequenceUtil.replace(url,POST,""),paramsJson);
             logger.info(result);
             try {
