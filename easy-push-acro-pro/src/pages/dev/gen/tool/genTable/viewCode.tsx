@@ -1,5 +1,5 @@
 import { preview } from '@/api/genTable';
-import MEditor from '@/components/MEdit/mEdit';
+import MEditor from '@/components/Medit/MEditor';
 import useLocale from '@/utils/useLocale';
 import { Tabs, Modal, Spin } from '@arco-design/web-react';
 import React, { useEffect, useState } from 'react';

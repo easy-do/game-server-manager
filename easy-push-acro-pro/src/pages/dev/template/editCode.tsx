@@ -3,7 +3,7 @@ import { Modal } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { updateRequest, infoRequest } from '@/api/template';
-import MEditor from '@/components/MEdit/mEdit';
+import MEditor from '@/components/Medit/MEditor';
 
 function EditCodePage(props: { id: number; visible; setVisible }) {
 
