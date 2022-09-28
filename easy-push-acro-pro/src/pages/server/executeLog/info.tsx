@@ -11,9 +11,9 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   const [logResuilt, setLogResult] = useState([]);
 
-  // const socketAddress = "wss://push.easydo.plus/wss/deployLog";
+  const socketAddress = "wss://push.easydo.plus/wss/deployLog";
 
-  const socketAddress = "ws://localhost:30002/wss/deployLog";
+  // const socketAddress = "ws://localhost:30002/wss/deployLog";
 
   const logDivs = []
 
