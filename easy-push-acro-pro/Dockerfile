@@ -7,7 +7,7 @@ ENV TZ=Asia/Shanghai
 
 
 COPY build/ /html/
-COPY audio/ /html/audio
+#COPY audio/ /html/audio
 COPY nginx.conf /opt/bitnami/nginx/conf/server_blocks/my_server_block.conf
 
 EXPOSE 8080
