@@ -5,6 +5,7 @@ import {
   Button,
   Space,
   Select,
+  Notification,
 } from '@arco-design/web-react';
 import { FormInstance } from '@arco-design/web-react/es/Form';
 import { IconLock, IconUser } from '@arco-design/web-react/icon';
@@ -13,7 +14,7 @@ import useStorage from '@/utils/useStorage';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { loginRequst } from '@/api/oauth';
+import { loginRequst, platformLogin } from '@/api/oauth';
 import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { userResource } from '@/api/resource';
@@ -32,6 +33,13 @@ export default function LoginForm() {
   const [token,setToken] = useStorage('token');
 
   const dispatch = useDispatch();
+
+  function flatform(platFrom){
+    platformLogin(platFrom).then((response) => {
+      Notification.success({content:'跳转至授权页面'})
+      window.location.href = response.data.data;
+    })
+  }
 
 
   /**登录 */
@@ -187,7 +195,7 @@ export default function LoginForm() {
             field="password"
             rules={[{ required: true, message: t['验证码不能为空'] }]}
           >
-            <Input.Password
+            <Input
               prefix={<IconLock />}
               placeholder={t['验证码']}
               onPressEnter={onSubmitClick}
@@ -208,31 +216,38 @@ export default function LoginForm() {
           </Form.Item>
         ) : null}
 
-        {/* { loginType === 'palatForm'?
-         
-        } */}
+        { loginType === 'platform'?
+         (
+          <Form.Item>
+          <Button type="text" onClick={() => flatform("baidu")}> 百度</Button>
+          <Button type="text" onClick={() => flatform("github")}> github</Button>
+          <Button type="text" onClick={() => flatform("gitee")}> gitee</Button>
+          <Button type="text" onClick={() => flatform("alipay")}> 支付宝</Button>
+          <Button type="text" onClick={() => flatform("dingtalk")}> 钉钉</Button>
+          <Button type="text" onClick={() => flatform("wechat_enterprise")}> 企业微信</Button>
+          <Button type="text" onClick={() => flatform("coding")}> 腾讯云</Button>
+          <Button type="text" onClick={() => flatform("oschina")}> 开源中国</Button>
+          <Button type="text" onClick={() => flatform("huawei")}> 华为</Button>
+          </Form.Item>
+         ):null
+        }
 
         <Space size={16} direction="vertical">
           <div className={styles['login-form-password-actions']}>
-            {/* <Checkbox checked={rememberPassword} onChange={setRememberPassword}>
-              {t['login.form.rememberPassword']}
-            </Checkbox> */}
             {loginType === 'email' ? (
               <Link disabled={sendMail} onClick={() => onSendMailCode()}>
                 {t['login.form.sendmail']}
               </Link>
-            ) : null}
+            ) : null
+            }
           </div>
-          <Button type="primary" long onClick={onSubmitClick} loading={loading}>
+          {
+          loginType !== 'platform'?
+          (
+            <Button type="primary" long onClick={onSubmitClick} loading={loading}>
             {t['login.form.login']}
-          </Button>
-          {/* <Button
-            type="text"
-            long
-            className={styles['login-form-register-btn']}
-          >
-            {t['login.form.register']}
-          </Button> */}
+             </Button>):null
+          }
         </Space>
       </Form>
     </div>
