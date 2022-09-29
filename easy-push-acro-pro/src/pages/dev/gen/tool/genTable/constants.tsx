@@ -5,9 +5,7 @@ import { SearchTypeEnum } from '@/utils/systemConstant';
 export const Status = ['正常', '禁用'];
 
 export interface DataInfoVo{
-    isWrapper: string,
     templateIds: string,
-    isManager: string,
     isRemove: string,
     isUpdate: string,
     isInsert: string,
@@ -38,33 +36,10 @@ export interface DataInfoVo{
 // 后台sql查询字段
 export function getSearChColumns(){
     return [
-    'isWrapper',
-    'templateIds',
-    'isManager',
-    'isRemove',
-    'isUpdate',
-    'isInsert',
-    'isQuery',
-    'remark',
     'updateTime',
-    'updateBy',
     'createTime',
-    'createBy',
-    'options',
-    'genPath',
-    'genType',
-    'functionAuthor',
-    'functionName',
-    'businessName',
-    'moduleName',
-    'packageName',
-    'tplCategory',
-    'className',
-    'subTableFkName',
-    'subTableName',
     'tableComment',
     'tableName',
-    'dataSourceId',
     'tableId',
       ];
 }
@@ -142,11 +117,6 @@ export function getColumns(
       title: t['searchTable.columns.updateTime'],
       dataIndex: 'updateTime',
     },
-    {
-      title: t['searchTable.columns.remark'],
-      dataIndex: 'remark',
-    },
-
     {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',

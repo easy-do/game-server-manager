@@ -84,7 +84,7 @@ public class GenController {
      * @author laoyu
      */
     @PostMapping("/page")
-    public MpDataResult page(MpBaseQo<GenTable> mpBaseQo) {
+    public MpDataResult page(@RequestBody MpBaseQo<GenTable> mpBaseQo) {
         IPage<GenTable> page = genTableService.pageGenTableList(mpBaseQo);
         return MpResultUtil.buildPage(page);
     }
