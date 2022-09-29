@@ -81,6 +81,7 @@ function RoleAuthPage(props: Props) {
           checkable
           treeData={resourceTree}
           showLine={true}
+          checkStrictly={true}
           fieldNames={{
             key: 'id',
             title: 'name',

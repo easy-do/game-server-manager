@@ -71,13 +71,12 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo<
 
     @Override
     public IPage<ServerInfoVo> page(MpBaseQo<ServerInfo> mpBaseQo) {
-        LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();
+        mpBaseQo.initInstance(ServerInfo.class);
+        LambdaQueryWrapper<ServerInfo> wrapper = mpBaseQo.getWrapper().lambda();
         if (!isAdmin()) {
             wrapper.eq(ServerInfo::getUserId, getUserId());
         }
-        wrapper.orderByDesc(ServerInfo::getCreateTime);
-        pageSelect(wrapper);
-        return page(mpBaseQo.startPage(), wrapper).convert(ServerInfoMapstruct.INSTANCE::entityToVo);
+        return page(mpBaseQo.getPage(), wrapper).convert(ServerInfoMapstruct.INSTANCE::entityToVo);
     }
 
     @Override

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Spin } from '@arco-design/web-react';
 import cs from 'classnames';
@@ -114,7 +114,8 @@ function PageLayout() {
   const showFooter = settings.footer && urlParams.footer !== false;
 
 
-  const flattenRoutes = getFlattenRoutes(systemRoutes);
+  // const flattenRoutes = getFlattenRoutes(systemRoutes);
+  const flattenRoutes = useMemo(() => getFlattenRoutes(systemRoutes) || [], [systemRoutes]);
 
   function renderRoutes(locale) {
     routeMap.current.clear();
