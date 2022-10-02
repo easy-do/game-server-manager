@@ -209,13 +209,13 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
 
     @Override
     public IPage<ApplicationInfoVo> page(MpBaseQo<ApplicationInfo> mpBaseQo) {
-        LambdaQueryWrapper<ApplicationInfo> wrapper = Wrappers.lambdaQuery();
+        mpBaseQo.initInstance(ApplicationInfo.class);
+        LambdaQueryWrapper<ApplicationInfo> wrapper = mpBaseQo.getWrapper().lambda();
         if(!isAdmin()){
             wrapper.eq(ApplicationInfo::getUserId,getUserId());
         }
-        wrapper.orderByDesc(ApplicationInfo::getLastUpTime);
         pageSelect(wrapper);
-        return baseMapper.selectPage(mpBaseQo.startPage(),wrapper).convert(ApplicationInfoMapstruct.INSTANCE::entityToVo);
+        return baseMapper.selectPage(mpBaseQo.getPage(),wrapper).convert(ApplicationInfoMapstruct.INSTANCE::entityToVo);
     }
 
     @Override

@@ -100,12 +100,11 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, MpBaseQo<Ap
 
     @Override
     public IPage<AppScriptVo> page(MpBaseQo<AppScript> mpBaseQo) {
-        LambdaQueryWrapper<AppScript> wrapper = Wrappers.lambdaQuery();
+        mpBaseQo.initInstance(AppScript.class);
+        LambdaQueryWrapper<AppScript> wrapper = mpBaseQo.getWrapper().lambda();
         if (!isAdmin()) {
             wrapper.eq(AppScript::getCreateBy, getUserId());
         }
-        wrapper.orderByDesc(AppScript::getCreateTime);
-        pageSelect(wrapper);
         return baseMapper.selectPage(mpBaseQo.startPage(), wrapper).convert(AppScriptMapstruct.INSTANCE::entityToVo);
     }
 
