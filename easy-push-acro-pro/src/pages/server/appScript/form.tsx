@@ -53,7 +53,7 @@ function SearchForm(props: {
         wrapperCol={{ span: 19 }}
       >
         <Row gutter={24}>
-          <Col span={colSpan}>
+          {/* <Col span={colSpan}>
             <Form.Item 
               label={t['searchTable.columns.adaptationAppId']}
               field="adaptationAppId"
@@ -68,7 +68,7 @@ function SearchForm(props: {
                 allowClear
               />
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col span={colSpan}>
             <Form.Item
               label={t['searchTable.columns.scriptName']}
