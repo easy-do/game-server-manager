@@ -34,38 +34,35 @@ import defaultLocale from '@/locale';
 import { logoutRequest } from '@/api/oauth';
 import checkLogin from '@/utils/checkLogin';
 
-function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
+function Navbar({ topMenu, show }: { topMenu; show: boolean }) {
   const t = useLocale();
   const { userInfo, userLoading } = useSelector((state: GlobalState) => state);
-
 
   const { setLang, lang, theme, setTheme } = useContext(GlobalContext);
 
   function logout() {
-    logoutRequest().then((res)=>{
+    logoutRequest().then((res) => {
       const { success } = res.data;
-      if(success){
+      if (success) {
         localStorage.clear();
         window.location.href = '/';
       }
-    })
+    });
   }
 
   function onMenuItemClick(key) {
-    
     if (key === 'login') {
-      window.location.href='/login'
+      window.location.href = '/login';
     } else if (key === 'info') {
-      window.location.href='/user/info'
+      window.location.href = '/user/info';
     } else if (key === 'logout') {
       logout();
     } else if (key === 'setting') {
-      window.location.href='/user/setting'
+      window.location.href = '/user/setting';
     } else {
       Message.info(`You clicked ${key}`);
     }
   }
-
 
   if (!show) {
     return (
@@ -80,13 +77,13 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
   }
 
   const droplist = (
-    
-      <Menu onClickMenuItem={onMenuItemClick}>
-        {!checkLogin() ? 
-                  <Menu.Item key="login">
-                  <IconImport className={styles['dropdown-icon']} />
-                  {t['navbar.login']}
-                </Menu.Item> :
+    <Menu onClickMenuItem={onMenuItemClick}>
+      {!checkLogin() ? (
+        <Menu.Item key="login">
+          <IconImport className={styles['dropdown-icon']} />
+          {t['navbar.login']}
+        </Menu.Item>
+      ) : (
         <>
           <Menu.Item key="info">
             <IconUser className={styles['dropdown-icon']} />
@@ -102,9 +99,8 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
             {t['navbar.logout']}
           </Menu.Item>
         </>
-        } 
-
-      </Menu>
+      )}
+    </Menu>
   );
 
   return (
@@ -117,10 +113,7 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
         {topMenu()}
       </div>
 
-
       <ul className={styles.right}>
-
-
         <li>
           <Input.Search
             className={styles.round}
@@ -148,11 +141,13 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
             }}
           />
         </li>
-        <li>
-          <MessageBox>
-            <IconButton icon={<IconNotification />} />
-          </MessageBox>
-        </li>
+        {checkLogin() && (
+          <li>
+            <MessageBox userInfo={userInfo}>
+              <IconButton icon={<IconNotification />} />
+            </MessageBox>
+          </li>
+        )}
         <li>
           <Tooltip
             content={
@@ -176,7 +171,7 @@ function Navbar({ topMenu, show }: {topMenu, show: boolean }) {
                   <IconLoading />
                 ) : !checkLogin() ? (
                   <div>未登录</div>
-                ): (
+                ) : (
                   <img alt="avatar" src={userInfo.avatarUrl} />
                 )}
               </Avatar>

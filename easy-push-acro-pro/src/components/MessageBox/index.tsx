@@ -6,14 +6,19 @@ import {
   Tabs,
   Spin,
   Button,
+  Notification,
 } from '@arco-design/web-react';
-import {
-  IconCustomerService,
-} from '@arco-design/web-react/icon';
+import { IconCustomerService } from '@arco-design/web-react/icon';
 import useLocale from '../../utils/useLocale';
 import MessageList, { MessageListType } from './list';
 import styles from './style/index.module.less';
-import { cleanAllMessageRequest, messageList, readMessageRequest } from '@/api/userMessage';
+import {
+  cleanAllMessageRequest,
+  count,
+  messageList,
+  readMessageRequest,
+} from '@/api/userMessage';
+import checkLogin from '@/utils/checkLogin';
 
 function DropContent() {
   const t = useLocale();
@@ -36,20 +41,18 @@ function DropContent() {
 
   function readMessage(data: MessageListType) {
     const ids = data.map((item) => item.id);
-    readMessageRequest(ids)
-      .then(() => {
-        fetchSourceData();
-      });
+    readMessageRequest(ids).then(() => {
+      fetchSourceData();
+    });
   }
 
   function cleanMessage() {
-    cleanAllMessageRequest()
-      .then((res) => {
-        const {success} = res.data
-        if(success){
-          setSourceData([]);
-        }
-      });
+    cleanAllMessageRequest().then((res) => {
+      const { success } = res.data;
+      if (success) {
+        setSourceData([]);
+      }
+    });
   }
 
   useEffect(() => {
@@ -134,7 +137,42 @@ function DropContent() {
   );
 }
 
-function MessageBox({ children }) {
+function MessageBox({ children, userInfo }) {
+  const [messageCount, setMessageCount] = useState(0);
+  const [countSetTimeOut, setCountSetTimeOut] = useState(false);
+
+  /**
+   * 获取未读消息数量
+   */
+  const countRequest = () => {
+    count().then((result) => {
+      if (result.data.success) {
+        const count = result.data.data;
+        if (count > 0) {
+          if (!sessionStorage.getItem('isPlayMessaudio')) {
+            this.audio.play();
+            Notification.success({ content: '您有' + count + '条未读消息。' });
+            sessionStorage.setItem('isPlayMessaudio', 'true');
+          }
+        } else {
+          sessionStorage.removeItem('isPlayMessaudio');
+        }
+        setMessageCount(messageCount);
+        //30秒后再刷新一次未读消息数量
+        if (!countSetTimeOut) {
+          setCountSetTimeOut(true);
+          setTimeout(countRequest, 30000);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (checkLogin()) {
+      setTimeout(countRequest, 5000);
+    }
+  }, [JSON.stringify(userInfo)]);
+
   return (
     <Trigger
       trigger="hover"
@@ -143,9 +181,7 @@ function MessageBox({ children }) {
       unmountOnExit={false}
       popupAlign={{ bottom: 4 }}
     >
-      <Badge count={9} dot>
-        {children}
-      </Badge>
+      <Badge count={messageCount}>{children}</Badge>
     </Trigger>
   );
 }
