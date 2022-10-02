@@ -29,22 +29,12 @@ export function getSearChColumns(){
     return [
     'applicationId',
     'applicationName',
-    'userId',
-    'deviceId',
     'deviceName',
-    'deviceType',
-    'appId',
     'appName',
     'status',
-    'publicKey',
-    'privateKey',
-    'appEnvCache',
-    'isBlack',
-    'pluginsData',
     'createTime',
     'updateTime',
     'lastUpTime',
-    'delFlag',
       ];
 }
 
