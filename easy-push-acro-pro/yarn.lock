@@ -3855,6 +3855,11 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
+"@types/marked@^4.0.3":
+  version "4.0.7"
+  resolved "https://registry.npmmirror.com/@types/marked/-/marked-4.0.7.tgz#400a76809fd08c2bbd9e25f3be06ea38c8e0a1d3"
+  integrity sha512-eEAhnz21CwvKVW+YvRvcTuFKNU9CV1qH+opcgVK3pIMI6YZzDm6gc8o2vHjldFk6MGKt5pueSB7IOpvpx5Qekw==
+
 "@types/mime@^1":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.2.tgz#93e25bf9ee75fe0fd80b594bc4feb0e862111b5a"
@@ -8849,6 +8854,13 @@ mathml-tag-names@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
+
+md-editor-rt@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.npmmirror.com/md-editor-rt/-/md-editor-rt-2.2.1.tgz#4dd1fa4342d3b62ed8b72d5014759a2bba408ab8"
+  integrity sha512-EHD343ZDP7M1zXn4E4kFU3w25Ni0DELuR2HhQKjuvRCujxWsMA8PYaRjrBjTnUAc/LsWdR7KvHYUtWeYnHHQ+g==
+  dependencies:
+    "@types/marked" "^4.0.3"
 
 mdn-data@2.0.14:
   version "2.0.14"

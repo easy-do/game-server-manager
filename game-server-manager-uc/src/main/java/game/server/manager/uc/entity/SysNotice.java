@@ -18,59 +18,38 @@ import java.io.Serializable;
 
 
 /**
- * 系统资源数据库映射对象
+ * 通知公告数据库映射对象
  * 
  * @author yuzhanfeng
- * @date 2022-09-19 22:43:39
+ * @date 2022-10-03 17:39:25
  */
 @Data
 @ToString
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_resource")
-public class SysResource implements Serializable {
+@TableName("sys_notice")
+public class SysNotice implements Serializable {
 
     @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    /** ID */
+    /** 公告ID */
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    /** 资源名称 */
-    private String resourceName;
+    /** 公告标题 */
+    private String noticeTitle;
 
-    /** 资源编码 */
-    private String resourceCode;
+    /** 公告类型 */
+    private String noticeType;
 
-    /** 父级ID */
-    private Long parentId;
+    /** 公告内容 */
+    private String noticeContent;
 
-    /** 资源类型 */
-    private String resourceType;
-
-    /** 显示顺序 */
-    private Long orderNumber;
-
-    /** 路径 */
-    private String path;
-
-    /** 参数 */
-    private String param;
-
-    /** 是否缓存 */
-    private Long isCache;
-
-    /** 是否隐藏 */
-    private Integer visible;
-
-    /** 状态 */
-    private Integer status;
-
-    /** 图标 */
-    private String icon;
+    /** 公告状态 */
+    private String status;
 
     /** 创建者 */
     private Long createBy;

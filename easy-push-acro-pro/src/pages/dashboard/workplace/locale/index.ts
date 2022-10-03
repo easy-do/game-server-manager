@@ -26,9 +26,6 @@ const i18n = {
     'workplace.marketing': 'Marketing',
     'workplace.recent': 'Recent',
     'workplace.announcement': 'Announcement',
-    'workplace.activity': 'Activity',
-    'workplace.info': 'Info',
-    'workplace.notice': 'Notice',
     'workplace.docs': 'Document',
     'workplace.pecs': 'pecs',
     'workplace.designLab': 'DesignLab',
@@ -40,6 +37,9 @@ const i18n = {
     'workplace.onlineCount': 'Online User number',
     'workplace.userCount': 'User number',
     'workplace.bout': 'Bout',
+    'workplace.3': 'Activity',
+    'workplace.1': 'Info',
+    'workplace.2': 'Announcement',
   },
   'zh-CN': {
     'workplace.welcomeBack': '欢迎回来，',
@@ -68,9 +68,7 @@ const i18n = {
     'workplace.marketing': '内容投放',
     'workplace.recent': '最近访问',
     'workplace.announcement': '公告',
-    'workplace.activity': '活动',
-    'workplace.info': '消息',
-    'workplace.notice': '通知',
+
     'workplace.docs': '文档中心',
     'workplace.pecs': '个',
     'workplace.bout': '次',
@@ -82,6 +80,9 @@ const i18n = {
     'workplace.deployCount': '累积部署',
     'workplace.onlineCount': '在线用户',
     'workplace.userCount': '用户',
+    'workplace.3': '活动',
+    'workplace.1': '通知',
+    'workplace.2': '公告',
   },
 };
 
