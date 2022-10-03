@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
+import dayjs from 'dayjs';
 import {
   Form,
   Input,
   Select,
+  DatePicker,
   Button,
   Grid,
 } from '@arco-design/web-react';
@@ -16,7 +18,7 @@ import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
-
+const TextArea = Input.TextArea;
 
 function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
@@ -51,37 +53,21 @@ function SearchForm(props: {
         wrapperCol={{ span: 19 }}
       >
         <Row gutter={24}>
-          {/* <Col span={colSpan}>
-            <Form.Item 
-              label={t['searchTable.columns.adaptationAppId']}
-              field="adaptationAppId"
-            >
-              <Select
-                placeholder={t['searchForm.adaptationAppId.placeholder']}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                // mode="multiple"
-                allowClear
-              />
-            </Form.Item>
-          </Col> */}
           <Col span={colSpan}>
             <Form.Item
-              label={t['searchTable.columns.scriptName']}
-              field="scriptName"
+              label={t['searchTable.columns.noticeTitle']}
+              field="noticeTitle"
             >
-              <Input placeholder={t['searchForm.scriptName.placeholder']} allowClear />
+              <Input placeholder={t['searchForm.noticeTitle.placeholder']} allowClear />
             </Form.Item>
           </Col> 
           <Col span={colSpan}>
             <Form.Item 
-              label={t['searchTable.columns.scriptType']}
-              field="scriptType"
+              label={t['searchTable.columns.noticeType']}
+              field="noticeType"
             >
               <Select
-                placeholder={t['searchForm.scriptType.placeholder']}
+                placeholder={t['searchForm.noticeType.placeholder']}
                 options={Status.map((item, index) => ({
                   label: item,
                   value: index,
@@ -93,10 +79,10 @@ function SearchForm(props: {
           </Col>
           <Col span={colSpan}>
             <Form.Item
-              label={t['searchTable.columns.scriptScope']}
-              field="scriptScope"
+              label={t['searchTable.columns.status']}
+              field="status"
             >
-              <DictDataSelect dictCode={'scope_select'} placeholder={t['searchForm.scriptScope.placeholder']} />
+              <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.status.placeholder']} />
             </Form.Item>
           </Col> 
         </Row>
