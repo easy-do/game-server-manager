@@ -17,7 +17,8 @@ public enum ConvertExceptionEnum {
     CONNECTION_RESET   ("Connection reset","服务器连接被重置,请确保服务器地址可访问。"),
     CHANNEL_IS_NOT_OPENED    ("channel is not opened","脚本执行中断,与服务器的通信异常关闭,无法跟踪脚本后续执行情况。"),
     PERMISSION_DENIED  ("SftpException: Permission denied","上传脚本失败，没有目录访问权限。"),
-    FAILURE  ("SftpException: Failure","上传脚本失败，磁盘空间不足。");
+    FAILURE  ("SftpException: Failure","上传脚本失败，磁盘空间不足。"),
+    UNKNOWN_HOST("UnknownHostException","未知的主机地址");
 
 
 
