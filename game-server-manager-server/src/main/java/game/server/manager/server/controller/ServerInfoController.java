@@ -59,6 +59,7 @@ return super.info(id);
     @SaveLog(logType = "操作日志", moduleName = "服务管理", description = "添加服务器: ?1", expressions = {"#p1.serverName"}, actionType = "添加")
     @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) ServerInfoDto serverInfoDto) {
+        baseService.test(serverInfoDto);
         return super.add(serverInfoDto);
     }
 
@@ -67,6 +68,7 @@ return super.info(id);
     @SaveLog(logType = "操作日志", moduleName = "服务管理", description = "编辑服务器: ?1 - ?2", expressions = {"#p1.id","#p1.serverName"},actionType = "编辑")
     @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) ServerInfoDto serverInfoDto) {
+        baseService.test(serverInfoDto);
         return super.update(serverInfoDto);
     }
 
@@ -78,11 +80,4 @@ return super.info(id);
         return super.remove(id);
     }
 
-    @SaCheckLogin
-    @PostMapping("/test")
-    @SaveLog(logType = "操作日志", moduleName = "服务管理", description = "测试服务器连通性", expressions = {}, actionType = "测试")
-    public R<Object> test(@RequestBody @Validated({Insert.class}) ServerInfoDto serverInfoDto) {
-        baseService.test(serverInfoDto);
-        return DataResult.ok();
-    }
 }

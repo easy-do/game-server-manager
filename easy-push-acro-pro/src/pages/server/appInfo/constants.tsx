@@ -35,22 +35,15 @@ export function getSearChColumns(){
     'appName',
     'version',
     'state',
-    'startCmd',
-    'stopCmd',
-    'configFilePath',
     'icon',
     'picture',
     'author',
     'isAudit',
     'appScope',
-    'deployType',
     'description',
     'heat',
     'createTime',
     'updateTime',
-    'createBy',
-    'updateBy',
-    'delFlag',
       ];
 }
 

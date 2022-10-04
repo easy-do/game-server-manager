@@ -178,11 +178,11 @@ function SearchTable() {
     <Card>
       <Title heading={6}>{t['menu.list.searchTable']}</Title>
       <SearchForm onSearch={handleSearch} />
-      <PermissionWrapper
+      {/* <PermissionWrapper
         requiredPermissions={[
           { resource: 'templateManager', actions: ['add'] },
         ]}
-      >
+      > */}
         <div className={styles['button-group']}>
           <Space>
             <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
@@ -190,7 +190,7 @@ function SearchTable() {
             </Button>
           </Space>
         </div>
-      </PermissionWrapper>
+      {/* </PermissionWrapper> */}
       <Table
         rowKey="id"
         loading={loading}
