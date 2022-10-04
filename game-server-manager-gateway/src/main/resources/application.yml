@@ -39,7 +39,7 @@ spring:
           filters:
             - StripPrefix=1
         - id: oss
-          uri: game-server-manager-oss.server:8888/**
+          uri: http://game-server-manager-oss.server:8888/**
           predicates:
             - Path=/oss/**
           filters:
