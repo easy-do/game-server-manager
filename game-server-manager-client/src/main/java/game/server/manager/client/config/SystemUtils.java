@@ -25,6 +25,9 @@ public class SystemUtils {
     @Value("${manager-url:https://manager.easydo.plus}")
     private String managerUrl;
 
+    @Value("${socket-url:wss://manager.easydo.plus/wss/syncClientData}")
+    private String socketUrl;
+
     @Value("${client-id:no}")
     private String clientId;
 
@@ -33,6 +36,8 @@ public class SystemUtils {
 
     @Value("${client_version:0}")
     private String version;
+
+    private String sessionId;
 
     public void init(ClientInitData clientInitData){
         String publicKey = clientInitData.getPublicKey();

@@ -40,13 +40,12 @@ public class ClientInitDataServer extends AbstractDefaultServer {
                     .clientId(clientInfo.getId())
                     .clientName(clientInfo.getClientName())
                     .publicKey(clientInfo.getPublicKey())
+                    .sessionId(syncData.getSessionId())
                     .build();
             return DataResult.ok(initData);
         }catch (Exception exception){
             logger.error("接收客户端启动数据发生异常{}",JSON.toJSONString(syncData));
             return DataResult.fail("获取初始化数据失败，{}", ExceptionUtil.getMessage(exception));
         }
-
-
     }
 }
