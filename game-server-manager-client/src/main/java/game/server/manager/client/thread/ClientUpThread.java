@@ -41,9 +41,7 @@ public class ClientUpThread {
     @Autowired
     private ClientMessageServer clientMessageServer;
 
-    private int errCount = 0;
-
-    @Scheduled(fixedDelay = 1000 * 30)
+    @Scheduled(fixedDelay = 1000 * 10)
     public void serverUp() {
         ClientData clientData = clientDataServer.getClientData();
         try {
@@ -62,12 +60,7 @@ public class ClientUpThread {
                 clientMessageServer.messageCallBack(messageVos);
             }
         } catch (Exception exception) {
-            errCount++;
             logger.error("心跳通信失败, {}",ExceptionUtil.getMessage(exception));
-            if(errCount > 6){
-                logger.error("心跳通信失败超过六次,结束程序 {}",ExceptionUtil.getMessage(exception));
-                System.exit(1000);
-            }
         }
     }
 }

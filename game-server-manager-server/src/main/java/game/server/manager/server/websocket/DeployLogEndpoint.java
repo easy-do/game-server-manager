@@ -36,10 +36,12 @@ import java.util.Objects;
 @ServerEndpoint("/wss/deployLog")
 public class DeployLogEndpoint {
 
-    /** session实例 */
-    private Session session;
-
     private static ApplicationInfoService applicationInfoService;
+    private static DeploymentLogServer deploymentLogServer;
+    /**
+     * session实例
+     */
+    private Session session;
 
     /**
      * ServerEndpoint无法直接 Autowired static方式
@@ -49,11 +51,9 @@ public class DeployLogEndpoint {
      * @date 2022/9/2
      */
     @Autowired
-    private void setApplicationInfoService(ApplicationInfoService applicationInfoService){
-        DeployLogEndpoint.applicationInfoService =applicationInfoService;
+    private void setApplicationInfoService(ApplicationInfoService applicationInfoService) {
+        DeployLogEndpoint.applicationInfoService = applicationInfoService;
     }
-
-    private static DeploymentLogServer deploymentLogServer;
 
     /**
      * ServerEndpoint无法直接 Autowired static方式
@@ -63,24 +63,9 @@ public class DeployLogEndpoint {
      * @date 2022/9/2
      */
     @Autowired
-    private void setDeploymentLogServer(DeploymentLogServer deploymentLogServer){
-        DeployLogEndpoint.deploymentLogServer =deploymentLogServer;
+    private void setDeploymentLogServer(DeploymentLogServer deploymentLogServer) {
+        DeployLogEndpoint.deploymentLogServer = deploymentLogServer;
     }
-//
-//    private static RedisUtils<Object> redisUtils;
-//
-//    /**
-//     * ServerEndpoint无法直接 Autowired static方式
-//     *
-//     * @param redisUtils redisUtils
-//     * @author laoyu
-//     * @date 2022/9/2
-//     */
-//    @Autowired
-//    private void setRedisUtils(RedisUtils<Object> redisUtils){
-//        DeployLogEndpoint.redisUtils =redisUtils;
-//    }
-
 
 
     /**
@@ -93,7 +78,7 @@ public class DeployLogEndpoint {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        log.info("【websocket消息】有新的连接.");
+        log.info("【websocket消息】建立查询执行日志连接.");
         sendMessage(JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("连接成功。")).build()));
     }
 
@@ -105,11 +90,11 @@ public class DeployLogEndpoint {
      */
     @OnClose
     public void onClose() {
-        log.info("【websocket消息】连接断开");
+        log.info("【websocket消息】查询执行日志连接断开");
     }
 
     @OnError
-    public void onError(Throwable exception){
+    public void onError(Throwable exception) {
         exception.printStackTrace();
         sendMessage("服务端错误,断开连接。：" + ExceptionUtil.getMessage(exception));
         close();
@@ -124,7 +109,7 @@ public class DeployLogEndpoint {
      */
     @OnMessage
     public void onMessage(String message) throws InterruptedException {
-        log.info("【websocket消息】收到客户端发来的消息:{}", message);
+        log.info("【websocket消息】查询执行日志请求:{}", message);
         JSONObject messageObject = JSON.parseObject(message);
         Object logId = messageObject.get("logId");
         Object token = messageObject.get(SystemConstant.TOKEN_NAME);
@@ -168,8 +153,8 @@ public class DeployLogEndpoint {
     }
 
 
-    private void close(){
-        if(Objects.nonNull(this.session)){
+    private void close() {
+        if (Objects.nonNull(this.session)) {
             try {
                 this.session.close();
             } catch (IOException e) {

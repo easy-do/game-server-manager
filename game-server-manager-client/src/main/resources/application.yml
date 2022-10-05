@@ -6,6 +6,7 @@ spring:
     name: game-server-manager-client
 
 manager-url: ${MANAGER_URL:https://manager.easydo.plus/server}
+socket-url: ${SOCKET_URL:wss://manager.easydo.plus/wss/syncClientData}
 client-id: ${CLIENT_ID:no}
 app-id: ${APP_ID:no}
 client_version: ${CLIENT_VERSION:no}

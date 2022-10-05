@@ -15,7 +15,6 @@ import game.server.manager.common.result.DataResult;
 import game.server.manager.common.vo.ClientMessageVo;
 import game.server.manager.server.annotation.SyncServerClass;
 import game.server.manager.server.entity.ClientInfo;
-import game.server.manager.server.entity.ClientMessage;
 import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
 import org.springframework.beans.factory.annotation.Autowired;

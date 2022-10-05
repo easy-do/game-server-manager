@@ -21,6 +21,7 @@ public class SyncData implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private String sessionId;
     private String applicationId;
     private String clientId;
     private String key;

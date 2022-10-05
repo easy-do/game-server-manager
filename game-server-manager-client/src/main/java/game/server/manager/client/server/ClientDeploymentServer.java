@@ -50,7 +50,6 @@ import static game.server.manager.common.constant.Constants.WINDOW_LINE_END_CHAR
 public class ClientDeploymentServer {
 
     Logger logger = LoggerFactory.getLogger(ClientDeploymentServer.class);
-    private static final String INSTALL_FAILED = "INSTALL_FAILED";
 
     @Autowired
     private SystemUtils systemUtils;

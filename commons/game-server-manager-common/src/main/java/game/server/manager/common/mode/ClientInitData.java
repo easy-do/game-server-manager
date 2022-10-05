@@ -28,4 +28,6 @@ public class ClientInitData implements Serializable {
 
     private String publicKey;
 
+    private String sessionId;
+
 }
