@@ -40,6 +40,12 @@ spring:
             - Path=/oss/**
           filters:
             - StripPrefix=1
+        - id: log-audit
+          uri: http://localhost:30005
+          predicates:
+            - Path=/log-audit/**
+          filters:
+            - StripPrefix=1
 
 management:
   server:

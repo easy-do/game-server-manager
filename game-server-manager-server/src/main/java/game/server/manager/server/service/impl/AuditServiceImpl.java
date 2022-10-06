@@ -1,5 +1,6 @@
 package game.server.manager.server.service.impl;
 
+import com.alicp.jetcache.anno.CacheInvalidate;
 import game.server.manager.event.BasePublishEventServer;
 import game.server.manager.server.dto.AuditDto;
 import game.server.manager.server.entity.AppInfo;
@@ -9,8 +10,6 @@ import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.AuditService;
 import game.server.manager.server.service.DiscussionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import game.server.manager.common.exception.BizException;
 
@@ -35,6 +34,8 @@ public class AuditServiceImpl implements AuditService {
     private AppInfoService appInfoService;
 
     @Override
+    @CacheInvalidate(name = "AppInfoService.storePage")
+    @CacheInvalidate(name = "DiscussionService.page")
     public boolean audit(AuditDto dto) {
         switch (dto.getAuditType()){
             case 1:
@@ -47,10 +48,8 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(value = "storePage",allEntries = true),
-            @CacheEvict(value = "discussionPage",allEntries = true),
-    })
+    @CacheInvalidate(name = "AppInfoService.storePage")
+    @CacheInvalidate(name = "DiscussionService.page")
     public boolean commitAudit(AuditDto auditDto) {
         switch (auditDto.getAuditType()){
             case 1:
@@ -106,11 +105,10 @@ public class AuditServiceImpl implements AuditService {
             basePublishEventServer.publishUserPointsEvent(discussion.getCreateBy(),dto.getPoints(),title);
             //发布用户消息事件
             basePublishEventServer.publishAuditEvent(discussion.getCreateBy(),title, discussion.getTitle(), AuditStatusEnum.getDesc(status),dto.getDescription());
-            //清空讨论交流查询缓存
-            DiscussionServiceImpl.PAGE_CACHE.clear();
         }
         return result;
     }
+
 
     private boolean auditApp(AuditDto dto){
         AppInfo appInfo = appInfoService.getById(dto.getId());
@@ -126,8 +124,6 @@ public class AuditServiceImpl implements AuditService {
             basePublishEventServer.publishUserPointsEvent(appInfo.getCreateBy(),dto.getPoints(),title);
             //发布用户消息事件
             basePublishEventServer.publishAuditEvent(appInfo.getCreateBy(),title, appInfo.getAppName(), AuditStatusEnum.getDesc(status),dto.getDescription());
-            //清空app市场查询缓存
-            AppInfoServiceImpl.STORE_PAGE_CACHE.clear();
         }
         return result;
     }

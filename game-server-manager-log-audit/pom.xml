@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>game.server.manager</groupId>
+        <artifactId>game-server-manager</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>game-server-manager-log-audit</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>game-server-manager-log-audit</name>
+    <description>日志审计</description>
+
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- 日志相关 -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-log</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--  web -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-web</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--  api -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--  doc -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-doc</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- mapstruct -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-mapstruct</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- redis -->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-redis</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--  数据库相关-->
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-mybatis-plus</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

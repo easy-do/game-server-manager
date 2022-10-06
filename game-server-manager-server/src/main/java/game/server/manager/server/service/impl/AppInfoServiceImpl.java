@@ -1,5 +1,9 @@
 package game.server.manager.server.service.impl;
 
+import com.alicp.jetcache.anno.CacheInvalidate;
+import com.alicp.jetcache.anno.CacheRefresh;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -20,19 +24,14 @@ import game.server.manager.common.result.DataResult;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
-* @author yuzhanfeng
-* @description 针对表【app_info(APP信息)】的数据库操作Service实现
-* @createDate 2022-05-22 17:44:07
-*/
+ * @author yuzhanfeng
+ * @description 针对表【app_info(APP信息)】的数据库操作Service实现
+ * @createDate 2022-05-22 17:44:07
+ */
 @Service
-public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppInfoVo, AppInfoDto, AppInfoMapper> implements AppInfoService{
-
-    public static final ConcurrentMap<String,IPage<AppInfo>> STORE_PAGE_CACHE = new ConcurrentHashMap<>();
+public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppInfoVo, AppInfoDto, AppInfoMapper> implements AppInfoService {
 
     @Autowired
     private ApplicationInfoService applicationInfoService;
@@ -82,6 +81,7 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppI
     }
 
     @Override
+    @CacheInvalidate(name = "AppInfoService.storePage")
     public boolean add(AppInfoDto appInfoDto) {
         //校验授权信息
         checkAuthorization("appAdd");
@@ -92,6 +92,7 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppI
     }
 
     @Override
+    @CacheInvalidate(name = "AppInfoService.storePage")
     public boolean edit(AppInfoDto appInfoDto) {
         //校验授权信息
         checkAuthorization("appEdit");
@@ -106,6 +107,7 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppI
     }
 
     @Override
+    @CacheInvalidate(name = "AppInfoService.storePage")
     public boolean delete(Serializable id) {
         //校验授权信息
         checkAuthorization("appDel");
@@ -125,7 +127,7 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppI
     @Override
     public long countByUserId(Long userId) {
         LambdaQueryWrapper<AppInfo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(AppInfo::getCreateBy,userId);
+        wrapper.eq(AppInfo::getCreateBy, userId);
         return count(wrapper);
     }
 
@@ -137,24 +139,19 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppI
     @Override
     public boolean exists(Long id) {
         LambdaQueryWrapper<AppInfo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(AppInfo::getId,id);
+        wrapper.eq(AppInfo::getId, id);
         return baseMapper.exists(wrapper);
     }
 
     @Override
+    @Cached(name = "AppInfoService.storePage", expire = 300, cacheType = CacheType.BOTH)
+    @CacheRefresh(refresh = 60)
     public IPage<AppInfo> storePage(AppInfoQo mpBaseQo) {
-        IPage<AppInfo> cachePage = STORE_PAGE_CACHE.get(mpBaseQo.getCurrentPage() + ":" + mpBaseQo.getPageSize());
-        if(Objects.nonNull(cachePage)){
-            return cachePage;
-        }else {
-            LambdaQueryWrapper<AppInfo> wrapper = Wrappers.lambdaQuery();
-            wrapper.eq(AppInfo::getIsAudit, AuditStatusEnum.AUDIT_SUCCESS.getState());
-            wrapper.eq(AppInfo::getAppScope, ScopeEnum.PUBLIC.getScope()).or().eq(AppInfo::getAppScope, ScopeEnum.SUBSCRIBE.getScope());
-            wrapper.orderByDesc(AppInfo::getHeat);
-            IPage<AppInfo> result = page(mpBaseQo.startPage(), wrapper);
-            STORE_PAGE_CACHE.put(mpBaseQo.getCurrentPage() + ":" + mpBaseQo.getPageSize(),result);
-            return result;
-        }
+        LambdaQueryWrapper<AppInfo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(AppInfo::getIsAudit, AuditStatusEnum.AUDIT_SUCCESS.getState());
+        wrapper.eq(AppInfo::getAppScope, ScopeEnum.PUBLIC.getScope()).or().eq(AppInfo::getAppScope, ScopeEnum.SUBSCRIBE.getScope());
+        wrapper.orderByDesc(AppInfo::getHeat);
+        return page(mpBaseQo.startPage(), wrapper);
     }
 }
 

@@ -13,7 +13,7 @@
     <version>1.0.0</version>
     <name>game-server-manager-server</name>
 
-    <description>game-server-manager-server</description>
+    <description>主服务</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,12 +76,6 @@
             <groupId>game.server.manager</groupId>
             <artifactId>game-server-manager-redis</artifactId>
             <version>1.0.0</version>
-        </dependency>
-
-        <!--spring缓存-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
         <!-- 日志相关 -->

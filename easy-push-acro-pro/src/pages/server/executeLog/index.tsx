@@ -8,7 +8,6 @@ import {
 import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
-import styles from './style/index.module.less';
 import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
 import { managerPage } from '@/api/executeLog';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
@@ -16,9 +15,10 @@ import InfoPage from './info';
 
 const { Title } = Typography;
 
-function ExecuteLogSearchTable(props:{applicationId?:string}) {
+function ExecuteLogSearchTable(props:{applicationId?:string,visible}) {
   const t = useLocale(locale);
 
+  const {visible=true} = props
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
     //查看
@@ -60,30 +60,34 @@ function ExecuteLogSearchTable(props:{applicationId?:string}) {
     pagination.pageSize,
     JSON.stringify(formParams),
     orders,
+    props.applicationId,
+    props.visible,
   ]);
 
   // 获取数据
   function fetchData() {
-    const { current, pageSize } = pagination;
-    setLoading(true);
-    const newFormParams:any = {...formParams, applicationId:props.applicationId}
-    managerPage({
-      currentPage: current,
-      pageSize,
-      searchParam: newFormParams,
-      orders: orders,
-      columns: getSearChColumns(),
-      searchConfig: searchConfig(),
-    }).then((res) => {
-      setData(res.data.data);
-      setPatination({
-        ...pagination,
-        current,
+    if(visible){
+      const { current, pageSize } = pagination;
+      setLoading(true);
+      const newFormParams:any = {...formParams, applicationId:props.applicationId}
+      managerPage({
+        currentPage: current,
         pageSize,
-        total: res.data.total,
+        searchParam: newFormParams,
+        orders: orders,
+        columns: getSearChColumns(),
+        searchConfig: searchConfig(),
+      }).then((res) => {
+        setData(res.data.data);
+        setPatination({
+          ...pagination,
+          current,
+          pageSize,
+          total: res.data.total,
+        });
+        setLoading(false);
       });
-      setLoading(false);
-    });
+    }
   }
 
   //表格搜索排序回调函数

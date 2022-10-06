@@ -214,3 +214,18 @@ springdoc:
     externalDocs:
       description: 外部文档
       url: https://push.easydo.plus
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  local:
+    default:
+      type: linkedhashmap
+      keyConvertor: fastjson2
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson2 #其他可选：fastjson/jackson
+      broadcastChannel: ${spring.application.name}
+      #redis://密码@ip:端口/redis库名?timeout=5s
+      uri: redis://${REDIS_PASSWORD:n2H%yuXZFS}@${REDIS_HOST:redis.server}:${REDIS_PORT:6379}/

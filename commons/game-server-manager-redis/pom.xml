@@ -62,6 +62,19 @@
             <version>2.13.4</version>
         </dependency>
 
+        <!--jetcache缓存-->
+        <dependency>
+            <groupId>com.alicp.jetcache</groupId>
+            <artifactId>jetcache-starter-redis</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alicp.jetcache</groupId>
+            <artifactId>jetcache-starter-redis-lettuce</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

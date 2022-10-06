@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+    Avatar,
   Descriptions, Drawer, Typography,
 } from '@arco-design/web-react';
 import locale from './locale';
@@ -14,7 +15,7 @@ function InfoPage(props: {id:number,visible,setVisible}) {
     const [infoData, setInfoData] = useState<UserInfoVo>();
     
     function fetchData (){
-        if(props.id !== undefined && props.visible){
+        if(props.id && props.visible){
             infoRequest(props.id).then((res)=>{
                 const { success, data} = res.data
                 if(success){
@@ -32,16 +33,20 @@ function InfoPage(props: {id:number,visible,setVisible}) {
 
   const authorizationInfo = infoData && infoData.authorization
   ? JSON.parse(infoData.authorization)
-  : '';
+  : {};
 
   const data = [
+    {
+        label: t['searchTable.columns.avatarUrl'],
+        value: infoData? <Avatar><img src={infoData.avatarUrl} /></Avatar>:'',
+    },
     {
       label: t['searchTable.columns.id'],
       value: infoData? infoData.id:'',
     },
     {
         label: t['searchTable.columns.unionId'],
-        value: infoData? infoData.unionId:'',
+        value: infoData? <Text copyable>{infoData.unionId}</Text>:'',
       },
     {
         label: t['searchTable.columns.name'],
@@ -80,10 +85,10 @@ function InfoPage(props: {id:number,visible,setVisible}) {
         label: t['searchTable.columns.loginIp'],
         value: infoData? infoData.loginIp:'',
     },   
-    {
-        label: t['searchTable.columns.authorization'],
-        value: infoData? authorizationInfo:'',
-    },   
+    // {
+    //     label: t['searchTable.columns.authorization'],
+    //     value: infoData && infoData.authorization ? <span>{authorizationInfo}</span>:'',
+    // },   
   ];
 
   return (

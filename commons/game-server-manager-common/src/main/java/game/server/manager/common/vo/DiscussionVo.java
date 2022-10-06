@@ -86,4 +86,9 @@ public class DiscussionVo implements Serializable {
      */
     private String createName;
 
+    /**
+     * 头像
+     */
+    private String avatarUrl;
+
 }

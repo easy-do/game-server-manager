@@ -41,7 +41,11 @@ function InfoPage(props: { id: number, visible, setVisible }) {
   const t = useLocale(locale);
 
   if (infoData && infoData.clientData) {
-    setClientData(JSON.parse(infoData.clientData))
+    try {
+      setClientData(JSON.parse(infoData.clientData))
+    } catch (error) {
+      
+    }
   }
 
   const data = [

@@ -253,7 +253,7 @@ function SearchTable() {
         maskClosable={false}
         style={{ width: "100%", minHeight: "100%" }}
       >
-        <ExecuteLogSearchTable applicationId={viewLogId} />
+        <ExecuteLogSearchTable applicationId={viewLogId} visible={isViewLog} />
       </Modal>
     </Card>
   );

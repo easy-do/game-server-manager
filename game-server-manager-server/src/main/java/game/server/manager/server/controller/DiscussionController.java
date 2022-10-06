@@ -1,6 +1,7 @@
 package game.server.manager.server.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.web.base.BaseController;
@@ -41,7 +42,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
         return super.page(mpBaseQo);
     }
 
-    @SaCheckLogin
+    @SaCheckPermission("system:server:discussion:managerPage")
     @PostMapping("/managerPage")
     public MpDataResult managerPage(@RequestBody MpBaseQo<Discussion> mpBaseQo) {
        return MpResultUtil.buildPage(baseService.managerPage(mpBaseQo));
@@ -55,6 +56,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
 
     @SaCheckLogin
     @PostMapping("/add")
+    @SaCheckPermission("system:server:discussion:add")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "添加话题: ?1",expressions = {"#p1.appName"}, actionType = "添加")
     @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) DiscussionDto discussionDto) {
@@ -63,6 +65,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
 
     @SaCheckLogin
     @PostMapping("/update")
+    @SaCheckPermission("system:server:discussion:update")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "编辑话题: ?1", expressions = {"#p1.id"}, actionType = "编辑")
     @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) DiscussionDto discussionDto) {
@@ -71,6 +74,7 @@ public class DiscussionController extends BaseController<DiscussionService, Disc
 
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @GetMapping("/remove/{id}")
+    @SaCheckPermission("system:server:discussion:remove")
     @SaveLog(logType = "操作日志", moduleName = "讨论话题", description = "删除话题: ?1 ", expressions = {"#p1"}, actionType = "删除")
     @Override
     public R<Object> remove(@PathVariable("id") Long id) {
