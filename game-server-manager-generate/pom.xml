@@ -11,7 +11,7 @@
 
     <artifactId>game-server-manager-generate</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>game-server-manager-generate</name>
+    <name>代码生成</name>
 
     <description>game-server-manager-generate</description>
 

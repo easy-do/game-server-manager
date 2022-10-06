@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import {
   Form,
   Input,
@@ -17,7 +16,7 @@ import { list } from '@/api/dataSourceManager';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
-const TextArea = Input.TextArea;
+
 
 function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
@@ -79,9 +78,10 @@ function SearchForm(props: {
           <Form.Item 
                 label={t['searchTable.columns.dataSourceId']}
                 field="dataSourceId"
+                initialValue={'default'}
               >
                 <Select
-                  placeholder={t['searchForm.status.placeholder']}
+                  placeholder={t['searchForm.dataSourceId.placeholder']}
                   options={dataSourceList.map((item) => ({
                     label: item.sourceName,
                     value: item.id,

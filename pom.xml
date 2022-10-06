@@ -33,6 +33,7 @@
         <module>commons/game-server-manager-mybatis-plus</module>
         <module>commons/game-server-manager-web</module>
         <module>commons/game-server-manager-doc</module>
+        <module>game-server-manager-log-audit</module>
         <module>game-server-manager-oss</module>
         <module>game-server-manager-plugins</module>
         <module>game-server-manager-client</module>

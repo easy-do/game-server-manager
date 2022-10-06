@@ -68,7 +68,8 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
 
     @Override
     public IPage<CommentDetailsVo> page(CommentDetailsQo commentDetailsQo) {
-        LambdaQueryWrapper<CommentDetails> wrapper = commentDetailsQo.buildSearchWrapper();
+        commentDetailsQo.initInstance(CommentDetails.class);
+        LambdaQueryWrapper<CommentDetails> wrapper = getWrapper();
         wrapper.orderByAsc(CommentDetails::getCreateTime);
         Long discussionId = commentDetailsQo.getDiscussionId();
         if (Objects.isNull(discussionId)) {
@@ -84,7 +85,7 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
             CommentDetailsVo vo = CommentDetailsMapstruct.INSTANCE.entityToVo(entityClass);
             String avatar = userInfoService.avatar(vo.getUserId()).getData();
             vo.setUserAvatar(avatar);
-            List<CommentDetailsVo> rootChildrenList = allChildren.stream().filter(children -> children.getParentId().equals(vo.getId())).collect(Collectors.toList());
+            List<CommentDetailsVo> rootChildrenList = allChildren.stream().filter(children -> children.getParentId().equals(vo.getId())).toList();
             allChildren.removeAll(rootChildrenList);
             vo.setChildren(rootChildrenList);
             return vo;

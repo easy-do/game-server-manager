@@ -9,7 +9,7 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   const t = useLocale(locale);
 
-  const [logResuilt, setLogResult] = useState([]);
+  const [logResult, setLogResult] = useState([]);
 
   const socketAddress = "wss://push.easydo.plus/wss/deployLog";
 
@@ -17,10 +17,10 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   const logDivs = []
 
-  for (let i = 0; i < logResuilt.length; i++) {
+  for (let i = 0; i < logResult.length; i++) {
     logDivs.push(
       <div className={styles['log-msg']}>
-        <span>{logResuilt[i]}</span>
+        <span>{logResult[i]}</span>
       </div>
     )
   }
@@ -29,34 +29,39 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   /**点击日志详情按钮 */
   function fetchData() {
-    const logWebSocket = new WebSocket(socketAddress);
-    logWebSocket.onopen = function () {
-      console.log('开启websocket连接.')
-      const messageParam = {
-        "applicationId": props.applicationId,
-        "logId": props.id,
-        "token": localStorage.getItem("token") ? localStorage.getItem("token") : ""
+    if(props.id && props.applicationId){
+      const logWebSocket = new WebSocket(socketAddress);
+      logWebSocket.onopen = function () {
+        console.log('开启websocket连接.')
+        const messageParam = {
+          "applicationId": props.applicationId,
+          "logId": props.id,
+          "token": localStorage.getItem("token") ? localStorage.getItem("token") : ""
+        }
+        logWebSocket.send(JSON.stringify(messageParam));
       }
-      logWebSocket.send(JSON.stringify(messageParam));
-    }
-    logWebSocket.onerror = function () {
-      console.log('websocket连接异常.')
-    };
-    logWebSocket.onclose = function (e: CloseEvent) {
-      console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
-    }
-    logWebSocket.onmessage = function (event: any) {
-      console.log('接收到服务端消息')
-      const logResult = JSON.parse(event.data);
-      const finish = logResult.isfinish;
-      setLogResult(logResult.logs)
+      logWebSocket.onerror = function () {
+        console.log('websocket连接异常.')
+      };
+      logWebSocket.onclose = function (e: CloseEvent) {
+        console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
+      }
+      logWebSocket.onmessage = function (event: any) {
+        console.log('接收到服务端消息')
+        try {
+          const logResult = JSON.parse(event.data);
+          setLogResult(logResult.logs)
+          } catch (err:any) {
+            setLogResult([event.data])
+          }
+      }
     }
   }
 
 
   useEffect(() => {
     fetchData();
-  }, [props.id,props.applicationId]);
+  }, [props.id,props.applicationId,props.visible]);
 
   return (
     <Modal

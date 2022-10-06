@@ -44,7 +44,12 @@ spring:
             - Path=/oss/**
           filters:
             - StripPrefix=1
-
+        - id: log-audit
+          uri: http://game-server-manager-log-audit.server:8888/**
+          predicates:
+            - Path=/log-audit/**
+          filters:
+            - StripPrefix=1
 
 management:
   server:

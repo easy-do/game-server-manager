@@ -131,20 +131,6 @@ export function getColumns(
                 {t['searchTable.columns.operations.view']}
             </Button>
           </PermissionWrapper>
-          <PermissionWrapper
-            requiredPermissions={[
-              { resource: 'server:executeLog', actions: ['remove'] },
-            ]}
-          >
-            <Popconfirm
-                title={t['searchTable.columns.operations.remove.confirm']}
-                onOk={() => callback(record, 'remove')}
-            >
-                <Button type="text" status="warning" size="small">
-                {t['searchTable.columns.operations.remove']}
-                </Button>
-            </Popconfirm>
-          </PermissionWrapper>
         </div>
       ),
     },
