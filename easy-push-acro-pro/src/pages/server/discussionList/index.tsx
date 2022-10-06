@@ -24,13 +24,8 @@ function DiscussionList() {
   const t = useLocale(locale);
 
 
-  //查看
-  const [viewInfoId, setViewInfoId] = useState();
-  const [isViewInfo, setisViewInfo] = useState(false);
-
   function viewInfo(id) {
-    setViewInfoId(id);
-    setisViewInfo(true);
+    window.open('/server/discussion/discussionInfo/'+id)
   }
 
     //新增
