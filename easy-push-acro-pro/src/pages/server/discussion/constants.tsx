@@ -65,30 +65,35 @@ export function getColumns(
       title: t['searchTable.columns.title'],
       dataIndex: 'title',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.createTime'],
       dataIndex: 'createTime',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.updateTime'],
       dataIndex: 'updateTime',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.createName'],
       dataIndex: 'createName',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],

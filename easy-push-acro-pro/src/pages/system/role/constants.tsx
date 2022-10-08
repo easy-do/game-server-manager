@@ -63,18 +63,21 @@ export function getColumns(
       title: t['searchTable.columns.roleName'],
       dataIndex: 'roleName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.roleKey'],
       dataIndex: 'roleKey',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis:true,
+      sorter: true,
       render: (_, record) => (
         Status[record.status]
       ),
@@ -84,6 +87,7 @@ export function getColumns(
       title: t['searchTable.columns.remark'],
       dataIndex: 'remark',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],

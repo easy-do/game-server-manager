@@ -69,21 +69,25 @@ export function getColumns(
       title: t['searchTable.columns.clientName'],
       dataIndex: 'clientName',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.serverName'],
       dataIndex: 'serverName',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.lastUpTime'],
       dataIndex: 'lastUpTime',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],

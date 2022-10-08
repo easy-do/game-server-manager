@@ -62,12 +62,14 @@ export function getColumns(
       title: t['searchTable.columns.noticeTitle'],
       dataIndex: 'noticeTitle',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.noticeType'],
       dataIndex: 'noticeType',
       ellipsis:true,
+      sorter: true,
       render: (_, record) => (noticeTypeEnum[record.noticeType]),
     },
 
@@ -75,6 +77,7 @@ export function getColumns(
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis:true,
+      sorter: true,
       render: (_, record) => (statusEnum[record.status]),
     },
 
@@ -82,11 +85,13 @@ export function getColumns(
       title: t['searchTable.columns.remark'],
       dataIndex: 'remark',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.createTime'],
       dataIndex: 'createTime',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],

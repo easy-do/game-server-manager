@@ -6,6 +6,8 @@ import { dictLabelEnum } from '@/utils/dictDataUtils';
 
 export const statusEnum = dictLabelEnum('status_select','string')
 
+const scopeSelect = dictLabelEnum("scope_select",'string')
+
 export interface DataInfoVo{
     id: string,
     appName: string,
@@ -36,8 +38,6 @@ export function getSearChColumns(){
     'appName',
     'version',
     'state',
-    'icon',
-    'picture',
     'author',
     'isAudit',
     'appScope',
@@ -79,37 +79,44 @@ export function getColumns(
       title: t['searchTable.columns.appName'],
       dataIndex: 'appName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.version'],
       dataIndex: 'version',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.state'],
       dataIndex: 'state',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.author'],
       dataIndex: 'author',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.isAudit'],
       dataIndex: 'isAudit',
       ellipsis:true,
+      sorter: true,
       render: (_, record) => (auditStatus[record.isAudit]),
     },
 
     {
       title: t['searchTable.columns.appScope'],
       dataIndex: 'appScope',
+      render: (_, record) => (scopeSelect[record.appScope]),
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],

@@ -78,18 +78,21 @@ export function getColumns(
       title: t['searchTable.columns.resourceName'],
       dataIndex: 'resourceName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.resourceCode'],
       dataIndex: 'resourceCode',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.resourceType'],
       dataIndex: 'resourceType',
       ellipsis:true,
+      sorter: true,
       render: (_, record) => (
         record.resourceType === 'M' ?  "菜单" : record.resourceType === 'I' ?  "接口" : record.resourceType === 'A'? "按钮": record.resourceType
         ),
@@ -99,11 +102,13 @@ export function getColumns(
       title: t['searchTable.columns.path'],
       dataIndex: 'path',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis:true,
+      sorter: true,
       render: (_, record) => (
         <Switch type='round' checkedText='开启' onClick={() => callback(record, 'chageStatus')} uncheckedText='关闭' checked={record.status === 0}  />
         ),
@@ -113,12 +118,14 @@ export function getColumns(
       title: t['searchTable.columns.icon'],
       dataIndex: 'icon',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.remark'],
       dataIndex: 'remark',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],

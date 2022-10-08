@@ -42,6 +42,7 @@ export function getColumns(
       title: t['searchTable.columns.id'],
       dataIndex: 'id',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.moduleName'],
@@ -53,6 +54,7 @@ export function getColumns(
     {
       title: t['searchTable.columns.actionType'],
       ellipsis:true,
+      sorter: true,
       render: (text: string, record: any, index: number) => {
         const fieldValue = JSON.parse(record.data);
         return fieldValue.actionType;
@@ -61,6 +63,7 @@ export function getColumns(
     {
       title: t['searchTable.columns.operationStatus'],
       ellipsis:true,
+      sorter: true,
       render: (text: string, record: any, index: number) => {
         const fieldValue = JSON.parse(record.data);
         return fieldValue.operationStatus;
@@ -69,6 +72,7 @@ export function getColumns(
     {
       title: t['searchTable.columns.sourceIp'],
       ellipsis:true,
+      sorter: true,
       render: (text: string, record: any, index: number) => {
         const fieldValue = JSON.parse(record.data);
         return fieldValue.sourceIp;
@@ -77,6 +81,7 @@ export function getColumns(
     {
       title: t['searchTable.columns.description'],
       ellipsis:true,
+      sorter: true,
       render: (text: any, record: any, index: any) => {
         const fieldValue = JSON.parse(record.data);
         return fieldValue.description;
@@ -85,6 +90,7 @@ export function getColumns(
     {
       title: t['searchTable.columns.operationTime'],
       ellipsis:true,
+      sorter: true,
       render: (text: string, record: any, index: number) => {
         const fieldValue = JSON.parse(record.data);
         return fieldValue.operationTime;
@@ -93,6 +99,7 @@ export function getColumns(
     {
       title: t['searchTable.columns.operatorName'],
       ellipsis:true,
+      sorter: true,
       render: (text: any, record: any, index: any) => {
         const fieldValue = JSON.parse(record.data);
         return fieldValue.operatorName;

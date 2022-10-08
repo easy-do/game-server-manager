@@ -76,42 +76,49 @@ export function getColumns(
       title: t['searchTable.columns.applicationName'],
       dataIndex: 'applicationName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.appName'],
       dataIndex: 'appName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.scriptName'],
       dataIndex: 'scriptName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.deviceName'],
       dataIndex: 'deviceName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.startTime'],
       dataIndex: 'startTime',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.endTime'],
       dataIndex: 'endTime',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.executeState'],
       dataIndex: 'executeState',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],
