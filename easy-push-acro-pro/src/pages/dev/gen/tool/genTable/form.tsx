@@ -13,7 +13,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { Status } from './constants';
+import { statusEnum } from './constants';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;

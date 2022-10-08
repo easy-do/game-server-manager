@@ -1,8 +1,10 @@
 import React from 'react';
 import { Button, Typography, Badge, Popconfirm, Link } from '@arco-design/web-react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
+import { dictLabelEnum } from '@/utils/dictDataUtils';
 
-export const Status = ['正常', '禁用'];
+
+export const statusEnum = dictLabelEnum('status_select','string')
 
 export interface DataInfoVo{
     remark: string,
@@ -71,6 +73,7 @@ export function getColumns(
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
+      render: (_, record) => (statusEnum[record.status]),
     },
     {
       title: t['searchTable.columns.createTime'],

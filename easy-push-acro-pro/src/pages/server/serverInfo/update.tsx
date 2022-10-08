@@ -3,7 +3,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { updateRequest, infoRequest } from '@/api/serverInfo';
 import { GlobalContext } from '@/context';
-import { Status } from './constants';
+import { statusEnum } from './constants';
 import { useContext, useEffect, useRef } from 'react';
 import React from 'react';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';

@@ -29,7 +29,7 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   /**点击日志详情按钮 */
   function fetchData() {
-    if(props.id && props.applicationId){
+    if(props.id){
       const logWebSocket = new WebSocket(socketAddress);
       logWebSocket.onopen = function () {
         console.log('开启websocket连接.')

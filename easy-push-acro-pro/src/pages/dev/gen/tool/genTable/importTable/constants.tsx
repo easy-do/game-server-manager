@@ -1,6 +1,7 @@
+import { dictLabelEnum } from '@/utils/dictDataUtils';
 import React from 'react';
 
-export const Status = ['正常', '禁用'];
+export const statusEnum = dictLabelEnum('status_select','string')
 
 export interface DataInfoVo{
     isWrapper: string,

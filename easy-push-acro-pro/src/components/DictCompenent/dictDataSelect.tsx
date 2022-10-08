@@ -1,4 +1,5 @@
 import { listByCode } from '@/api/dictData';
+import { getDictList } from '@/utils/dictDataUtils';
 import { Select } from '@arco-design/web-react';
 import React, { useEffect, useState } from 'react';
 
@@ -16,27 +17,25 @@ function DictDataSelect(props:props) {
 
   useEffect(() => {
     setLoading(true);
-    listByCode(props.dictCode).then((res) => {
-      const { success, data } = res.data;
-      if (success) {
         const options = [];
-        data.map((item) => {
-          if (item.dictValueType === 'string') {
-            options.push({
-              value: item.dictValue,
-              label: item.dictLabel,
-            });
-          } else {
-            options.push({
-              value: Number(item.dictValue),
-              label: item.dictLabel,
-            });
-          }
-        });
+        const data = getDictList(props.dictCode)
+        if(data && data.length > 0){
+          data.map((item) => {
+            if (item.dictValueType === 'string') {
+              options.push({
+                value: item.dictValue,
+                label: item.dictLabel,
+              });
+            } else {
+              options.push({
+                value: Number(item.dictValue),
+                label: item.dictLabel,
+              });
+            }
+          });
+        }
         setOptions(options);
-      }
       setLoading(false);
-    });
   }, []);
 
   return (

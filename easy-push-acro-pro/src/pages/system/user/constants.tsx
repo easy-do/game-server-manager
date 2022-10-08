@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button, Typography, Badge } from '@arco-design/web-react';
+import { dictLabelEnum } from '@/utils/dictDataUtils';
 
 const { Text } = Typography;
 
-export const Status = ['正常', '禁用'];
+export const statusEnum = dictLabelEnum('status_select','string')
 
 export interface UserInfoVo{
   authorization: string,
@@ -73,9 +74,9 @@ export function getColumns(
       dataIndex: 'state',
       render: (x) => {
         if (x === 1) {
-          return <Badge status="error" text={Status[x]}></Badge>;
+          return <Badge status="error" text={dictLabelEnum[x]}></Badge>;
         }
-        return <Badge status="success" text={Status[x]}></Badge>;
+        return <Badge status="success" text={dictLabelEnum[x]}></Badge>;
       },
     },
     {

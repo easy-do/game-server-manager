@@ -15,7 +15,6 @@ import styles from './style/index.module.less';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
-const TextArea = Input.TextArea;
 
 function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
@@ -51,14 +50,6 @@ function SearchForm(props: {
       >
         <Row gutter={24}>
           <Col span={colSpan}>
-            <Form.Item 
-              label={t['searchTable.columns.data']}
-              field="data"
-            >
-              <TextArea placeholder={t['searchForm.data.placeholder']} />
-            </Form.Item>
-          </Col> 
-          <Col span={colSpan}>
             <Form.Item
               label={t['searchTable.columns.createTime']}
               field="createTime"
@@ -70,6 +61,14 @@ function SearchForm(props: {
               />
             </Form.Item>
           </Col>
+          <Col span={colSpan}>
+            <Form.Item 
+              label={t['searchTable.columns.data']}
+              field="data"
+            >
+              <Input placeholder={t['searchForm.data.placeholder']} />
+            </Form.Item>
+          </Col> 
         </Row>
       </Form>
       <div className={styles['right-button']}>

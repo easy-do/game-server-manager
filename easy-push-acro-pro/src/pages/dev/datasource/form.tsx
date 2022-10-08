@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
-import dayjs from 'dayjs';
 import {
   Form,
   Input,
-  Select,
-  DatePicker,
   Button,
   Grid,
 } from '@arco-design/web-react';
@@ -13,7 +10,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { Status } from './constants';
+import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
@@ -60,14 +57,9 @@ function SearchForm(props: {
                 { required: true, message: t['searchTable.rules.status.required'] },
               ]}
             >
-              <Select
+              <DictDataSelect
                 placeholder={t['searchForm.status.placeholder']}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                // mode="multiple"
-                allowClear
+                dictCode={'status_select'}
               />
             </Form.Item>
           </Col>
@@ -101,14 +93,9 @@ function SearchForm(props: {
                 { required: true, message: t['searchTable.rules.sourceType.required'] },
               ]}
             >
-              <Select
-                placeholder={t['searchForm.sourceType.placeholder']}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                // mode="multiple"
-                allowClear
+              <DictDataSelect
+                placeholder={t['searchForm.status.placeholder']}
+                dictCode={'status_select'}
               />
             </Form.Item>
           </Col>

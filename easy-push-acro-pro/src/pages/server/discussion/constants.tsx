@@ -2,8 +2,9 @@ import React from 'react';
 import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import PermissionWrapper from '@/components/PermissionWrapper';
+import { dictLabelEnum } from '@/utils/dictDataUtils';
 
-export const Status = ['正常', '禁用'];
+export const statusEnum = dictLabelEnum('status_select','string')
 
 export interface DataInfoVo{
     id: string,

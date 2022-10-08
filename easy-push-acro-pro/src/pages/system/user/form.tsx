@@ -12,8 +12,9 @@ import { GlobalContext } from '@/context';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
-import { Status } from './constants';
+import { statusEnum } from './constants';
 import styles from './style/index.module.less';
+import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
@@ -75,14 +76,9 @@ function SearchForm(props: {
           </Col>
           <Col span={colSpan}>
             <Form.Item label={t['searchTable.columns.status']} field="state">
-              <Select
+              <DictDataSelect
                 placeholder={t['searchForm.all.placeholder']}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                // mode="multiple"
-                allowClear
+                dictCode={'status_select'}
               />
             </Form.Item>
           </Col>
