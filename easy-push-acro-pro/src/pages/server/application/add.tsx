@@ -5,7 +5,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { addRequest } from '@/api/applicationInfo';
 import { GlobalContext } from '@/context';
-import { Status } from './constants';
+import { statusEnum } from './constants';
 import RequestSelect from '@/components/RequestSelect/RequestSelect';
 import { list as serverList } from '@/api/serverInfo';
 import { list as appList } from '@/api/appInfo';
@@ -117,14 +117,9 @@ function AddPage({ visible, setVisible, successCallBack }) {
           label={t['searchTable.columns.status']}
           field="status"
         >
-          <Select
-            placeholder={t['searchForm.status.placeholder']}
-            options={Status.map((item, index) => ({
-              label: item,
-              value: index,
-            }))}
-            // mode="multiple"
-            allowClear
+        <DictDataSelect
+                placeholder={t['searchForm.status.placeholder']}
+                dictCode={'status_select'}
           />
         </Form.Item>
 

@@ -11,7 +11,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { Status } from './constants';
+import { statusEnum } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
@@ -51,22 +51,6 @@ function SearchForm(props: {
         wrapperCol={{ span: 19 }}
       >
         <Row gutter={24}>
-          {/* <Col span={colSpan}>
-            <Form.Item 
-              label={t['searchTable.columns.adaptationAppId']}
-              field="adaptationAppId"
-            >
-              <Select
-                placeholder={t['searchForm.adaptationAppId.placeholder']}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                // mode="multiple"
-                allowClear
-              />
-            </Form.Item>
-          </Col> */}
           <Col span={colSpan}>
             <Form.Item
               label={t['searchTable.columns.scriptName']}
@@ -80,14 +64,9 @@ function SearchForm(props: {
               label={t['searchTable.columns.scriptType']}
               field="scriptType"
             >
-              <Select
-                placeholder={t['searchForm.scriptType.placeholder']}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                // mode="multiple"
-                allowClear
+              <DictDataSelect
+                placeholder={t['searchForm.status.placeholder']}
+                dictCode={'status_select'}
               />
             </Form.Item>
           </Col>

@@ -5,7 +5,8 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { addRequest } from '@/api/dictType';
 import { GlobalContext } from '@/context';
-import { Status } from './constants';
+import { statusEnum } from './constants';
+import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 function AddPage(props: { visible; setVisible; successCallback }) {
   
@@ -75,14 +76,9 @@ function AddPage(props: { visible; setVisible; successCallback }) {
             { required: true, message: t['searchTable.rules.status.required'] },
           ]}
         >
-          <Select
+          <DictDataSelect
             placeholder={t['searchForm.status.placeholder']}
-            options={Status.map((item, index) => ({
-              label: item,
-              value: index,
-            }))}
-            // mode="multiple"
-            allowClear
+            dictCode={'status_select'}
           />
         </Form.Item>
     

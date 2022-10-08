@@ -13,7 +13,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { Status } from './constants';
+import { statusEnum } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
@@ -70,35 +70,11 @@ function SearchForm(props: {
             </Form.Item>
           </Col> 
           <Col span={colSpan}>
-            <Form.Item 
-              label={t['searchTable.columns.configFilePath']}
-              field="configFilePath"
-            >
-              <TextArea placeholder={t['searchForm.configFilePath.placeholder']} />
-            </Form.Item>
-          </Col> 
-          <Col span={colSpan}>
-            <Form.Item 
-              label={t['searchTable.columns.icon']}
-              field="icon"
-            >
-              <TextArea placeholder={t['searchForm.icon.placeholder']} />
-            </Form.Item>
-          </Col> 
-          <Col span={colSpan}>
-            <Form.Item 
-              label={t['searchTable.columns.picture']}
-              field="picture"
-            >
-              <TextArea placeholder={t['searchForm.picture.placeholder']} />
-            </Form.Item>
-          </Col> 
-          <Col span={colSpan}>
             <Form.Item
               label={t['searchTable.columns.isAudit']}
               field="isAudit"
             >
-              <Input placeholder={t['searchForm.isAudit.placeholder']} allowClear />
+              <DictDataSelect dictCode={'audit_status'} placeholder={t['searchForm.isAudit.placeholder']} />
             </Form.Item>
           </Col> 
           <Col span={colSpan}>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
+import { dictLabelEnum } from '@/utils/dictDataUtils';
 
-export const Status = ['正常', '禁用'];
+export const statusEnum = dictLabelEnum('status_select','string')
 
 export interface DataInfoVo{
     id: string,

@@ -13,7 +13,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { Status } from './constants';
+import { statusEnum } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;

@@ -1,11 +1,10 @@
 import React, { useContext, useRef } from 'react';
-import dayjs from 'dayjs';
 import { Form, FormInstance, Input, Modal, DatePicker, Select, Notification } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { addRequest } from '@/api/dataSourceManager';
 import { GlobalContext } from '@/context';
-import { Status } from './constants';
+import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 function AddPage(props: { visible; setVisible }) {
   
@@ -126,14 +125,9 @@ function AddPage(props: { visible; setVisible }) {
             { required: true, message: t['searchTable.rules.status.required'] },
           ]}
         >
-          <Select
+          <DictDataSelect
             placeholder={t['searchForm.status.placeholder']}
-            options={Status.map((item, index) => ({
-              label: item,
-              value: index,
-            }))}
-            // mode="multiple"
-            allowClear
+            dictCode={'status_select'}
           />
         </Form.Item>
         <Form.Item 
@@ -182,14 +176,9 @@ function AddPage(props: { visible; setVisible }) {
             { required: true, message: t['searchTable.rules.sourceType.required'] },
           ]}
         >
-          <Select
+          <DictDataSelect
             placeholder={t['searchForm.sourceType.placeholder']}
-            options={Status.map((item, index) => ({
-              label: item,
-              value: index,
-            }))}
-            // mode="multiple"
-            allowClear
+            dictCode={'status_select'}
           />
         </Form.Item>
         <Form.Item

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { Button, Popconfirm } from '@arco-design/web-react';
+import { dictLabelEnum, getDictList } from '@/utils/dictDataUtils';
 
-export const Status = ['正常', '禁用'];
+export const statusEnum = dictLabelEnum('status_select','string')
 
 export interface DataInfoVo{
     delFlag: string,

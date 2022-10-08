@@ -5,7 +5,6 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { addRequest } from '@/api/dictData';
 import { GlobalContext } from '@/context';
-import { Status } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 function AddPage({ dictTypeId, visible, setVisible, successCallBack }) {

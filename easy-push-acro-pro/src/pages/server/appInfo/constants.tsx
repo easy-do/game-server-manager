@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { Button, Popconfirm } from '@arco-design/web-react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import PermissionWrapper from '@/components/PermissionWrapper';
+import { dictLabelEnum } from '@/utils/dictDataUtils';
 
-export const Status = ['正常', '禁用'];
+export const statusEnum = dictLabelEnum('status_select','string')
 
 export interface DataInfoVo{
     id: string,
@@ -65,6 +66,7 @@ export function getDefaultOrders(){
   return [{column: 'createTime', asc: false}];
 }
 
+const auditStatus = dictLabelEnum("audit_status",'string')
 
 //表单展示字段
 export function getColumns(
@@ -101,6 +103,7 @@ export function getColumns(
       title: t['searchTable.columns.isAudit'],
       dataIndex: 'isAudit',
       ellipsis:true,
+      render: (_, record) => (auditStatus[record.isAudit]),
     },
 
     {

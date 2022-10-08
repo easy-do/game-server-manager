@@ -3,9 +3,9 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { updateRequest, infoRequest } from '@/api/dataSourceManager';
 import { GlobalContext } from '@/context';
-import { Status } from './constants';
 import { useContext, useEffect, useRef } from 'react';
 import React from 'react';
+import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 function UpdatePage(props: { id: number; visible; setVisible }) {
 
@@ -148,14 +148,9 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
             { required: true, message: t['searchTable.rules.status.required'] },
           ]}
         >
-          <Select
-            placeholder={t['searchForm.status.placeholder']}
-            options={Status.map((item, index) => ({
-              label: item,
-              value: index,
-            }))}
-            // mode="multiple"
-            allowClear
+          <DictDataSelect
+                placeholder={t['searchForm.status.placeholder']}
+                dictCode={'status_select'}
           />
         </Form.Item>
         <Form.Item 
@@ -204,14 +199,9 @@ function UpdatePage(props: { id: number; visible; setVisible }) {
             { required: true, message: t['searchTable.rules.sourceType.required'] },
           ]}
         >
-          <Select
-            placeholder={t['searchForm.sourceType.placeholder']}
-            options={Status.map((item, index) => ({
-              label: item,
-              value: index,
-            }))}
-            // mode="multiple"
-            allowClear
+              <DictDataSelect
+                placeholder={t['searchForm.status.placeholder']}
+                dictCode={'status_select'}
           />
         </Form.Item>
         <Form.Item

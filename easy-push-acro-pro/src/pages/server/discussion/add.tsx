@@ -5,7 +5,7 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { addRequest } from '@/api/discussion';
 import { GlobalContext } from '@/context';
-import { Status } from './constants';
+import { statusEnum } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 
