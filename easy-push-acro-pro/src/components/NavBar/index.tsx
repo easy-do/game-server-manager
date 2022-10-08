@@ -45,6 +45,7 @@ function Navbar({ topMenu, show }: { topMenu; show: boolean }) {
       const { success } = res.data;
       if (success) {
         localStorage.clear();
+        sessionStorage.clear();
         window.location.href = '/';
       }
     });

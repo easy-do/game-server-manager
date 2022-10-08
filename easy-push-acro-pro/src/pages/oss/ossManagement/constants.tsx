@@ -67,30 +67,35 @@ export function getColumns(
       title: t['searchTable.columns.groupName'],
       dataIndex: 'groupName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.fileName'],
       dataIndex: 'fileName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.fileSize'],
       dataIndex: 'fileSize',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.ossType'],
       dataIndex: 'ossType',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.createTime'],
       dataIndex: 'createTime',
       ellipsis:true,
+      sorter: true,
     },
 
     {

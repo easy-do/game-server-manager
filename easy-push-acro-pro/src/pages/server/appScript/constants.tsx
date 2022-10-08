@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { Button, Popconfirm } from '@arco-design/web-react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import PermissionWrapper from '@/components/PermissionWrapper';
 import { dictLabelEnum } from '@/utils/dictDataUtils';
 
 export const statusEnum = dictLabelEnum('status_select','string')
+
+const scopeSelect = dictLabelEnum("scope_select",'string')
 
 export interface DataInfoVo{
     id: string,
@@ -66,29 +68,36 @@ export function getColumns(
       title: t['searchTable.columns.scriptName'],
       dataIndex: 'scriptName',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.scriptType'],
       dataIndex: 'scriptType',
       ellipsis:true,
+      sorter: true,
     },
 
     {
       title: t['searchTable.columns.scriptScope'],
       dataIndex: 'scriptScope',
+      render: (_, record) => (scopeSelect[record.scriptScope]),
       ellipsis:true,
+      sorter: true,
+
     },
 
     {
       title: t['searchTable.columns.version'],
       dataIndex: 'version',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.author'],
       dataIndex: 'author',
       ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],

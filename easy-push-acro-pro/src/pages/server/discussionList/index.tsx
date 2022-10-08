@@ -10,7 +10,7 @@ import {
   Pagination,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { IconPlus } from '@arco-design/web-react/icon';
+import { IconDown, IconLoading, IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import locale from '../discussion/locale';
 import styles from '../discussion/style/index.module.less';
@@ -44,8 +44,9 @@ function DiscussionList() {
   const [pagination, setPatination] = useState<PaginationProps>({
     sizeCanChange: true,
     showTotal: true,
-    pageSize: 10,
+    pageSize: 5,
     current: 1,
+    simple:true,
     pageSizeChangeResetCurrent: true,
     onChange:(pageNumber, pageSize)=> setPatination({
       ...pagination,
@@ -132,7 +133,12 @@ function DiscussionList() {
       dataSource={data}
       render={(item, index) => {
         return (
-          <List.Item onClick={()=>viewInfo(item.id)} key={index} style={{ padding: '24px 20px 24px 0px' }}>
+          <List.Item 
+          style={{ maxWidth: '100%', maxHeight: '100%' }}
+          onClick={()=>viewInfo(item.id)} key={index} 
+          // style={{ padding: '24px 20px 24px 0px' }}
+          >
+            
             {loading ? (
               <Skeleton
                 animation

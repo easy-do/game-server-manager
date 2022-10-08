@@ -54,27 +54,38 @@ export function getColumns(
     {
       title: t['searchTable.columns.applicationId'],
       dataIndex: 'applicationId',
-      ellipsis:true
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.applicationName'],
       dataIndex: 'applicationName',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.deviceName'],
       dataIndex: 'deviceName',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.appName'],
       dataIndex: 'appName',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.lastUpTime'],
       dataIndex: 'lastUpTime',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.operations'],

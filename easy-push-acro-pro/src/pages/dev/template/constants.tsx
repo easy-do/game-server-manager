@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { Button, Popconfirm } from '@arco-design/web-react';
+import { dictLabelEnum } from '@/utils/dictDataUtils';
 
-const { Text } = Typography;
+const scopeSelect = dictLabelEnum("scope_select",'string')
 
 export interface DataInfoVo {
   delFlag: string;
@@ -56,22 +57,33 @@ export function getColumns(
     {
       title: t['searchTable.columns.templateName'],
       dataIndex: 'templateName',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.templateType'],
       dataIndex: 'templateType',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.version'],
       dataIndex: 'version',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.templateScope'],
       dataIndex: 'templateScope',
+      render: (_, record) => (scopeSelect[record.templateScope]),
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.createName'],
       dataIndex: 'createName',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.description'],

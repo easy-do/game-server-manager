@@ -45,28 +45,38 @@ export function getColumns(
     {
       title: t['searchTable.columns.id'],
       dataIndex: 'id',
+      ellipsis:true,
+      sorter: true,
       render: (value) => <Text copyable>{value}</Text>,
     },
     {
       title: t['searchTable.columns.name'],
       dataIndex: 'nickName',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.platform'],
       dataIndex: 'platform',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.loginIp'],
       dataIndex: 'loginIp',
+      ellipsis:true,
+      sorter: true,
     },
     {
       title: t['searchTable.columns.lastLoginTime'],
       dataIndex: 'lastLoginTime',
+      ellipsis:true,
       sorter: true,
     },
     {
       title: t['searchTable.columns.createTime'],
       dataIndex: 'createTime',
+      ellipsis:true,
       sorter: true,
     },
     {
