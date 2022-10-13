@@ -1,13 +1,10 @@
 package game.server.manager.server.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.core.util.RuntimeUtil;
+import com.jcraft.jsch.JSch;
 import game.server.manager.common.exception.BizException;
-import game.server.manager.common.mode.SyncData;
-import game.server.manager.common.result.DataResult;
-import game.server.manager.server.server.DefaultServerContainer;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -17,11 +14,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author yuzhanfeng
@@ -35,7 +29,7 @@ public class TermShellEndpoint {
 
     private Session session;
 
-    private static List<String> history = new ArrayList<>();
+    private static final StringBuilder history = new StringBuilder();
 
     /**
      * 打开websocket连接
@@ -48,7 +42,7 @@ public class TermShellEndpoint {
     public void onOpen(Session session) {
         log.info("【websocket消息】建立termShell连接.");
         this.session = session;
-        sendMessage(session,JSON.toJSONString(DataResult.ok(session.getId(),"success")));
+        sendMessage(session,"success\r\n");
     }
 
     /**
@@ -78,13 +72,43 @@ public class TermShellEndpoint {
     @OnMessage
     public void onMessage(String message) {
         log.info("【websocket消息】termShell通信请求:{}", message);
-        if(message.contains("\r\n")){
+        if(history.length() == 0 && message.equals("\r")){
             sendMessage(session,message);
-        }else {
-            history.add(message);
-         sendMessage(session,message);
+            return;
         }
-        sendMessage(session,"message:"+message);
+        if(message.contains("\r")){
+            String[] cmds = message.split("\r");
+            if(cmds.length > 1){
+                for (int i = 0; i < cmds.length; i++) {
+                    String cmd;
+                    if(i == 0){
+                        cmd =  history.append(cmds[i]).toString();
+                        history.setLength(0);
+                    }else {
+                        cmd = cmds[i];
+                    }
+                    execCmd(cmd);
+                }
+            }else {
+                history.append(message);
+                sendMessage(session,message);
+                execCmd(history.toString());
+                history.setLength(0);
+            }
+            history.setLength(0);
+        }else {
+            history.append(message);
+            sendMessage(session,message);
+        }
+        System.err.println(history);
+    }
+
+    private void execCmd(String cmd){
+        log.info(cmd);
+        List<String> resilt = RuntimeUtil.execForLines(cmd);
+        resilt.forEach(str->{
+            sendMessage(session,str+"\r\n");
+        });
     }
 
 

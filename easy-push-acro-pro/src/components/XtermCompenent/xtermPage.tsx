@@ -20,14 +20,14 @@ export function newTerminal(fontSize?: number) {
     disableStdin: false,
     cursorStyle: 'underline',
     // 终端中的回滚量
-    scrollback: 10,
+    scrollback: 10000,
     fontSize: fontSize,
     rows: 20,
     // 光标闪烁
     cursorBlink: true,
     theme: {
       //   字体
-      // foreground: '#ffffff',
+      foreground: '#ffffff',
       // 光标
       cursor: 'help',
       background: '#1f1b1b'
@@ -62,7 +62,6 @@ export function XtermPage() {
     const fitAddon = new FitAddon()
     term.loadAddon(fitAddon)
     fitAddon.fit();
-    fitAddon.fit()
 
     term.focus()
 
@@ -71,5 +70,5 @@ export function XtermPage() {
     }
   }, [])
 
-  return <div id='xterm-div' style={{height: "100%"}} />
+  return <div id='xterm-div' style={{height: "100%",width:'100%'}} />
 }
