@@ -32,13 +32,13 @@ function CardInfo(props: CardInfoProps) {
   const getButtonGroup = () => {
       return (
         <>
-          <Button
+          {/* <Button
             type="text"
             size="small"
             onClick={() => props.optionCallCack(card, 'shell')}
           >
             {'命令行'}
-          </Button>
+          </Button> */}
         <PermissionWrapper
           requiredPermissions={[
             { resource: 'server:serverInfo', actions: ['info'] },
