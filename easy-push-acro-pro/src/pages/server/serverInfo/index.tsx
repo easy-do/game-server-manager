@@ -26,7 +26,6 @@ import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
 import CardInfo from './card-info';
-import { XtermPage } from '@/components/XtermCompenent/xtermPage';
 
 const { Title } = Typography;
 
@@ -54,7 +53,8 @@ function SearchTable() {
 
         //shell
         if (type === 'shell') {
-          shell(record.id);
+          // shell(record.id);
+          window.open('/xterm')
         }
   };
 
@@ -223,14 +223,6 @@ function SearchTable() {
         setVisible={setisUpdateInfo}
         successCallBack={updateSuccess}
       />
-      <Modal
-      style={{width:'100%',height:'100%'}}
-      onCancel={()=>setIsShell(false)}
-      onOk={()=>setIsShell(false)}
-      visible={isShell}
-      >
-        <XtermPage/>
-      </Modal>
     </Card>
   );
 }

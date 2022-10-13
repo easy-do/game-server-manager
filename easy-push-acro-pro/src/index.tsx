@@ -17,6 +17,7 @@ import useStorage from './utils/useStorage';
 import { userResource } from './api/resource';
 import { IRoute, staticRoutes } from './routes';
 import DiscussionInfo from './pages/server/discussion/discussionInfo';
+import { XtermPage } from './components/XtermCompenent/xtermPage';
 
 
 const store = createStore(rootReducer);
@@ -105,6 +106,7 @@ function Index() {
           <GlobalContext.Provider value={contextValue}>
             <Switch>
               <Route path="/login" component={Login} />
+              <Route path="/xterm" component={XtermPage} />
               <Route path="/server/discussion/discussionInfo/:id" component={DiscussionInfo} />
               <Route path="/" component={PageLayout} />
             </Switch>
