@@ -7,6 +7,11 @@ import MEditor from '@/components/Medit/MEditor';
 
 function EditScriptPage(props: { id: number; visible; setVisible }) {
 
+  const t = useLocale(locale);
+
+  const [ dataInfo, setDataInfo ] = useState({});
+
+  const [templateCode, setTemplateCode] = useState('')
 
   function fetchData() {
     setTemplateCode('')
@@ -15,6 +20,7 @@ function EditScriptPage(props: { id: number; visible; setVisible }) {
         const { success, data } = res.data;
         if (success) {
             setTemplateCode(data.scriptFile)
+            setDataInfo(data)
         }
       });
     }
@@ -24,18 +30,18 @@ function EditScriptPage(props: { id: number; visible; setVisible }) {
     fetchData();
   }, [props.id,props.visible]);
 
-  const t = useLocale(locale);
 
-  const [templateCode, setTemplateCode] = useState('')
 
+  
   const mdCallBack = (value) =>{
     setTemplateCode(value)
   }
 
   const handleSubmit = () => {
       const param = {
+        ...dataInfo,
         id:props.id,
-        templateCode:templateCode
+        scriptFile:templateCode
       }
       updateRequest(param).then((res) => {
         if (res.data.success) {

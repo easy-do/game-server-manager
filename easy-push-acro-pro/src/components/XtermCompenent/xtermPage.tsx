@@ -27,7 +27,7 @@ export function newTerminal(fontSize?: number) {
     cursorBlink: true,
     theme: {
       //   字体
-      foreground: '#ffffff',
+      // foreground: '#ffffff',
       // 光标
       cursor: 'help',
       background: '#1f1b1b'
