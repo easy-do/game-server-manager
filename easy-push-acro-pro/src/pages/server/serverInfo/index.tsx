@@ -8,6 +8,7 @@ import {
   Notification,
   Grid,
   Pagination,
+  Modal,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
 import { IconPlus } from '@arco-design/web-react/icon';
@@ -25,6 +26,7 @@ import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
 import CardInfo from './card-info';
+import { XtermPage } from '@/components/XtermCompenent/xtermPage';
 
 const { Title } = Typography;
 
@@ -49,6 +51,11 @@ function SearchTable() {
     if (type === 'remove') {
       removeData(record.id);
     }
+
+        //shell
+        if (type === 'shell') {
+          shell(record.id);
+        }
   };
 
   //查看
@@ -96,6 +103,15 @@ function SearchTable() {
       }
     });
   }
+
+    //shell
+    const [shellId, setShellId] = useState();
+    const [isShell, setIsShell] = useState(false);
+  
+    function shell(id) {
+      setShellId(id);
+      setIsShell(true);
+    }
 
   const [data, setData] = useState([]);
   const [pagination, setPatination] = useState<PaginationProps>({
@@ -207,6 +223,14 @@ function SearchTable() {
         setVisible={setisUpdateInfo}
         successCallBack={updateSuccess}
       />
+      <Modal
+      style={{width:'100%'}}
+      onCancel={()=>setIsShell(false)}
+      onOk={()=>setIsShell(false)}
+      visible={isShell}
+      >
+        <XtermPage/>
+      </Modal>
     </Card>
   );
 }
