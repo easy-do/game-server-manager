@@ -29,6 +29,9 @@ import game.server.manager.common.result.R;
 import game.server.manager.common.vaild.Insert;
 import game.server.manager.common.vaild.Update;
 
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * @author laoyu
@@ -96,13 +99,13 @@ public class SysDictDataController extends BaseController<SysDictDataService, Sy
     @GetMapping("/listByCode/{dictCode}")
     @Override
     public R<Object> listByCode(@PathVariable("dictCode") String dictCode) {
-        if(!StpUtil.isLogin()){
-          // 不是用户请求的则校验 Id-Token 身份凭证
-          SaIdUtil.checkCurrentRequestToken();
-        }
-        if(CharSequenceUtil.isEmpty(dictCode)){
-            throw new BizException("code为空");
-        }
+//        if(!StpUtil.isLogin()){
+//          // 不是用户请求的则校验 Id-Token 身份凭证
+//          SaIdUtil.checkCurrentRequestToken();
+//        }
+//        if(CharSequenceUtil.isEmpty(dictCode)){
+//            throw new BizException("code为空");
+//        }
         return DataResult.ok(baseService.listByCode(dictCode));
     }
 
@@ -110,11 +113,20 @@ public class SysDictDataController extends BaseController<SysDictDataService, Sy
     @GetMapping("/getSingleDictData/{dictCode}/{dictDataKey}")
     @Override
     public R<SysDictDataVo> getSingleDictData(@PathVariable("dictCode")String dictCode, @PathVariable("dictDataKey")String dictDataKey){
-        if(!StpUtil.isLogin()){
-            // 不是用户请求的则校验 Id-Token 身份凭证
-            SaIdUtil.checkCurrentRequestToken();
-        }
+//        if(!StpUtil.isLogin()){
+//            // 不是用户请求的则校验 Id-Token 身份凭证
+//            SaIdUtil.checkCurrentRequestToken();
+//        }
         return DataResult.ok(baseService.getSingleDictData(dictCode,dictDataKey));
+    }
+
+    @GetMapping("/getDictDataMap")
+    public R<Map<String, List<SysDictDataVo>>> getDictDataMap(){
+//        if(!StpUtil.isLogin()){
+//            // 不是用户请求的则校验 Id-Token 身份凭证
+//            SaIdUtil.checkCurrentRequestToken();
+//        }
+        return DataResult.ok(baseService.getDictDataMap());
     }
 
 

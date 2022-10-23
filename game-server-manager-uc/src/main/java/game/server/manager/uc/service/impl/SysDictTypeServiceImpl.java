@@ -1,5 +1,6 @@
 package game.server.manager.uc.service.impl;
 
+import com.alicp.jetcache.anno.CacheInvalidate;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.common.enums.StatusEnum;
@@ -57,21 +58,33 @@ public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictType, MpBaseQ
     }
 
     @Override
+    @CacheInvalidate(name = "SysDictDataService.listByCode")
+    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
+    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
     public boolean add(SysDictTypeDto sysDictTypeDto) {
         return save(SysDictTypeMapstruct.INSTANCE.dtoToEntity(sysDictTypeDto));
     }
 
     @Override
+    @CacheInvalidate(name = "SysDictDataService.listByCode")
+    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
+    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
     public boolean edit(SysDictTypeDto sysDictTypeDto) {
         return updateById(SysDictTypeMapstruct.INSTANCE.dtoToEntity(sysDictTypeDto));
     }
 
     @Override
+    @CacheInvalidate(name = "SysDictDataService.listByCode")
+    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
+    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
     public boolean delete(Serializable id) {
         return removeById(id);
     }
 
     @Override
+    @CacheInvalidate(name = "SysDictDataService.listByCode")
+    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
+    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
     public boolean changeStatus(ChangeStatusDto changeStatusDto) {
         Long id = changeStatusDto.getId();
         Integer status = changeStatusDto.getStatus();

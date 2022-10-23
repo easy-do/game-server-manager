@@ -18,6 +18,7 @@ import { userResource } from './api/resource';
 import { IRoute, staticRoutes } from './routes';
 import DiscussionInfo from './pages/server/discussion/discussionInfo';
 import { XtermPage } from './components/XtermCompenent/xtermPage';
+import { getDictDataMap } from './api/dictData';
 
 
 const store = createStore(rootReducer);
@@ -26,6 +27,7 @@ function Index() {
   const [lang, setLang] = useStorage('arco-lang', 'zh-CN');
   const [theme, setTheme] = useStorage('arco-theme', 'light');
   const [userInfo, _setUserInfo] = useStorage('userInfo','');
+  const [dictDataMap, setDictDataMap] = useStorage('dictDataMap','');
 
   function getArcoLocale() {
     switch (lang) {
@@ -73,6 +75,14 @@ function Index() {
           });
         }
       })
+      //初始化全局字典数据
+      getDictDataMap().then((res)=>{
+        const {success,data} = res.data
+        if(success){
+          setDictDataMap(JSON.stringify(data))
+        }
+      })
+
   }, []);
 
   useEffect(() => {
