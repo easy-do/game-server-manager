@@ -8,3 +8,4 @@ export const addRequest = (param) => postRequestBody("/uc/dictData/add",param);
 export const updateRequest = (param) => postRequestBody("/uc/dictData/update",param);
 export const changeStatus = (param) => postRequestBody("/uc/dictData/changeStatus",param);
 export const listByCode = (code) => get("/uc/dictData/listByCode/"+code);
+export const getDictDataMap = (code) => get("/uc/dictData/getDictDataMap");

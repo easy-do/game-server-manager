@@ -8,6 +8,7 @@ import game.server.manager.web.base.BaseService;
 import game.server.manager.common.vo.SysDictDataVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author yuzhanfeng
@@ -47,4 +48,14 @@ public interface SysDictDataService extends  BaseService<SysDictData, MpBaseQo<S
      * @date 2022/7/23
      */
     SysDictDataVo getSingleDictData(String dictCode, String dictDataKey);
+
+    /**
+     * 获取字典map结构数据
+     *
+     * @param
+     * @return java.util.Map<java.lang.String,game.server.manager.common.vo.SysDictDataVo>
+     * @author laoyu
+     * @date 2022/10/23
+     */
+    Map<String,List<SysDictDataVo>> getDictDataMap();
 }

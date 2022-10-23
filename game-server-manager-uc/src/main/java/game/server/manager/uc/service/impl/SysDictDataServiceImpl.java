@@ -6,6 +6,8 @@ import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.google.common.collect.Maps;
+import game.server.manager.common.vo.SysDictTypeVo;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.uc.dto.SysDictDataDto;
@@ -23,6 +25,7 @@ import game.server.manager.common.exception.BizException;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -69,6 +72,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     @Override
     @CacheInvalidate(name = "SysDictDataService.listByCode")
     @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
+    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
     public boolean add(SysDictDataDto sysDictDataDto) {
         return save(SysDictDataMapstruct.INSTANCE.dtoToEntity(sysDictDataDto));
     }
@@ -76,6 +80,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     @Override
     @CacheInvalidate(name = "SysDictDataService.listByCode")
     @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
+    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
     public boolean edit(SysDictDataDto sysDictDataDto) {
         return updateById(SysDictDataMapstruct.INSTANCE.dtoToEntity(sysDictDataDto));
     }
@@ -83,6 +88,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     @Override
     @CacheInvalidate(name = "SysDictDataService.listByCode")
     @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
+    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
     public boolean delete(Serializable id) {
         return removeById(id);
     }
@@ -90,6 +96,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     @Override
     @CacheInvalidate(name = "SysDictDataService.listByCode")
     @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
+    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
     public boolean changeStatus(ChangeStatusDto changeStatusDto) {
         Long id = changeStatusDto.getId();
         Integer status = changeStatusDto.getStatus();
@@ -125,6 +132,21 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
             throw new BizException("字典"+dictCode+":"+dictDataKey+"不存在");
         }
         return SysDictDataMapstruct.INSTANCE.entityToVo(sysDictData);
+    }
+
+    @Override
+    @Cached(name = "SysDictDataService.getDictDataMap", expire = 300, cacheType = CacheType.BOTH)
+    public Map<String, List<SysDictDataVo>> getDictDataMap() {
+        List<SysDictTypeVo> typeList = sysDictTypeService.voList();
+        Map<String,List<SysDictDataVo>> resultMap = Maps.newHashMapWithExpectedSize(typeList.size());
+        typeList.forEach(sysDictTypeVo -> {
+            String dictCode = sysDictTypeVo.getDictCode();
+            List<SysDictDataVo> dataVoList = listByCode(dictCode);
+            if(!dataVoList.isEmpty()){
+                resultMap.put(dictCode,dataVoList);
+            }
+        });
+        return resultMap;
     }
 }
 
