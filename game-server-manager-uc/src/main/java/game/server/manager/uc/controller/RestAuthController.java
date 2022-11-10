@@ -5,7 +5,6 @@ import game.server.manager.auth.AuthStateRedisCache;
 import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.auth.OauthConfigProperties;
 import game.server.manager.log.SaveLog;
-import game.server.manager.common.constant.HttpStatus;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.uc.dto.LoginModel;
 import game.server.manager.uc.dto.RestPasswordModel;
@@ -34,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
@@ -93,6 +93,8 @@ public class RestAuthController {
         if (authResponse.ok()) {
             AuthUser authUser = authResponse.getData();
             String token = loginService.platformLogin(authUser);
+            Cookie cookie = new Cookie("token",token);
+            response.addCookie(cookie);
             response.sendRedirect(beDomain + "/login?token=" + token);
         } else {
             response.sendRedirect(beDomain + "/loginFailed");
@@ -101,9 +103,11 @@ public class RestAuthController {
 
     @PostMapping("/login")
     @SaveLog(logType = "授权日志", moduleName = "授权服务", description = "登录类型,?1", expressions = {"#p1.loginType"},  actionType = "登录")
-    public R<String> login(@RequestBody @Validated LoginModel loginModel) {
+    public R<String> login(@RequestBody @Validated LoginModel loginModel, HttpServletResponse response) {
         UserInfoVo userInfoVo = loginService.login(loginModel);
         if (Objects.nonNull(userInfoVo)) {
+            Cookie cookie = new Cookie("token",userInfoVo.getToken());
+            response.addCookie(cookie);
             return DataResult.ok(beDomain + "/login?token=" + userInfoVo.getToken());
         } else {
             return DataResult.fail(beDomain + "/loginFailed");
@@ -122,11 +126,7 @@ public class RestAuthController {
     @SaCheckLogin
     @GetMapping("/getUserInfo")
     public R<UserInfoVo> getUserInfo() {
-        if (Objects.nonNull(AuthorizationUtil.getUser())) {
-            return DataResult.ok(AuthorizationUtil.getUser());
-        } else {
-            return DataResult.fail(HttpStatus.FORBIDDEN, "登录过期");
-        }
+        return DataResult.ok(AuthorizationUtil.getUser());
 
     }
 

@@ -68,6 +68,8 @@ export function getDefaultOrders(){
 
 const auditStatus = dictLabelEnum("audit_status",'string')
 
+const status = dictLabelEnum("status_select",'string')
+
 //表单展示字段
 export function getColumns(
   t: any,
@@ -94,6 +96,7 @@ export function getColumns(
       dataIndex: 'state',
       ellipsis:true,
       sorter: true,
+      render: (_, record) => (status[record.state]),
     },
 
     {
@@ -142,12 +145,32 @@ export function getColumns(
               { resource: 'server:appInfo', actions: ['update'] },
             ]}
           >
-            <Button
+         
+           <Button
                 type="text"
                 size="small"
                 onClick={() => callback(record, 'update')}
             >
                 {t['searchTable.columns.operations.update']}
+            </Button>
+          </PermissionWrapper>
+          {
+           record.isAudit === 0 || record.isAudit === 3?   
+          <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'submitAudit')}
+            >
+                {t['searchTable.columns.operations.submitAudit']}
+          </Button>:null
+           } 
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'server:appInfo', actions: ['audit'] },
+            ]}
+          >
+            <Button type="text" size="small">
+              {t['searchTable.columns.operations.audit']}
             </Button>
           </PermissionWrapper>
           <PermissionWrapper

@@ -19,6 +19,7 @@ import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { userResource } from '@/api/resource';
 import { IRoute, staticRoutes } from '@/routes';
+import cookie from 'react-cookies'
 
 export default function LoginForm() {
   const formRef = useRef<FormInstance>();
@@ -75,13 +76,18 @@ export default function LoginForm() {
   // 读取 localStorage，设置初始值
   useEffect(() => {
 
-    // if (token) {
-    //   window.location.href = '/';
-    // }
-
+    let token;
     const search = window.location.search;
     const param = new URLSearchParams(search);
-    const token = param.get('token');
+    const searchToken = param.get('token');
+    const cookieToken = cookie.load('token')
+    if(searchToken){
+      token = searchToken;
+    }
+    if(cookieToken){
+      token = cookieToken;
+    }
+    
     if (token) {
       setToken(token)
       const tokenInfo: any = decode(token);
