@@ -304,6 +304,9 @@ public class DeploymentServer {
             String execStr = "chmod u+x " + fileName + " && ./" + fileName;
             StringBuilder stringBuilder = new StringBuilder(execStr);
             JSONObject env = deployParam.getEnv();
+            if(Objects.isNull(env)){
+                env = new JSONObject();
+            }
             env.put("APPLICATION_ID", applicationId);
             env.put("APP_ID", appInfo.getId());
             env.put("APP_VERSION", appInfo.getVersion());
