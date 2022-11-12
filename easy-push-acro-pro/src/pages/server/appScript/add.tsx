@@ -1,5 +1,5 @@
-import React, { useContext, useRef } from 'react';
 import dayjs from 'dayjs';
+import React, { useContext, useRef } from 'react';
 import {
   Form,
   FormInstance,
@@ -36,7 +36,8 @@ function AddPage({ visible, setVisible, successCallBack }) {
 
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
-      addRequest(values).then((res) => {
+      const basicScript = values.basicScript;
+      addRequest({values, basicScript:basicScript.join(",")}).then((res) => {
         const { success, msg } = res.data;
         if (success) {
           Notification.success({ content: msg, duration: 300 });
