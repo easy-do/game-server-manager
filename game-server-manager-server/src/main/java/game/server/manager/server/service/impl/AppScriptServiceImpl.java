@@ -131,7 +131,7 @@ public class AppScriptServiceImpl extends BaseServiceImpl<AppScript, MpBaseQo<Ap
         boolean result = save(entity);
         if (result) {
             List<AppEnvInfoDto> envList = appScriptDto.getScriptEnv();
-            if (!envList.isEmpty()) {
+            if (Objects.nonNull(envList) && !envList.isEmpty()) {
                 appEnvInfoService.saveOrUpdateScriptEnvList(entity.getId(),envList);
             }
         }
