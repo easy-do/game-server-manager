@@ -14,7 +14,7 @@ import useStorage from '@/utils/useStorage';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { loginRequst, platformLogin } from '@/api/oauth';
+import { loginRequst, platformLogin, sendEmailcode } from '@/api/oauth';
 import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { userResource } from '@/api/resource';
@@ -70,7 +70,12 @@ export default function LoginForm() {
   /**发送验证码 */
   function onSendMailCode() {
     setSendMail(true);
-    console.log('send mail code');
+    sendEmailcode().then((res) => {
+      const { success, msg } = res.data
+      if(success){
+        Notification.success({ content: msg, duration: 3000 })
+      }
+    });
   }
 
   // 读取 localStorage，设置初始值
