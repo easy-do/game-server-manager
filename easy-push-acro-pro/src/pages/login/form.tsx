@@ -70,11 +70,13 @@ export default function LoginForm() {
   /**发送验证码 */
   function onSendMailCode() {
     setSendMail(true);
-    sendEmailcode().then((res) => {
-      const { success, msg } = res.data
-      if(success){
-        Notification.success({ content: msg, duration: 3000 })
-      }
+    formRef.current.validate().then((values) => {
+      sendEmailcode(values.userName).then((res) => {
+        const { success, msg } = res.data
+        if(success){
+          Notification.success({ content: msg, duration: 3000 })
+        }
+      });
     });
   }
 
