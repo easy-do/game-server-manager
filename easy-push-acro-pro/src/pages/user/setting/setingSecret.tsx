@@ -6,7 +6,6 @@ import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import cookie from 'react-cookies'
 
 function SetingSecret({ visible, setVisible}) {
   
@@ -16,11 +15,11 @@ function SetingSecret({ visible, setVisible}) {
 
   const handleSubmit = () => {
       resetSecretRequest().then((res) => {
-        const { success, msg } = res.data
+        const { success, data, msg } = res.data
         if(success){
-          const token = cookie.load('token')
-          localStorage.setItem('token',token)
-          const tokenInfo: any = decode(token);
+          // const token = cookie.load('token')
+          localStorage.setItem('token',data)
+          const tokenInfo: any = decode(data);
           localStorage.setItem('userInfo', JSON.stringify(tokenInfo.userInfo));
           dispatch({
             type: 'update-userInfo',

@@ -94,8 +94,8 @@ public class RestAuthController {
         if (authResponse.ok()) {
             AuthUser authUser = authResponse.getData();
             String token = loginService.platformLogin(authUser);
-            Cookie cookie = new Cookie("token",token);
-            response.addCookie(cookie);
+//            Cookie cookie = new Cookie("token",token);
+//            response.addCookie(cookie);
             response.sendRedirect(beDomain + "/login?token=" + token);
         } else {
             response.sendRedirect(beDomain + "/loginFailed");
@@ -144,8 +144,8 @@ public class RestAuthController {
         boolean result = userInfoService.resetSecret();
         if(result){
             String token = StpUtil.getTokenValue();
-            Cookie cookie = new Cookie("token", token);
-            response.addCookie(cookie);
+//            Cookie cookie = new Cookie("token", token);
+//            response.addCookie(cookie);
             return DataResult.ok(token);
         }else {
             return DataResult.fail();
