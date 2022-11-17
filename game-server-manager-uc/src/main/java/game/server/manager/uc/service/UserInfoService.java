@@ -105,4 +105,14 @@ public interface UserInfoService extends IService<UserInfo>{
      * @date 2022/7/17
      */
     boolean updateUserStatus(ChangeStatusDto changeStatusDto);
+
+    /**
+     * 用户重置密码
+     *
+     * @param restPasswordModel restPasswordModel
+     * @return boolean
+     * @author laoyu
+     * @date 2022/11/17
+     */
+    boolean userResetPassword(RestPasswordModel restPasswordModel);
 }

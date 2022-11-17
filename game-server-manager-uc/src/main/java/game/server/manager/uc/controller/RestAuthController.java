@@ -1,6 +1,7 @@
 package game.server.manager.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
 import game.server.manager.auth.AuthStateRedisCache;
 import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.auth.OauthConfigProperties;
@@ -95,7 +96,7 @@ public class RestAuthController {
             String token = loginService.platformLogin(authUser);
             Cookie cookie = new Cookie("token",token);
             response.addCookie(cookie);
-            response.sendRedirect(beDomain + "/login?token=" + token);
+            response.sendRedirect(beDomain + "/login");
         } else {
             response.sendRedirect(beDomain + "/loginFailed");
         }
@@ -108,12 +109,18 @@ public class RestAuthController {
         if (Objects.nonNull(userInfoVo)) {
             Cookie cookie = new Cookie("token",userInfoVo.getToken());
             response.addCookie(cookie);
-            return DataResult.ok(beDomain + "/login?token=" + userInfoVo.getToken());
+            return DataResult.ok(beDomain + "/login");
         } else {
             return DataResult.fail(beDomain + "/loginFailed");
         }
     }
 
+    @SaCheckLogin
+    @PostMapping("/userResetPassword")
+    @SaveLog(logType = "授权日志", moduleName = "授权服务", description = "用户id,?1", expressions = {"#p1.userId"}, actionType = "重置密码")
+    public R<Object> userResetPassword(@RequestBody @Validated RestPasswordModel restPasswordModel) {
+        return userInfoService.userResetPassword(restPasswordModel)? DataResult.ok():DataResult.fail();
+    }
 
     @SaCheckLogin
     @PostMapping("/resetPassword")
@@ -133,8 +140,16 @@ public class RestAuthController {
     @SaCheckLogin
     @SaveLog(logType = "授权日志", moduleName = "授权服务", description = "重置密钥", actionType = "重置密钥")
     @GetMapping("/resetSecret")
-    public R<Object> resetSecret() {
-        return userInfoService.resetSecret()?DataResult.ok():DataResult.fail();
+    public R<Object> resetSecret(HttpServletResponse response) {
+        boolean result = userInfoService.resetSecret();
+        if(result){
+            String token = StpUtil.getTokenValue();
+            Cookie cookie = new Cookie("token", token);
+            response.addCookie(cookie);
+            return DataResult.ok(token);
+        }else {
+            return DataResult.fail();
+        }
     }
 
 

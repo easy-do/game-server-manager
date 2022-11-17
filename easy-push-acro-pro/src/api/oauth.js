@@ -11,5 +11,5 @@ export const authorization = (authorizationCode) => get("/uc/oauth/authorization
 export const sendEmailcode = (email) => get("/uc/email/sendMailCode?email="+email);
 export const bingdingEmail = (email,code) => get("/uc/oauth/bindingEmail?email="+email+"&code="+code);
 export const resetSecretRequest = () => get("/uc/oauth/resetSecret")
-
+export const userResetPassword = (param) => postRequestBody("/uc/oauth/userResetPassword",param);
 

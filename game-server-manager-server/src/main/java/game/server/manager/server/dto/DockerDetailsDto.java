@@ -46,7 +46,7 @@ public class DockerDetailsDto implements Serializable {
     private String dockerHost;
 
     /** 证书 */
-    private Object dockerCert;
+    private String dockerCert;
 
     /** 验证连接 */
 

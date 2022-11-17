@@ -1,5 +1,7 @@
 package game.server.manager.uc.service.impl;
 
+import cn.dev33.satoken.stp.SaLoginConfig;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
@@ -9,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import game.server.manager.auth.AuthorizationUtil;
+import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.common.exception.HasPermissionException;
 import game.server.manager.common.dto.AuthorizationConfigDto;
@@ -250,6 +253,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             cacheUser.setSecret(secret);
             AuthorizationUtil.reloadUserCache(cacheUser);
             basePublishEventServer.publishResetSecretEvent(cacheUser.getId());
+            StpUtil.login(cacheUser.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, cacheUser));
         }
         return result;
     }
@@ -274,6 +278,20 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         Integer status = changeStatusDto.getStatus();
         Long updateUserId = changeStatusDto.getUpdateUserId();
         UserInfo entity = UserInfo.builder().id(userId).state(status).updateBy(updateUserId).build();
+        return updateById(entity);
+    }
+
+    @Override
+    public boolean userResetPassword(RestPasswordModel restPasswordModel) {
+        long userId = AuthorizationUtil.getUserId();
+        UserInfo entity = UserInfo.builder().id(userId).build();
+        //生成盐
+        String salt = BCrypt.gensalt();
+        //加密
+        String encryptPass = BCrypt.hashpw(restPasswordModel.getPassword(),salt);
+        entity.setSalt(salt);
+        entity.setPassword(encryptPass);
+        entity.setUpdateBy(userId);
         return updateById(entity);
     }
 

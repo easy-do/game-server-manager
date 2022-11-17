@@ -76,21 +76,10 @@ export default function LoginForm() {
   // 读取 localStorage，设置初始值
   useEffect(() => {
 
-    let token;
-    const search = window.location.search;
-    const param = new URLSearchParams(search);
-    const searchToken = param.get('token');
     const cookieToken = cookie.load('token')
-    if(searchToken){
-      token = searchToken;
-    }
-    if(cookieToken){
-      token = cookieToken;
-    }
-    
-    if (token) {
-      setToken(token)
-      const tokenInfo: any = decode(token);
+    if (cookieToken) {
+      setToken(cookieToken)
+      const tokenInfo: any = decode(cookieToken);
       localStorage.setItem('userInfo', JSON.stringify(tokenInfo.userInfo));
       dispatch({
         type: 'update-userInfo',

@@ -42,7 +42,8 @@ public class DockerDetails implements Serializable {
     private String dockerHost;
 
     /** 证书 */
-    private Object dockerCert;
+    @TableField(exist = false,typeHandler = org.apache.ibatis.type.BlobTypeHandler.class)
+    private String dockerCert;
 
     /** 验证连接 */
     private Long dockerIsSsl;
