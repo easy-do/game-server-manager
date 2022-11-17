@@ -96,7 +96,7 @@ public class RestAuthController {
             String token = loginService.platformLogin(authUser);
             Cookie cookie = new Cookie("token",token);
             response.addCookie(cookie);
-            response.sendRedirect(beDomain + "/login");
+            response.sendRedirect(beDomain + "/login?token=" + authUser.getToken());
         } else {
             response.sendRedirect(beDomain + "/loginFailed");
         }
