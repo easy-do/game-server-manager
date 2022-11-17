@@ -37,7 +37,7 @@ public class DockerDetailsVo implements Serializable {
     /** ip地址 */
     private String dockerHost;
     /** 证书 */
-    private Object dockerCert;
+    private String dockerCert;
     /** 验证连接 */
     private Long dockerIsSsl;
     /** 证书密码 */

@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import cs from 'classnames';
 import { Button, Typography } from '@arco-design/web-react';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import styles from './style/index.module.less';
+import SetingSecret from './setingSecret';
+import SetingPassword from './setingPassword';
 
 function Security() {
+
   const { Text } = Typography;
   
   const t = useLocale(locale);
@@ -20,28 +23,40 @@ function Security() {
       title: t['userSetting.security.secret'],
       value: <Text copyable >{userInfo.secret}</Text>,
       placeholder: t['userSetting.security.secret.tips'],
+      type: 'secret',
     },
     {
       title: t['userSetting.security.password'],
       value: t['userSetting.security.password.tips'],
+      type: 'password',
     },
-    // {
-    //   title: t['userSetting.security.question'],
-    //   value: '',
-    //   placeholder: t['userSetting.security.question.placeholder'],
-    // },
-    // {
-    //   title: t['userSetting.security.phone'],
-    //   value: userInfo.phoneNumber
-    //     ? `${t['userSetting.security.phone.tips']} ${userInfo.phoneNumber}`
-    //     : '',
-    // },
     {
       title: t['userSetting.security.email'],
       value: userInfo.email,
       placeholder: t['userSetting.security.email.placeholder'],
+      type: 'email',
     },
   ];
+
+  const [visibleSetSecret,setVisibleSetSecret] = useState(false);
+
+  const [visiblePassword,setVisiblePassword] = useState(false);
+
+  const setingSecurity  = (type)=> {
+    console.log(type)
+   switch(type){
+    case 'secret':
+      setVisibleSetSecret(true);
+      break;
+    case 'password':
+      setVisiblePassword(true);
+      break;
+    case 'email':
+      break;
+    default:
+      break;
+   }
+  }
 
   return (
     <div className={styles['security']}>
@@ -58,7 +73,7 @@ function Security() {
             </span>
 
             <span>
-              <Button type="text">
+              <Button type="text" onClick={()=>setingSecurity(item.type)}>
                 {item.value
                   ? t['userSetting.btn.edit']
                   : t['userSetting.btn.set']}
@@ -67,6 +82,8 @@ function Security() {
           </div>
         </div>
       ))}
+      <SetingSecret visible={visibleSetSecret} setVisible={setVisibleSetSecret} />
+      <SetingPassword visible={visiblePassword} setVisible={setVisiblePassword} />
     </div>
   );
 }

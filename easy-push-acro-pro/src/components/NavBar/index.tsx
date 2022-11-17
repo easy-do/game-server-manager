@@ -33,6 +33,7 @@ import styles from './style/index.module.less';
 import defaultLocale from '@/locale';
 import { logoutRequest } from '@/api/oauth';
 import checkLogin from '@/utils/checkLogin';
+import cookie from 'react-cookies'
 
 function Navbar({ topMenu, show }: { topMenu; show: boolean }) {
   const t = useLocale();
@@ -46,6 +47,7 @@ function Navbar({ topMenu, show }: { topMenu; show: boolean }) {
       if (success) {
         localStorage.clear();
         sessionStorage.clear();
+        cookie.remove('token')
         window.location.href = '/';
       }
     });

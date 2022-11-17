@@ -88,6 +88,10 @@ const i18n = {
     'userSetting.verified.label.appCreationNum': 'App Creation number',
     'userSetting.verified.label.scriptCreationNum': 'Script creation Number',
     'userSetting.verified.label.description': 'Authentication description',   
+    'userSetting.security.operation.resetSecet': 'Rest Secret', 
+    'userSetting.security.operation.confirmResetSecet': 'The secret will become invalid immediately. Are you sure to continue?', 
+    'userSetting.security.newPassword': 'New Password',
+    'userSetting.security.operation.resetPassword': 'Rest Password', 
   },
 
   'zh-CN': {
@@ -173,7 +177,12 @@ const i18n = {
     'userSetting.verified.label.serverNum': '服务数量',
     'userSetting.verified.label.appCreationNum': 'app创作数量',
     'userSetting.verified.label.scriptCreationNum': '脚本创作数量',
-    'userSetting.verified.label.description': '授权描述',    
+    'userSetting.verified.label.description': '授权描述',   
+    'userSetting.security.operation.resetSecet': '重置密钥', 
+    'userSetting.security.operation.confirmResetSecet': '密钥将立即失效,确认继续操作吗?', 
+    'userSetting.security.newPassword': '新密码',
+    'userSetting.security.operation.resetPassword': '重置密码', 
+    
   },
 };
 
