@@ -16,6 +16,8 @@ export interface DataInfoVo{
     createTime: string,
     updateBy: string,
     updateTime: string,
+    detailsJson:any,
+    versionJson:any,
 }
 
 // 后台sql查询字段
@@ -64,12 +66,6 @@ export function getColumns(
     },
 
     {
-      title: t['searchTable.columns.dockerIsSsl'],
-      dataIndex: 'dockerIsSsl',
-      ellipsis:true,
-    },
-
-    {
       title: t['searchTable.columns.createTime'],
       dataIndex: 'createTime',
       ellipsis:true,
@@ -79,7 +75,20 @@ export function getColumns(
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => (
-        <div>  
+        <div> 
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'server:dockerDetails', actions: ['info'] },
+            ]}
+          >
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'imageList')}
+            >
+                {t['searchTable.columns.imageList.view']}
+            </Button>
+          </PermissionWrapper> 
           <PermissionWrapper
             requiredPermissions={[
               { resource: 'server:dockerDetails', actions: ['info'] },
@@ -126,3 +135,99 @@ export function getColumns(
   ];
 }
 
+
+//镜像列表展示字段
+export function getImageListColumns(
+  t: any,
+  callback: (record: Record<string, any>, type: string) => Promise<void>
+) {
+  return [
+    {
+      title: t['searchTable.columns.Id'],
+      dataIndex: 'Id',
+      ellipsis:true,
+      render: (_, record) => (
+        <Typography.Paragraph copyable>
+        {record.Id}
+      </Typography.Paragraph>
+      ),
+    },
+    {
+      title: t['searchTable.columns.Repo'],
+      dataIndex: 'RepoTags[0]',
+      ellipsis:true,
+      render: (_, record) => (
+        <Typography.Paragraph copyable>
+        {record.RepoTags && record.RepoTags[0]? record.RepoTags[0].split(":")[0]:''}
+      </Typography.Paragraph>
+        
+      ),
+    },
+    {
+      title: t['searchTable.columns.Tag'],
+      dataIndex: 'RepoTags[0]',
+      ellipsis:true,
+      render: (_, record) => (
+        <Typography.Paragraph copyable>
+        {record.RepoTags && record.RepoTags[0]? record.RepoTags[0].split(":")[1]:''}
+      </Typography.Paragraph>
+      ),
+    },
+    {
+      title: t['searchTable.columns.Digests'],
+      dataIndex: 'RepoDigests[0]',
+      ellipsis:true,
+      render: (_, record) => (
+        <Typography.Paragraph copyable>
+        {record.RepoTags[0]}
+      </Typography.Paragraph>
+      ),
+    },
+
+    {
+      // title: t['searchTable.columns.createTime'],
+      title: '大小',
+      dataIndex: 'Size',
+      ellipsis:true,
+      render: (_, record) => (
+        (record.Size/1024/1024).toFixed() +'MB'
+      ),
+    },
+    {
+      title: t['searchTable.columns.operations'],
+      dataIndex: 'operations',
+      headerCellStyle: { paddingLeft: '15px' },
+      render: (_, record) => (
+        <div> 
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'server:dockerDetails', actions: ['info'] },
+            ]}
+          >
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'view')}
+            >
+                {t['searchTable.columns.operations.view']}
+            </Button>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'server:dockerDetails', actions: ['remove'] },
+            ]}
+          >
+            <Popconfirm
+                title={t['searchTable.columns.operations.remove.confirm']}
+                onOk={() => callback(record, 'remove')}
+            >
+                <Button type="text" status="warning" size="small">
+                {t['searchTable.columns.operations.remove']}
+                </Button>
+            </Popconfirm>
+          </PermissionWrapper>
+        </div>
+      ),
+    },
+  ];
+}

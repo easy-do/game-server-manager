@@ -7,20 +7,21 @@ import {
   Space,
   Typography,
   Notification,
+  Modal,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
+import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
 import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
 import { managerPage, removeRequest } from '@/api/dockerDetails';
-import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
+import ImageList from './imageList';
 
 const { Title } = Typography;
 
@@ -32,6 +33,11 @@ function SearchTable() {
     //查看
     if (type === 'view') {
       viewInfo(record.id);
+    }
+
+    //镜像列表
+    if (type === 'imageList') {
+      imagesList(record.id);
     }
 
     //编辑
@@ -54,6 +60,15 @@ function SearchTable() {
     setViewInfoId(id);
     setisViewInfo(true);
   }
+
+    //查看镜像列表
+    const [viewImageId, setViewImageId] = useState();
+    const [isViewImageList, setisViewImageList] = useState(false);
+  
+    function imagesList(id) {
+      setViewImageId(id);
+      setisViewImageList(true);
+    }
 
   //新增
   const [isAddData, setIsAddData] = useState(false);
@@ -212,6 +227,22 @@ function SearchTable() {
         setVisible={setisUpdateInfo}
         successCallBack={updateSuccess}
       />
+       <Modal
+        style={{minHeight:'100%',width:'100%'}}
+        title={t['searchTable.info.title']}
+        visible={isViewImageList}
+        onOk={() => {
+          setisViewImageList(false);
+        }}
+        onCancel={() => {
+          setisViewImageList(false);
+          
+        }}
+        autoFocus={false}
+        focusLock={true}
+      >
+        <ImageList dockerId={viewImageId} />
+      </Modal>
     </Card>
   );
 }

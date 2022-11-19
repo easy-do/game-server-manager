@@ -33,6 +33,8 @@
         <module>commons/game-server-manager-mybatis-plus</module>
         <module>commons/game-server-manager-web</module>
         <module>commons/game-server-manager-doc</module>
+        <module>commons/game-server-manager-docker</module>
+        <module>commons/game-server-manager-docker-client-api</module>
         <module>game-server-manager-log-audit</module>
         <module>game-server-manager-oss</module>
         <module>game-server-manager-plugins</module>
@@ -41,6 +43,7 @@
         <module>game-server-manager-uc</module>
         <module>game-server-manager-server</module>
         <module>game-server-manager-generate</module>
+        <module>game-server-manager-docker-client</module>
     </modules>
 
     <dependencyManagement>

@@ -41,9 +41,58 @@ function InfoPage(props: {id:number,visible,setVisible}) {
       value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.dockerHost:'',
     },
     {
-      label: t['searchTable.columns.dockerIsSsl'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.dockerIsSsl:'',
+      label: t['searchTable.columns.Version'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.versionJson ? JSON.parse(infoData.versionJson).Version:'',
     },
+    {
+      label: t['searchTable.columns.Arch'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.versionJson ? JSON.parse(infoData.versionJson).Arch:'',
+    }, 
+    {
+      label: t['searchTable.columns.KernelVersion'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.versionJson ? JSON.parse(infoData.versionJson).KernelVersion:'',
+    },
+    {
+      label: t['searchTable.columns.GoVersion'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.versionJson ? JSON.parse(infoData.versionJson).GoVersion:'',
+    },
+    {
+      label: t['searchTable.columns.ApiVersion'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.versionJson ? JSON.parse(infoData.versionJson).ApiVersion:'',
+    },
+    {
+      label: t['searchTable.columns.MinAPIVersion'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.versionJson ? JSON.parse(infoData.versionJson).MinAPIVersion:'',
+    },
+    {
+      label: t['searchTable.columns.OperatingSystem'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.detailsJson ? JSON.parse(infoData.detailsJson).OperatingSystem:'',
+    },
+    {
+      label: t['searchTable.columns.Images'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.detailsJson ? JSON.parse(infoData.detailsJson).Images:'',
+    },
+    {
+      label: t['searchTable.columns.Containers'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.detailsJson ? JSON.parse(infoData.detailsJson).Containers:'',
+    },
+    {
+      label: t['searchTable.columns.ContainersRunning'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.detailsJson ? JSON.parse(infoData.detailsJson).ContainersRunning:'',
+    },
+    {
+      label: t['searchTable.columns.ContainersPaused'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.detailsJson ? JSON.parse(infoData.detailsJson).ContainersPaused:'',
+    },
+    {
+      label: t['searchTable.columns.ContainersStopped'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.detailsJson ? JSON.parse(infoData.detailsJson).ContainersStopped:'',
+    },
+    {
+      label: t['searchTable.columns.MemTotal'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData && infoData.detailsJson ? (JSON.parse(infoData.detailsJson).MemTotal/8388608).toFixed() +'MB':'',
+    },
+
   ];
 
   return (

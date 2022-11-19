@@ -1,6 +1,8 @@
 package game.server.manager.server.entity;
 
 import java.time.LocalDateTime;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -41,6 +43,12 @@ public class DockerDetails implements Serializable {
     /** ip地址 */
     private String dockerHost;
 
+    /** 模式 api/client */
+    private String dockerModel;
+
+    /** client模式通信密钥 */
+    private String dockerSecret;
+
     /** 证书 */
     @TableField(exist = false,typeHandler = org.apache.ibatis.type.BlobTypeHandler.class)
     private String dockerCert;
@@ -56,12 +64,14 @@ public class DockerDetails implements Serializable {
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /** 更新人 */
     private Long updateBy;
 
     /** 更新时间 */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
 }
