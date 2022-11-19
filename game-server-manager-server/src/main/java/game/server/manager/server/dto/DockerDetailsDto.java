@@ -48,8 +48,10 @@ public class DockerDetailsDto implements Serializable {
     /** 证书 */
     private String dockerCert;
 
-    /** 验证连接 */
+    /** 模式 api/client */
+    private String dockerModel;
 
+    /** 验证连接 */
     @NotNull(message = "验证连接必填",groups = {Insert.class, Update.class})
     private Long dockerIsSsl;
 

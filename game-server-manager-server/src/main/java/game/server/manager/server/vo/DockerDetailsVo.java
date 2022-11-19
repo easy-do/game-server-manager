@@ -36,6 +36,10 @@ public class DockerDetailsVo implements Serializable {
     private String dockerName;
     /** ip地址 */
     private String dockerHost;
+    /** 模式 api/client */
+    private String dockerModel;
+    /** client模式通信密钥 */
+    private String dockerSecret;
     /** 证书 */
     private String dockerCert;
     /** 验证连接 */
@@ -51,5 +55,9 @@ public class DockerDetailsVo implements Serializable {
     private Long updateBy;
     /** 更新时间 */
     private LocalDateTime updateTime;
+    /** docker实时信息 */
+    private String detailsJson;
+    /** version详细信息 */
+    private String versionJson;
 
 }

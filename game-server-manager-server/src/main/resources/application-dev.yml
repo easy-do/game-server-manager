@@ -107,7 +107,7 @@ springdoc:
     # 开启api-docs
     enabled: true
   # 配置需要生成接口文档的扫描包
-  packages-to-scan: game.server.manager.uc.controller
+  packages-to-scan: game.server.manager.server.controller
   # 配置需要生成接口文档的接口路径
   #  paths-to-match: /brand/**,/admin/**
   customize:
@@ -135,3 +135,17 @@ jetcache:
       broadcastChannel: ${spring.application.name}
       #redis://密码@ip:端口/redis库名?timeout=5s
       uri: redis://${REDIS_PASSWORD:n2H%yuXZFS}@${REDIS_HOST:redis.server}:${REDIS_PORT:6379}/
+
+
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+  okhttp:
+    enabled: true
+  httpclient:
+    maxConnections: 1000
+    connectionTimeout: 3000
