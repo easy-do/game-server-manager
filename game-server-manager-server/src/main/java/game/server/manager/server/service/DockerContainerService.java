@@ -5,6 +5,7 @@ import com.github.dockerjava.api.model.Container;
 import game.server.manager.common.result.R;
 import game.server.manager.docker.model.CreateContainerDto;
 
+import javax.servlet.ServletOutputStream;
 import java.util.List;
 
 /**
@@ -91,4 +92,15 @@ public interface DockerContainerService {
      * @date 2022/11/19
      */
     R<CreateContainerResponse> createContainer(String dockerId, CreateContainerDto createContainerDto);
+
+    /**
+     * 查看容器日志
+     *
+     * @param dockerId dockerId
+     * @param containerId containerId
+     * @return game.server.manager.common.result.R<java.lang.String>
+     * @author laoyu
+     * @date 2022/11/20
+     */
+    R<String> logContainer(String dockerId, String containerId);
 }

@@ -20,6 +20,7 @@ const i18n = {
     'searchTable.columns.operations': 'Operation',
     'searchTable.columns.operations.view': 'View',
     'searchTable.columns.imageList.view': 'Images',
+    'searchTable.columns.containerList.view': 'Containers',
     'searchTable.columns.operations.update': 'Edit',
     'searchTable.columns.operations.remove': 'Remove',
     'searchTable.columns.operations.remove.confirm': 'Are you sure you want to delete?',
@@ -63,6 +64,16 @@ const i18n = {
     'searchTable.columns.Repo': 'Repo',
     'searchTable.columns.Tag': 'Tag',
     'searchTable.columns.Digests': 'Digests',
+    'searchTable.columns.Names': 'Names',
+    'searchTable.columns.Image': 'Image',
+    'searchTable.columns.NetworkMode': 'NetworkMode',
+    'searchTable.columns.Status': 'Status',
+    'searchTable.columns.operations.start': 'Start',
+    'searchTable.columns.operations.restart': 'Restart',
+    'searchTable.columns.operations.stop': 'Stop',
+    'searchTable.columns.operations.rename': 'Rename',
+    'searchTable.columns.operations.log': 'Log',
+    
   },
   'zh-CN': {
     'list': '列表页',
@@ -85,6 +96,7 @@ const i18n = {
     'searchTable.columns.operations': '操作',
     'searchTable.columns.operations.view': '查看',
     'searchTable.columns.imageList.view': '镜像列表',
+    'searchTable.columns.containerList.view': '容器列表',
     'searchTable.columns.operations.update': '修改',
     'searchTable.columns.operations.remove': '删除',
     'searchTable.columns.operations.remove.confirm': '确定要删除吗?', 
@@ -128,6 +140,17 @@ const i18n = {
     'searchTable.columns.Repo': '仓库',
     'searchTable.columns.Tag': '标签',
     'searchTable.columns.Digests': '摘要',
+    'searchTable.columns.Names': '名称',
+    'searchTable.columns.Image': '镜像',
+    'searchTable.columns.NetworkMode': '网络模式',
+    'searchTable.columns.Status': '状态',
+    'searchTable.columns.operations.start': '启动',
+    'searchTable.columns.operations.restart': '重启',
+    'searchTable.columns.operations.stop': '停止',
+    'searchTable.columns.operations.rename': '重命名',
+    'searchTable.columns.operations.log': '日志',
+    
+    
     
   },
 };

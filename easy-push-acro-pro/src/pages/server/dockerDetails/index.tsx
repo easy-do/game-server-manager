@@ -22,6 +22,7 @@ import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
 import ImageList from './imageList';
+import ContainerList from './containerList';
 
 const { Title } = Typography;
 
@@ -30,6 +31,7 @@ function SearchTable() {
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
+    
     //查看
     if (type === 'view') {
       viewInfo(record.id);
@@ -39,6 +41,11 @@ function SearchTable() {
     if (type === 'imageList') {
       imagesList(record.id);
     }
+
+        //容器列表
+        if (type === 'containerList') {
+          containerList(record.id);
+        }
 
     //编辑
     if (type === 'update') {
@@ -61,14 +68,26 @@ function SearchTable() {
     setisViewInfo(true);
   }
 
-    //查看镜像列表
-    const [viewImageId, setViewImageId] = useState();
-    const [isViewImageList, setisViewImageList] = useState(false);
+          //查看镜像列表
+          const [viewImageId, setViewImageId] = useState();
+          const [isViewImageList, setisViewImageList] = useState(false);
+        
+          function imagesList(id) {
+            setViewImageId(id);
+            setisViewImageList(true);
+          }
+
+    //查看容器列表
+    const [viewContainerId, setViewContainerId] = useState();
+    const [isViewContainerList, setIsViewContainerList] = useState(false);
   
-    function imagesList(id) {
-      setViewImageId(id);
-      setisViewImageList(true);
+    function containerList(id) {
+      console.info('containerList')
+      setViewContainerId(id);
+      setIsViewContainerList(true);
     }
+
+
 
   //新增
   const [isAddData, setIsAddData] = useState(false);
@@ -241,7 +260,23 @@ function SearchTable() {
         autoFocus={false}
         focusLock={true}
       >
-        <ImageList dockerId={viewImageId} />
+        <ImageList isViewImageList={isViewImageList} dockerId={viewImageId} />
+      </Modal>
+      <Modal
+        style={{minHeight:'100%',width:'100%'}}
+        title={t['searchTable.info.title']}
+        visible={isViewContainerList}
+        onOk={() => {
+          setIsViewContainerList(false);
+        }}
+        onCancel={() => {
+          setIsViewContainerList(false);
+          
+        }}
+        autoFocus={false}
+        focusLock={true}
+      >
+        <ContainerList isViewContainerList={isViewContainerList} dockerId={viewContainerId} />
       </Modal>
     </Card>
   );

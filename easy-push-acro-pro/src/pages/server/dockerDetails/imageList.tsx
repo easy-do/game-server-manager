@@ -14,7 +14,7 @@ import { imagesList, removeImage } from '@/api/dockerApi';
 
 const { Title } = Typography;
 
-function ImageList(props: { dockerId: any }) {
+function ImageList(props: {isViewImageList:boolean, dockerId: any }) {
   const t = useLocale(locale);
 
   //表格操作按钮回调
@@ -60,10 +60,10 @@ function ImageList(props: { dockerId: any }) {
   // const [orders, setOrders] = useState(getDefaultOrders());
 
   useEffect(() => {
-    if (props.dockerId) {
+    if (props.dockerId && props.isViewImageList) {
       fetchData();
     }
-  }, []);
+  }, [props.isViewImageList,props.dockerId]);
 
   // 获取数据
   function fetchData() {
@@ -108,7 +108,7 @@ function ImageList(props: { dockerId: any }) {
 
   return (
     <Card>
-      <Title heading={6}>{t['list.searchTable']}</Title>
+      {/* <Title heading={6}>{t['list.searchTable']}</Title> */}
       {/* <SearchForm onSearch={handleSearch} /> */}
       {/* <PermissionWrapper
         requiredPermissions={[

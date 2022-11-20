@@ -68,4 +68,9 @@ public class DockerContainerServiceImpl implements DockerContainerService {
     public R<CreateContainerResponse> createContainer(String dockerId, CreateContainerDto createContainerDto) {
         return dockerContainerApi(dockerId).createContainer(createContainerDto);
     }
+
+    @Override
+    public R<String> logContainer(String dockerId, String containerId) {
+        return dockerContainerApi(dockerId).logContainer(containerId);
+    }
 }
