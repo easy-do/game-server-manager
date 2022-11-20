@@ -3,9 +3,10 @@ package game.server.manager.docker.client.controller;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
-import game.server.manager.docker.client.api.DockerContainerApi;
+import feign.Response;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
+import game.server.manager.docker.client.api.DockerContainerApi;
 import game.server.manager.docker.client.service.DockerService;
 import game.server.manager.docker.model.CreateContainerDto;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +40,6 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @GetMapping("/containerList")
     public R<List<Container>> containerList(){
         try {
@@ -57,7 +57,6 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @GetMapping("/startContainer")
     public R<Void> startContainer(@RequestParam("containerId")String containerId){
         try {
@@ -76,7 +75,6 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @GetMapping("/restartContainer")
     public R<Void> restartContainer(@RequestParam("containerId")String containerId){
         try {
@@ -94,7 +92,6 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @GetMapping("/stopContainer")
     public R<Void> stopContainer(@RequestParam("containerId")String containerId){
         try {
@@ -112,7 +109,6 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @DeleteMapping("/removeContainer")
     public R<Void> removeContainer(@RequestParam("containerId")String containerId){
         try {
@@ -131,7 +127,6 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @GetMapping("/renameContainer")
     public R<Void> renameContainer(@RequestParam("containerId")String containerId,@RequestParam("name")String name){
         try {
@@ -149,11 +144,27 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @PostMapping("/createContainer")
     public R<CreateContainerResponse> createContainer(@RequestBody CreateContainerDto createContainerDto){
         try {
             return DataResult.ok(dockerService.createContainer(createContainerDto));
+        }catch (Exception e){
+            return DataResult.fail(ExceptionUtil.getMessage(e));
+        }
+    }
+
+    /**
+     * 查看容器日志
+     *
+     * @param containerId containerId
+     * @return game.server.manager.common.result.R<com.github.dockerjava.core.InvocationBuilder.AsyncResultCallback>
+     * @author laoyu
+     * @date 2022/11/20
+     */
+    @GetMapping("/logContainer")
+    public R<String> logContainer(@RequestParam("containerId")String containerId) {
+        try {
+            return DataResult.ok(dockerService.logContainer(containerId));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }

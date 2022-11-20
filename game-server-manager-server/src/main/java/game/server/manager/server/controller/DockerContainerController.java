@@ -2,11 +2,12 @@ package game.server.manager.server.controller;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
+import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.docker.model.CreateContainerDto;
 import game.server.manager.server.service.DockerContainerService;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +37,8 @@ public class DockerContainerController {
      * @author laoyu
      * @date 2022/11/19
      */
-    @GetMapping("/v1/containerList")
-    public R<List<Container>> containerList(@RequestParam("dockerId")String dockerId){
+    @GetMapping("/v1/list/{dockerId}")
+    public R<List<Container>> containerList(@PathVariable("dockerId")String dockerId){
         return dockerContainerService.containerList(dockerId);
     }
 
@@ -49,8 +50,8 @@ public class DockerContainerController {
      * @author laoyu
      * @date 2022/11/19
      */
-    @GetMapping("/v1/startContainer")
-    public R<Void> startContainer(@RequestParam("dockerId")String dockerId,@RequestParam("containerId")String containerId){
+    @GetMapping("/v1/start/{dockerId}/{containerId}")
+    public R<Void> startContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
         return dockerContainerService.startContainer(dockerId,containerId);
     }
 
@@ -63,8 +64,8 @@ public class DockerContainerController {
      * @author laoyu
      * @date 2022/11/19
      */
-    @GetMapping("/v1/restartContainer")
-    public R<Void> restartContainer(@RequestParam("dockerId")String dockerId,@RequestParam("containerId")String containerId){
+    @GetMapping("/v1/restart/{dockerId}/{containerId}")
+    public R<Void> restartContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
         return dockerContainerService.restartContainer(dockerId,containerId);
     }
 
@@ -76,8 +77,8 @@ public class DockerContainerController {
      * @author laoyu
      * @date 2022/11/19
      */
-    @GetMapping("/v1/stopContainer")
-    public R<Void> stopContainer(@RequestParam("dockerId")String dockerId,@RequestParam("containerId")String containerId){
+    @GetMapping("/v1/stop/{dockerId}/{containerId}")
+    public R<Void> stopContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
         return dockerContainerService.stopContainer(dockerId,containerId);
     }
 
@@ -89,8 +90,8 @@ public class DockerContainerController {
      * @author laoyu
      * @date 2022/11/19
      */
-    @DeleteMapping("/v1/removeContainer")
-    public R<Void> removeContainer(@RequestParam("dockerId")String dockerId,@RequestParam("containerId")String containerId){
+    @GetMapping("/v1/remove/{dockerId}/{containerId}")
+    public R<Void> removeContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
         return dockerContainerService.removeContainer(dockerId,containerId);
     }
 
@@ -103,9 +104,22 @@ public class DockerContainerController {
      * @author laoyu
      * @date 2022/11/19
      */
-    @GetMapping("/v1/renameContainer")
-    public R<Void> renameContainer(@RequestParam("dockerId")String dockerId,@RequestParam("containerId")String containerId,@RequestParam("name")String name){
+    @GetMapping("/v1/rename/{dockerId}/{containerId}")
+    public R<Void> renameContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId,@RequestParam("name")String name){
         return dockerContainerService.renameContainer(dockerId,containerId,name);
+    }
+
+    /**
+     * 查看容器日志
+     *
+     * @param containerId containerId
+     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @author laoyu
+     * @date 2022/11/19
+     */
+    @GetMapping("/v1/log/{dockerId}/{containerId}")
+    public R<String> logContainer(@PathVariable("dockerId")String dockerId, @PathVariable("containerId")String containerId) {
+        return dockerContainerService.logContainer(dockerId,containerId);
     }
 
     /**
@@ -119,5 +133,5 @@ public class DockerContainerController {
     @PostMapping("/v1/createContainer")
     public R<CreateContainerResponse> createContainer(@RequestParam("dockerId")String dockerId,@RequestBody CreateContainerDto createContainerDto){
         return dockerContainerService.createContainer(dockerId,createContainerDto);
-    };
+    }
 }

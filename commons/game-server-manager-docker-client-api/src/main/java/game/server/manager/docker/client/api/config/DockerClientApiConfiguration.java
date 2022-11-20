@@ -20,8 +20,8 @@ public class DockerClientApiConfiguration {
     private String dateFormat = "yyyy-MM-dd";
     private String timeFormat = "HH:m:ss";
     private String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-    private int connectTimeoutMillis = 1000;
-    private int readTimeoutMillis = 1000;
+    private int connectTimeoutMillis = 5000;
+    private int readTimeoutMillis = 5000;
     private long retryPeriod = 5000L;
     private int retryMaxAttempts = 1;
     private long retryMaxPeriod = 5000L;

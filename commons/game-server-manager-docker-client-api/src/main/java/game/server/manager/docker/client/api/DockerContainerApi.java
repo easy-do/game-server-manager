@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -101,7 +100,7 @@ public interface DockerContainerApi {
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/renameContainer?containerId={containerId}&name={name}")
     @GetMapping("/v1/renameContainer")
-    public R<Void> renameContainer(@RequestParam("containerId")String containerId,@RequestParam("name")String name);
+    public R<Void> renameContainer(@Param("containerId")String containerId,@Param("name")String name);
 
     /**
      * 创建容器
@@ -115,4 +114,9 @@ public interface DockerContainerApi {
     @RequestLine("POST /v1/createContainer")
     @PostMapping("/v1/createContainer")
     public R<CreateContainerResponse> createContainer(@RequestBody CreateContainerDto createContainerDto);
+
+    @Headers({"Content-Type: application/json"})
+    @RequestLine("GET /v1/logContainer?containerId={containerId}")
+    @GetMapping("/v1/logContainer")
+    public  R<String> logContainer(@Param("containerId")String containerId);
 }
