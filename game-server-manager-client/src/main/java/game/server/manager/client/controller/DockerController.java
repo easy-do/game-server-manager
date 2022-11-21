@@ -1,12 +1,12 @@
-package game.server.manager.docker.client.controller;
+package game.server.manager.client.controller;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.Version;
-import game.server.manager.docker.client.api.DockerClientApi;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
-import game.server.manager.docker.client.service.DockerService;
+import game.server.manager.docker.client.api.DockerClientApi;
+import game.server.manager.client.service.DockerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -5,8 +5,37 @@ spring:
   application:
     name: game-server-manager-client
 
-manager-url: ${MANAGER_URL:https://manager.easydo.plus/server}
+model: ${MODEL:socket}
+manager-url: ${MANAGER_URL:https://manager.easydo.plus/client}
+server-socket-url: ${SERVER_SOCKET_URL:wss://manager.easydo.plus/wss/client}
 socket-url: ${SOCKET_URL:wss://manager.easydo.plus/wss/syncClientData}
 client-id: ${CLIENT_ID:no}
 app-id: ${APP_ID:no}
 client_version: ${CLIENT_VERSION:no}
+
+
+springdoc:
+  swagger-ui:
+    # 修改Swagger UI路径
+    path: /swagger-ui.html
+    # 开启Swagger UI界面
+    enabled: true
+  api-docs:
+    # 修改api-docs路径
+    path: /v2/api-docs
+    # 开启api-docs
+    enabled: true
+  # 配置需要生成接口文档的扫描包
+  packages-to-scan: game.server.manager.client.controller
+  # 配置需要生成接口文档的接口路径
+  #  paths-to-match: /brand/**,/admin/**
+  customize:
+    title: 用户中心 API
+    description: docker客户端API接口
+    version: 1.0.0
+    license:
+      name: 未设置
+      url: https://push.easydo.plus
+    externalDocs:
+      description: 外部文档
+      url: https://push.easydo.plus

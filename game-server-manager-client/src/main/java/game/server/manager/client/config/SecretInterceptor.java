@@ -1,4 +1,4 @@
-package game.server.manager.docker.client.config;
+package game.server.manager.client.config;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import lombok.extern.slf4j.Slf4j;

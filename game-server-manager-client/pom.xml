@@ -41,17 +41,25 @@
         </dependency>
 
         <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+
+        <!--  doc -->
+        <dependency>
             <groupId>game.server.manager</groupId>
-            <artifactId>game-server-manager-common</artifactId>
+            <artifactId>game-server-manager-doc</artifactId>
             <version>1.0.0</version>
         </dependency>
 
+        <!--  docker client api-->
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>5.8.7</version>
-            <scope>compile</scope>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-docker-client-api</artifactId>
+            <version>1.0.0</version>
         </dependency>
+
 
     </dependencies>
 

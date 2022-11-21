@@ -43,7 +43,6 @@
         <module>game-server-manager-uc</module>
         <module>game-server-manager-server</module>
         <module>game-server-manager-generate</module>
-        <module>game-server-manager-docker-client</module>
     </modules>
 
     <dependencyManagement>

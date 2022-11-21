@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,6 +45,11 @@ public class DockerImageController {
 
     }
 
+    @GetMapping("/pull/{dockerId}")
+    public void pullImage(@PathVariable("dockerId")String dockerId,@RequestParam("repository")String repository, HttpServletResponse httpResponse) throws IOException {
+            dockerImageService.pullImage(dockerId,repository,httpResponse.getOutputStream());
+    }
+
     /**
      * 删除镜像
      *
@@ -52,6 +59,7 @@ public class DockerImageController {
      * @author laoyu
      * @date 2022/11/19
      */
+    @SaCheckLogin
     @GetMapping("/v1/remove/{dockerId}/{imageId}")
     public R<Void> removeImage(@PathVariable("dockerId")String dockerId, @PathVariable("imageId")String imageId){
         return dockerImageService.removeImage(dockerId,imageId);

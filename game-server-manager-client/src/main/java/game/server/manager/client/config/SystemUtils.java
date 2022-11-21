@@ -4,6 +4,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import game.server.manager.client.websocket.ClientWebsocketEndpoint;
 import game.server.manager.common.mode.ClientInitData;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +23,14 @@ public class SystemUtils {
 
     public static final Map<String,Object> VALUES = new HashMap<>();
 
+    @Value("${model:socket}")
+    private String model;
+
     @Value("${manager-url:https://manager.easydo.plus}")
     private String managerUrl;
+
+    @Value("${server-socket-url:https://manager.easydo.plus}")
+    private String serverSocketUrl;
 
     @Value("${socket-url:wss://manager.easydo.plus/wss/syncClientData}")
     private String socketUrl;
@@ -36,8 +43,6 @@ public class SystemUtils {
 
     @Value("${client_version:0}")
     private String version;
-
-    private String sessionId;
 
     public void init(ClientInitData clientInitData){
         String publicKey = clientInitData.getPublicKey();
@@ -66,5 +71,6 @@ public class SystemUtils {
     public ClientInitData getClientInitData() {
         return (ClientInitData) VALUES.get("clientInitData");
     }
+
 
 }

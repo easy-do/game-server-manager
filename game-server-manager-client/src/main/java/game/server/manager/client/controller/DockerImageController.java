@@ -1,19 +1,18 @@
-package game.server.manager.docker.client.controller;
+package game.server.manager.client.controller;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.dockerjava.api.model.Image;
-import game.server.manager.docker.client.api.DockerImageApi;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
-import game.server.manager.docker.client.service.DockerService;
+import game.server.manager.client.service.DockerImageService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -24,10 +23,10 @@ import java.util.List;
  */
 @RequestMapping("/v1")
 @RestController
-public class DockerImageController implements DockerImageApi {
+public class DockerImageController {
 
     @Resource
-    private DockerService dockerService;
+    private DockerImageService dockerImageService;
 
     /**
      * 获取镜像列表
@@ -36,11 +35,10 @@ public class DockerImageController implements DockerImageApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @GetMapping("/listImages")
     public R<List<Image>> listImages(){
         try {
-            return DataResult.ok(dockerService.listImages());
+            return DataResult.ok(dockerImageService.listImages());
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }
@@ -54,13 +52,20 @@ public class DockerImageController implements DockerImageApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @DeleteMapping("/removeImage")
     public R<Void> removeImage(@RequestParam("imageId")String imageId){
         try {
-            return DataResult.ok(dockerService.removeImage(imageId));
+            return DataResult.ok(dockerImageService.removeImage(imageId));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
+        }
+    }
+
+    @GetMapping("/pullImage")
+    public void pullImage(@RequestParam("repository")String repository, HttpServletResponse httpResponse){
+        try {
+            dockerImageService.pullImage(repository,httpResponse.getOutputStream());
+        }catch (Exception e){
         }
     }
 }

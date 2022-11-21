@@ -1,4 +1,4 @@
-package game.server.manager.docker.client.config;
+package game.server.manager.client.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
