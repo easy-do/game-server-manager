@@ -15,7 +15,6 @@ import game.server.manager.common.vo.ClientMessageVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class ClientUpThread {
     @Autowired
     private ClientMessageServer clientMessageServer;
 
-    @Scheduled(fixedDelay = 1000 * 10)
+//    @Scheduled(fixedDelay = 1000 * 10)
     public void serverUp() {
         ClientData clientData = clientDataServer.getClientData();
         try {

@@ -1,4 +1,4 @@
-package game.server.manager.docker.client.service;
+package game.server.manager.client.service;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrBuilder;
@@ -6,8 +6,22 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.command.*;
-import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.RestartContainerCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.PortBinding;
 import game.server.manager.docker.model.BindDto;
 import game.server.manager.docker.model.CreateContainerDto;
 import game.server.manager.docker.model.LinkDto;
@@ -16,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,68 +37,16 @@ import java.util.Objects;
 /**
  * @author laoyu
  * @version 1.0
- * @description docker service
- * @date 2022/11/19
+ * @description docker容器相关
+ * @date 2022/11/21
  */
 @Slf4j
 @Component
-public class DockerService {
+public class DockerContainerService {
+
 
     @Resource
     private DockerClient dockerClient;
-
-
-    /**
-     * ping
-     *
-     * @author laoyu
-     * @date 2022/11/13
-     */
-    public Void ping() {
-        log.info("Docker ping");
-        PingCmd pingCmd = dockerClient.pingCmd();
-        return pingCmd.exec();
-    }
-
-    public Info info() {
-        log.info("Docker info");
-        InfoCmd infoCmd = dockerClient.infoCmd();
-        return infoCmd.exec();
-    }
-
-    public Version version() {
-        log.info("Docker info");
-        VersionCmd versionCmd = dockerClient.versionCmd();
-        return versionCmd.exec();
-    }
-
-    /**
-     * 获取镜像列表
-     *
-     * @return java.util.List<com.github.dockerjava.api.model.Image>
-     * @author laoyu
-     * @date 2022/11/12
-     */
-    public List<Image> listImages() {
-        log.info("Docker listImages");
-        ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
-        return listImagesCmd.exec();
-    }
-
-
-    /**
-     * 删除镜像
-     *
-     * @param imageId imageId
-     * @return java.lang.Void
-     * @author laoyu
-     * @date 2022/11/19
-     */
-    public Void removeImage(String imageId) {
-        log.info("Docker removeImage {}", imageId);
-        RemoveImageCmd removeImageCmd = dockerClient.removeImageCmd(imageId);
-        return removeImageCmd.exec();
-    }
 
     /**
      * 容器列表
@@ -182,27 +143,19 @@ public class DockerService {
      * @author laoyu
      * @date 2022/11/20
      */
-    public String logContainer(String containerId) {
+    public String logContainer(String containerId) throws InterruptedException {
         long startTime = System.currentTimeMillis();
         log.info("Docker logContainer start {}", containerId);
-        final boolean[] closed = {false};
         StrBuilder strBuilder = CharSequenceUtil.strBuilder();
         LogContainerCmd logContainerCmd = dockerClient.logContainerCmd(containerId);
         logContainerCmd.withStdOut(true).withStdErr(true);
-        logContainerCmd.exec(new ResultCallback.Adapter<Frame>() {
+        ResultCallback.Adapter<Frame> result = logContainerCmd.exec(new ResultCallback.Adapter<Frame>() {
             @Override
             public void onNext(Frame frame) {
                 strBuilder.append(new String(frame.getPayload()));
             }
-
-            @Override
-            public void close() throws IOException {
-                closed[0] = true;
-                super.close();
-            }
         });
-        while (!closed[0]) {
-        }
+        result.awaitCompletion();
         log.info("Docker logContainer end {},{}", containerId,System.currentTimeMillis() - startTime);
         return strBuilder.toString();
     }

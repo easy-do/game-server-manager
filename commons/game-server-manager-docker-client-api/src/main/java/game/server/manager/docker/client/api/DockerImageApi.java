@@ -4,11 +4,10 @@ import com.github.dockerjava.api.model.Image;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
+import feign.Response;
 import game.server.manager.common.result.R;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -44,5 +43,10 @@ public interface DockerImageApi {
     @RequestLine("DELETE /v1/removeImage?imageId={imageId}")
     @DeleteMapping("/v1/removeImage")
     public R<Void> removeImage(@Param(value = "imageId")String imageId);
+
+    @Headers({"Content-Type: application/json"})
+    @RequestLine("GET /v1/pullImage?repository={repository}")
+    @GetMapping("/v1/pullImage")
+    public Response pullImage(@Param(value = "repository")String repository);
 
 }

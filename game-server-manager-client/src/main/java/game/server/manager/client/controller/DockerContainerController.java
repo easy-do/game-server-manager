@@ -1,13 +1,13 @@
-package game.server.manager.docker.client.controller;
+package game.server.manager.client.controller;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
-import feign.Response;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.docker.client.api.DockerContainerApi;
-import game.server.manager.docker.client.service.DockerService;
+import game.server.manager.client.service.DockerContainerService;
+import game.server.manager.client.service.DockerService;
 import game.server.manager.docker.model.CreateContainerDto;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +33,9 @@ public class DockerContainerController implements DockerContainerApi {
     @Resource
     private DockerService dockerService;
 
+    @Resource
+    private DockerContainerService dockerContainerService;
+
     /**
      * 获取容器列表
      *
@@ -43,7 +46,7 @@ public class DockerContainerController implements DockerContainerApi {
     @GetMapping("/containerList")
     public R<List<Container>> containerList(){
         try {
-            return DataResult.ok(dockerService.containerList());
+            return DataResult.ok(dockerContainerService.containerList());
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }
@@ -60,7 +63,7 @@ public class DockerContainerController implements DockerContainerApi {
     @GetMapping("/startContainer")
     public R<Void> startContainer(@RequestParam("containerId")String containerId){
         try {
-            return DataResult.ok(dockerService.startContainer(containerId));
+            return DataResult.ok(dockerContainerService.startContainer(containerId));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }
@@ -78,7 +81,7 @@ public class DockerContainerController implements DockerContainerApi {
     @GetMapping("/restartContainer")
     public R<Void> restartContainer(@RequestParam("containerId")String containerId){
         try {
-            return DataResult.ok(dockerService.restartContainer(containerId));
+            return DataResult.ok(dockerContainerService.restartContainer(containerId));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }
@@ -95,7 +98,7 @@ public class DockerContainerController implements DockerContainerApi {
     @GetMapping("/stopContainer")
     public R<Void> stopContainer(@RequestParam("containerId")String containerId){
         try {
-            return DataResult.ok(dockerService.stopContainer(containerId));
+            return DataResult.ok(dockerContainerService.stopContainer(containerId));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }
@@ -112,7 +115,7 @@ public class DockerContainerController implements DockerContainerApi {
     @DeleteMapping("/removeContainer")
     public R<Void> removeContainer(@RequestParam("containerId")String containerId){
         try {
-            return DataResult.ok(dockerService.removeContainer(containerId));
+            return DataResult.ok(dockerContainerService.removeContainer(containerId));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }
@@ -130,7 +133,7 @@ public class DockerContainerController implements DockerContainerApi {
     @GetMapping("/renameContainer")
     public R<Void> renameContainer(@RequestParam("containerId")String containerId,@RequestParam("name")String name){
         try {
-            return DataResult.ok(dockerService.renameContainer(containerId,name));
+            return DataResult.ok(dockerContainerService.renameContainer(containerId,name));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }
@@ -147,7 +150,7 @@ public class DockerContainerController implements DockerContainerApi {
     @PostMapping("/createContainer")
     public R<CreateContainerResponse> createContainer(@RequestBody CreateContainerDto createContainerDto){
         try {
-            return DataResult.ok(dockerService.createContainer(createContainerDto));
+            return DataResult.ok(dockerContainerService.createContainer(createContainerDto));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }
@@ -164,7 +167,7 @@ public class DockerContainerController implements DockerContainerApi {
     @GetMapping("/logContainer")
     public R<String> logContainer(@RequestParam("containerId")String containerId) {
         try {
-            return DataResult.ok(dockerService.logContainer(containerId));
+            return DataResult.ok(dockerContainerService.logContainer(containerId));
         }catch (Exception e){
             return DataResult.fail(ExceptionUtil.getMessage(e));
         }

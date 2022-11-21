@@ -20,7 +20,6 @@ import javax.annotation.Resource;
 @Service
 public class DockerBasicServiceImpl implements DockerBasicService {
 
-
     @Resource
     private DockerDetailsService dockerDetailsService;
 

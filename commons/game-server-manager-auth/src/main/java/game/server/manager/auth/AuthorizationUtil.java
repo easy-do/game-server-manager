@@ -1,5 +1,7 @@
 package game.server.manager.auth;
 
+import cn.dev33.satoken.jwt.SaJwtUtil;
+import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONObject;
@@ -44,6 +46,22 @@ public class AuthorizationUtil {
 
     public static boolean isAdmin(){
         return StpUtil.hasRole(SystemConstant.SUPER_ADMIN_ROLE);
+    }
+
+    public static cn.hutool.json.JSONObject checkTokenOrLoadUserJson(String token) {
+        StpLogicJwtForSimple stpLogic = (StpLogicJwtForSimple) StpUtil.stpLogic;
+        cn.hutool.json.JSONObject payloads = SaJwtUtil.getPayloadsNotCheck(token, stpLogic.loginType, stpLogic.jwtSecretKey());
+        return payloads.getJSONObject(SystemConstant.TOKEN_USER_INFO);
+
+    }
+
+    public static boolean isAdmin(String token){
+        cn.hutool.json.JSONObject info = checkTokenOrLoadUserJson(token);
+        return info.getJSONArray(SystemConstant.TOKEN_USER_ROLES).contains(SystemConstant.SUPER_ADMIN_ROLE);
+    }
+    public static Long getUserId(String token){
+        cn.hutool.json.JSONObject info = checkTokenOrLoadUserJson(token);
+        return info.getLong("id");
     }
 
     /**

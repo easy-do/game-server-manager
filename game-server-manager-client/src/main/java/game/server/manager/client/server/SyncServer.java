@@ -1,6 +1,7 @@
 package game.server.manager.client.server;
 
 import com.alibaba.fastjson2.JSON;
+import game.server.manager.client.websocket.ClientWebsocketEndpoint;
 import game.server.manager.common.constant.PathConstants;
 import game.server.manager.common.mode.SyncData;
 import game.server.manager.client.config.SystemUtils;
@@ -11,14 +12,10 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Objects;
+
 
 /**
  * @author laoyu
@@ -34,7 +31,7 @@ public class SyncServer {
     @Autowired
     private ClientDataServer clientDataServer;
 
-    private Socket socket;
+    private ClientWebsocketEndpoint client;
 
     public R<String> sync(SyncData syncData) {
         //TODO 使用socket连接 待实现
@@ -48,5 +45,15 @@ public class SyncServer {
         return HttpRequestUtil.unPackage(resultStr);
     }
 
+    public void createClient() {
+        URI uri = null;
+        try {
+            uri = new URI(systemUtils.getServerSocketUrl());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        this.client = new ClientWebsocketEndpoint(uri,systemUtils.getClientId());
+        client.connect();
+    }
 
 }
