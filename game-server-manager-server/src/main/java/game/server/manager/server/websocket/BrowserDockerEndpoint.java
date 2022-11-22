@@ -2,11 +2,10 @@ package game.server.manager.server.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
-import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.common.enums.DockerSocketTypeEnum;
 import game.server.manager.common.exception.BizException;
-import game.server.manager.common.mode.socket.DockerSocketMessage;
-import game.server.manager.common.mode.socket.DockerSocketPullImageMessage;
+import game.server.manager.common.mode.socket.BrowserDockerMessage;
+import game.server.manager.common.mode.socket.BrowserPulImageMessage;
 import game.server.manager.server.websocket.model.SocketPullImageData;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.server.service.DockerImageService;
@@ -23,16 +22,14 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Objects;
 
-import static game.server.manager.server.websocket.SocketSessionCache.SESSION_CACHE;
-
 /**
  * @author yuzhanfeng
  * @Date 2022/9/1 11:20
  */
 @Slf4j
 @Component
-@ServerEndpoint("/wss/docker")
-public class DockerApiEndpoint {
+@ServerEndpoint("/wss/browserDocker")
+public class BrowserDockerEndpoint {
 
 
     public static DockerImageService dockerImageService;
@@ -47,7 +44,7 @@ public class DockerApiEndpoint {
      */
     @Autowired
     private void setDockerImageService(DockerImageService dockerImageService) {
-        DockerApiEndpoint.dockerImageService = dockerImageService;
+        BrowserDockerEndpoint.dockerImageService = dockerImageService;
     }
 
     /**
@@ -59,7 +56,6 @@ public class DockerApiEndpoint {
      */
     @OnOpen
     public void onOpen(Session session) {
-        SESSION_CACHE.put(session.getId(),session);
         log.info("【websocket消息】客户端docker相关连接.");
         sendMessage(session,JSON.toJSONString(DataResult.ok(session.getId(),"connect success")));
     }
@@ -72,7 +68,7 @@ public class DockerApiEndpoint {
      */
     @OnClose
     public void onClose(Session session) {
-        SESSION_CACHE.remove(session.getId());
+        SocketSessionCache.removeBrowser(session.getId());
         log.info("【websocket消息】客户端docker相关连接断开");
     }
 
@@ -81,6 +77,7 @@ public class DockerApiEndpoint {
         log.warn("【websocket消息】客户端docker socket通信异常，{}",ExceptionUtil.getMessage(exception));
         sendMessage(session,"服务器异常,将断开连接:," + ExceptionUtil.getMessage(exception));
         try {
+            SocketSessionCache.removeBrowser(session.getId());
             session.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -97,13 +94,14 @@ public class DockerApiEndpoint {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("【websocket消息】客户端docker相关连接请求:{}", message);
-        DockerSocketMessage dockerSocketMessage = JSON.parseObject(message, DockerSocketMessage.class);
+        BrowserDockerMessage browserDockerMessage = JSON.parseObject(message, BrowserDockerMessage.class);
         //校验token
-        AuthorizationUtil.checkTokenOrLoadUserJson(dockerSocketMessage.getToken());
-        String type = dockerSocketMessage.getType();
+//        AuthorizationUtil.checkTokenOrLoadUserJson(browserDockerMessage.getToken());
+        SocketSessionCache.saveBrowser(browserDockerMessage.getDockerId(),session);
+        String type = browserDockerMessage.getType();
         //拉取镜像
         if(DockerSocketTypeEnum.PULL.getType().equals(type)) {
-            pullImage(session,dockerSocketMessage);
+            pullImage(browserDockerMessage);
         }
     }
 
@@ -129,20 +127,20 @@ public class DockerApiEndpoint {
 
     /**
      * 推送镜像
-     *
-     * @param session session
-     * @param dockerSocketMessage dockerSocketMessage
+     * @param browserDockerMessage browserDockerMessage
      * @author laoyu
      * @date 2022/11/21
      */
-    private void pullImage(Session session,DockerSocketMessage dockerSocketMessage){
-            String jsonData = dockerSocketMessage.getJsonData();
-            DockerSocketPullImageMessage pullData = JSON.parseObject(jsonData, DockerSocketPullImageMessage.class);
-            sendMessage(session,"start pull image");
+    private void pullImage(BrowserDockerMessage browserDockerMessage){
+            String jsonData = browserDockerMessage.getJsonData();
+            BrowserPulImageMessage pullData = JSON.parseObject(jsonData, BrowserPulImageMessage.class);
+        try {
             dockerImageService.socketPullImage(SocketPullImageData.builder()
-                    .session(session)
-                    .dockerId(pullData.getDockerId())
+                    .dockerId(browserDockerMessage.getDockerId())
                     .repository(pullData.getRepository()).build());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

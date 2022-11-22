@@ -4,7 +4,6 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import game.server.manager.client.websocket.ClientWebsocketEndpoint;
 import game.server.manager.common.mode.ClientInitData;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
