@@ -1,11 +1,15 @@
 package game.server.manager.server.service.impl;
 
-import cn.hutool.core.io.IoUtil;
+import com.alibaba.fastjson2.JSON;
 import com.github.dockerjava.api.model.Image;
-import feign.Response;
+import game.server.manager.common.enums.ServerMessageTypeEnum;
+import game.server.manager.common.mode.socket.ServerMessage;
+import game.server.manager.common.mode.socket.ServerPullImageMessage;
 import game.server.manager.docker.client.api.DockerClientApiEndpoint;
 import game.server.manager.docker.client.api.DockerImageApi;
 import game.server.manager.common.result.R;
+import game.server.manager.server.entity.DockerDetails;
+import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.server.websocket.model.SocketPullImageData;
 import game.server.manager.server.service.DockerDetailsService;
 import game.server.manager.server.service.DockerImageService;
@@ -13,12 +17,8 @@ import game.server.manager.server.vo.DockerDetailsVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
 import javax.websocket.Session;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,55 +53,36 @@ public class DockerImageServiceImpl implements DockerImageService {
     }
 
     @Override
-    public void pullImage(String dockerId, String repository, ServletOutputStream outputStream) throws IOException {
-        Response response = dockerImageApi(dockerId).pullImage(repository);
-        Response.Body body = response.body();
-        IoUtil.copy(body.asInputStream(),outputStream);
+    public R<String> pullImage(String dockerId, String repository){
+        return dockerImageApi(dockerId).pullImage(repository);
     }
 
     @Override
-    public void socketPullImage(SocketPullImageData socketPullImageData) {
-        Response response = dockerImageApi(socketPullImageData.getDockerId()).pullImage(socketPullImageData.getRepository());
-        Response.Body body = response.body();
-        Session session = socketPullImageData.getSession();
-        InputStream in = null;
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-        try {
-            in = body.asInputStream();
-            isr = new InputStreamReader(in);
-            br = new BufferedReader(isr);
-            String str;
-            // 通过readLine()方法按行读取字符串
-            while ((str = br.readLine()) != null) {
-                if(Objects.nonNull(session) && session.isOpen()){
-                    session.getBasicRemote().sendText(str);
-                }else {
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }finally {
-            // 统一在finally中关闭流，防止发生异常的情况下，文件流未能正常关闭
-            try {
-                if(Objects.nonNull(session) && session.isOpen()){
-                    session.close();
-                }
-                if (br != null) {
-                    br.close();
-                }
-                if (isr != null) {
-                    isr.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void socketPullImage(SocketPullImageData socketPullImageData) throws IOException {
+        String dockerId = socketPullImageData.getDockerId();
+        DockerDetails docker = dockerDetailsService.getById(dockerId);
+        Session browserSession = SocketSessionCache.getBrowserByDockerId(dockerId);
+        if(Objects.isNull(docker)){
+            browserSession.getBasicRemote().sendText("docker不存在.");
+            browserSession.close();
         }
-
+        String clientId = docker.getClientId();
+        //
+        Session clientSession = SocketSessionCache.getClient(clientId);
+        if(Objects.isNull(clientSession)){
+            browserSession.getBasicRemote().sendText("客户端未连接.");
+            return;
+        }
+        SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(),clientSession.getId());
+        ServerPullImageMessage pullImageMessage = ServerPullImageMessage.builder()
+                .repository(socketPullImageData.getRepository())
+                .build();
+        ServerMessage serverMessage = ServerMessage.builder()
+                .messageId(browserSession.getId())
+                .sync(1)
+                .type(ServerMessageTypeEnum.PULL_IMAGE.getType())
+                .jsonData(JSON.toJSONString(pullImageMessage)).build();
+        clientSession.getBasicRemote().sendText(JSON.toJSONString(serverMessage));
     }
 
 

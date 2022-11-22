@@ -1,7 +1,10 @@
 server:
   port: 9999
 
+
 spring:
+  main:
+    allow-circular-references: true
   application:
     name: game-server-manager-client
 
@@ -30,7 +33,7 @@ springdoc:
   # 配置需要生成接口文档的接口路径
   #  paths-to-match: /brand/**,/admin/**
   customize:
-    title: 用户中心 API
+    title: 客户端 API
     description: docker客户端API接口
     version: 1.0.0
     license:

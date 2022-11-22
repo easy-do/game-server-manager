@@ -1,27 +1,27 @@
-package game.server.manager.server.websocket.model;
+package game.server.manager.common.mode.socket;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 /**
  * @author laoyu
  * @version 1.0
+ * @description 游览器消息
  * @date 2022/11/21
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocketPullImageData {
+public class BrowserMessage {
 
-    private Long userId;
+    private String clientId;
 
-    private Boolean isAdmin;
+    private String type;
 
-    private String dockerId;
+    private String secret;
 
-    private String repository;
+    private String jsonData;
 }

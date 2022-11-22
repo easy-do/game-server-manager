@@ -1,6 +1,9 @@
 package game.server.manager.common.mode.socket;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author laoyu
@@ -9,9 +12,10 @@ import lombok.Data;
  * @date 2022/11/21
  */
 @Data
-public class DockerSocketPullImageMessage {
-
-    private String dockerId;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ServerPullImageMessage{
 
     private String repository;
 

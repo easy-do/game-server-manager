@@ -46,8 +46,8 @@ public class DockerImageController {
     }
 
     @GetMapping("/pull/{dockerId}")
-    public void pullImage(@PathVariable("dockerId")String dockerId,@RequestParam("repository")String repository, HttpServletResponse httpResponse) throws IOException {
-            dockerImageService.pullImage(dockerId,repository,httpResponse.getOutputStream());
+    public R<String> pullImage(@PathVariable("dockerId")String dockerId,@RequestParam("repository")String repository) {
+        return  dockerImageService.pullImage(dockerId,repository);
     }
 
     /**

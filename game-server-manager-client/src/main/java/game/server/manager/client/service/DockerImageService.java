@@ -1,5 +1,7 @@
 package game.server.manager.client.service;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
+import com.alibaba.fastjson2.JSON;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
@@ -7,6 +9,10 @@ import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
+import game.server.manager.client.config.SystemUtils;
+import game.server.manager.client.server.SyncServer;
+import game.server.manager.common.enums.ClientSocketTypeEnum;
+import game.server.manager.common.mode.socket.ClientMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +35,12 @@ public class DockerImageService {
     @Resource
     private DockerClient dockerClient;
 
+    @Resource
+    private SystemUtils systemUtils;
+
+    @Resource
+    private SyncServer syncServer;
+
     /**
      * 获取镜像列表
      *
@@ -42,31 +54,60 @@ public class DockerImageService {
         return listImagesCmd.exec();
     }
 
+
     /**
-     * pull镜像
+     * pull镜像  socket
      *
-     * @param repository   repository
-     * @param outputStream
-     * @return java.lang.Void
+     * @param messageId messageId
+     * @param repository repository
      * @author laoyu
-     * @date 2022/11/19
+     * @date 2022/11/23
      */
-    public void pullImage(String repository, ServletOutputStream outputStream) throws InterruptedException {
+    public void pullImage(String messageId, String repository) {
         log.info("Docker pullImage {}", repository);
         PullImageCmd pullImageCmd = dockerClient.pullImageCmd(repository);
         PullImageResultCallback callback = pullImageCmd.exec(new PullImageResultCallback() {
             @Override
             public void onNext(PullResponseItem item) {
-                try {
-                    outputStream.write((item.getStatus() +"\n").getBytes());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                syncServer.sendMessage(ClientSocketTypeEnum.RESULT,item.getStatus());
+                log.info("pullImage ==> {},{}", repository, item.getStatus());
+                super.onNext(item);
+            }
+        });
+        try {
+            callback.awaitCompletion();
+            syncServer.sendMessage(ClientSocketTypeEnum.RESULT_END,"success");
+        } catch (InterruptedException e) {
+            syncServer.sendMessage(ClientSocketTypeEnum.ERROR,ExceptionUtil.getMessage(e));
+            log.error("执行pull镜像操作异常，{}", ExceptionUtil.getMessage(e));
+        }finally {
+            //释放锁
+            syncServer.getClient().unLock(messageId);
+        }
+    }
+
+    /**
+     * pull镜像
+     *
+     * @param repository   repository
+     * @return java.lang.Void
+     * @author laoyu
+     * @date 2022/11/19
+     */
+    public String pullImage(String repository) throws InterruptedException {
+        log.info("Docker pullImage {}", repository);
+        StringBuilder sb = new StringBuilder();
+        PullImageCmd pullImageCmd = dockerClient.pullImageCmd(repository);
+        PullImageResultCallback callback = pullImageCmd.exec(new PullImageResultCallback() {
+            @Override
+            public void onNext(PullResponseItem item) {
+                    sb.append(item.getStatus() +"\n");
                 log.info("pullImage ==> {},{}", repository, item.getStatus());
                 super.onNext(item);
             }
         });
         callback.awaitCompletion();
+        return sb.toString();
     }
 
 

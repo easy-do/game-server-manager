@@ -8,20 +8,26 @@ import lombok.NoArgsConstructor;
 /**
  * @author laoyu
  * @version 1.0
- * @description docker socket接口通信数据封装
- * @date 2022/11/21
+ * @description server消息
+ * @date 2022/11/22
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientSocketMessage {
+public class ServerMessage {
 
-    private String clientId;
+    private String messageId;
+
+    private int sync;
 
     private String type;
 
-    private String secret;
-
     private String jsonData;
+
+    public boolean isSync(){
+        return sync == 1;
+    }
+
+
 }

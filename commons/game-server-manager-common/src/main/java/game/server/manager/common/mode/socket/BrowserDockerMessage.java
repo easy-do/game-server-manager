@@ -9,9 +9,9 @@ import lombok.Data;
  * @date 2022/11/21
  */
 @Data
-public class DockerSocketMessage {
+public class BrowserDockerMessage {
 
-    private String sessionId;
+    private String dockerId;
 
     private String token;
 

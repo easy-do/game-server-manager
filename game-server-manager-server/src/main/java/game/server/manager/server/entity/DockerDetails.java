@@ -37,6 +37,9 @@ public class DockerDetails implements Serializable {
     /** 主键 */
     private Long id;
 
+    /** 客户端id */
+    private String clientId;
+
     /** 名称 */
     private String dockerName;
 

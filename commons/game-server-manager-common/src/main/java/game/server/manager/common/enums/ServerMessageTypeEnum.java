@@ -1,28 +1,23 @@
 package game.server.manager.common.enums;
 
 /**
- * @author laoyu
- * @version 1.0
+ * @author yuzhanfeng
+ * @Date 2022/8/11 15:00
  */
-public enum ClientSocketTypeEnum {
+public enum ServerMessageTypeEnum {
+
     /**/
     HEARTBEAT("heartbeat","心跳"),
+    CONNECT_SUCCESS("connect_success","连接成功"),
+    ERROR("error","服务器异常"),
+    PULL_IMAGE("pull","脚本"),
+    PUSH_IMAGE("push","卸载");
 
-    LOCK("lock","锁定"),
-
-    ERROR("error","异常"),
-
-    RESULT("result","业务数据返回"),
-
-    RESULT_END("result","业务数据返回结束"),
-
-
-    SYNC("sync","同步");
 
     private final String type;
     private final String desc;
 
-    ClientSocketTypeEnum(String type, String desc) {
+    ServerMessageTypeEnum(String type, String desc) {
         this.type = type;
         this.desc = desc;
     }

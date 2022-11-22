@@ -4,7 +4,6 @@ import com.github.dockerjava.api.model.Image;
 import game.server.manager.common.result.R;
 import game.server.manager.server.websocket.model.SocketPullImageData;
 
-import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public interface DockerImageService {
      */
     R<Void> removeImage(String dockerId, String imageId);
 
-    void pullImage(String dockerId, String repository, ServletOutputStream outputStream) throws IOException;
+    R<String> pullImage(String dockerId, String repository);
 
-    void socketPullImage(SocketPullImageData  pullImageData);
+    void socketPullImage(SocketPullImageData  pullImageData) throws IOException;
 }
