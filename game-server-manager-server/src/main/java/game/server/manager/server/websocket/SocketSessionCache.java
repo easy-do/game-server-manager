@@ -67,13 +67,13 @@ public class SocketSessionCache {
     }
 
     /**
-     * 保存客户端session
+     * 保存session
      *
      * @param session session
      * @author laoyu
      * @date 2022/11/24
      */
-    public static void saveClientSession(Session session){
+    public static void saveSession(Session session){
         SESSION_CACHE.put(session.getId(), session);
     }
 

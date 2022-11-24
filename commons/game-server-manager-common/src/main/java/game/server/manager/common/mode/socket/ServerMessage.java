@@ -23,7 +23,7 @@ public class ServerMessage {
 
     private String type;
 
-    private String jsonData;
+    private String data;
 
     public boolean isSync(){
         return sync == 1;

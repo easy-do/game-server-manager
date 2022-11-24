@@ -53,7 +53,7 @@ public class ClientSocketEndpoint {
      */
     @OnOpen
     public void onOpen(Session session) {
-        SocketSessionCache.saveClientSession(session);
+        SocketSessionCache.saveSession(session);
         log.info("【websocket消息】客户端建立连接.");
     }
 
@@ -72,7 +72,11 @@ public class ClientSocketEndpoint {
     @OnError
     public void onError(Throwable exception, Session session) {
         log.warn("【websocket消息】ClientSocketEndpoint异常，{}",ExceptionUtil.getMessage(exception));
-        ServerMessage serverMsg = ServerMessage.builder().messageId(session.getId()).type(ServerMessageTypeEnum.ERROR.getType()).sync(0).jsonData(ExceptionUtil.getMessage(exception)).build();
+        ServerMessage serverMsg = ServerMessage.builder()
+                .messageId(session.getId())
+                .type(ServerMessageTypeEnum.ERROR.getType())
+                .sync(0)
+                .data(ExceptionUtil.getMessage(exception)).build();
         sendMessage(session, JSON.toJSONString(serverMsg));
     }
 

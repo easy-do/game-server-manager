@@ -11,9 +11,9 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   const [logResult, setLogResult] = useState([]);
 
-  const socketAddress = "wss://push.easydo.plus/wss/deployLog";
+  // const socketAddress = "wss://push.easydo.plus/wss/deployLog";
 
-  // const socketAddress = "ws://localhost:30002/wss/deployLog";
+  const socketAddress = "ws://localhost:30002/wss/browser";
 
   const logDivs = []
 
@@ -29,14 +29,17 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   /**点击日志详情按钮 */
   function fetchData() {
-    if(props.id){
+    if(props.id && props.visible){
       const logWebSocket = new WebSocket(socketAddress);
       logWebSocket.onopen = function () {
         console.log('开启websocket连接.')
         const messageParam = {
-          "applicationId": props.applicationId,
-          "logId": props.id,
-          "token": localStorage.getItem("token") ? localStorage.getItem("token") : ""
+          "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
+          "type": "deploy_log",
+          "data":{
+            "applicationId": props.applicationId,
+            "logId": props.id
+          }
         }
         logWebSocket.send(JSON.stringify(messageParam));
       }
@@ -47,10 +50,14 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
         console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
       }
       logWebSocket.onmessage = function (event: any) {
-        console.log('接收到服务端消息')
+        console.log('接收到服务端消息:'+event.data)
         try {
           const logResult = JSON.parse(event.data);
-          setLogResult(logResult.logs)
+          if(logResult.type === 'success'){
+            setLogResult(JSON.parse(logResult.data))
+          }else{
+            setLogResult(JSON.parse(logResult.data))
+          }
           } catch (err:any) {
             setLogResult([event.data])
           }

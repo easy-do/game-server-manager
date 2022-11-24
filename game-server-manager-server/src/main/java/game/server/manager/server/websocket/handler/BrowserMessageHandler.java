@@ -1,16 +1,19 @@
 package game.server.manager.server.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.auth.AuthorizationUtil;
-import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.enums.BrowserMessageTypeEnum;
+import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.BizException;
 import game.server.manager.common.mode.socket.BrowserDeployLogMessage;
 import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.mode.socket.BrowserPulImageMessage;
+import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.vo.DeployLogResultVo;
+import game.server.manager.common.vo.UserInfoVo;
+import game.server.manager.server.application.DeploymentLogServer;
+import game.server.manager.server.service.ApplicationInfoService;
 import game.server.manager.server.service.DockerImageService;
 import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.server.websocket.model.SocketPullImageData;
@@ -20,7 +23,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.websocket.Session;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +35,11 @@ import java.util.Objects;
 @Component
 public class BrowserMessageHandler {
 
+    @Resource
+    private ApplicationInfoService applicationInfoService;
+
+    @Resource
+    private DeploymentLogServer deploymentLogServer;
 
     @Resource
     private DockerImageService dockerImageService;
@@ -41,51 +48,63 @@ public class BrowserMessageHandler {
     public void handle(String message, Session session) {
         BrowserMessage browserMessage = JSON.parseObject(message, BrowserMessage.class);
         //校验token
-        JSONObject userInfo = AuthorizationUtil.checkTokenOrLoadUserJson(browserMessage.getToken());
-        SocketSessionCache.saveBrowserSession(browserMessage.getDockerId(),session);
+        UserInfoVo userInfo = AuthorizationUtil.checkTokenOrLoadUser(browserMessage.getToken());
         String type = browserMessage.getType();
         //部署日志
         if(BrowserMessageTypeEnum.DEPLOY_LOG.getType().equals(type)) {
-            getDeployLog(browserMessage,userInfo);
+            try {
+                getDeployLog(session,browserMessage,userInfo);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         //拉取镜像
         if(BrowserMessageTypeEnum.PULL.getType().equals(type)) {
-            pullImage(browserMessage);
+            SocketSessionCache.saveBrowserSession(browserMessage.getDockerId(),session);
+            pullImage(browserMessage,userInfo);
         }
     }
 
-    private void getDeployLog(BrowserMessage browserMessage, JSONObject userInfo) {
-        String jsonData = browserMessage.getJsonData();
+    private void getDeployLog(Session session,BrowserMessage browserMessage, UserInfoVo userInfo) throws IOException {
+        String jsonData = browserMessage.getData();
         BrowserDeployLogMessage browserDeployLogMessage = JSON.parseObject(jsonData, BrowserDeployLogMessage.class);
-        boolean isAdmin = userInfo.getJSONArray(SystemConstant.TOKEN_USER_ROLES).contains(SystemConstant.SUPER_ADMIN_ROLE);
-        Long userId = userInfo.getLong("id");
+        String logId = browserDeployLogMessage.getLogId();
+        if (!userInfo.isAdmin()) {
+            String applicationId = browserDeployLogMessage.getApplicationId();
+            if (Objects.isNull(applicationId)) {
+                sendMessage(session,JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用信息不存在,断开连接")).build()));
+                session.close();
+                return;
+            }
+            if (!applicationInfoService.exist(applicationId, userInfo.getId())) {
+                sendMessage(session,JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用不存在或不属于你,断开连接")).build()));
+                session.close();
+                return;
+            }
+        }
 
-//        if (!isAdmin) {
-//            Object applicationId = browserDeployLogMessage.getApplicationId();
-//            if (Objects.isNull(applicationId)) {
-//                sendMessage(JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用信息不存在,断开连接")).build()));
-//                close();
-//            }
-//            if (!applicationInfoService.exist((String) applicationId, userId)) {
-//                sendMessage(JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用不存在或不属于你,断开连接")).build()));
-//                close();
-//            }
-//        }
-//
-//        if (Objects.isNull(logId) && session.isOpen()) {
-//            sendMessage(JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("日志不存在,断开连接")).build()));
-//            close();
-//        } else {
-//            DeployLogResultVo logResult;
-//            do {
-//                logResult = deploymentLogServer.getDeploymentLog((Serializable) logId);
-//                sendMessage(JSON.toJSONString(logResult));
-//                if (!logResult.isFinish() && session.isOpen()) {
-//                    Thread.sleep(3000);
-//                }
-//            } while (!logResult.isFinish() && session.isOpen());
-//            close();
-//        }
+        if (Objects.isNull(logId) && session.isOpen()) {
+            sendMessage(session,JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("日志不存在,断开连接")).build()));
+            session.close();
+        } else {
+            DeployLogResultVo logResult;
+            do {
+                logResult = deploymentLogServer.getDeploymentLog(logId);
+                ServerMessage serverMessage  = ServerMessage.builder()
+                        .type(ServerMessageTypeEnum.SUCCESS.getType())
+                        .data(JSON.toJSONString(logResult.getLogs()))
+                        .build();
+                sendMessage(session,JSON.toJSONString(serverMessage));
+                if (!logResult.isFinish() && session.isOpen()) {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            } while (!logResult.isFinish() && session.isOpen());
+            session.close();
+        }
     }
 
 
@@ -115,12 +134,12 @@ public class BrowserMessageHandler {
      * @author laoyu
      * @date 2022/11/21
      */
-    private void pullImage(BrowserMessage browserMessage){
-        String jsonData = browserMessage.getJsonData();
+    private void pullImage(BrowserMessage browserMessage,UserInfoVo userInfo){
+        String jsonData = browserMessage.getData();
         BrowserPulImageMessage pullData = JSON.parseObject(jsonData, BrowserPulImageMessage.class);
         dockerImageService.socketPullImage(SocketPullImageData.builder()
                 .dockerId(browserMessage.getDockerId())
-                .repository(pullData.getRepository()).build());
+                .repository(pullData.getRepository()).build(),userInfo);
     }
 
 

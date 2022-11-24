@@ -108,11 +108,11 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
     public void onMessage(String message) {
         log.info("接收到服务端消息,{}",message);
         ServerMessage serverMessage = JSON.parseObject(message, ServerMessage.class);
-        if(isLock(serverMessage)){
+        if(!isLock(serverMessage)){
             onMessageHandler.handler(serverMessage);
         }else {
             log.warn("消息被锁定.");
-            this.send(JSON.toJSONString(ClientMessage.builder().clientId(clientId).type(ClientSocketTypeEnum.LOCK.getType()).dataJson("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
+            this.send(JSON.toJSONString(ClientMessage.builder().clientId(clientId).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
         }
     }
 

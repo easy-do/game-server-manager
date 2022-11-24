@@ -30,16 +30,18 @@ public class ClientMessageHandler {
         try{
             clientMessage = JSON.parseObject(message, ClientMessage.class);
         }catch (Exception exception){
-            ServerMessage clientMsg = ServerMessage.builder().type(ServerMessageTypeEnum.ERROR.getType()).messageId(session.getId()).jsonData("").sync(0).build();
-            sendMessage(session,JSON.toJSONString(clientMsg));
-            return;
+            throw new RuntimeException(exception);
         }
         String type = clientMessage.getType();
         //心跳数据
         if(ClientSocketTypeEnum.HEARTBEAT.getType().equals(type)){
-            SocketSessionCache.saveClientSession(session);
+            SocketSessionCache.saveSession(session);
             SocketSessionCache.saveClientIdSession(clientMessage.getClientId(),session.getId());
-            ServerMessage serverMsg = ServerMessage.builder().messageId(session.getId()).type(ServerMessageTypeEnum.HEARTBEAT.getType()).sync(0).build();
+            ServerMessage serverMsg = ServerMessage.builder()
+                    .messageId(session.getId())
+                    .type(ServerMessageTypeEnum.HEARTBEAT.getType())
+                    .sync(0)
+                    .build();
             sendMessage(session, JSON.toJSONString(serverMsg));
             return;
         }
@@ -49,7 +51,7 @@ public class ClientMessageHandler {
             //向游览器转发消息
             if(Objects.nonNull(browserSession)){
                 try {
-                    browserSession.getBasicRemote().sendText(clientMessage.getDataJson());
+                    browserSession.getBasicRemote().sendText(clientMessage.getData());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -62,7 +64,7 @@ public class ClientMessageHandler {
             Session browserSession = SocketSessionCache.getBrowserSessionByClientSessionId(session.getId());
             //向游览器转发消息
             try {
-                browserSession.getBasicRemote().sendText(clientMessage.getDataJson());
+                browserSession.getBasicRemote().sendText(clientMessage.getData());
                 browserSession.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -2,6 +2,7 @@ package game.server.manager.common.vo;
 
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import game.server.manager.common.constant.SystemConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -98,6 +99,11 @@ public class UserInfoVo implements Serializable {
     private Set<String> permissions;
 
     private Map<String,List<String>> resourceAction;
+
+
+    public boolean isAdmin(){
+        return this.roles.contains(SystemConstant.SUPER_ADMIN_ROLE);
+    }
 
 
 }

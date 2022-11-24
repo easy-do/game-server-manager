@@ -9,6 +9,7 @@ public enum ServerMessageTypeEnum {
     /**/
     HEARTBEAT("heartbeat","心跳"),
     CONNECT_SUCCESS("connect_success","连接成功"),
+    SUCCESS("success","服务器异常"),
     ERROR("error","服务器异常"),
     PULL_IMAGE("pull","脚本"),
     PUSH_IMAGE("push","卸载");

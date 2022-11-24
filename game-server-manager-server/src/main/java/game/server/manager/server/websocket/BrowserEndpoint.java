@@ -2,7 +2,9 @@ package game.server.manager.server.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
+import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.BizException;
+import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.server.websocket.handler.BrowserMessageHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +54,12 @@ public class BrowserEndpoint {
     @OnOpen
     public void onOpen(Session session) {
         log.info("【websocket消息】客户端docker相关连接.");
-        sendMessage(session,JSON.toJSONString(DataResult.ok(session.getId(),"connect success")));
+        SocketSessionCache.saveSession(session);
+        ServerMessage serverMessage = ServerMessage.builder()
+                .messageId(session.getId())
+                .type(ServerMessageTypeEnum.SUCCESS.getType())
+                .data("connect success").build();
+        sendMessage(session,JSON.toJSONString(serverMessage));
     }
 
     /**
@@ -70,7 +77,12 @@ public class BrowserEndpoint {
     @OnError
     public void onError(Session session,Throwable exception) {
         log.warn("【websocket消息】客户端docker socket通信异常，{}",ExceptionUtil.getMessage(exception));
-        sendMessage(session,"服务器异常:," + ExceptionUtil.getMessage(exception));
+        ServerMessage serverMessage = ServerMessage.builder()
+                .messageId(session.getId())
+                .type(ServerMessageTypeEnum.ERROR.getType())
+                .data("服务器异常:," + ExceptionUtil.getMessage(exception))
+                .build();
+        sendMessage(session,JSON.toJSONString(serverMessage));
         try {
             SocketSessionCache.removeBrowserBySessionId(session.getId());
             session.close();
@@ -89,7 +101,7 @@ public class BrowserEndpoint {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("【websocket消息】客户端docker相关连接请求:{}", message);
-
+        browserMessageHandler.handle(message, session);
     }
 
 

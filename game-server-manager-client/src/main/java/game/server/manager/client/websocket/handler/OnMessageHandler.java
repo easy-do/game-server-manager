@@ -37,7 +37,7 @@ public class OnMessageHandler {
         }
        if(ServerMessageTypeEnum.PULL_IMAGE.getType().equals(serverMessage.getType())){
            log.info("OnMessageHandler pull ==> {}",serverMessage);
-           String jsonData = serverMessage.getJsonData();
+           String jsonData = serverMessage.getData();
            ServerPullImageMessage pullImageMessage = JSON.parseObject(jsonData, ServerPullImageMessage.class);
            dockerImageService.pullImage(serverMessage.getMessageId(),pullImageMessage.getRepository());
        }

@@ -17,5 +17,5 @@ public class BrowserMessage {
 
     private String type;
 
-    private String jsonData;
+    private String data;
 }
