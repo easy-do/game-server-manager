@@ -2,13 +2,9 @@ package game.server.manager.server.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
-import game.server.manager.common.enums.DockerSocketTypeEnum;
 import game.server.manager.common.exception.BizException;
-import game.server.manager.common.mode.socket.BrowserDockerMessage;
-import game.server.manager.common.mode.socket.BrowserPulImageMessage;
-import game.server.manager.server.websocket.model.SocketPullImageData;
 import game.server.manager.common.result.DataResult;
-import game.server.manager.server.service.DockerImageService;
+import game.server.manager.server.websocket.handler.BrowserMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,23 +24,22 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
-@ServerEndpoint("/wss/browserDocker")
-public class BrowserDockerEndpoint {
+@ServerEndpoint("/wss/browser")
+public class BrowserEndpoint {
 
 
-    public static DockerImageService dockerImageService;
-
+    public static BrowserMessageHandler browserMessageHandler;
 
     /**
      * ServerEndpoint无法直接 Autowired static方式
      *
-     * @param dockerImageService dockerImageService
+     * @param browserMessageHandler browserMessageHandler
      * @author laoyu
      * @date 2022/9/2
      */
     @Autowired
-    private void setDockerImageService(DockerImageService dockerImageService) {
-        BrowserDockerEndpoint.dockerImageService = dockerImageService;
+    private void setBrowserMessageHandler(BrowserMessageHandler browserMessageHandler) {
+        BrowserEndpoint.browserMessageHandler = browserMessageHandler;
     }
 
     /**
@@ -68,16 +63,16 @@ public class BrowserDockerEndpoint {
      */
     @OnClose
     public void onClose(Session session) {
-        SocketSessionCache.removeBrowser(session.getId());
+        SocketSessionCache.removeBrowserBySessionId(session.getId());
         log.info("【websocket消息】客户端docker相关连接断开");
     }
 
     @OnError
     public void onError(Session session,Throwable exception) {
         log.warn("【websocket消息】客户端docker socket通信异常，{}",ExceptionUtil.getMessage(exception));
-        sendMessage(session,"服务器异常,将断开连接:," + ExceptionUtil.getMessage(exception));
+        sendMessage(session,"服务器异常:," + ExceptionUtil.getMessage(exception));
         try {
-            SocketSessionCache.removeBrowser(session.getId());
+            SocketSessionCache.removeBrowserBySessionId(session.getId());
             session.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -94,15 +89,7 @@ public class BrowserDockerEndpoint {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("【websocket消息】客户端docker相关连接请求:{}", message);
-        BrowserDockerMessage browserDockerMessage = JSON.parseObject(message, BrowserDockerMessage.class);
-        //校验token
-//        AuthorizationUtil.checkTokenOrLoadUserJson(browserDockerMessage.getToken());
-        SocketSessionCache.saveBrowser(browserDockerMessage.getDockerId(),session);
-        String type = browserDockerMessage.getType();
-        //拉取镜像
-        if(DockerSocketTypeEnum.PULL.getType().equals(type)) {
-            pullImage(browserDockerMessage);
-        }
+
     }
 
 
@@ -122,24 +109,6 @@ public class BrowserDockerEndpoint {
             }
         } catch (IOException e) {
             throw new BizException(ExceptionUtil.getMessage(e));
-        }
-    }
-
-    /**
-     * 推送镜像
-     * @param browserDockerMessage browserDockerMessage
-     * @author laoyu
-     * @date 2022/11/21
-     */
-    private void pullImage(BrowserDockerMessage browserDockerMessage){
-            String jsonData = browserDockerMessage.getJsonData();
-            BrowserPulImageMessage pullData = JSON.parseObject(jsonData, BrowserPulImageMessage.class);
-        try {
-            dockerImageService.socketPullImage(SocketPullImageData.builder()
-                    .dockerId(browserDockerMessage.getDockerId())
-                    .repository(pullData.getRepository()).build());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
