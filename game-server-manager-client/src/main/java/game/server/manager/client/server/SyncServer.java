@@ -3,7 +3,7 @@ package game.server.manager.client.server;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.client.websocket.ClientWebsocketEndpoint;
-import game.server.manager.client.websocket.OnMessageHandler;
+import game.server.manager.client.websocket.handler.OnMessageHandler;
 import game.server.manager.common.constant.PathConstants;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.SyncData;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Objects;
 
 
 /**

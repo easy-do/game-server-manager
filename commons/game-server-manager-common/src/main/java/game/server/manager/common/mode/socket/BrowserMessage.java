@@ -1,27 +1,21 @@
 package game.server.manager.common.mode.socket;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author laoyu
  * @version 1.0
- * @description 游览器消息
+ * @description docker socket接口通信数据封装
  * @date 2022/11/21
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class BrowserMessage {
 
-    private String clientId;
+    private String dockerId;
+
+    private String token;
 
     private String type;
-
-    private String secret;
 
     private String jsonData;
 }

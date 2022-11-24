@@ -4,7 +4,6 @@ import com.github.dockerjava.api.model.Image;
 import game.server.manager.common.result.R;
 import game.server.manager.server.websocket.model.SocketPullImageData;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,7 +36,23 @@ public interface DockerImageService {
      */
     R<Void> removeImage(String dockerId, String imageId);
 
+    /**
+     * pull镜像
+     *
+     * @param dockerId dockerId
+     * @param repository repository
+     * @return game.server.manager.common.result.R<java.lang.String>
+     * @author laoyu
+     * @date 2022/11/24
+     */
     R<String> pullImage(String dockerId, String repository);
 
-    void socketPullImage(SocketPullImageData  pullImageData) throws IOException;
+    /**
+     * socket方式pull镜像
+     *
+     * @param pullImageData pullImageData
+     * @author laoyu
+     * @date 2022/11/24
+     */
+    void socketPullImage(SocketPullImageData  pullImageData);
 }

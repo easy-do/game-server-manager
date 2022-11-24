@@ -1,5 +1,6 @@
 package game.server.manager.server.service.impl;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
 import com.github.dockerjava.api.model.Image;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
@@ -14,6 +15,7 @@ import game.server.manager.server.websocket.model.SocketPullImageData;
 import game.server.manager.server.service.DockerDetailsService;
 import game.server.manager.server.service.DockerImageService;
 import game.server.manager.server.vo.DockerDetailsVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +30,7 @@ import java.util.Objects;
  * @description dicker 镜像相关
  * @date 2022/11/19
  */
+@Slf4j
 @Service
 public class DockerImageServiceImpl implements DockerImageService {
 
@@ -58,31 +61,35 @@ public class DockerImageServiceImpl implements DockerImageService {
     }
 
     @Override
-    public void socketPullImage(SocketPullImageData socketPullImageData) throws IOException {
+    public void socketPullImage(SocketPullImageData socketPullImageData){
         String dockerId = socketPullImageData.getDockerId();
         DockerDetails docker = dockerDetailsService.getById(dockerId);
         Session browserSession = SocketSessionCache.getBrowserByDockerId(dockerId);
-        if(Objects.isNull(docker)){
-            browserSession.getBasicRemote().sendText("docker不存在.");
-            browserSession.close();
+        try {
+            if(Objects.isNull(docker)){
+                browserSession.getBasicRemote().sendText("docker不存在.");
+                browserSession.close();
+            }
+            String clientId = docker.getClientId();
+            Session clientSession = SocketSessionCache.getClientByClientId(clientId);
+            if(Objects.isNull(clientSession)){
+                browserSession.getBasicRemote().sendText("客户端未连接.");
+                return;
+            }
+            SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(),clientSession.getId());
+            ServerPullImageMessage pullImageMessage = ServerPullImageMessage.builder()
+                    .repository(socketPullImageData.getRepository())
+                    .build();
+            ServerMessage serverMessage = ServerMessage.builder()
+                    .messageId(browserSession.getId())
+                    .sync(1)
+                    .type(ServerMessageTypeEnum.PULL_IMAGE.getType())
+                    .jsonData(JSON.toJSONString(pullImageMessage)).build();
+            clientSession.getBasicRemote().sendText(JSON.toJSONString(serverMessage));
+        }catch (IOException e) {
+            log.error("socket pull镜像异常，{}", ExceptionUtil.getMessage(e));
         }
-        String clientId = docker.getClientId();
-        //
-        Session clientSession = SocketSessionCache.getClient(clientId);
-        if(Objects.isNull(clientSession)){
-            browserSession.getBasicRemote().sendText("客户端未连接.");
-            return;
-        }
-        SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(),clientSession.getId());
-        ServerPullImageMessage pullImageMessage = ServerPullImageMessage.builder()
-                .repository(socketPullImageData.getRepository())
-                .build();
-        ServerMessage serverMessage = ServerMessage.builder()
-                .messageId(browserSession.getId())
-                .sync(1)
-                .type(ServerMessageTypeEnum.PULL_IMAGE.getType())
-                .jsonData(JSON.toJSONString(pullImageMessage)).build();
-        clientSession.getBasicRemote().sendText(JSON.toJSONString(serverMessage));
+
     }
 
 

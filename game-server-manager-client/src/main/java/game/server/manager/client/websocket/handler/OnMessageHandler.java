@@ -1,4 +1,4 @@
-package game.server.manager.client.websocket;
+package game.server.manager.client.websocket.handler;
 
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.client.service.DockerImageService;

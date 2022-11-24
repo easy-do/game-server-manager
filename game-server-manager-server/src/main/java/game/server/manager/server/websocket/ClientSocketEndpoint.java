@@ -2,12 +2,12 @@ package game.server.manager.server.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
-import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.BizException;
-import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
+import game.server.manager.server.websocket.handler.ClientMessageHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -30,6 +30,20 @@ import java.util.Objects;
 public class ClientSocketEndpoint {
 
 
+    public static ClientMessageHandler clientMessageHandler;
+
+    /**
+     * ServerEndpoint无法直接 Autowired static方式注入
+     *
+     * @param clientMessageHandler clientMessageHandler
+     * @author laoyu
+     * @date 2022/9/2
+     */
+    @Autowired
+    public void setClientMessageHandler(ClientMessageHandler clientMessageHandler){
+        ClientSocketEndpoint.clientMessageHandler = clientMessageHandler;
+    }
+
     /**
      * 打开websocket连接
      *
@@ -39,6 +53,7 @@ public class ClientSocketEndpoint {
      */
     @OnOpen
     public void onOpen(Session session) {
+        SocketSessionCache.saveClientSession(session);
         log.info("【websocket消息】客户端建立连接.");
     }
 
@@ -50,13 +65,13 @@ public class ClientSocketEndpoint {
      */
     @OnClose
     public void onClose(Session session) {
-        SocketSessionCache.removeClient(session.getId());
+        SocketSessionCache.removeClientBySessionId(session.getId());
         log.info("【websocket消息】客户端通信请求意外断开");
     }
 
     @OnError
     public void onError(Throwable exception, Session session) {
-        log.warn("【websocket消息】客户端socket通信异常，{}",ExceptionUtil.getMessage(exception));
+        log.warn("【websocket消息】ClientSocketEndpoint异常，{}",ExceptionUtil.getMessage(exception));
         ServerMessage serverMsg = ServerMessage.builder().messageId(session.getId()).type(ServerMessageTypeEnum.ERROR.getType()).sync(0).jsonData(ExceptionUtil.getMessage(exception)).build();
         sendMessage(session, JSON.toJSONString(serverMsg));
     }
@@ -71,37 +86,7 @@ public class ClientSocketEndpoint {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("【websocket消息】客户端消息:{}", message);
-        ClientMessage clientMessage = JSON.parseObject(message, ClientMessage.class);
-        String type = clientMessage.getType();
-        //心跳数据
-        if(ClientSocketTypeEnum.HEARTBEAT.getType().equals(type)){
-            SocketSessionCache.saveClientSession(session);
-            SocketSessionCache.saveClientIdSession(clientMessage.getClientId(),session.getId());
-            ServerMessage serverMsg = ServerMessage.builder().messageId(session.getId()).type(ServerMessageTypeEnum.HEARTBEAT.getType()).sync(0).build();
-            sendMessage(session, JSON.toJSONString(serverMsg));
-            return;
-        }
-        if(ClientSocketTypeEnum.RESULT.getType().equals(type)){
-            //寻找游览器session
-            Session browserSession = SocketSessionCache.getBrowserByClientSessionId(session.getId());
-            //向游览器转发消息
-            try {
-                browserSession.getBasicRemote().sendText(clientMessage.getDataJson());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if(ClientSocketTypeEnum.RESULT_END.getType().equals(type)){
-            //寻找游览器session
-            Session browserSession = SocketSessionCache.getBrowserByClientSessionId(session.getId());
-            //向游览器转发消息
-            try {
-                browserSession.getBasicRemote().sendText(clientMessage.getDataJson());
-                browserSession.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        clientMessageHandler.handle(message,session);
     }
 
 

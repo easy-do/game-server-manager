@@ -6,7 +6,6 @@ import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.client.websocket.ClientWebsocketEndpoint;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
-import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.mode.socket.ClientMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
