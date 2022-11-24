@@ -2,10 +2,13 @@ package game.server.manager.server.service.impl;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.dockerjava.api.model.Image;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.mode.socket.ServerPullImageMessage;
+import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.docker.client.api.DockerClientApiEndpoint;
 import game.server.manager.docker.client.api.DockerImageApi;
 import game.server.manager.common.result.R;
@@ -61,13 +64,18 @@ public class DockerImageServiceImpl implements DockerImageService {
     }
 
     @Override
-    public void socketPullImage(SocketPullImageData socketPullImageData){
+    public void socketPullImage(SocketPullImageData socketPullImageData, UserInfoVo userInfo){
         String dockerId = socketPullImageData.getDockerId();
-        DockerDetails docker = dockerDetailsService.getById(dockerId);
+
+        LambdaQueryWrapper<DockerDetails> query = Wrappers.lambdaQuery();
+        if(!userInfo.isAdmin()){
+            query.eq(DockerDetails::getCreateBy,userInfo.getId());
+        }
+        DockerDetails docker = dockerDetailsService.getOne(query);
         Session browserSession = SocketSessionCache.getBrowserByDockerId(dockerId);
         try {
             if(Objects.isNull(docker)){
-                browserSession.getBasicRemote().sendText("docker不存在.");
+                browserSession.getBasicRemote().sendText("docker不存在.或不属于你。");
                 browserSession.close();
             }
             String clientId = docker.getClientId();
@@ -84,7 +92,7 @@ public class DockerImageServiceImpl implements DockerImageService {
                     .messageId(browserSession.getId())
                     .sync(1)
                     .type(ServerMessageTypeEnum.PULL_IMAGE.getType())
-                    .jsonData(JSON.toJSONString(pullImageMessage)).build();
+                    .data(JSON.toJSONString(pullImageMessage)).build();
             clientSession.getBasicRemote().sendText(JSON.toJSONString(serverMessage));
         }catch (IOException e) {
             log.error("socket pull镜像异常，{}", ExceptionUtil.getMessage(e));

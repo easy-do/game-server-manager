@@ -28,6 +28,10 @@ public class AuthorizationUtil {
     public static UserInfoVo getUser(){
         StpUtil.checkLogin();
         JSONObject userJson = (JSONObject) StpUtil.getExtra(SystemConstant.TOKEN_USER_INFO);
+        return userJsonToBean(userJson);
+    }
+
+    public static UserInfoVo userJsonToBean(JSONObject userJson) {
         Integer lastLoginTimeInt = userJson.getInt("lastLoginTime");
         userJson.remove("lastLoginTime");
         UserInfoVo userInfoVo = userJson.toBean(UserInfoVo.class);
@@ -48,20 +52,19 @@ public class AuthorizationUtil {
         return StpUtil.hasRole(SystemConstant.SUPER_ADMIN_ROLE);
     }
 
-    public static cn.hutool.json.JSONObject checkTokenOrLoadUserJson(String token) {
+    public static UserInfoVo checkTokenOrLoadUser(String token) {
         StpLogicJwtForSimple stpLogic = (StpLogicJwtForSimple) StpUtil.stpLogic;
-        cn.hutool.json.JSONObject payloads = SaJwtUtil.getPayloadsNotCheck(token, stpLogic.loginType, stpLogic.jwtSecretKey());
-        return payloads.getJSONObject(SystemConstant.TOKEN_USER_INFO);
+        JSONObject payloads = SaJwtUtil.getPayloadsNotCheck(token, stpLogic.loginType, stpLogic.jwtSecretKey());
+        return userJsonToBean(payloads.getJSONObject("userInfo"));
 
     }
 
     public static boolean isAdmin(String token){
-        cn.hutool.json.JSONObject info = checkTokenOrLoadUserJson(token);
-        return info.getJSONArray(SystemConstant.TOKEN_USER_ROLES).contains(SystemConstant.SUPER_ADMIN_ROLE);
+        UserInfoVo info = checkTokenOrLoadUser(token);
+        return info.getRoles().contains(SystemConstant.SUPER_ADMIN_ROLE);
     }
     public static Long getUserId(String token){
-        cn.hutool.json.JSONObject info = checkTokenOrLoadUserJson(token);
-        return info.getLong("id");
+        return checkTokenOrLoadUser(token).getId();
     }
 
     /**

@@ -74,7 +74,7 @@ public class SyncServer {
     }
 
     public void sendMessage(ClientSocketTypeEnum type,  String message){
-        ClientMessage clientMessage = ClientMessage.builder().clientId(systemUtils.getClientId()).type(type.getType()).dataJson(message).build();
+        ClientMessage clientMessage = ClientMessage.builder().clientId(systemUtils.getClientId()).type(type.getType()).data(message).build();
         client.send(JSON.toJSONString(clientMessage));
     }
 

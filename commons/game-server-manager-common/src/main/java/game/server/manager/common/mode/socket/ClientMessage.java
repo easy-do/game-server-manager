@@ -21,6 +21,6 @@ public class ClientMessage {
 
     private String type;
 
-    private String dataJson;
+    private String data;
 
 }

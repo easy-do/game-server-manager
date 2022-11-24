@@ -2,6 +2,7 @@ package game.server.manager.server.service;
 
 import com.github.dockerjava.api.model.Image;
 import game.server.manager.common.result.R;
+import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.server.websocket.model.SocketPullImageData;
 
 import java.util.List;
@@ -51,8 +52,9 @@ public interface DockerImageService {
      * socket方式pull镜像
      *
      * @param pullImageData pullImageData
+     * @param userInfo
      * @author laoyu
      * @date 2022/11/24
      */
-    void socketPullImage(SocketPullImageData  pullImageData);
+    void socketPullImage(SocketPullImageData  pullImageData, UserInfoVo userInfo);
 }
