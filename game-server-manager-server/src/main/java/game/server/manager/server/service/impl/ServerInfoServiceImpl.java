@@ -5,20 +5,20 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.jcraft.jsch.Session;
+import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.result.DataResult;
+import game.server.manager.common.vo.ServerInfoVo;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.server.application.DeploymentServer;
-import game.server.manager.web.base.BaseServiceImpl;
-import game.server.manager.common.exception.BizException;
 import game.server.manager.server.dto.ServerInfoDto;
 import game.server.manager.server.entity.ServerInfo;
+import game.server.manager.server.mapper.ServerInfoMapper;
 import game.server.manager.server.mapstruct.ServerInfoMapstruct;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.server.service.ApplicationInfoService;
 import game.server.manager.server.service.ServerInfoService;
-import game.server.manager.server.mapper.ServerInfoMapper;
-import game.server.manager.common.vo.ServerInfoVo;
+import game.server.manager.web.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import game.server.manager.common.result.DataResult;
 
 import java.io.Serializable;
 import java.util.List;
@@ -141,7 +141,7 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo<
             return true;
         }catch (Exception exception){
             String exceptionMessage = DeploymentServer.convertExceptionMessage(exception);
-            throw new BizException(exceptionMessage);
+            throw ExceptionFactory.bizException(exceptionMessage);
         }
     }
 }

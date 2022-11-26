@@ -42,9 +42,6 @@ public class SyncServer {
     private ClientWebsocketEndpoint client;
 
     public R<String> sync(SyncData syncData) {
-        //TODO 使用socket连接 待实现
-
-
         String resultStr = HttpRequestUtil.post(
                 HttpModel.builder()
                         .host(systemUtils.getManagerUrl())

@@ -3,9 +3,7 @@ package game.server.manager.server.websocket;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
-import game.server.manager.common.exception.BizException;
 import game.server.manager.common.mode.socket.ServerMessage;
-import game.server.manager.common.result.DataResult;
 import game.server.manager.server.websocket.handler.BrowserMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,6 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
-import java.util.Objects;
 
 /**
  * @author yuzhanfeng
@@ -59,7 +55,7 @@ public class BrowserEndpoint {
                 .messageId(session.getId())
                 .type(ServerMessageTypeEnum.SUCCESS.getType())
                 .data("connect success").build();
-        sendMessage(session,JSON.toJSONString(serverMessage));
+        SessionUtils.sendMessage(session,JSON.toJSONString(serverMessage));
     }
 
     /**
@@ -82,13 +78,9 @@ public class BrowserEndpoint {
                 .type(ServerMessageTypeEnum.ERROR.getType())
                 .data("服务器异常:," + ExceptionUtil.getMessage(exception))
                 .build();
-        sendMessage(session,JSON.toJSONString(serverMessage));
-        try {
+        SessionUtils.sendMessage(session,JSON.toJSONString(serverMessage));
             SocketSessionCache.removeBrowserBySessionId(session.getId());
-            session.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            SessionUtils.close(session);
     }
 
     /**
@@ -102,26 +94,6 @@ public class BrowserEndpoint {
     public void onMessage(String message, Session session) {
         log.info("【websocket消息】客户端docker相关连接请求:{}", message);
         browserMessageHandler.handle(message, session);
-    }
-
-
-    /**
-     * 发送消息
-     *
-     * @param message message
-     * @author laoyu
-     * @date 2022/9/1
-     */
-    public void sendMessage(Session session,String message) {
-        try {
-            if(Objects.nonNull(session) && session.isOpen()){
-                session.getBasicRemote().sendText(message);
-            }else {
-                log.warn("Session is null");
-            }
-        } catch (IOException e) {
-            throw new BizException(ExceptionUtil.getMessage(e));
-        }
     }
 
 }

@@ -3,7 +3,6 @@ package game.server.manager.server.websocket;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
-import game.server.manager.common.exception.BizException;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.server.websocket.handler.ClientMessageHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +15,6 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
-import java.util.Objects;
 
 
 /**
@@ -77,7 +74,7 @@ public class ClientSocketEndpoint {
                 .type(ServerMessageTypeEnum.ERROR.getType())
                 .sync(0)
                 .data(ExceptionUtil.getMessage(exception)).build();
-        sendMessage(session, JSON.toJSONString(serverMsg));
+        SessionUtils.sendMessage(session, JSON.toJSONString(serverMsg));
     }
 
     /**
@@ -92,26 +89,5 @@ public class ClientSocketEndpoint {
         log.info("【websocket消息】客户端消息:{}", message);
         clientMessageHandler.handle(message,session);
     }
-
-
-    /**
-     * 发送消息
-     *
-     * @param message message
-     * @author laoyu
-     * @date 2022/9/1
-     */
-    public void sendMessage(Session session,String message) {
-        try {
-            if(Objects.nonNull(session) && session.isOpen()){
-                session.getBasicRemote().sendText(message);
-            }else {
-                log.warn("Session is null");
-            }
-        } catch (IOException e) {
-            throw new BizException(ExceptionUtil.getMessage(e));
-        }
-    }
-
 
 }

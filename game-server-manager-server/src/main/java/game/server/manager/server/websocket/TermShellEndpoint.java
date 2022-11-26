@@ -2,8 +2,7 @@ package game.server.manager.server.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.RuntimeUtil;
-import com.jcraft.jsch.JSch;
-import game.server.manager.common.exception.BizException;
+import game.server.manager.common.exception.ExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -127,7 +126,7 @@ public class TermShellEndpoint {
                 log.warn("Session is null");
             }
         } catch (IOException e) {
-            throw new BizException(ExceptionUtil.getMessage(e));
+            throw ExceptionFactory.bizException(ExceptionUtil.getMessage(e));
         }
     }
 

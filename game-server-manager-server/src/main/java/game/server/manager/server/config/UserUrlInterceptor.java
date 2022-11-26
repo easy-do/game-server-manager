@@ -4,7 +4,7 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import game.server.manager.common.constant.HttpStatus;
-import game.server.manager.common.exception.BizException;
+import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.utils.IpUtil;
 import game.server.manager.redis.config.RedisUtils;
 import game.server.manager.server.entity.Blacklist;
@@ -60,7 +60,7 @@ public class UserUrlInterceptor implements HandlerInterceptor {
             if(between < 0){
                 blacklistService.removeById(domain.getId());
             }else {
-                throw new BizException(HttpStatus.UNAUTHORIZED+"","访问频繁,已限制访问," +
+                throw ExceptionFactory.bizException(HttpStatus.UNAUTHORIZED+"","访问频繁,已限制访问," +
                         ""+ DateUtil.format(disableTime, DatePattern.NORM_DATETIME_PATTERN) +"解除。");
             }
         }
@@ -83,7 +83,7 @@ public class UserUrlInterceptor implements HandlerInterceptor {
                 Blacklist backList = init(ip);
                 blacklistService.save(backList);
                 redisUtils.delete(REDIS_KEY+ip);
-                throw new BizException(HttpStatus.UNAUTHORIZED+"","访问频繁,已限制访问," +
+                throw ExceptionFactory.bizException(HttpStatus.UNAUTHORIZED+"","访问频繁,已限制访问," +
                         ""+ DateUtil.format(backList.getDisableTime(), DatePattern.NORM_DATETIME_PATTERN) +"解除。");
             }
         }

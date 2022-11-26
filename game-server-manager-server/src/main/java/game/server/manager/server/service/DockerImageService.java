@@ -3,7 +3,7 @@ package game.server.manager.server.service;
 import com.github.dockerjava.api.model.Image;
 import game.server.manager.common.result.R;
 import game.server.manager.common.vo.UserInfoVo;
-import game.server.manager.server.websocket.model.SocketPullImageData;
+import game.server.manager.server.websocket.handler.browser.SocketPullImageData;
 
 import java.util.List;
 

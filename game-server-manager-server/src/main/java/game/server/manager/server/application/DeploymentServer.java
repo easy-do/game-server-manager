@@ -3,12 +3,10 @@ package game.server.manager.server.application;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.extra.ssh.ChannelType;
-import cn.hutool.extra.ssh.JschRuntimeException;
 import cn.hutool.extra.ssh.JschUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.jcraft.jsch.ChannelExec;
@@ -17,8 +15,10 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import game.server.manager.api.SysDictDataApi;
 import game.server.manager.common.application.DeployParam;
+import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.common.enums.ConvertExceptionEnum;
-import game.server.manager.common.exception.BizException;
+import game.server.manager.common.enums.ScriptTypeEnum;
+import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.utils.AppScriptUtils;
 import game.server.manager.common.vo.SysDictDataVo;
 import game.server.manager.event.BasePublishEventServer;
@@ -28,8 +28,6 @@ import game.server.manager.server.entity.ApplicationInfo;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.server.entity.ServerInfo;
-import game.server.manager.common.enums.AppStatusEnum;
-import game.server.manager.common.enums.ScriptTypeEnum;
 import game.server.manager.server.service.AppEnvInfoService;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.AppScriptService;
@@ -145,7 +143,7 @@ public class DeploymentServer {
                 }
                 SysDictDataVo clientAppDictData = sysDictDataService.getSingleDictData("system_config", "client_app_id").getData();
                 if(Objects.isNull(clientAppDictData)){
-                    throw new BizException("服务端APP配置不存在.");
+                    throw ExceptionFactory.bizException("服务端APP配置不存在.");
                 }
                 appInfo = appInfoService.getById(clientAppDictData.getDictValue());
                 if(Objects.isNull(appInfo)){
@@ -345,10 +343,8 @@ public class DeploymentServer {
                 saveLogLine(logId, stdout, line);
             }
             input.close();
-        } catch (IOException e) {
-            throw new IORuntimeException(e);
-        } catch (JSchException e) {
-            throw new JschRuntimeException(e);
+        } catch (IOException | JSchException e) {
+            throw ExceptionFactory.bizException(ExceptionUtil.getMessage(e));
         } finally {
             JschUtil.close(channel);
         }

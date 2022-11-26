@@ -1,4 +1,4 @@
-package game.server.manager.server.server;
+package game.server.manager.server.handler;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.exceptions.ExceptionUtil;
@@ -13,7 +13,8 @@ import game.server.manager.common.mode.ClientData;
 import game.server.manager.common.mode.SyncData;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.vo.ClientMessageVo;
-import game.server.manager.server.annotation.SyncServerClass;
+import game.server.manager.handler.AbstractHandlerService;
+import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
@@ -28,8 +29,8 @@ import java.util.Objects;
  * @author laoyu
  * @version 1.0
  */
-@SyncServerClass("clientUp")
-public class ClientUpServer extends AbstractDefaultServer {
+@HandlerService("clientUp")
+public class ClientUpHandlerService extends AbstractHandlerService<SyncData,Object> {
 
     @Autowired
     private ClientInfoService clientInfoService;
@@ -39,7 +40,7 @@ public class ClientUpServer extends AbstractDefaultServer {
 
 
     @Override
-    Object processData(SyncData syncData) {
+    public Object handler(SyncData syncData) {
         String clientId = syncData.getClientId();
         String data = syncData.getData();
         Boolean encryption = syncData.getEncryption();

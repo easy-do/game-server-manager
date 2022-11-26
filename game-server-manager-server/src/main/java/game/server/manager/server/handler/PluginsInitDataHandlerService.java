@@ -1,4 +1,4 @@
-package game.server.manager.server.server;
+package game.server.manager.server.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
@@ -6,7 +6,8 @@ import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.mode.PluginsInitData;
 import game.server.manager.common.mode.SyncData;
 import game.server.manager.common.result.DataResult;
-import game.server.manager.server.annotation.SyncServerClass;
+import game.server.manager.handler.AbstractHandlerService;
+import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.entity.AppInfo;
 import game.server.manager.server.entity.ApplicationInfo;
 import game.server.manager.server.service.AppInfoService;
@@ -21,8 +22,8 @@ import java.util.Objects;
  * @version 1.0
  * @date 2022/7/31
  */
-@SyncServerClass("pluginsInitData")
-public class PluginsInitDataServer extends AbstractDefaultServer {
+@HandlerService("pluginsInitData")
+public class PluginsInitDataHandlerService extends AbstractHandlerService<SyncData,Object> {
 
     @Autowired
     private ApplicationInfoService applicationInfoService;
@@ -31,7 +32,7 @@ public class PluginsInitDataServer extends AbstractDefaultServer {
     private AppInfoService appInfoService;
 
     @Override
-    Object processData(SyncData syncData) {
+    public Object handler(SyncData syncData) {
         String applicationId = syncData.getApplicationId();
         try{
             if(CharSequenceUtil.isEmpty(applicationId)){

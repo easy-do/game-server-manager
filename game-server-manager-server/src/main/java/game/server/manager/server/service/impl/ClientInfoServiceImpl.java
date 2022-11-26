@@ -12,32 +12,32 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import game.server.manager.api.SysDictDataApi;
+import game.server.manager.common.application.DeployParam;
+import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.common.enums.ClientMessageTypeEnum;
-import game.server.manager.common.exception.BizException;
+import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.utils.AppScriptUtils;
 import game.server.manager.common.vo.ClientInfoVo;
 import game.server.manager.common.vo.SysDictDataVo;
-import game.server.manager.common.application.DeployParam;
 import game.server.manager.event.BasePublishEventServer;
-import game.server.manager.web.base.BaseServiceImpl;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
+import game.server.manager.redis.config.RedisStreamUtils;
 import game.server.manager.server.dto.ClientInfoDto;
 import game.server.manager.server.entity.AppInfo;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.ClientMessage;
 import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.server.entity.ServerInfo;
-import game.server.manager.common.enums.AppStatusEnum;
+import game.server.manager.server.mapper.ClientInfoMapper;
 import game.server.manager.server.mapstruct.ClientInfoMapstruct;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.server.redis.ApplicationDeployListenerMessage;
-import game.server.manager.redis.config.RedisStreamUtils;
 import game.server.manager.server.service.AppEnvInfoService;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.ClientInfoService;
-import game.server.manager.server.mapper.ClientInfoMapper;
 import game.server.manager.server.service.ClientMessageService;
 import game.server.manager.server.service.ExecuteLogService;
 import game.server.manager.server.service.ServerInfoService;
+import game.server.manager.web.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -130,7 +130,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
         if(Objects.nonNull(entity.getServerId())){
             ServerInfo serverInfo = serverInfoService.getById(entity.getServerId());
             if(Objects.isNull(serverInfo)){
-                throw new BizException("服务器不存在");
+                throw ExceptionFactory.bizException("服务器不存在");
             }
             entity.setServerName(serverInfo.getServerName());
         }
@@ -158,7 +158,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
         //执行卸载脚本
         ClientInfo clientInfo = getById(id);
         if(Objects.isNull(clientInfo)){
-            throw new BizException("客户端已不存在.");
+            throw ExceptionFactory.bizException("客户端已不存在.");
         }
         LocalDateTime lastUpTime = clientInfo.getLastUpTime();
         if(Objects.isNull(lastUpTime) || LocalDateTimeUtil.between(lastUpTime,LocalDateTimeUtil.now(), ChronoUnit.MINUTES) > 1){
@@ -205,14 +205,14 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
     public boolean onlineInstall(String id) {
         ClientInfo clientInfo = getById(id);
         if(Objects.isNull(clientInfo)){
-            throw new BizException("客户端已不存在.");
+            throw ExceptionFactory.bizException("客户端已不存在.");
         }
         Long serverId = clientInfo.getServerId();
         if(Objects.isNull(serverId)){
-            throw new BizException("未绑定服务器.");
+            throw ExceptionFactory.bizException("未绑定服务器.");
         }
         if(!serverInfoService.exists(serverId)){
-            throw new BizException("服务器已不存在.");
+            throw ExceptionFactory.bizException("服务器已不存在.");
         }
         
         JSONObject env = new JSONObject();
@@ -263,14 +263,14 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
     private String getInstallScriptId(){
         SysDictDataVo clientScriptDictData = sysDictDataService.getSingleDictData("system_config", "client_install_script").getData();
         if(Objects.isNull(clientScriptDictData)){
-            throw new BizException("客户端脚本配置不存在.");
+            throw ExceptionFactory.bizException("客户端脚本配置不存在.");
         }
         return clientScriptDictData.getDictValue();
     }
     private String getUnInstallScriptId(){
         SysDictDataVo clientScriptDictData = sysDictDataService.getSingleDictData("system_config", "client_uninstall_script").getData();
         if(Objects.isNull(clientScriptDictData)){
-            throw new BizException("客户端卸载脚本配置不存在.");
+            throw ExceptionFactory.bizException("客户端卸载脚本配置不存在.");
         }
         return clientScriptDictData.getDictValue();
     }

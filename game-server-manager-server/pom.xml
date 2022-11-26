@@ -124,6 +124,12 @@
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>game.server.manager</groupId>
+            <artifactId>game-server-manager-handler</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
