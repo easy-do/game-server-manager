@@ -5,7 +5,6 @@ import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.handler.HandlerServiceContainer;
-import game.server.manager.handler.Void;
 import game.server.manager.server.websocket.handler.browser.BrowserHandlerData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

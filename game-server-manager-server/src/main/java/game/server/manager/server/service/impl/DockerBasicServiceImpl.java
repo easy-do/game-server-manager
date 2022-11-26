@@ -1,15 +1,24 @@
 package game.server.manager.server.service.impl;
 
-import com.github.dockerjava.api.model.Info;
+import cn.hutool.core.lang.UUID;
+import game.server.manager.common.enums.ClientModelEnum;
+import game.server.manager.common.enums.ServerMessageTypeEnum;
+import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.mode.socket.ClientMessage;
+import game.server.manager.common.result.DataResult;
 import game.server.manager.docker.client.api.DockerClientApi;
 import game.server.manager.docker.client.api.DockerClientApiEndpoint;
 import game.server.manager.common.result.R;
+import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerBasicService;
 import game.server.manager.server.service.DockerDetailsService;
-import game.server.manager.server.vo.DockerDetailsVo;
+import game.server.manager.server.websocket.SessionResultCache;
+import game.server.manager.server.websocket.SessionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.websocket.Session;
+import java.util.Objects;
 
 /**
  * @author laoyu
@@ -26,18 +35,71 @@ public class DockerBasicServiceImpl implements DockerBasicService {
     @Resource
     private DockerClientApiEndpoint dockerClientApiEndpoint;
 
-    private DockerClientApi dockerClientApi(String dockerId){
-        DockerDetailsVo dockerDetailsVo = dockerDetailsService.info(dockerId);
-        return dockerClientApiEndpoint.dockerClientApi(dockerDetailsVo.getDockerHost(), dockerDetailsVo.getDockerSecret());
+    private DockerDetails getDetails(String dockerId){
+        DockerDetails dockerDetails = dockerDetailsService.getById(dockerId);
+        if(Objects.isNull(dockerDetails)){
+            throw ExceptionFactory.bizException("客户端不存在");
+        }
+        return dockerDetails;
+    }
+
+    private DockerClientApi dockerClientApi(DockerDetails dockerDetails){
+        return dockerClientApiEndpoint.dockerClientApi(dockerDetails.getDockerHost(), dockerDetails.getDockerSecret());
     }
 
     @Override
     public Object ping(String dockerId) {
-        return dockerClientApi(dockerId).ping();
+        DockerDetails dockerDetails = getDetails(dockerId);
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
+            Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
+            String messageId = UUID.fastUUID().toString(true);
+            SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.PING_DOCKER,clientSession);
+            while (true) {
+                ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
+                if(Objects.nonNull(message)){
+                    SessionResultCache.removeMessageById(messageId);
+                    return message.getSuccess()? DataResult.ok(message.getData()):DataResult.fail(message.getData());
+                }
+            }
+        }
+        return dockerClientApi(dockerDetails).ping();
     }
 
     @Override
-    public R<Info> info(String dockerId) {
-        return dockerClientApi(dockerId).info();
+    public R<String> info(String dockerId) {
+        DockerDetails dockerDetails = getDetails(dockerId);
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
+            Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
+            String messageId = UUID.fastUUID().toString(true);
+            SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_INFO,clientSession);
+            while (true) {
+                ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
+                if(Objects.nonNull(message)){
+                    SessionResultCache.removeMessageById(messageId);
+                    return message.getSuccess()? DataResult.ok(message.getData())
+                            :DataResult.fail(message.getData());
+                }
+            }
+        }
+        return dockerClientApi(dockerDetails).info();
+    }
+
+    @Override
+    public R<String> version(String id) {
+        DockerDetails dockerDetails = getDetails(id);
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
+            Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
+            String messageId = UUID.fastUUID().toString(true);
+            SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_VERSION,clientSession);
+            while (true) {
+                ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
+                if(Objects.nonNull(message)){
+                    SessionResultCache.removeMessageById(messageId);
+                    return message.getSuccess()? DataResult.ok(message.getData())
+                            :DataResult.fail(message.getData());
+                }
+            }
+        }
+        return dockerClientApi(dockerDetails).version();
     }
 }

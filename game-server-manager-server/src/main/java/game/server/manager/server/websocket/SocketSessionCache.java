@@ -86,7 +86,7 @@ public class SocketSessionCache {
      * @author laoyu
      * @date 2022/11/24
      */
-    public static void saveClientIdSession(String clientId,String clientSessionId){
+    public static void saveClientIdAndSid(String clientId, String clientSessionId){
         CLIENT_ID_CLIENT_SID_CACHE.put(clientId, clientSessionId);
         CLIENT_SID_CLIENT_ID_CACHE.put(clientSessionId,clientId);
     }

@@ -35,7 +35,7 @@ public interface DockerImageService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Void> removeImage(String dockerId, String imageId);
+    R<Object> removeImage(String dockerId, String imageId);
 
     /**
      * pull镜像

@@ -3,7 +3,6 @@ package game.server.manager.client.server;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.client.websocket.ClientWebsocketEndpoint;
-import game.server.manager.client.websocket.handler.OnMessageHandler;
 import game.server.manager.common.constant.PathConstants;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.SyncData;
@@ -12,6 +11,7 @@ import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.result.R;
 import game.server.manager.common.utils.http.HttpModel;
 import game.server.manager.common.utils.http.HttpRequestUtil;
+import game.server.manager.handler.HandlerServiceContainer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class SyncServer {
     private ClientDataServer clientDataServer;
 
     @Autowired
-    private OnMessageHandler onMessageHandler;
+    private HandlerServiceContainer handlerServiceContainer;
 
     private ClientWebsocketEndpoint client;
 
@@ -57,12 +57,13 @@ public class SyncServer {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        this.client = new ClientWebsocketEndpoint(uri,systemUtils.getClientId(),onMessageHandler);
+        this.client = new ClientWebsocketEndpoint(uri,systemUtils.getClientId(),handlerServiceContainer);
         log.info("初始化服务端连接");
         try {
             client.connect();
             ClientMessage message = ClientMessage.builder()
-                    .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(systemUtils.getClientId())
+                    .type(ClientSocketTypeEnum.HEARTBEAT.getType())
+                    .clientId(systemUtils.getClientId())
                     .build();
             client.send(JSON.toJSONString(message));
         }catch (Exception e) {
@@ -70,8 +71,33 @@ public class SyncServer {
         }
     }
 
+    public void sendOkMessage(ClientSocketTypeEnum type, String messageId, String message){
+        ClientMessage clientMessage = ClientMessage.builder()
+                .clientId(systemUtils.getClientId())
+                .messageId(messageId)
+                .type(type.getType())
+                .data(message)
+                .success(true)
+                .build();
+        client.send(JSON.toJSONString(clientMessage));
+    }
+    public void sendFailMessage(ClientSocketTypeEnum type, String messageId, String message){
+        ClientMessage clientMessage = ClientMessage.builder()
+                .clientId(systemUtils.getClientId())
+                .messageId(messageId)
+                .type(type.getType())
+                .data(message)
+                .success(false)
+                .build();
+        client.send(JSON.toJSONString(clientMessage));
+    }
+
     public void sendMessage(ClientSocketTypeEnum type,  String message){
-        ClientMessage clientMessage = ClientMessage.builder().clientId(systemUtils.getClientId()).type(type.getType()).data(message).build();
+        ClientMessage clientMessage = ClientMessage.builder()
+                .clientId(systemUtils.getClientId())
+                .type(type.getType())
+                .data(message)
+                .build();
         client.send(JSON.toJSONString(clientMessage));
     }
 

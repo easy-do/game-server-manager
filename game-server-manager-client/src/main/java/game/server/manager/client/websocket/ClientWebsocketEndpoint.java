@@ -3,10 +3,10 @@ package game.server.manager.client.websocket;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
-import game.server.manager.client.websocket.handler.OnMessageHandler;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
+import game.server.manager.handler.HandlerServiceContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -26,7 +26,8 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
 
     private static volatile String lockMessageId;
 
-    private OnMessageHandler onMessageHandler;
+
+    private HandlerServiceContainer handlerServiceContainer;
 
     /**
      * 是否被某个消息锁定
@@ -89,10 +90,10 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
 
     private String clientId;
 
-    public ClientWebsocketEndpoint(URI serverUri,String clientId,OnMessageHandler onMessageHandler) {
+    public ClientWebsocketEndpoint(URI serverUri,String clientId,HandlerServiceContainer handlerServiceContainer) {
         super(serverUri);
         this.clientId = clientId;
-        this.onMessageHandler = onMessageHandler;
+        this.handlerServiceContainer = handlerServiceContainer;
     }
 
     @Override
@@ -109,7 +110,7 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
         log.info("接收到服务端消息,{}",message);
         ServerMessage serverMessage = JSON.parseObject(message, ServerMessage.class);
         if(!isLock(serverMessage)){
-            onMessageHandler.handler(serverMessage);
+            handlerServiceContainer.handler(serverMessage.getType(),serverMessage);
         }else {
             log.warn("消息被锁定.");
             this.send(JSON.toJSONString(ClientMessage.builder().clientId(clientId).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));

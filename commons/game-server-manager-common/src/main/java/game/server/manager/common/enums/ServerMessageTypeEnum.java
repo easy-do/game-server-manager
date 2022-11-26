@@ -17,9 +17,33 @@ public enum ServerMessageTypeEnum {
 
     ERROR(MessageTypeConstants.ERROR,"服务器异常"),
 
+    PING_DOCKER(MessageTypeConstants.PING_DOCKER,"删除镜像"),
+
+    DOCKER_INFO(MessageTypeConstants.DOCKER_INFO,"删除镜像"),
+
+    DOCKER_VERSION(MessageTypeConstants.DOCKER_VERSION,"删除镜像"),
+
+    LIST_IMAGE(MessageTypeConstants.LIST_IMAGE,"镜像列表"),
+
+    REMOVE_IMAGE(MessageTypeConstants.REMOVE_IMAGE,"删除镜像"),
+
     PULL_IMAGE(MessageTypeConstants.PULL_IMAGE,"pull镜像"),
 
-    PUSH_IMAGE(MessageTypeConstants.PUSH_IMAGE,"push镜像");
+    PUSH_IMAGE(MessageTypeConstants.PUSH_IMAGE,"push镜像"),
+
+    CONTAINER_LIST(MessageTypeConstants.CONTAINER_LIST,"容器列表"),
+
+    START_CONTAINER(MessageTypeConstants.START_CONTAINER,"启动容器"),
+
+    RESTART_CONTAINER(MessageTypeConstants.RESTART_CONTAINER,"重启容器"),
+
+    STOP_CONTAINER(MessageTypeConstants.STOP_CONTAINER,"停止容器"),
+
+    REMOVE_CONTAINER(MessageTypeConstants.REMOVE_CONTAINER,"删除容器"),
+
+    RENAME_CONTAINER(MessageTypeConstants.RENAME_CONTAINER,"重命名容器"),
+
+    CREATE_CONTAINER(MessageTypeConstants.CREATE_CONTAINER,"创建容器");
 
 
     private final String type;

@@ -34,14 +34,14 @@ public interface DockerImageApi {
      * 删除镜像
      *
      * @param imageId imageId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Headers({"Content-Type: application/json"})
     @RequestLine("DELETE /v1/removeImage?imageId={imageId}")
     @DeleteMapping("/v1/removeImage")
-    public R<Void> removeImage(@Param(value = "imageId")String imageId);
+    public R<Object> removeImage(@Param(value = "imageId")String imageId);
 
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/pullImage?repository={repository}")

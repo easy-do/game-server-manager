@@ -5,7 +5,6 @@ import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.Version;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
-import game.server.manager.docker.client.api.DockerClientApi;
 import game.server.manager.client.service.DockerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,7 @@ import javax.annotation.Resource;
  */
 @RequestMapping("/v1")
 @RestController
-public class DockerController implements DockerClientApi {
+public class DockerController {
 
 
     @Resource
@@ -34,7 +33,6 @@ public class DockerController implements DockerClientApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @GetMapping("/ping")
     public R<Void> ping(){
         try {
@@ -51,7 +49,6 @@ public class DockerController implements DockerClientApi {
      * @author laoyu
      * @date 2022/11/19
      */
-    @Override
     @GetMapping("/info")
     public R<Info> info(){
         try {

@@ -6,7 +6,6 @@ import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.handler.AbstractHandlerService;
-import game.server.manager.handler.Void;
 import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.websocket.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
@@ -27,14 +26,14 @@ public class HeartbeatHandlerService extends AbstractHandlerService<ClientHandle
         ClientMessage clientMessage = clientHandlerData.getClientMessage();
         Session session = clientHandlerData.getSession();
         SocketSessionCache.saveSession(session);
-        SocketSessionCache.saveClientIdSession(clientMessage.getClientId(),session.getId());
+        SocketSessionCache.saveClientIdAndSid(clientMessage.getClientId(),session.getId());
         ServerMessage serverMsg = ServerMessage.builder()
                 .messageId(session.getId())
                 .type(ServerMessageTypeEnum.HEARTBEAT.getType())
                 .sync(0)
                 .build();
         SessionUtils.sendMessage(session, JSON.toJSONString(serverMsg));
-        return returnVoid();
+        return null;
     }
 
 }
