@@ -19,8 +19,12 @@ public class ClientMessage {
 
     private String clientId;
 
+    private String messageId;
+
     private String type;
 
     private String data;
+
+    private Boolean success;
 
 }

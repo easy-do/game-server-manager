@@ -1,17 +1,14 @@
 package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.Version;
 import game.server.manager.common.result.R;
-import game.server.manager.docker.client.api.DockerClientApi;
-import game.server.manager.docker.client.api.DockerClientApiEndpoint;
+
 import game.server.manager.server.dto.DockerDetailsDto;
 import game.server.manager.server.entity.DockerDetails;
+import game.server.manager.server.service.DockerBasicService;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.server.qo.DockerDetailsQo;
 import game.server.manager.server.vo.DockerDetailsVo;
@@ -37,11 +34,7 @@ import java.util.Objects;
 public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, DockerDetailsQo, DockerDetailsVo, DockerDetailsDto, DockerDetailsMapper> implements DockerDetailsService {
 
     @Resource
-    private DockerClientApiEndpoint dockerClientApiEndpoint;
-
-    private DockerClientApi dockerClientApi(DockerDetailsVo dockerDetailsVo){
-        return dockerClientApiEndpoint.dockerClientApi(dockerDetailsVo.getDockerHost(), dockerDetailsVo.getDockerSecret());
-    }
+    private DockerBasicService dockerBasicService;
 
     @Override
     public void listSelect(LambdaQueryWrapper<DockerDetails> wrapper) {
@@ -90,13 +83,13 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
     @Override
     public DockerDetailsVo info(Serializable id) {
         DockerDetailsVo vo = DockerDetailsMapstruct.INSTANCE.entityToVo(getById(id));
-        R<Info> info = dockerClientApi(vo).info();
+        R<String> info = dockerBasicService.info(id.toString());
         if(Objects.nonNull(info)){
-            vo.setDetailsJson(JSON.toJSONString(info.getData()));
+            vo.setDetailsJson(info.getData());
         }
-        R<Version> version = dockerClientApi(vo).version();
+        R<String> version = dockerBasicService.version(id.toString());
         if(Objects.nonNull(version)){
-            vo.setVersionJson(JSON.toJSONString(version.getData()));
+            vo.setVersionJson(version.getData());
         }
         return vo;
     }

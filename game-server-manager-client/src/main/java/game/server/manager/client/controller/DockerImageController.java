@@ -35,6 +35,7 @@ public class DockerImageController implements DockerImageApi {
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @GetMapping("/listImages")
     public R<List<Image>> listImages(){
         try {
@@ -48,12 +49,13 @@ public class DockerImageController implements DockerImageApi {
      * 删除镜像
      *
      * @param imageId imageId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @DeleteMapping("/removeImage")
-    public R<Void> removeImage(@RequestParam("imageId")String imageId){
+    public R<Object> removeImage(@RequestParam("imageId")String imageId){
         try {
             return DataResult.ok(dockerImageService.removeImage(imageId));
         }catch (Exception e){
@@ -61,6 +63,7 @@ public class DockerImageController implements DockerImageApi {
         }
     }
 
+    @Override
     @GetMapping("/pullImage")
     public R<String> pullImage(@RequestParam("repository")String repository){
         try {

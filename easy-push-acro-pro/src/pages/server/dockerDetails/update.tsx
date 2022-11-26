@@ -101,14 +101,14 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
         <Form.Item
           label={t['searchTable.columns.dockerModel']}
           field="dockerModel"
-          initialValue={'client'}
+          initialValue={'socket'}
           rules={[
             { required: true, message: t['searchTable.rules.dockerModel.required'] },
           ]}
         >
           <Select placeholder={t['searchForm.dockerModel.placeholder']} allowClear >
-            <Select.Option value={'api'}>API-直连</Select.Option>
-            <Select.Option value={'client'}>Proxy-客户端代理</Select.Option>
+          <Select.Option value={'http'}>API直连</Select.Option>
+            <Select.Option value={'socket'}>客户端模式</Select.Option>
             </Select>
         </Form.Item>
         <Form.Item

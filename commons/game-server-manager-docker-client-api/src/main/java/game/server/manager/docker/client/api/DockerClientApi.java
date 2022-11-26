@@ -40,7 +40,7 @@ public interface DockerClientApi {
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/info")
     @GetMapping("/v1/info")
-    public R<Info> info();
+    public R<String> info();
 
     /**
      * 版本信息
@@ -52,5 +52,5 @@ public interface DockerClientApi {
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/version")
     @GetMapping("/v1/version")
-    public R<Version> version();
+    public R<String> version();
 }

@@ -61,14 +61,14 @@ public class DockerImageService {
         PullImageResultCallback callback = pullImageCmd.exec(new PullImageResultCallback() {
             @Override
             public void onNext(PullResponseItem item) {
-                syncServer.sendMessage(ClientSocketTypeEnum.RESULT,item.getStatus());
+                syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT,item.getStatus());
                 log.info("pullImage ==> {},{}", repository, item.getStatus());
                 super.onNext(item);
             }
         });
         try {
             callback.awaitCompletion();
-            syncServer.sendMessage(ClientSocketTypeEnum.RESULT_END,"success");
+            syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END,"success");
         } catch (InterruptedException e) {
             syncServer.sendMessage(ClientSocketTypeEnum.ERROR,ExceptionUtil.getMessage(e));
             log.error("执行pull镜像操作异常，{}", ExceptionUtil.getMessage(e));
@@ -111,7 +111,7 @@ public class DockerImageService {
      * @author laoyu
      * @date 2022/11/19
      */
-    public Void removeImage(String imageId) {
+    public Object removeImage(String imageId) {
         log.info("Docker removeImage {}", imageId);
         RemoveImageCmd removeImageCmd = dockerClient.removeImageCmd(imageId);
         return removeImageCmd.exec();

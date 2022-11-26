@@ -49,7 +49,7 @@ public class DockerController {
      * @date 2022/11/19
      */
     @GetMapping("/info")
-    public R<Info> info(@RequestParam("dockerId") String dockerId){
+    public R<String> info(@RequestParam("dockerId") String dockerId){
         try {
             return DockerBasicService.info(dockerId);
         }catch (Exception e){

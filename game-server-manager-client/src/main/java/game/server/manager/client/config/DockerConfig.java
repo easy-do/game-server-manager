@@ -33,7 +33,7 @@ public class DockerConfig {
             log.info("set default secret :{}",secret);
         }
         DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
-                .createDefaultConfigBuilder().withDockerHost("tcp://192.168.123.89:2375").build();
+                .createDefaultConfigBuilder().withDockerHost("tcp://192.168.124.124:2375").build();
         DockerClient client = DockerClientBuilder.getInstance(dockerClientConfig)
                 .build();
         log.info("docker info:{}",client.infoCmd().exec());

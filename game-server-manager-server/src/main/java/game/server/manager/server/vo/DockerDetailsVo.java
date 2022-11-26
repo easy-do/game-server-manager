@@ -34,9 +34,11 @@ public class DockerDetailsVo implements Serializable {
     private Long id;
     /** 名称 */
     private String dockerName;
+    /** 客户端id */
+    private String clientId;
     /** ip地址 */
     private String dockerHost;
-    /** 模式 api/client */
+    /** 模式 http/socket */
     private String dockerModel;
     /** client模式通信密钥 */
     private String dockerSecret;

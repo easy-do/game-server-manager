@@ -11,7 +11,6 @@ import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.vo.DeployLogResultVo;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.handler.AbstractHandlerService;
-import game.server.manager.handler.Void;
 import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.application.DeploymentLogServer;
 import game.server.manager.server.service.ApplicationInfoService;
@@ -50,12 +49,12 @@ public class DeployLogHandlerService extends AbstractHandlerService<BrowserHandl
                 if (Objects.isNull(applicationId)) {
                     SessionUtils.sendMessage(session, JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用信息不存在,断开连接")).build()));
                     SessionUtils.close(session);
-                    returnVoid();
+                    return null;
                 }
                 if (!applicationInfoService.exist(applicationId, userInfo.getId())) {
                     SessionUtils.sendMessage(session, JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用不存在或不属于你,断开连接")).build()));
                     SessionUtils.close(session);
-                    returnVoid();
+                    return null;
                 }
             }
 
@@ -82,7 +81,7 @@ public class DeployLogHandlerService extends AbstractHandlerService<BrowserHandl
                 SessionUtils.close(session);
             }
 
-        return returnVoid();
+        return null;
     }
 
 

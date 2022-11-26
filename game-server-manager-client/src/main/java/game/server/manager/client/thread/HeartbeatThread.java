@@ -36,7 +36,8 @@ public class HeartbeatThread {
         ClientWebsocketEndpoint client = syncServer.getClient();
         if(Objects.nonNull(client)){
             ClientMessage message = ClientMessage.builder()
-                    .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(systemUtils.getClientId())
+                    .type(ClientSocketTypeEnum.HEARTBEAT.getType())
+                    .clientId(systemUtils.getClientId())
                     .build();
                 if(client.isOpen()){
                     client.send(JSON.toJSONString(message));

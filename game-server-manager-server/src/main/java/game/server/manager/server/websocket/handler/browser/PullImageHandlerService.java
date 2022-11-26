@@ -6,7 +6,6 @@ import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.mode.socket.BrowserPulImageMessage;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.handler.AbstractHandlerService;
-import game.server.manager.handler.Void;
 import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.service.DockerImageService;
 import game.server.manager.server.websocket.SocketSessionCache;
@@ -36,7 +35,7 @@ public class PullImageHandlerService extends AbstractHandlerService<BrowserHandl
         dockerImageService.socketPullImage(SocketPullImageData.builder()
                 .dockerId(browserMessage.getDockerId())
                 .repository(pullData.getRepository()).build(), userInfo);
-        return returnVoid();
+        return null;
     }
 
 }

@@ -20,8 +20,4 @@ public abstract class AbstractHandlerService<T, R> {
      * @author laoyu
      */
     public abstract R handler(T t);
-
-    public Void returnVoid(){
-        return new Void();
-    }
 }

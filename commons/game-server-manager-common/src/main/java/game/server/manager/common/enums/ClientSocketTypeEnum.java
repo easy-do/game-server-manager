@@ -14,10 +14,11 @@ public enum ClientSocketTypeEnum {
 
     ERROR(MessageTypeConstants.ERROR,"异常"),
 
-    RESULT(MessageTypeConstants.RESULT,"业务数据返回"),
+    SYNC_RESULT(MessageTypeConstants.SYNC_RESULT,"业务数据返回"),
 
-    RESULT_END(MessageTypeConstants.RESULT_END,"业务数据返回结束"),
+    SYNC_RESULT_END(MessageTypeConstants.SYNC_RESULT_END,"业务数据返回结束"),
 
+    NO_SYNC_RESULT(MessageTypeConstants.NO_SYNC_RESULT,"业务数据返回结束"),
 
     SYNC(MessageTypeConstants.SYNC,"同步");
 

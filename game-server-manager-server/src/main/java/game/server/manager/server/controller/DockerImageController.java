@@ -61,7 +61,7 @@ public class DockerImageController {
      */
     @SaCheckLogin
     @GetMapping("/v1/remove/{dockerId}/{imageId}")
-    public R<Void> removeImage(@PathVariable("dockerId")String dockerId, @PathVariable("imageId")String imageId){
+    public R<Object> removeImage(@PathVariable("dockerId")String dockerId, @PathVariable("imageId")String imageId){
         return dockerImageService.removeImage(dockerId,imageId);
     }
 }

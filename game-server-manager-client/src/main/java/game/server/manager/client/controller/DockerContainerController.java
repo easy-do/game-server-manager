@@ -43,6 +43,7 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @GetMapping("/containerList")
     public R<List<Container>> containerList(){
         try {
@@ -60,6 +61,7 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @GetMapping("/startContainer")
     public R<Void> startContainer(@RequestParam("containerId")String containerId){
         try {
@@ -78,6 +80,7 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @GetMapping("/restartContainer")
     public R<Void> restartContainer(@RequestParam("containerId")String containerId){
         try {
@@ -95,6 +98,7 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @GetMapping("/stopContainer")
     public R<Void> stopContainer(@RequestParam("containerId")String containerId){
         try {
@@ -112,6 +116,7 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @DeleteMapping("/removeContainer")
     public R<Void> removeContainer(@RequestParam("containerId")String containerId){
         try {
@@ -130,6 +135,7 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @GetMapping("/renameContainer")
     public R<Void> renameContainer(@RequestParam("containerId")String containerId,@RequestParam("name")String name){
         try {
@@ -147,6 +153,7 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/19
      */
+    @Override
     @PostMapping("/createContainer")
     public R<CreateContainerResponse> createContainer(@RequestBody CreateContainerDto createContainerDto){
         try {
@@ -164,6 +171,7 @@ public class DockerContainerController implements DockerContainerApi {
      * @author laoyu
      * @date 2022/11/20
      */
+    @Override
     @GetMapping("/logContainer")
     public R<String> logContainer(@RequestParam("containerId")String containerId) {
         try {
