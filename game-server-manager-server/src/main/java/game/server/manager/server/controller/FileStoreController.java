@@ -9,16 +9,18 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import game.server.manager.common.constant.SystemConstant;
-import game.server.manager.web.base.BaseController;
-import game.server.manager.common.exception.BizException;
-import game.server.manager.server.entity.FileStore;
-import game.server.manager.log.SaveLog;
 import game.server.manager.auth.AuthorizationUtil;
+import game.server.manager.common.constant.SystemConstant;
+import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.result.DataResult;
+import game.server.manager.common.result.R;
+import game.server.manager.log.SaveLog;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
+import game.server.manager.server.entity.FileStore;
 import game.server.manager.server.service.FileStoreService;
+import game.server.manager.web.base.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +30,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import game.server.manager.common.result.DataResult;
-import game.server.manager.common.result.R;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -89,7 +89,7 @@ public class FileStoreController {
         long fileSize = file.getSize();
         //校验文件大小
         if(!AuthorizationUtil.isAdmin() && fileSize > maxFileSize){
-            throw new BizException("文件大小不得超过"+(maxFileSize/1024)+"kb。");
+            throw ExceptionFactory.bizException("文件大小不得超过"+(maxFileSize/1024)+"kb。");
         }
         //根据md5查找是否存在相同文件，存在则直接返回已有的文件
         String md5 = getMd5(file);
@@ -155,7 +155,7 @@ public class FileStoreController {
             //转换为16进制
             return new BigInteger(1, digest).toString(16);
         } catch (Exception e) {
-            throw new BizException(ExceptionUtil.getMessage(e));
+            throw ExceptionFactory.bizException(ExceptionUtil.getMessage(e));
         }
     }
 

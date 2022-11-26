@@ -1,4 +1,4 @@
-package game.server.manager.server.server;
+package game.server.manager.server.handler;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.exceptions.ExceptionUtil;
@@ -12,7 +12,8 @@ import com.alibaba.fastjson2.JSONArray;
 import game.server.manager.common.mode.MessageCallBackData;
 import game.server.manager.common.mode.SyncData;
 import game.server.manager.common.result.DataResult;
-import game.server.manager.server.annotation.SyncServerClass;
+import game.server.manager.handler.AbstractHandlerService;
+import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.ClientMessage;
 import game.server.manager.server.service.ClientInfoService;
@@ -27,8 +28,8 @@ import java.util.Objects;
  * @version 1.0
  * @date 2022/8/7
  */
-@SyncServerClass("clientMessageCallBack")
-public class ClientMessageCallBackServer extends AbstractDefaultServer {
+@HandlerService("clientMessageCallBack")
+public class ClientMessageCallBackHandlerService extends AbstractHandlerService<SyncData,Object> {
 
     @Autowired
     private ClientInfoService clientInfoService;
@@ -37,7 +38,7 @@ public class ClientMessageCallBackServer extends AbstractDefaultServer {
     private ClientMessageService clientMessageService;
 
     @Override
-    Object processData(SyncData syncData) {
+    public Object handler(SyncData syncData) {
         String clientId = syncData.getClientId();
         String data = syncData.getData();
         Boolean encryption = syncData.getEncryption();

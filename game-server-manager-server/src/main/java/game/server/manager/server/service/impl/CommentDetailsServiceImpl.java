@@ -5,24 +5,24 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import game.server.manager.api.UserInfoApi;
-import game.server.manager.event.BasePublishEventServer;
-import game.server.manager.server.qo.CommentDetailsQo;
-import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.common.constant.SystemConstant;
+import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.vo.CommentDetailsVo;
+import game.server.manager.common.vo.UserInfoVo;
+import game.server.manager.event.BasePublishEventServer;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
+import game.server.manager.redis.config.RedisUtils;
 import game.server.manager.server.dto.CommentDetailsDto;
 import game.server.manager.server.entity.CommentDetails;
 import game.server.manager.server.entity.Discussion;
-import game.server.manager.server.mapstruct.CommentDetailsMapstruct;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
-import game.server.manager.redis.config.RedisUtils;
-import game.server.manager.server.service.CommentDetailsService;
 import game.server.manager.server.mapper.CommentDetailsMapper;
+import game.server.manager.server.mapstruct.CommentDetailsMapstruct;
+import game.server.manager.server.qo.CommentDetailsQo;
+import game.server.manager.server.service.CommentDetailsService;
 import game.server.manager.server.service.DiscussionService;
-import game.server.manager.common.vo.CommentDetailsVo;
-import game.server.manager.common.vo.UserInfoVo;
+import game.server.manager.web.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import game.server.manager.common.exception.BizException;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -113,7 +113,7 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
         Long businessId = entity.getBusinessId();
         Discussion discussion = discussionService.getById(businessId);
         if (Objects.isNull(discussion)) {
-            throw new BizException("主题不存在");
+            throw ExceptionFactory.bizException("主题不存在");
         }
         entity.setUserId(userId);
         entity.setUserName(getUser().getNickName());
@@ -122,17 +122,17 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
             //回复的是评论
             CommentDetails toCommentDetails = getById(commentId);
             if (Objects.isNull(toCommentDetails)) {
-                throw new BizException("评论不存在");
+                throw ExceptionFactory.bizException("评论不存在");
             }
             //获取被回复的用户信息
             Long toUserId = toCommentDetails.getUserId();
             //不允许回复自己的评论
             if (toUserId.equals(userId)) {
-                throw new BizException("不能回复自己的评论");
+                throw ExceptionFactory.bizException("不能回复自己的评论");
             }
             UserInfoVo toUser = userInfoService.getUserInfo(toUserId).getData();
             if (Objects.isNull(toUser)) {
-                throw new BizException("用户已不存在");
+                throw ExceptionFactory.bizException("用户已不存在");
             }
             entity.setToUserId(toUserId);
             entity.setToUserName(toUser.getNickName());
@@ -142,7 +142,7 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
             Long discussionUserId = discussion.getCreateBy();
             UserInfoVo toUser = userInfoService.getUserInfo(discussionUserId).getData();
             if (Objects.isNull(toUser)) {
-                throw new BizException("用户已不存在");
+                throw ExceptionFactory.bizException("用户已不存在");
             }
             entity.setToUserId(toUser.getId());
             entity.setToUserName(toUser.getNickName());
@@ -162,7 +162,7 @@ public class CommentDetailsServiceImpl extends BaseServiceImpl<CommentDetails, C
     private void checkCommentCount(Long userId){
         Object result = redisUtils.get(SystemConstant.PREFIX + SystemConstant.USER_COMMENT + userId);
         if(Objects.nonNull(result)){
-            throw new BizException("回复过快，请稍等一分钟");
+            throw ExceptionFactory.bizException("回复过快，请稍等一分钟");
         }
     }
 

@@ -1,4 +1,4 @@
-package game.server.manager.server.server;
+package game.server.manager.server.handler;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
@@ -22,7 +22,8 @@ import game.server.manager.common.vo.AppEnvInfoVo;
 import game.server.manager.common.vo.AppInfoVo;
 import game.server.manager.common.vo.AppScriptVo;
 import game.server.manager.event.BasePublishEventServer;
-import game.server.manager.server.annotation.SyncServerClass;
+import game.server.manager.handler.AbstractHandlerService;
+import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.entity.AppInfo;
 import game.server.manager.server.entity.AppScript;
 import game.server.manager.server.entity.ApplicationInfo;
@@ -43,8 +44,8 @@ import java.util.Objects;
 /**
  * @author yuzhanfeng
  */
-@SyncServerClass("clientDeploymentCallBack")
-public class ClientDeploymentCallBackService extends AbstractDefaultServer {
+@HandlerService("clientDeploymentCallBack")
+public class ClientDeploymentCallBackService extends AbstractHandlerService<SyncData,Object> {
 
     @Autowired
     private ClientInfoService clientInfoService;
@@ -68,7 +69,7 @@ public class ClientDeploymentCallBackService extends AbstractDefaultServer {
     private BasePublishEventServer basePublishEventServer;
 
     @Override
-    Object processData(SyncData syncData) {
+    public Object handler(SyncData syncData) {
         String clientId = syncData.getClientId();
         String data = syncData.getData();
         Boolean encryption = syncData.getEncryption();

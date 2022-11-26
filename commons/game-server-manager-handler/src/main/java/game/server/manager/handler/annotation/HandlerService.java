@@ -1,4 +1,4 @@
-package game.server.manager.server.annotation;
+package game.server.manager.handler.annotation;
 
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,15 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface SyncServerClass {
+public @interface HandlerService {
 
+    /**
+     * 处理器名称
+     *
+     * @return java.lang.String
+     * @author laoyu
+     * @date 2022/11/26
+     */
     String value();
+
 }

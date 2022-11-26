@@ -1,8 +1,8 @@
-package game.server.manager.server.config;
+package game.server.manager.handler.config;
 
-import game.server.manager.server.annotation.SyncServerClass;
-import game.server.manager.server.server.AbstractDefaultServer;
-import game.server.manager.server.server.DefaultServerContainer;
+import game.server.manager.handler.AbstractHandlerService;
+import game.server.manager.handler.HandlerServiceContainer;
+import game.server.manager.handler.annotation.HandlerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopProxyUtils;
@@ -21,12 +21,12 @@ import java.util.Map;
  * @version 1.0
  */
 @Configuration
-public class ServerClassContainerConfig implements ApplicationContextAware, SmartInitializingSingleton {
+public class HandlerServiceConfig implements ApplicationContextAware, SmartInitializingSingleton {
 
-    Logger logger = LoggerFactory.getLogger(ServerClassContainerConfig.class);
+    Logger logger = LoggerFactory.getLogger(HandlerServiceConfig.class);
 
     @Autowired
-    private DefaultServerContainer defaultServerContainer;
+    private HandlerServiceContainer<String, AbstractHandlerService<Object,Object>> handlerServiceContainer;
 
     private ConfigurableApplicationContext applicationContext;
 
@@ -37,12 +37,12 @@ public class ServerClassContainerConfig implements ApplicationContextAware, Smar
      */
     @Override
     public void afterSingletonsInstantiated() {
-        Map<String, Object> beans = this.applicationContext.getBeansWithAnnotation(SyncServerClass.class);
+        Map<String, Object> beans = this.applicationContext.getBeansWithAnnotation(HandlerService.class);
         beans.forEach(this::registerHttpProxy);
     }
 
     /**
-     * 把所有代理工具注册到容器
+     * 把所有被注解描述的对象注册到容器
      *
      * @param s s
      * @param bean bean
@@ -50,10 +50,13 @@ public class ServerClassContainerConfig implements ApplicationContextAware, Smar
      */
     private void registerHttpProxy(String s, Object bean) {
         Class<?> clazz = AopProxyUtils.ultimateTargetClass(bean);
-        SyncServerClass annotation = clazz.getAnnotation(SyncServerClass.class);
-        String key = annotation.value();
-        defaultServerContainer.put(key, (AbstractDefaultServer) bean);
-        logger.info("注册服务类,key:{},class:{}",key, bean.getClass().getSimpleName());
+        Class<?> superClass = clazz.getSuperclass();
+            if (superClass == AbstractHandlerService.class) {
+                HandlerService annotation = clazz.getAnnotation(HandlerService.class);
+                String key = annotation.value();
+                handlerServiceContainer.put(key, (AbstractHandlerService) bean);
+                logger.info("register handlerService ,key:{},class:{}",key, bean.getClass().getSimpleName());
+            }
     }
 
 

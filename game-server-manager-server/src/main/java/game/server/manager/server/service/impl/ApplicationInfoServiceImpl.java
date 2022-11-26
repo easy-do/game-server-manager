@@ -11,8 +11,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import game.server.manager.common.application.DeployParam;
+import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.common.enums.ClientMessageTypeEnum;
-import game.server.manager.web.base.BaseServiceImpl;
+import game.server.manager.common.enums.DeviceTypeEnum;
+import game.server.manager.common.exception.BizException;
+import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.vo.ApplicationInfoVo;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
+import game.server.manager.redis.config.RedisStreamUtils;
 import game.server.manager.server.dto.ApplicationInfoDto;
 import game.server.manager.server.entity.AppInfo;
 import game.server.manager.server.entity.AppScript;
@@ -21,24 +27,19 @@ import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.ClientMessage;
 import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.server.entity.ServerInfo;
-import game.server.manager.common.enums.AppStatusEnum;
-import game.server.manager.common.enums.DeviceTypeEnum;
+import game.server.manager.server.mapper.ApplicationInfoMapper;
 import game.server.manager.server.mapstruct.ApplicationInfoMapstruct;
-import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.server.redis.ApplicationDeployListenerMessage;
-import game.server.manager.redis.config.RedisStreamUtils;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.AppScriptService;
 import game.server.manager.server.service.ApplicationInfoService;
-import game.server.manager.server.mapper.ApplicationInfoMapper;
 import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
 import game.server.manager.server.service.ExecuteLogService;
 import game.server.manager.server.service.ServerInfoService;
-import game.server.manager.common.vo.ApplicationInfoVo;
+import game.server.manager.web.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import game.server.manager.common.exception.BizException;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -108,26 +109,26 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
         ServerInfo serverInfo = null;
         ClientInfo clientInfo = null;
         if(Objects.isNull(application)){
-            throw new BizException("应用"+appId+"已不存在.");
+            throw ExceptionFactory.bizException("应用"+appId+"已不存在.");
         }
         if(!appInfoService.exists(application.getAppId())){
-            throw new BizException("APP不存在.");
+            throw ExceptionFactory.bizException("APP不存在.");
         }
         Integer deviceType = application.getDeviceType();
         if(deviceType == DeviceTypeEnum.SERVER.getType()){
             serverInfo = serverInfoService.getById(Long.valueOf(application.getDeviceId()));
             if(Objects.isNull(serverInfo)){
-                throw new BizException("目标服务器不存在.");
+                throw ExceptionFactory.bizException("目标服务器不存在.");
             }
         }else {
             clientInfo = clientInfoService.getById(application.getDeviceId());
             if(Objects.isNull(clientInfo)){
-                throw new BizException("目标客户端不存在.");
+                throw ExceptionFactory.bizException("目标客户端不存在.");
             }
         }
         AppScript appScript = appScriptService.getById(deployParam.getAppScriptId());
         if(Objects.isNull(appScript)){
-            throw new BizException("脚本不存在.");
+            throw ExceptionFactory.bizException("脚本不存在.");
         }
         //创建执行记录
         ExecuteLog entity = ExecuteLog.builder()
@@ -235,21 +236,21 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
         ApplicationInfo entity = ApplicationInfoMapstruct.INSTANCE.dtoToEntity(applicationInfoDto);
         AppInfo appInfo = appInfoService.getById(entity.getAppId());
         if(Objects.isNull(appInfo)){
-            throw new BizException("app不存在");
+            throw ExceptionFactory.bizException("app不存在");
         }
         entity.setAppName(appInfo.getAppName());
         Integer deviceType = entity.getDeviceType();
         if(deviceType == DeviceTypeEnum.SERVER.getType()){
         ServerInfo serverInfo = serverInfoService.getById(entity.getDeviceId());
         if(Objects.isNull(serverInfo)){
-            throw new BizException("服务不存在");
+            throw ExceptionFactory.bizException("服务不存在");
         }
         entity.setDeviceName(serverInfo.getServerName());
         }
         if(deviceType == DeviceTypeEnum.CLIENT.getType()){
             ClientInfo client = clientInfoService.getById(entity.getDeviceId());
             if(Objects.isNull(client)){
-                throw new BizException("客户端不存在");
+                throw ExceptionFactory.bizException("客户端不存在");
             }
             entity.setDeviceName(client.getClientName());
         }
@@ -276,7 +277,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
         wrapper.eq(ApplicationInfo::getApplicationId,applicationInfoDto.getApplicationId());
         ApplicationInfo app = getOne(wrapper);
         if(Objects.isNull(app)){
-            throw new BizException("应用不存在或不属于你");
+            throw ExceptionFactory.bizException("应用不存在或不属于你");
         }
         String state = app.getStatus();
         if( CharSequenceUtil.equals(state, AppStatusEnum.NO_DEPLOYMENT.getDesc()) || CharSequenceUtil.equals(state, AppStatusEnum.UNINSTALL.getDesc())){
@@ -284,7 +285,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
             entity.setUpdateTime(LocalDateTime.now());
             return update(entity,wrapper);
         }
-        throw new BizException("应用处于无法更改状态,请先卸载。");
+        throw ExceptionFactory.bizException("应用处于无法更改状态,请先卸载。");
     }
 
     @Override
@@ -298,7 +299,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
         wrapper.eq(ApplicationInfo::getApplicationId,id);
         ApplicationInfo app = baseMapper.selectOne(wrapper);
         if(Objects.isNull(app)){
-            throw new BizException("应用不存在或不属于你");
+            throw ExceptionFactory.bizException("应用不存在或不属于你");
         }
         String state = app.getStatus();
         if( CharSequenceUtil.equals(state, AppStatusEnum.NO_DEPLOYMENT.getDesc()) || CharSequenceUtil.equals(state, AppStatusEnum.UNINSTALL.getDesc())){

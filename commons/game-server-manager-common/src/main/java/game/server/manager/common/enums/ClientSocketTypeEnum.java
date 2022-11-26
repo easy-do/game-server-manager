@@ -1,23 +1,25 @@
 package game.server.manager.common.enums;
 
+import game.server.manager.common.constant.MessageTypeConstants;
+
 /**
  * @author laoyu
  * @version 1.0
  */
 public enum ClientSocketTypeEnum {
     /**/
-    HEARTBEAT("heartbeat","心跳"),
+    HEARTBEAT(MessageTypeConstants.HEARTBEAT,"心跳"),
 
-    LOCK("lock","锁定"),
+    LOCK(MessageTypeConstants.LOCK,"锁定"),
 
-    ERROR("error","异常"),
+    ERROR(MessageTypeConstants.ERROR,"异常"),
 
-    RESULT("result","业务数据返回"),
+    RESULT(MessageTypeConstants.RESULT,"业务数据返回"),
 
-    RESULT_END("result","业务数据返回结束"),
+    RESULT_END(MessageTypeConstants.RESULT_END,"业务数据返回结束"),
 
 
-    SYNC("sync","同步");
+    SYNC(MessageTypeConstants.SYNC,"同步");
 
     private final String type;
     private final String desc;

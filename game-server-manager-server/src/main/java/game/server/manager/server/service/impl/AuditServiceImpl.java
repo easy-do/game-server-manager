@@ -1,17 +1,17 @@
 package game.server.manager.server.service.impl;
 
 import com.alicp.jetcache.anno.CacheInvalidate;
+import game.server.manager.common.enums.AuditStatusEnum;
+import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.event.BasePublishEventServer;
 import game.server.manager.server.dto.AuditDto;
 import game.server.manager.server.entity.AppInfo;
 import game.server.manager.server.entity.Discussion;
-import game.server.manager.common.enums.AuditStatusEnum;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.AuditService;
 import game.server.manager.server.service.DiscussionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import game.server.manager.common.exception.BizException;
 
 import java.util.Objects;
 
@@ -64,10 +64,10 @@ public class AuditServiceImpl implements AuditService {
     private boolean commitAppAudit(AuditDto auditDto) {
         AppInfo appInfo = appInfoService.getById(auditDto.getId());
         if(Objects.isNull(appInfo)){
-            throw new BizException("APP不存在");
+            throw ExceptionFactory.bizException("APP不存在");
         }
         if(!AuditStatusEnum.canCommitAudit(appInfo.getIsAudit())){
-            throw new BizException("当前状态无法在提交审核.");
+            throw ExceptionFactory.bizException("当前状态无法在提交审核.");
         }
         AppInfo entity = AppInfo.builder().id(auditDto.getId()).isAudit(AuditStatusEnum.AUDIT_ING.getState()).build();
         boolean result = appInfoService.updateById(entity);
@@ -79,10 +79,10 @@ public class AuditServiceImpl implements AuditService {
     private boolean commitDiscussionAudit(AuditDto auditDto) {
         Discussion discussion = discussionService.getById(auditDto.getId());
         if(Objects.isNull(discussion)){
-            throw new BizException("话题不存在");
+            throw ExceptionFactory.bizException("话题不存在");
         }
         if(!AuditStatusEnum.canCommitAudit(discussion.getStatus())){
-            throw new BizException("当前状态无法在提交审核.");
+            throw ExceptionFactory.bizException("当前状态无法在提交审核.");
         }
         Discussion entity = Discussion.builder().id(auditDto.getId()).status(AuditStatusEnum.AUDIT_ING.getState()).build();
         boolean result = discussionService.updateById(entity);
@@ -94,7 +94,7 @@ public class AuditServiceImpl implements AuditService {
     private boolean auditDiscussion(AuditDto dto) {
         Discussion discussion = discussionService.getById(dto.getId());
         if(Objects.isNull(discussion)){
-            throw new BizException("话题不存在");
+            throw ExceptionFactory.bizException("话题不存在");
         }
         int status = dto.getStatus();
         Discussion entity = Discussion.builder().id(dto.getId()).status(status).build();
@@ -113,7 +113,7 @@ public class AuditServiceImpl implements AuditService {
     private boolean auditApp(AuditDto dto){
         AppInfo appInfo = appInfoService.getById(dto.getId());
         if(Objects.isNull(appInfo)){
-            throw new BizException("APP不存在");
+            throw ExceptionFactory.bizException("APP不存在");
         }
         int status = dto.getStatus();
         AppInfo entity = AppInfo.builder().id(dto.getId()).isAudit(status).build();

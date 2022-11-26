@@ -1,7 +1,6 @@
 package game.server.manager.client.service;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.alibaba.fastjson2.JSON;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
@@ -9,16 +8,12 @@ import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
-import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
-import game.server.manager.common.mode.socket.ClientMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -34,9 +29,6 @@ public class DockerImageService {
 
     @Resource
     private DockerClient dockerClient;
-
-    @Resource
-    private SystemUtils systemUtils;
 
     @Resource
     private SyncServer syncServer;

@@ -1,4 +1,4 @@
-package game.server.manager.server.server;
+package game.server.manager.server.handler;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.exceptions.ExceptionUtil;
@@ -8,12 +8,13 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import com.alibaba.fastjson2.JSON;
+import game.server.manager.common.enums.StatusEnum;
 import game.server.manager.common.mode.PluginsData;
 import game.server.manager.common.mode.SyncData;
 import game.server.manager.common.result.DataResult;
-import game.server.manager.server.annotation.SyncServerClass;
+import game.server.manager.handler.AbstractHandlerService;
+import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.entity.ApplicationInfo;
-import game.server.manager.common.enums.StatusEnum;
 import game.server.manager.server.service.ApplicationInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,14 +25,14 @@ import java.util.Objects;
  * @author laoyu
  * @version 1.0
  */
-@SyncServerClass("pluginsData")
-public class PluginsDataServer extends AbstractDefaultServer {
+@HandlerService("pluginsData")
+public class PluginsDataHandlerService extends AbstractHandlerService<SyncData,Object> {
 
     @Autowired
     private ApplicationInfoService applicationInfoService;
 
     @Override
-    Object processData(SyncData syncData) {
+    public Object handler(SyncData syncData) {
         String applicationId = syncData.getApplicationId();
         String data = syncData.getData();
         Boolean encryption = syncData.getEncryption();

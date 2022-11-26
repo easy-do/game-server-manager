@@ -1,4 +1,4 @@
-package game.server.manager.server.websocket.model;
+package game.server.manager.server.websocket.handler.browser;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
