@@ -14,6 +14,7 @@ import game.server.manager.common.utils.http.HttpRequestUtil;
 import game.server.manager.handler.HandlerServiceContainer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -65,7 +66,7 @@ public class SyncServer {
                     .type(ClientSocketTypeEnum.HEARTBEAT.getType())
                     .clientId(systemUtils.getClientId())
                     .build();
-            client.send(JSON.toJSONString(message));
+            sendMessage(JSON.toJSONString(message));
         }catch (Exception e) {
             log.warn("初始化服务端连接失败,{}", ExceptionUtil.getMessage(e));
         }
@@ -79,7 +80,7 @@ public class SyncServer {
                 .data(message)
                 .success(true)
                 .build();
-        client.send(JSON.toJSONString(clientMessage));
+        sendMessage(JSON.toJSONString(clientMessage));
     }
     public void sendFailMessage(ClientSocketTypeEnum type, String messageId, String message){
         ClientMessage clientMessage = ClientMessage.builder()
@@ -89,16 +90,37 @@ public class SyncServer {
                 .data(message)
                 .success(false)
                 .build();
-        client.send(JSON.toJSONString(clientMessage));
+        sendMessage(JSON.toJSONString(clientMessage));
     }
 
-    public void sendMessage(ClientSocketTypeEnum type,  String message){
+    public void sendMessage(ClientSocketTypeEnum type, String message){
         ClientMessage clientMessage = ClientMessage.builder()
                 .clientId(systemUtils.getClientId())
                 .type(type.getType())
+                .success(true)
                 .data(message)
                 .build();
-        client.send(JSON.toJSONString(clientMessage));
+        if(client.isOpen()){
+            sendMessage(JSON.toJSONString(clientMessage));
+            }else {
+                    log.error("连接断开,尝试重连。");
+                    client.reconnect();
+                    client.send(JSON.toJSONString(clientMessage));
+            }
+    }
+
+    public void sendMessage(String message){
+        if(client.isOpen()){
+            client.send(message);
+        }else {
+            try {
+                log.error("连接断开,尝试重连。");
+                client.reconnectBlocking();
+                client.send(message);
+            } catch (InterruptedException ex) {
+                log.error("重连失败,{}",ExceptionUtil.getMessage(ex));
+            }
+        }
     }
 
 }

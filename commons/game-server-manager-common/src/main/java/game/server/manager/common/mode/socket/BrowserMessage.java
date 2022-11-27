@@ -11,8 +11,6 @@ import lombok.Data;
 @Data
 public class BrowserMessage {
 
-    private String dockerId;
-
     private String token;
 
     private String type;

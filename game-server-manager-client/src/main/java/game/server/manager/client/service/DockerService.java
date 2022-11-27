@@ -7,6 +7,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.Version;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,7 +22,7 @@ import javax.annotation.Resource;
 @Component
 public class DockerService {
 
-    @Resource
+    @Autowired(required = false)
     private DockerClient dockerClient;
 
 

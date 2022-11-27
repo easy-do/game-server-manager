@@ -25,6 +25,7 @@ const i18n = {
     'searchTable.columns.operations.remove': 'Remove',
     'searchTable.columns.operations.remove.confirm': 'Are you sure you want to delete?',
     'searchTable.operations.add': 'New',
+    'searchTable.operations.pullImage': 'Pull Image',
     'searchForm.all.placeholder': 'all',
     'searchForm.id.placeholder': 'Please enter the id',
     'searchForm.dockerName.placeholder': 'Please enter the dockerName',
@@ -73,6 +74,10 @@ const i18n = {
     'searchTable.columns.operations.stop': 'Stop',
     'searchTable.columns.operations.rename': 'Rename',
     'searchTable.columns.operations.log': 'Log',
+    'searchTable.columns.repository': 'Repository',
+    'searchTable.columns.imageList.clientId': 'Client',
+    'searchForm.clientId.placeholder': 'Please Select the Client',
+    'searchTable.rules.clientId.required': 'ClientCan not be empty',
     
   },
   'zh-CN': {
@@ -101,6 +106,7 @@ const i18n = {
     'searchTable.columns.operations.remove': '删除',
     'searchTable.columns.operations.remove.confirm': '确定要删除吗?', 
     'searchTable.operations.add': '新建',
+    'searchTable.operations.pullImage': '拉取镜像',
     'searchForm.all.placeholder': '全部',
     'searchForm.id.placeholder': '请输入主键',
     'searchForm.dockerName.placeholder': '请输入名称',
@@ -149,6 +155,11 @@ const i18n = {
     'searchTable.columns.operations.stop': '停止',
     'searchTable.columns.operations.rename': '重命名',
     'searchTable.columns.operations.log': '日志',
+    'searchTable.columns.repository': '镜像仓库',
+    'searchTable.columns.imageList.clientId': '客户端',
+    'searchForm.clientId.placeholder': '请选择客户端',
+    'searchTable.rules.clientId.required': '客户端必选',
+    
     
     
     

@@ -33,7 +33,7 @@ public class ListImageHandlerService extends AbstractHandlerService<ServerMessag
 
     @Override
     public Void handler(ServerMessage serverMessage) {
-        log.info("OnMessageHandler pull ==> {}",serverMessage);
+        log.info("OnMessageHandler listImages ==> {}",serverMessage);
         String messageId = serverMessage.getMessageId();
         try {
             List<Image> listImages = dockerImageService.listImages();

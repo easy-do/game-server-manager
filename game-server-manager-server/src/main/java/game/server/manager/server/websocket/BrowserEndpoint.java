@@ -1,9 +1,7 @@
 package game.server.manager.server.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.alibaba.fastjson2.JSON;
-import game.server.manager.common.enums.ServerMessageTypeEnum;
-import game.server.manager.common.mode.socket.ServerMessage;
+import game.server.manager.server.util.SessionUtils;
 import game.server.manager.server.websocket.handler.BrowserMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +47,9 @@ public class BrowserEndpoint {
      */
     @OnOpen
     public void onOpen(Session session) {
-        log.info("【websocket消息】客户端docker相关连接.");
+        log.info("【websocket消息】游览器建立连接.");
         SocketSessionCache.saveSession(session);
-        ServerMessage serverMessage = ServerMessage.builder()
-                .messageId(session.getId())
-                .type(ServerMessageTypeEnum.SUCCESS.getType())
-                .data("connect success").build();
-        SessionUtils.sendMessage(session,JSON.toJSONString(serverMessage));
+        SessionUtils.sendOkServerMessage(session, session.getId(), "connect success");
     }
 
     /**
@@ -67,20 +61,16 @@ public class BrowserEndpoint {
     @OnClose
     public void onClose(Session session) {
         SocketSessionCache.removeBrowserBySessionId(session.getId());
-        log.info("【websocket消息】客户端docker相关连接断开");
+        log.info("【websocket消息】游览器连接断开");
     }
 
     @OnError
-    public void onError(Session session,Throwable exception) {
-        log.warn("【websocket消息】客户端docker socket通信异常，{}",ExceptionUtil.getMessage(exception));
-        ServerMessage serverMessage = ServerMessage.builder()
-                .messageId(session.getId())
-                .type(ServerMessageTypeEnum.ERROR.getType())
-                .data("服务器异常:," + ExceptionUtil.getMessage(exception))
-                .build();
-        SessionUtils.sendMessage(session,JSON.toJSONString(serverMessage));
-            SocketSessionCache.removeBrowserBySessionId(session.getId());
-            SessionUtils.close(session);
+    public void onError(Session session, Throwable exception) {
+        log.warn("【websocket消息】游览器连接通信异常，{}", ExceptionUtil.getMessage(exception));
+        SessionUtils.sendErrorServerMessage(session, session.getId(), "服务器异常:," + ExceptionUtil.getMessage(exception));
+        SocketSessionCache.removeBrowserBySessionId(session.getId());
+        SocketSessionCache.removeBrowserBySessionId(session.getId());
+        SessionUtils.close(session);
     }
 
     /**
@@ -92,7 +82,7 @@ public class BrowserEndpoint {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        log.info("【websocket消息】客户端docker相关连接请求:{}", message);
+        log.info("【websocket消息】游览器连接请求:{}", message);
         browserMessageHandler.handle(message, session);
     }
 

@@ -27,6 +27,7 @@ import game.server.manager.docker.model.CreateContainerDto;
 import game.server.manager.docker.model.LinkDto;
 import game.server.manager.docker.model.PortBindDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -45,7 +46,7 @@ import java.util.Objects;
 public class DockerContainerService {
 
 
-    @Resource
+    @Autowired(required = false)
     private DockerClient dockerClient;
 
     /**

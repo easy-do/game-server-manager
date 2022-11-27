@@ -7,6 +7,8 @@ import { addRequest } from '@/api/dockerDetails';
 import { GlobalContext } from '@/context';
 import { Status } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
+import RequestSelect from '@/components/RequestSelect/RequestSelect';
+import { list as clientList } from '@/api/clientInfo';
 
 function AddPage({ visible, setVisible, successCallBack }) {
   
@@ -63,9 +65,9 @@ function AddPage({ visible, setVisible, successCallBack }) {
         <Form.Item
           label={t['searchTable.columns.dockerHost']}
           field="dockerHost"
-          rules={[
-            { required: true, message: t['searchTable.rules.dockerHost.required'] },
-          ]}
+          // rules={[
+          //   { required: true, message: t['searchTable.rules.dockerHost.required'] },
+          // ]}
         >
           <Input placeholder={t['searchForm.dockerHost.placeholder']} allowClear />
         </Form.Item>
@@ -79,10 +81,19 @@ function AddPage({ visible, setVisible, successCallBack }) {
         >
           <Select placeholder={t['searchForm.dockerModel.placeholder']} allowClear >
             <Select.Option value={'http'}>API直连</Select.Option>
-            <Select.Option value={'socket'}>客户端模式</Select.Option>
+            <Select.Option value={'socket'}>socket通信</Select.Option>
             </Select>
         </Form.Item>
         <Form.Item
+          label={t['searchTable.columns.imageList.clientId']}
+          field="clientId"
+          rules={[
+            { required: true, message: t['searchTable.rules.clientId.required'] },
+          ]}
+        >
+          <RequestSelect placeholder={t['searchForm.clientId.placeholder']} lableFiled='clientName' valueFiled='clientId' request={() => clientList()} />
+        </Form.Item>
+        {/* <Form.Item
           label={t['searchTable.columns.dockerIsSsl']}
           field="dockerIsSsl"
         >
@@ -99,7 +110,7 @@ function AddPage({ visible, setVisible, successCallBack }) {
           field="dockerCertPassword"
         >
           <Input placeholder={t['searchForm.dockerCertPassword.placeholder']} allowClear />
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </Modal>
   );

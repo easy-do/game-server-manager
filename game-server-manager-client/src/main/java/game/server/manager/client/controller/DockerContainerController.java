@@ -7,7 +7,6 @@ import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.docker.client.api.DockerContainerApi;
 import game.server.manager.client.service.DockerContainerService;
-import game.server.manager.client.service.DockerService;
 import game.server.manager.docker.model.CreateContainerDto;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +29,6 @@ import java.util.List;
 @RestController
 public class DockerContainerController implements DockerContainerApi {
 
-    @Resource
-    private DockerService dockerService;
 
     @Resource
     private DockerContainerService dockerContainerService;

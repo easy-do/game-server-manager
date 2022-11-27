@@ -1,5 +1,6 @@
 package game.server.manager.client.config;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.github.dockerjava.api.DockerClient;
@@ -32,12 +33,19 @@ public class DockerConfig {
             secret = UUID.fastUUID().toString(true);
             log.info("set default secret :{}",secret);
         }
+        DockerClient client = null;
         DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
-                .createDefaultConfigBuilder().withDockerHost("tcp://192.168.124.124:2375").build();
-        DockerClient client = DockerClientBuilder.getInstance(dockerClientConfig)
-                .build();
-        log.info("docker info:{}",client.infoCmd().exec());
-        return client;
+                .createDefaultConfigBuilder().build();
+//                .createDefaultConfigBuilder().withDockerHost("tcp://192.168.124.124:2375").build();
+        try {
+            client = DockerClientBuilder.getInstance(dockerClientConfig)
+                    .build();
+            log.info("docker info:{}",client.infoCmd().exec());
+            return client;
+        }catch (Exception exception) {
+            log.error("初始化docker失败:{}", ExceptionUtil.getMessage(exception));
+            return client;
+        }
     }
 
     @Bean

@@ -49,6 +49,8 @@ public class MessageTypeConstants {
     public static final String RENAME_CONTAINER = "renameContainer";
 
     public static final String CREATE_CONTAINER = "createContainer";
+    public static final String CANCEL_SYNC = "cancel_sync";
+
     private MessageTypeConstants() {
     }
 

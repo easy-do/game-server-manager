@@ -14,7 +14,7 @@ import game.server.manager.handler.AbstractHandlerService;
 import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.application.DeploymentLogServer;
 import game.server.manager.server.service.ApplicationInfoService;
-import game.server.manager.server.websocket.SessionUtils;
+import game.server.manager.server.util.SessionUtils;
 
 import javax.annotation.Resource;
 import javax.websocket.Session;

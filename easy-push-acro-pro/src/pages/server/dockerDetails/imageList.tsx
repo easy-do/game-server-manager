@@ -1,20 +1,27 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Table,
   Card,
   Typography,
   Notification,
   Modal,
+  Space,
+  Button,
+  Form,
+  Input,
 } from '@arco-design/web-react';
 import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import { getImageListColumns } from './constants';
 import { imagesList, removeImage } from '@/api/dockerApi';
+import PermissionWrapper from '@/components/PermissionWrapper';
+import styles from './style/index.module.less';
+import { socketAddress } from '@/utils/systemConstant';
 
 const { Title } = Typography;
 
-function ImageList(props: {isViewImageList:boolean, dockerId: any }) {
+function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
   const t = useLocale(locale);
 
   //表格操作按钮回调
@@ -56,14 +63,13 @@ function ImageList(props: {isViewImageList:boolean, dockerId: any }) {
   const [data, setData] = useState([]);
 
   const [loading, setLoading] = useState(true);
-  // const [formParams, setFormParams] = useState({});
-  // const [orders, setOrders] = useState(getDefaultOrders());
+
 
   useEffect(() => {
     if (props.dockerId && props.isViewImageList) {
       fetchData();
     }
-  }, [props.isViewImageList,props.dockerId]);
+  }, [props.isViewImageList, props.dockerId]);
 
   // 获取数据
   function fetchData() {
@@ -74,55 +80,96 @@ function ImageList(props: {isViewImageList:boolean, dockerId: any }) {
     });
   }
 
-  //表格搜索排序回调函数
-  // function onChangeTable(
-  //   pagination: PaginationProps,
-  //   sorter: SorterResult,
-  //   _filters: Partial<any>,
-  //   _extra: {
-  //     currentData: any[];
-  //     action: 'paginate' | 'sort' | 'filter';
-  //   }
-  // ) {
-  //   setPatination({
-  //     ...pagination,
-  //     current: pagination.current,
-  //     pageSize: pagination.pageSize,
-  //   });
-  //   if (sorter) {
-  //     if (sorter.direction === 'ascend') {
-  //       setOrders([{ column: sorter.field, asc: true }]);
-  //     } else if (sorter.direction === 'descend') {
-  //       setOrders([{ column: sorter.field, asc: false }]);
-  //     } else if (sorter.direction === undefined) {
-  //       setOrders(getDefaultOrders());
-  //     }
-  //   }
-  // }
+  //pull镜像
+  const [viewPullImage, setViewPullImage] = useState(false);
+  const [pullImageStatus, setPullImageStatus] = useState(false);
+  const [pullImageLogData, setPullImageLogData] = useState([]);
+  let repository = '';
 
-  // //点击搜索按钮
-  // function handleSearch(params) {
-  //   setPatination({ ...pagination, current: 1 });
-  //   setFormParams(params);
-  // }
+  const pullImageLogCache = []
+
+
+  let logWebSocket:WebSocket;
+
+
+  function pullImageButton() {
+    setViewPullImage(true)
+  }
+
+  function onCancelPullImage() {
+    setViewPullImage(false)
+    // setPullImageStatus(false)
+    // setPullImageLogData([])
+  }
+
+  function setRepositoryValue(value, _e) {
+    repository = value;
+  }
+
+
+  function okPullImage() {
+    if (!pullImageStatus) {
+      setPullImageLogData([])
+      setViewPullImage(true)
+      logWebSocket = new WebSocket(socketAddress);
+      logWebSocket.onopen = function () {
+        console.log('开启websocket连接.')
+        setPullImageStatus(true)
+        const messageParam = {
+          "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
+          "type": "pullImage",
+          "data": {
+            "dockerId": props.dockerId,
+            "repository": repository
+          }
+        }
+        logWebSocket.send(JSON.stringify(messageParam));
+      }
+      logWebSocket.onerror = function () {
+        console.log('websocket连接异常.')
+      };
+      logWebSocket.onclose = function (e: CloseEvent) {
+        console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
+      }
+      logWebSocket.onmessage = function (event: any) {
+        setPullImageStatus(true)
+        console.log('接收到服务端消息:' + event.data)
+        const serverMessage = JSON.parse(event.data);
+        if(serverMessage.type === 'sync_result_end'){
+          Notification.success({ content: "完成", duration: 300 });
+          setPullImageStatus(false)
+        }
+        pullImageLogCache.push(
+          <div className={styles['log-msg']}>
+            <span>{serverMessage.data}</span>
+          </div>
+        )
+        setPullImageLogData(null)
+        setPullImageLogData(pullImageLogCache)
+      }
+    } else {
+      onCancelPullImage()
+    }
+  }
+
 
   return (
     <Card>
       {/* <Title heading={6}>{t['list.searchTable']}</Title> */}
       {/* <SearchForm onSearch={handleSearch} /> */}
-      {/* <PermissionWrapper
+      <PermissionWrapper
         requiredPermissions={[
           { resource: 'server:dockerDetails', actions: ['add'] },
         ]}
       >
         <div className={styles['button-group']}>
           <Space>
-            <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
-              {t['searchTable.operations.add']}
+            <Button type="primary" icon={<IconPlus />} onClick={() => pullImageButton()}>
+              {t['searchTable.operations.pullImage']}
             </Button>
           </Space>
         </div>
-      </PermissionWrapper> */}
+      </PermissionWrapper>
       <Table rowKey="id" loading={loading} columns={columns} data={data} />
       <Modal
         // style={{ minHeight: '100%', width: '100%' }}
@@ -142,6 +189,39 @@ function ImageList(props: {isViewImageList:boolean, dockerId: any }) {
             {JSON.stringify(viewInfoData)}
           </Typography.Paragraph>
         </Typography>
+      </Modal>
+      <Modal
+        title={t['searchTable.info.title']}
+        visible={viewPullImage}
+        onOk={() => {
+          okPullImage();
+        }}
+        onCancel={() => {
+          onCancelPullImage();
+        }}
+        style={{ width: "80%", minHeight: "70%" }}
+        autoFocus={false}
+        focusLock={true}
+        maskClosable={false}
+      >
+        {pullImageStatus ?
+          <section className={pullImageStatus ? styles['log-body'] : ''}>
+            {pullImageLogData}
+          </section>
+          :
+          <Form
+          >
+            <Form.Item
+              label={t['searchTable.columns.repository']}
+              field='repository'
+              initialValue={repository}
+              required
+            >
+              <Input onChange={(value, e) => setRepositoryValue(value, e)} />
+            </Form.Item>
+          </Form>
+        }
+
       </Modal>
     </Card>
   );
