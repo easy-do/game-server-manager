@@ -15,6 +15,7 @@ import locale from './locale';
 import { getContainerListColumns } from './constants';
 import { containerList, logContainer, removeContainer, renameContainer, restartContainer, startContainer, stopContainer } from '@/api/dockerApi';
 import styles from './style/index.module.less';
+import { socketAddress } from '@/utils/systemConstant';
 
 const { Title } = Typography;
 
@@ -24,6 +25,7 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
 
   const formRef = useRef<FormInstance>();
 
+  const pullImageLogCache = []
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
@@ -34,23 +36,40 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
 
         //日志
         if (type === 'log') {
-          logContainer(props.dockerId,record.Id).then((res) => {
-            const { success, msg, data } = res.data;
-            if (success) {
-              Notification.success({ content: msg, duration: 300 });
-              setIsViewLog(true);
-              const logResult = data.split("\r\n")
-              const logDivs = []
-              for (let i = 0; i < logResult.length; i++) {
-                logDivs.push(
-                  <div className={styles['log-msg']}>
-                    <span>{logResult[i]}</span>
-                  </div>
-                )
+          const logWebSocket = new WebSocket(socketAddress);
+          logWebSocket.onopen = function () {
+            console.log('开启websocket连接.')
+            setIsViewLog(true);
+            const messageParam = {
+              "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
+              "type": "container_log",
+              "data": {
+                "dockerId": props.dockerId,
+                "containerId": record.Id
               }
-              setViewLogData(logDivs)
             }
-          });
+            logWebSocket.send(JSON.stringify(messageParam));
+          }
+          logWebSocket.onerror = function () {
+            console.log('websocket连接异常.')
+          };
+          logWebSocket.onclose = function (e: CloseEvent) {
+            console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
+          }
+          logWebSocket.onmessage = function (event: any) {
+            console.log('接收到服务端消息:' + event.data)
+            const serverMessage = JSON.parse(event.data);
+            if(serverMessage.type === 'sync_result_end'){
+              Notification.success({ content: "完成", duration: 300 });
+            }
+            pullImageLogCache.push(
+              <div className={styles['log-msg']}>
+                <span>{serverMessage.data}</span>
+              </div>
+            )
+            setViewLogData(null)
+            setViewLogData(pullImageLogCache)
+          }
         }
 
     //启动

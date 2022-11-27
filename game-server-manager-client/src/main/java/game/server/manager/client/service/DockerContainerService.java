@@ -1,20 +1,13 @@
 package game.server.manager.client.service;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrBuilder;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.command.LogContainerCmd;
-import com.github.dockerjava.api.command.RemoveContainerCmd;
-import com.github.dockerjava.api.command.RenameContainerCmd;
-import com.github.dockerjava.api.command.RestartContainerCmd;
-import com.github.dockerjava.api.command.StartContainerCmd;
-import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -22,6 +15,9 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.PullResponseItem;
+import game.server.manager.client.server.SyncServer;
+import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.docker.model.BindDto;
 import game.server.manager.docker.model.CreateContainerDto;
 import game.server.manager.docker.model.LinkDto;
@@ -34,6 +30,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author laoyu
@@ -48,6 +45,10 @@ public class DockerContainerService {
 
     @Autowired(required = false)
     private DockerClient dockerClient;
+
+    @Resource
+    private SyncServer syncServer;
+
 
     /**
      * 容器列表
@@ -159,6 +160,38 @@ public class DockerContainerService {
         result.awaitCompletion();
         log.info("Docker logContainer end {},{}", containerId,System.currentTimeMillis() - startTime);
         return strBuilder.toString();
+    }
+
+
+    /**
+     * 查看日志
+     *
+     * @param messageId messageId
+     * @param containerId containerId
+     * @author laoyu
+     * @date 2022/11/28
+     */
+    public void logContainer(String messageId, String containerId) {
+        log.info("Docker logContainer {}", containerId);
+
+        LogContainerCmd logContainerCmd = dockerClient.logContainerCmd(containerId);
+        logContainerCmd.withStdOut(true).withStdErr(true);
+        ResultCallback.Adapter<Frame> callback = logContainerCmd.exec(new ResultCallback.Adapter<Frame>() {
+            @Override
+            public void onNext(Frame frame) {
+                syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT,new String(frame.getPayload()));
+            }
+        });
+        try {
+            callback.awaitCompletion();
+            syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END,"success");
+        } catch ( InterruptedException interruptedException) {
+            log.error("执行查看镜像日志线程异常，{}", ExceptionUtil.getMessage(interruptedException));
+            syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END,"客户端执行查看镜像日志线程异常："+ExceptionUtil.getMessage(interruptedException));
+        }finally {
+            //释放锁
+            syncServer.getClient().unLock(messageId);
+        }
     }
 
     /**

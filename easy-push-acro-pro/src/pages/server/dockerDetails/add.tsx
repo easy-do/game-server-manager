@@ -91,7 +91,7 @@ function AddPage({ visible, setVisible, successCallBack }) {
             { required: true, message: t['searchTable.rules.clientId.required'] },
           ]}
         >
-          <RequestSelect placeholder={t['searchForm.clientId.placeholder']} lableFiled='clientName' valueFiled='clientId' request={() => clientList()} />
+          <RequestSelect placeholder={t['searchForm.clientId.placeholder']} lableFiled='clientName' valueFiled='id' request={() => clientList()} />
         </Form.Item>
         {/* <Form.Item
           label={t['searchTable.columns.dockerIsSsl']}

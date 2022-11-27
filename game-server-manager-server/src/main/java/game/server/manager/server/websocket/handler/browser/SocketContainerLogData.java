@@ -15,9 +15,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocketPullImageData {
+public class SocketContainerLogData {
+
 
     private String dockerId;
 
-    private String repository;
+    private String containerId;
 }
