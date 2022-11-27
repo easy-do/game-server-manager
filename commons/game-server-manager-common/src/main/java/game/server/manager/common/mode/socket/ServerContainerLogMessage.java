@@ -1,23 +1,22 @@
-package game.server.manager.server.websocket.handler.browser;
+package game.server.manager.common.mode.socket;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 /**
  * @author laoyu
  * @version 1.0
+ * @description pull docker镜像参数封装
  * @date 2022/11/21
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocketPullImageData {
+public class ServerContainerLogMessage {
 
-    private String dockerId;
+    private String containerId;
 
-    private String repository;
 }

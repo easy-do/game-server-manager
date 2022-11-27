@@ -37,6 +37,8 @@ public enum ServerMessageTypeEnum {
 
     CONTAINER_LIST(MessageTypeConstants.CONTAINER_LIST,"容器列表"),
 
+    CONTAINER_LOG(MessageTypeConstants.CONTAINER_LOG,"容器列表"),
+
     START_CONTAINER(MessageTypeConstants.START_CONTAINER,"启动容器"),
 
     RESTART_CONTAINER(MessageTypeConstants.RESTART_CONTAINER,"重启容器"),

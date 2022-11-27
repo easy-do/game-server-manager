@@ -13,7 +13,6 @@ import game.server.manager.server.websocket.SocketSessionCache;
 
 import javax.annotation.Resource;
 import javax.websocket.Session;
-import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -34,10 +33,8 @@ public class HeartbeatHandlerService extends AbstractHandlerService<ClientHandle
         SocketSessionCache.saveSession(session);
         SocketSessionCache.saveClientIdAndSid(clientMessage.getClientId(),session.getId());
         SessionUtils.sendSimpleServerMessage(session,session.getId(),"success",ServerMessageTypeEnum.HEARTBEAT);
-        CompletableFuture.runAsync(()-> {
-            ClientData clientData = JSON.parseObject(clientMessage.getData(),ClientData.class);
-            clientInfoService.updateHeartbeat(clientData);
-        });
+        ClientData clientData = JSON.parseObject(clientMessage.getData(),ClientData.class);
+        clientInfoService.updateHeartbeat(clientData);
         return null;
     }
 

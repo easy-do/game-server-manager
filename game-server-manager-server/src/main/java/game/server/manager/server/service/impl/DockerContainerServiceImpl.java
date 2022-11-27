@@ -2,24 +2,28 @@ package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import game.server.manager.common.enums.ClientModelEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
-import game.server.manager.common.mode.socket.ClientMessage;
+import game.server.manager.common.mode.socket.ServerContainerLogMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
-import game.server.manager.common.result.DataResult;
+import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.docker.client.api.DockerClientApiEndpoint;
 import game.server.manager.docker.client.api.DockerContainerApi;
 import game.server.manager.common.result.R;
 import game.server.manager.docker.model.CreateContainerDto;
+import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerContainerService;
 import game.server.manager.server.service.DockerDetailsService;
 import game.server.manager.server.vo.DockerDetailsVo;
-import game.server.manager.server.websocket.SessionResultCache;
 import game.server.manager.server.util.SessionUtils;
 import game.server.manager.common.mode.socket.RenameContainerData;
+import game.server.manager.server.websocket.SocketSessionCache;
+import game.server.manager.server.websocket.handler.browser.SocketContainerLogData;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -167,6 +171,37 @@ public class DockerContainerServiceImpl implements DockerContainerService {
     @Override
     public R<String> logContainer(String dockerId, String containerId) {
         return dockerContainerApi(dockerId).logContainer(containerId);
+    }
+
+    @Override
+    public void socketContainerLog(SocketContainerLogData socketContainerLogData, UserInfoVo userInfo) {
+        String dockerId = socketContainerLogData.getDockerId();
+        LambdaQueryWrapper<DockerDetails> query = Wrappers.lambdaQuery();
+        if(!userInfo.isAdmin()){
+            query.eq(DockerDetails::getCreateBy,userInfo.getId());
+        }
+        DockerDetails docker = dockerDetailsService.getOne(query);
+        Session browserSession = SocketSessionCache.getBrowserByDockerId(dockerId);
+        if(Objects.isNull(docker)){
+            assert browserSession != null;
+            SessionUtils.sendErrorServerMessage(browserSession,browserSession.getId(),"等待客户端响应,这需要一点时间....");
+            SessionUtils.close(browserSession);
+            return;
+        }
+        String clientId = docker.getClientId();
+        Session clientSession = SocketSessionCache.getClientByClientId(clientId);
+        if(Objects.isNull(clientSession)){
+            assert browserSession != null;
+            SessionUtils.sendErrorServerMessage(browserSession,browserSession.getId(),"客户端未连接");
+            SessionUtils.close(browserSession);
+            return;
+        }
+        assert browserSession != null;
+        SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(),clientSession.getId());
+        ServerContainerLogMessage serverContainerLogMessage = ServerContainerLogMessage.builder()
+                .containerId(socketContainerLogData.getContainerId())
+                .build();
+        SessionUtils.sendSyncServerMessage(clientSession,browserSession.getId(),JSON.toJSONString(serverContainerLogMessage),ServerMessageTypeEnum.CONTAINER_LOG);
     }
 
     @NotNull

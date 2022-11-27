@@ -3,9 +3,10 @@ package game.server.manager.server.service;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import game.server.manager.common.result.R;
+import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.docker.model.CreateContainerDto;
+import game.server.manager.server.websocket.handler.browser.SocketContainerLogData;
 
-import javax.servlet.ServletOutputStream;
 import java.util.List;
 
 /**
@@ -103,4 +104,14 @@ public interface DockerContainerService {
      * @date 2022/11/20
      */
     R<String> logContainer(String dockerId, String containerId);
+
+    /**
+     * socket查看容器日志
+     *
+     * @param build build
+     * @param userInfo userInfo
+     * @author laoyu
+     * @date 2022/11/28
+     */
+    void socketContainerLog(SocketContainerLogData build, UserInfoVo userInfo);
 }

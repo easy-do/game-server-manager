@@ -30,10 +30,9 @@ public class HeartbeatThread {
     @Autowired
     private SystemUtils systemUtils;
 
-    @Scheduled(fixedDelay = 1000 * 20)
+    @Scheduled(fixedDelay = 1000 * 30)
     public void HeartbeatCheck() {
         ClientData clientData = clientDataServer.getClientData();
-        String data = JSON.toJSONString(clientData);
-        syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, JSON.toJSONString(data));
+        syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, JSON.toJSONString(clientData));
     }
 }

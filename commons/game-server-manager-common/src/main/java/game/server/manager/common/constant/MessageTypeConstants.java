@@ -48,6 +48,8 @@ public class MessageTypeConstants {
     public static final String REMOVE_CONTAINER = "removeContainer";
     public static final String RENAME_CONTAINER = "renameContainer";
 
+    public static final String CONTAINER_LOG = "container_log";
+
     public static final String CREATE_CONTAINER = "createContainer";
     public static final String CANCEL_SYNC = "cancel_sync";
 
