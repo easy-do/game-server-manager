@@ -1,5 +1,6 @@
 package game.server.manager.server.service;
 
+import game.server.manager.common.mode.ClientData;
 import game.server.manager.common.vo.ClientInfoVo;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.web.base.BaseService;
@@ -43,4 +44,14 @@ public interface ClientInfoService extends BaseService<ClientInfo, MpBaseQo<Clie
      * @date 2022/8/7
      */
     boolean exists(String clientId);
+
+    /**
+     * 更新心跳数据
+     *
+     * @param clientData clientData
+     * @return java.lang.String
+     * @author laoyu
+     * @date 2022/11/28
+     */
+    void updateHeartbeat(ClientData clientData);
 }

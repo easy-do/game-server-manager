@@ -5,6 +5,7 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.crypto.asymmetric.RSA;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -15,7 +16,10 @@ import game.server.manager.api.SysDictDataApi;
 import game.server.manager.common.application.DeployParam;
 import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.common.enums.ClientMessageTypeEnum;
+import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.mode.ClientData;
+import game.server.manager.common.result.DataResult;
 import game.server.manager.common.utils.AppScriptUtils;
 import game.server.manager.common.vo.ClientInfoVo;
 import game.server.manager.common.vo.SysDictDataVo;
@@ -37,10 +41,13 @@ import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
 import game.server.manager.server.service.ExecuteLogService;
 import game.server.manager.server.service.ServerInfoService;
+import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.web.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.websocket.Session;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -258,6 +265,34 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
         LambdaQueryWrapper<ClientInfo> wrapper = getWrapper();
         wrapper.eq(ClientInfo::getId,clientId);
         return baseMapper.exists(wrapper);
+    }
+
+    @Override
+    public void updateHeartbeat(ClientData clientData) {
+        String clientId = clientData.getClientId();
+        Session clientSession = SocketSessionCache.getClientByClientId(clientId);
+        assert clientSession != null;
+        if(CharSequenceUtil.isEmpty(clientId)){
+            SessionUtils.sendErrorServerMessage(clientSession,clientSession.getId(),"客户端标识为空");
+        }
+        ClientInfo dbClientInfo = getById(clientId);
+        if(Objects.isNull(dbClientInfo)){
+            SessionUtils.sendErrorServerMessage(clientSession,clientSession.getId(),"客户端不存在");
+        }
+        if (CharSequenceUtil.isEmpty(clientData.getIp())) {
+            SessionUtils.sendErrorServerMessage(clientSession,clientSession.getId(),"未知的服务器ip");
+        }
+        if (CharSequenceUtil.isEmpty(clientData.getVersion())) {
+            SessionUtils.sendErrorServerMessage(clientSession,clientSession.getId(),"未知的版本信息");
+        }
+        ClientInfo clientInfo = ClientInfo.builder()
+                .id(clientId)
+                .status("最近在线")
+                .clientData(com.alibaba.fastjson2.JSON.toJSONString(clientData))
+                .lastUpTime(LocalDateTime.now())
+                .status(AppStatusEnum.DEPLOYMENT_SUCCESS.getDesc()).build();
+        updateById(clientInfo);
+        SessionUtils.sendSimpleServerMessage(clientSession,clientSession.getId(),"success", ServerMessageTypeEnum.HEARTBEAT);
     }
 
     private String getInstallScriptId(){

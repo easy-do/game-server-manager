@@ -8,6 +8,7 @@ import game.server.manager.common.enums.ClientMessageStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -37,7 +38,7 @@ public class ConsumeClientMessageThread {
      * @author laoyu
      * @date 2022/8/7
      */
-//    @Scheduled(fixedDelay = 1000 * 10)
+    @Scheduled(fixedDelay = 1000 * 10)
     public void consumeMessage(){
         if(!consumeFlag){
             consumeFlag = true;
