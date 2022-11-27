@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BrowserPulImageMessage {
 
+    private String dockerId;
+
     private String repository;
 
 }

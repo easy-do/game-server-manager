@@ -150,7 +150,7 @@ function MessageBox({ children, userInfo }) {
         const count = result.data.data;
         if (count > 0) {
           if (!sessionStorage.getItem('isPlayMessaudio')) {
-            this.audio.play();
+            // this.audio.play();
             Notification.success({ content: '您有' + count + '条未读消息。' });
             sessionStorage.setItem('isPlayMessaudio', 'true');
           }

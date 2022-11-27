@@ -1,6 +1,7 @@
 package game.server.manager.client.service;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
@@ -11,10 +12,13 @@ import com.github.dockerjava.api.model.PullResponseItem;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author laoyu
@@ -27,7 +31,7 @@ import java.util.List;
 public class DockerImageService {
 
 
-    @Resource
+    @Autowired(required = false)
     private DockerClient dockerClient;
 
     @Resource
@@ -58,20 +62,31 @@ public class DockerImageService {
     public void pullImage(String messageId, String repository) {
         log.info("Docker pullImage {}", repository);
         PullImageCmd pullImageCmd = dockerClient.pullImageCmd(repository);
+        ConcurrentHashMap<String,String> messageCache = new ConcurrentHashMap<>();
         PullImageResultCallback callback = pullImageCmd.exec(new PullImageResultCallback() {
             @Override
             public void onNext(PullResponseItem item) {
-                syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT,item.getStatus());
-                log.info("pullImage ==> {},{}", repository, item.getStatus());
+                String status = item.getStatus();
+                log.info("pullImage ==> {},{}", repository, status);
+                try {
+                    String firstCache = messageCache.get("first");
+                    if(Objects.isNull(firstCache) || !CharSequenceUtil.equals(status,firstCache)){
+                        assert status != null;
+                        syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT,status);
+                        messageCache.put("first",status);
+                    }
+                }catch (Exception e) {
+                    log.warn("发送pull image 消息异常，等待一秒继续，{}", ExceptionUtil.getMessage(e));
+                }
                 super.onNext(item);
             }
         });
         try {
             callback.awaitCompletion();
             syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END,"success");
-        } catch (InterruptedException e) {
-            syncServer.sendMessage(ClientSocketTypeEnum.ERROR,ExceptionUtil.getMessage(e));
-            log.error("执行pull镜像操作异常，{}", ExceptionUtil.getMessage(e));
+        } catch ( InterruptedException interruptedException) {
+            log.error("执行pull镜像线程异常，{}", ExceptionUtil.getMessage(interruptedException));
+            syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END,"客户端执行pull镜像线程异常："+ExceptionUtil.getMessage(interruptedException));
         }finally {
             //释放锁
             syncServer.getClient().unLock(messageId);

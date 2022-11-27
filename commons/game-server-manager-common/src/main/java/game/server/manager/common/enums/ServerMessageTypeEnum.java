@@ -17,6 +17,10 @@ public enum ServerMessageTypeEnum {
 
     ERROR(MessageTypeConstants.ERROR,"服务器异常"),
 
+    SYNC_RESULT_END(MessageTypeConstants.SYNC_RESULT_END,"同步等待数据执行完成"),
+
+    CANCEL_SYNC(MessageTypeConstants.CANCEL_SYNC,"取消当前同步请求"),
+
     PING_DOCKER(MessageTypeConstants.PING_DOCKER,"删除镜像"),
 
     DOCKER_INFO(MessageTypeConstants.DOCKER_INFO,"删除镜像"),
@@ -44,7 +48,6 @@ public enum ServerMessageTypeEnum {
     RENAME_CONTAINER(MessageTypeConstants.RENAME_CONTAINER,"重命名容器"),
 
     CREATE_CONTAINER(MessageTypeConstants.CREATE_CONTAINER,"创建容器");
-
 
     private final String type;
     private final String desc;

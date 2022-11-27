@@ -13,7 +13,7 @@ import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerBasicService;
 import game.server.manager.server.service.DockerDetailsService;
 import game.server.manager.server.websocket.SessionResultCache;
-import game.server.manager.server.websocket.SessionUtils;
+import game.server.manager.server.util.SessionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -54,13 +54,12 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.PING_DOCKER,clientSession);
-            while (true) {
-                ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
-                if(Objects.nonNull(message)){
-                    SessionResultCache.removeMessageById(messageId);
-                    return message.getSuccess()? DataResult.ok(message.getData()):DataResult.fail(message.getData());
-                }
+            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 3000);
+            if(Objects.isNull(clientMessage)){
+                return DataResult.fail("获取客户端消息超时.");
             }
+            return clientMessage.isSuccess()? DataResult.ok(clientMessage.getData())
+                    :DataResult.fail(clientMessage.getData());
         }
         return dockerClientApi(dockerDetails).ping();
     }
@@ -72,14 +71,12 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_INFO,clientSession);
-            while (true) {
-                ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
-                if(Objects.nonNull(message)){
-                    SessionResultCache.removeMessageById(messageId);
-                    return message.getSuccess()? DataResult.ok(message.getData())
-                            :DataResult.fail(message.getData());
-                }
+            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
+            if(Objects.isNull(clientMessage)){
+                return DataResult.fail("获取客户端消息超时.");
             }
+            return clientMessage.isSuccess()? DataResult.ok(clientMessage.getData())
+                    :DataResult.fail(clientMessage.getData());
         }
         return dockerClientApi(dockerDetails).info();
     }
@@ -91,14 +88,12 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_VERSION,clientSession);
-            while (true) {
-                ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
-                if(Objects.nonNull(message)){
-                    SessionResultCache.removeMessageById(messageId);
-                    return message.getSuccess()? DataResult.ok(message.getData())
-                            :DataResult.fail(message.getData());
-                }
+            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
+            if(Objects.isNull(clientMessage)){
+                return DataResult.fail("获取客户端消息超时.");
             }
+            return clientMessage.isSuccess()? DataResult.ok(clientMessage.getData())
+                    :DataResult.fail(clientMessage.getData());
         }
         return dockerClientApi(dockerDetails).version();
     }

@@ -4,6 +4,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.mode.socket.ServerMessage;
+import game.server.manager.server.util.SessionUtils;
 import game.server.manager.server.websocket.handler.ClientMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,18 +64,13 @@ public class ClientSocketEndpoint {
     @OnClose
     public void onClose(Session session) {
         SocketSessionCache.removeClientBySessionId(session.getId());
-        log.info("【websocket消息】客户端通信请求意外断开");
+        log.info("【websocket消息】客户端通信断开");
     }
 
     @OnError
     public void onError(Throwable exception, Session session) {
         log.warn("【websocket消息】ClientSocketEndpoint异常，{}",ExceptionUtil.getMessage(exception));
-        ServerMessage serverMsg = ServerMessage.builder()
-                .messageId(session.getId())
-                .type(ServerMessageTypeEnum.ERROR.getType())
-                .sync(0)
-                .data(ExceptionUtil.getMessage(exception)).build();
-        SessionUtils.sendMessage(session, JSON.toJSONString(serverMsg));
+        SessionUtils.sendErrorServerMessage(session,session.getId(), ExceptionUtil.getMessage(exception));
     }
 
     /**

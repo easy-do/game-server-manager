@@ -25,6 +25,6 @@ public class ClientMessage {
 
     private String data;
 
-    private Boolean success;
+    private boolean success;
 
 }

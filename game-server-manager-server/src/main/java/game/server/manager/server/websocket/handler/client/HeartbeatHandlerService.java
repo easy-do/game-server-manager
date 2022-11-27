@@ -1,13 +1,11 @@
 package game.server.manager.server.websocket.handler.client;
 
-import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.mode.socket.ClientMessage;
-import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.handler.AbstractHandlerService;
 import game.server.manager.handler.annotation.HandlerService;
-import game.server.manager.server.websocket.SessionUtils;
+import game.server.manager.server.util.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
 
 import javax.websocket.Session;
@@ -27,12 +25,7 @@ public class HeartbeatHandlerService extends AbstractHandlerService<ClientHandle
         Session session = clientHandlerData.getSession();
         SocketSessionCache.saveSession(session);
         SocketSessionCache.saveClientIdAndSid(clientMessage.getClientId(),session.getId());
-        ServerMessage serverMsg = ServerMessage.builder()
-                .messageId(session.getId())
-                .type(ServerMessageTypeEnum.HEARTBEAT.getType())
-                .sync(0)
-                .build();
-        SessionUtils.sendMessage(session, JSON.toJSONString(serverMsg));
+        SessionUtils.sendSimpleServerMessage(session,session.getId(),"success",ServerMessageTypeEnum.HEARTBEAT);
         return null;
     }
 

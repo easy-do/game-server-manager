@@ -49,7 +49,7 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
         //没有锁定，但是为同步传输消息则加锁。
         messageLock = true;
         lockMessageId = serverMessage.getMessageId();
-        return true;
+        return false;
     }
 
     /**
@@ -119,7 +119,7 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
 
     @Override
     public void onClose(int i, String s, boolean b) {
-        log.info("与服务端连接断开");
+        log.info("与服务端连接断开。");
     }
 
     @Override

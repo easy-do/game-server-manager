@@ -18,7 +18,7 @@ import game.server.manager.server.service.DockerContainerService;
 import game.server.manager.server.service.DockerDetailsService;
 import game.server.manager.server.vo.DockerDetailsVo;
 import game.server.manager.server.websocket.SessionResultCache;
-import game.server.manager.server.websocket.SessionUtils;
+import game.server.manager.server.util.SessionUtils;
 import game.server.manager.common.mode.socket.RenameContainerData;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -67,16 +67,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
                     .type(ServerMessageTypeEnum.CONTAINER_LIST.getType())
                     .sync(0)
                     .build();
-            SessionUtils.sendMessage(clientSession, JSON.toJSONString(serverMessage));
-            while (true) {
-                ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
-                if(Objects.nonNull(message)){
-                    SessionResultCache.removeMessageById(messageId);
-                    return message.getSuccess()?
-                            DataResult.ok(JSON.parseObject(message.getData(),List.class)):
-                            DataResult.fail(message.getData());
-                }
-            }
+            return SessionUtils.sendMessageAndGetListResultMessage(clientSession, messageId, serverMessage);
         }
         return dockerContainerApi(dockerId).containerList();
     }
@@ -180,13 +171,6 @@ public class DockerContainerServiceImpl implements DockerContainerService {
 
     @NotNull
     private R<Void> sendMessageAndUnPackage(Session clientSession, String messageId, ServerMessage serverMessage) {
-        SessionUtils.sendMessage(clientSession, JSON.toJSONString(serverMessage));
-        while (true) {
-            ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
-            if(Objects.nonNull(message)){
-                SessionResultCache.removeMessageById(messageId);
-                return message.getSuccess()? DataResult.ok():DataResult.fail(message.getData());
-            }
-        }
+        return SessionUtils.sendMessageAndGetResultMessage(clientSession, messageId, serverMessage);
     }
 }

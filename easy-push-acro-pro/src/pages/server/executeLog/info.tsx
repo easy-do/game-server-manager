@@ -3,6 +3,7 @@ import { Descriptions, Modal, Skeleton } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import styles from './style/index.module.less';
+import { socketAddress } from '@/utils/systemConstant';
 
 
 function InfoPage(props: { id: number, applicationId: string, visible, setVisible }) {
@@ -11,9 +12,6 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   const [logResult, setLogResult] = useState([]);
 
-  const socketAddress = "wss://push.easydo.plus/wss/browser";
-
-  // const socketAddress = "ws://localhost:30002/wss/browser";
 
   const logDivs = []
 

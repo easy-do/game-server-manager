@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author yuzhanfeng
  * @Date 2022/11/26 23:29
- * @Description 客户端返回连续数据结束时的处理服务
+ * @Description 客户端返回的非同步消息处理服务
  */
 @Slf4j
 @HandlerService(MessageTypeConstants.NO_SYNC_RESULT)
