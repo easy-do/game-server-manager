@@ -10,7 +10,7 @@ spring:
 
 model: ${MODEL:socket}
 manager-url: ${MANAGER_URL:https://manager.easydo.plus/client}
-server-socket-url: ${SERVER_SOCKET_URL:wss://manager.easydo.plus/wss/client}
+server-socket-url: ${SERVER_SOCKET_URL:wss://manager.easydo.plus/server/wss/client}
 socket-url: ${SOCKET_URL:wss://manager.easydo.plus/wss/syncClientData}
 client-id: ${CLIENT_ID:no}
 app-id: ${APP_ID:no}

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.common.result.R;
 
 import game.server.manager.server.dto.DockerDetailsDto;
+import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerBasicService;
 import game.server.manager.web.base.BaseServiceImpl;
@@ -57,6 +58,10 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
         LambdaQueryWrapper<DockerDetails> wrapper = Wrappers.lambdaQuery();
         wrapper.orderByDesc(DockerDetails::getCreateTime);
         listSelect(wrapper);
+        if (!isAdmin()) {
+            wrapper.eq(DockerDetails::getCreateBy, getUserId());
+        }
+        wrapper.orderByDesc(DockerDetails::getCreateTime);
         return DockerDetailsMapstruct.INSTANCE.entityToVo(list(wrapper));
     }
 
@@ -71,7 +76,11 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
     @Override
     public IPage<DockerDetailsVo> page(DockerDetailsQo mpBaseQo) {
         mpBaseQo.initInstance(DockerDetails.class);
-        return page(mpBaseQo.getPage(), mpBaseQo.getWrapper()).convert(DockerDetailsMapstruct.INSTANCE::entityToVo);
+        LambdaQueryWrapper<DockerDetails> wrapper = mpBaseQo.getWrapper().lambda();
+        if(!isAdmin()){
+            wrapper.eq(DockerDetails::getCreateBy,getUserId());
+        }
+        return page(mpBaseQo.getPage(), wrapper).convert(DockerDetailsMapstruct.INSTANCE::entityToVo);
     }
 
     /**
@@ -82,14 +91,21 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
      */
     @Override
     public DockerDetailsVo info(Serializable id) {
-        DockerDetailsVo vo = DockerDetailsMapstruct.INSTANCE.entityToVo(getById(id));
-        R<String> info = dockerBasicService.info(id.toString());
-        if(Objects.nonNull(info)){
-            vo.setDetailsJson(info.getData());
+        LambdaQueryWrapper<DockerDetails> wrapper = Wrappers.lambdaQuery();
+        if(!isAdmin()){
+            wrapper.eq(DockerDetails::getCreateBy,getUserId());
         }
-        R<String> version = dockerBasicService.version(id.toString());
-        if(Objects.nonNull(version)){
-            vo.setVersionJson(version.getData());
+        wrapper.eq(DockerDetails::getId,id);
+        DockerDetailsVo vo = DockerDetailsMapstruct.INSTANCE.entityToVo(getOne(wrapper));
+        if(Objects.nonNull(vo)){
+            R<String> info = dockerBasicService.info(id.toString());
+            if(Objects.nonNull(info)){
+                vo.setDetailsJson(info.getData());
+            }
+            R<String> version = dockerBasicService.version(id.toString());
+            if(Objects.nonNull(version)){
+                vo.setVersionJson(version.getData());
+            }
         }
         return vo;
     }
@@ -120,6 +136,11 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
      */
     @Override
     public boolean edit(DockerDetailsDto dockerDetailsDto) {
+        LambdaQueryWrapper<DockerDetails> wrapper = Wrappers.lambdaQuery();
+        if(!isAdmin()){
+            wrapper.eq(DockerDetails::getCreateBy,getUserId());
+        }
+        wrapper.eq(DockerDetails::getId,dockerDetailsDto.getId());
         DockerDetails entity = DockerDetailsMapstruct.INSTANCE.dtoToEntity(dockerDetailsDto);
         return updateById(entity);
     }
@@ -132,7 +153,12 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
      */
     @Override
     public boolean delete(Serializable id) {
-        return removeById(id);
+        LambdaQueryWrapper<DockerDetails> wrapper = Wrappers.lambdaQuery();
+        if(!isAdmin()){
+            wrapper.eq(DockerDetails::getCreateBy,getUserId());
+        }
+        wrapper.eq(DockerDetails::getId,id);
+        return remove(wrapper);
     }
 
 }

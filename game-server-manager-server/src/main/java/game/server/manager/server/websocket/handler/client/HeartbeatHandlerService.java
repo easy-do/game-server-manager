@@ -1,14 +1,19 @@
 package game.server.manager.server.websocket.handler.client;
 
+import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
+import game.server.manager.common.mode.ClientData;
 import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.handler.AbstractHandlerService;
 import game.server.manager.handler.annotation.HandlerService;
+import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.util.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
 
+import javax.annotation.Resource;
 import javax.websocket.Session;
+import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -19,6 +24,9 @@ import javax.websocket.Session;
 @HandlerService(MessageTypeConstants.HEARTBEAT)
 public class HeartbeatHandlerService extends AbstractHandlerService<ClientHandlerData, Void> {
 
+    @Resource
+    private ClientInfoService clientInfoService;
+
     @Override
     public Void handler(ClientHandlerData clientHandlerData) {
         ClientMessage clientMessage = clientHandlerData.getClientMessage();
@@ -26,6 +34,10 @@ public class HeartbeatHandlerService extends AbstractHandlerService<ClientHandle
         SocketSessionCache.saveSession(session);
         SocketSessionCache.saveClientIdAndSid(clientMessage.getClientId(),session.getId());
         SessionUtils.sendSimpleServerMessage(session,session.getId(),"success",ServerMessageTypeEnum.HEARTBEAT);
+        CompletableFuture.runAsync(()-> {
+            ClientData clientData = JSON.parseObject(clientMessage.getData(),ClientData.class);
+            clientInfoService.updateHeartbeat(clientData);
+        });
         return null;
     }
 

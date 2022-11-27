@@ -37,8 +37,10 @@ public class DockerDetailsDto implements Serializable {
     /** 主键 */
     private Long id;
 
-    /** 名称 */
+    /** 客户端 */
+    private String clientId;
 
+    /** 名称 */
     @NotNull(message = "名称必填",groups = {Insert.class, Update.class})
     private String dockerName;
 
@@ -52,7 +54,6 @@ public class DockerDetailsDto implements Serializable {
     private String dockerModel;
 
     /** 验证连接 */
-    @NotNull(message = "验证连接必填",groups = {Insert.class, Update.class})
     private Long dockerIsSsl;
 
     /** 证书密码 */

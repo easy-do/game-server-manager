@@ -2,8 +2,10 @@ package game.server.manager.client.thread;
 
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.client.config.SystemUtils;
+import game.server.manager.client.server.ClientDataServer;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
+import game.server.manager.common.mode.ClientData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,7 +22,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class HeartbeatThread {
 
-
+    @Autowired
+    private ClientDataServer clientDataServer;
     @Autowired
     private SyncServer syncServer;
 
@@ -29,6 +32,8 @@ public class HeartbeatThread {
 
     @Scheduled(fixedDelay = 1000 * 20)
     public void HeartbeatCheck() {
-        syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, JSON.toJSONString(""));
+        ClientData clientData = clientDataServer.getClientData();
+        String data = JSON.toJSONString(clientData);
+        syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, JSON.toJSONString(data));
     }
 }
