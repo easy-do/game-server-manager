@@ -66,8 +66,8 @@ public class ClientDataServer {
     }
 
 
-    public String getEnv() {
+    public JSONObject getEnv() {
         Map<String, String> env = System.getenv();
-        return JSON.toJSONString(env);
+        return new JSONObject(env);
     }
 }

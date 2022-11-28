@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Descriptions, Modal, Skeleton } from '@arco-design/web-react';
+import { Modal } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import styles from './style/index.module.less';
 import { socketAddress } from '@/utils/systemConstant';
+import LogCompennet from '@/components/LogCompenent/logCompennet';
+import { createWebSocket,closeWebSocket } from '@/utils/webSocket';
 
 
 function InfoPage(props: { id: number, applicationId: string, visible, setVisible }) {
@@ -13,42 +14,19 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
   const [logResult, setLogResult] = useState([]);
 
 
-  const logDivs = []
-
-  for (let i = 0; i < logResult.length; i++) {
-    logDivs.push(
-      <div className={styles['log-msg']}>
-        <span>{logResult[i]}</span>
-      </div>
-    )
-  }
-
-
 
   /**点击日志详情按钮 */
   function fetchData() {
     if(props.id && props.visible){
-      const logWebSocket = new WebSocket(socketAddress);
-      logWebSocket.onopen = function () {
-        console.log('开启websocket连接.')
-        const messageParam = {
-          "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
-          "type": "deploy_log",
-          "data":{
-            "applicationId": props.applicationId,
-            "logId": props.id
-          }
+      const messageParam = {
+        "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
+        "type": "deploy_log",
+        "data":{
+          "applicationId": props.applicationId,
+          "logId": props.id
         }
-        logWebSocket.send(JSON.stringify(messageParam));
       }
-      logWebSocket.onerror = function () {
-        console.log('websocket连接异常.')
-      };
-      logWebSocket.onclose = function (e: CloseEvent) {
-        console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
-      }
-      logWebSocket.onmessage = function (event: any) {
-        console.log('接收到服务端消息:'+event.data)
+      createWebSocket(socketAddress,JSON.stringify(messageParam),(event)=>{
         try {
           const logResult = JSON.parse(event.data);
           if(logResult.type === 'success'){
@@ -59,7 +37,7 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
           } catch (err:any) {
             setLogResult([event.data])
           }
-      }
+      });
     }
   }
 
@@ -74,18 +52,18 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
       visible={props.visible}
       onOk={() => {
         props.setVisible(false);
+        closeWebSocket();
       }}
       onCancel={() => {
         props.setVisible(false);
+        closeWebSocket();
       }}
       style={{ width: "80%", minHeight: "70%" }}
       autoFocus={false}
       focusLock={true}
       maskClosable={false}
     >
-      <section className={styles['log-body']}>
-        {logDivs}
-      </section>
+      <LogCompennet values={logResult}/>
     </Modal>
   );
 }

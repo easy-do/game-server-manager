@@ -18,10 +18,13 @@ import { imagesList, removeImage } from '@/api/dockerApi';
 import PermissionWrapper from '@/components/PermissionWrapper';
 import styles from './style/index.module.less';
 import { socketAddress } from '@/utils/systemConstant';
+import LogCompennet from '@/components/LogCompenent/logCompennet';
+import { closeWebSocket, createWebSocket } from '@/utils/webSocket';
 
 const { Title } = Typography;
 
 function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
+
   const t = useLocale(locale);
 
   //表格操作按钮回调
@@ -89,64 +92,43 @@ function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
   const pullImageLogCache = []
 
 
-  let logWebSocket:WebSocket;
-
-
   function pullImageButton() {
     setViewPullImage(true)
   }
 
   function onCancelPullImage() {
     setViewPullImage(false)
-    // setPullImageStatus(false)
-    // setPullImageLogData([])
+    setPullImageStatus(false)
+    setPullImageLogData([])
+    closeWebSocket()
   }
 
   function setRepositoryValue(value, _e) {
     repository = value;
   }
 
-
   function okPullImage() {
     if (!pullImageStatus) {
       setPullImageLogData([])
       setViewPullImage(true)
-      logWebSocket = new WebSocket(socketAddress);
-      logWebSocket.onopen = function () {
-        console.log('开启websocket连接.')
-        setPullImageStatus(true)
-        const messageParam = {
-          "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
-          "type": "pullImage",
-          "data": {
-            "dockerId": props.dockerId,
-            "repository": repository
-          }
+      const messageParam = {
+        "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
+        "type": "pullImage",
+        "data": {
+          "dockerId": props.dockerId,
+          "repository": repository
         }
-        logWebSocket.send(JSON.stringify(messageParam));
       }
-      logWebSocket.onerror = function () {
-        console.log('websocket连接异常.')
-      };
-      logWebSocket.onclose = function (e: CloseEvent) {
-        console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
-      }
-      logWebSocket.onmessage = function (event: any) {
+      createWebSocket(socketAddress,JSON.stringify(messageParam),(event)=>{
         setPullImageStatus(true)
-        console.log('接收到服务端消息:' + event.data)
         const serverMessage = JSON.parse(event.data);
         if(serverMessage.type === 'sync_result_end'){
           Notification.success({ content: "完成", duration: 300 });
-          setPullImageStatus(false)
         }
-        pullImageLogCache.push(
-          <div className={styles['log-msg']}>
-            <span>{serverMessage.data}</span>
-          </div>
-        )
-        setPullImageLogData(null)
+        pullImageLogCache.push(serverMessage.data)
+        setPullImageLogData([])
         setPullImageLogData(pullImageLogCache)
-      }
+      });
     } else {
       onCancelPullImage()
     }
@@ -205,9 +187,7 @@ function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
         maskClosable={false}
       >
         {pullImageStatus ?
-          <section className={pullImageStatus ? styles['log-body'] : ''}>
-            {pullImageLogData}
-          </section>
+          <LogCompennet values={pullImageLogData}/>
           :
           <Form
           >

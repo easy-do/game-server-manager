@@ -11,12 +11,15 @@ function InfoPage(props: { id: number, visible, setVisible }) {
   const [loading, setLoading] = useState(false)
 
   const [clientData, setClientData] = useState({
-    version: '',
+    clientId: "",
+    env: "",
+    ip: "",
     systemInfo: {
-      osName: '',
-      cpuInfo: '',
-      memory: ''
-    }
+      cpuInfo: "",
+      memory: "",
+      osName: ""
+    },
+    version: ""
   })
 
   const [infoData, setInfoData] = useState<DataInfoVo>();
@@ -28,6 +31,13 @@ function InfoPage(props: { id: number, visible, setVisible }) {
         const { success, data } = res.data;
         if (success) {
           setInfoData(data);
+          let clientData;
+          try{
+            clientData = JSON.parse(infoData.clientData)
+            setClientData(clientData);
+          }catch{
+          }
+          
         }
         setLoading(false)
       });
@@ -39,14 +49,6 @@ function InfoPage(props: { id: number, visible, setVisible }) {
   }, [props.id,props.visible]);
 
   const t = useLocale(locale);
-
-  if (infoData && infoData.clientData) {
-    // try {
-      // setClientData(JSON.parse(infoData.clientData))
-    // } catch (error) {
-      
-    // }
-  }
 
   const data = [
     {
@@ -65,22 +67,22 @@ function InfoPage(props: { id: number, visible, setVisible }) {
       label: t['searchTable.columns.status'],
       value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.status : '',
     },
-    // {
-    //   label: t['searchTable.columns.clientData.version'],
-    //   value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.version ? clientData.version : '未同步',
-    // },
-    // {
-    //   label: t['searchTable.columns.clientData.systemInfo.osName'],
-    //   value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.osName : '未同步',
-    // },
-    // {
-    //   label: t['searchTable.columns.clientData.systemInfo.cpuInfo'],
-    //   value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.cpuInfo : '未同步',
-    // },
-    // {
-    //   label: t['searchTable.columns.clientData.systemInfo.memory'],
-    //   value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.memory : '未同步',
-    // },
+    {
+      label: t['searchTable.columns.clientData.version'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.version ? clientData.version : '未同步',
+    },
+    {
+      label: t['searchTable.columns.clientData.systemInfo.osName'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.osName : '未同步',
+    },
+    {
+      label: t['searchTable.columns.clientData.systemInfo.cpuInfo'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.cpuInfo : '未同步',
+    },
+    {
+      label: t['searchTable.columns.clientData.systemInfo.memory'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.systemInfo ? clientData.systemInfo.memory : '未同步',
+    },
     {
       label: t['searchTable.columns.createTime'],
       value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData ? infoData.createTime : '',

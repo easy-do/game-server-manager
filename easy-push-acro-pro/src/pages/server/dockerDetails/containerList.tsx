@@ -13,9 +13,10 @@ import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import { getContainerListColumns } from './constants';
-import { containerList, logContainer, removeContainer, renameContainer, restartContainer, startContainer, stopContainer } from '@/api/dockerApi';
-import styles from './style/index.module.less';
+import { containerList, removeContainer, renameContainer, restartContainer, startContainer, stopContainer } from '@/api/dockerApi';
 import { socketAddress } from '@/utils/systemConstant';
+import LogCompennet from '@/components/LogCompenent/logCompennet';
+import { closeWebSocket, createWebSocket } from '@/utils/webSocket';
 
 const { Title } = Typography;
 
@@ -34,47 +35,31 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
       viewInfo(record);
     }
 
-        //日志
-        if (type === 'log') {
-          const logWebSocket = new WebSocket(socketAddress);
-          logWebSocket.onopen = function () {
-            console.log('开启websocket连接.')
-            setIsViewLog(true);
-            const messageParam = {
-              "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
-              "type": "container_log",
-              "data": {
-                "dockerId": props.dockerId,
-                "containerId": record.Id
-              }
-            }
-            logWebSocket.send(JSON.stringify(messageParam));
-          }
-          logWebSocket.onerror = function () {
-            console.log('websocket连接异常.')
-          };
-          logWebSocket.onclose = function (e: CloseEvent) {
-            console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
-          }
-          logWebSocket.onmessage = function (event: any) {
-            console.log('接收到服务端消息:' + event.data)
-            const serverMessage = JSON.parse(event.data);
-            if(serverMessage.type === 'sync_result_end'){
-              Notification.success({ content: "完成", duration: 300 });
-            }
-            pullImageLogCache.push(
-              <div className={styles['log-msg']}>
-                <span>{serverMessage.data}</span>
-              </div>
-            )
-            setViewLogData(null)
-            setViewLogData(pullImageLogCache)
-          }
+    //日志
+    if (type === 'log') {
+      setIsViewLog(true)
+      const messageParam = {
+        "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
+        "type": "container_log",
+        "data": {
+          "dockerId": props.dockerId,
+          "containerId": record.Id
         }
-
+      }
+      createWebSocket(socketAddress,JSON.stringify(messageParam),(event)=>{
+        const serverMessage = JSON.parse(event.data);
+        if (serverMessage.type === 'sync_result_end') {
+          Notification.success({ content: "完成", duration: 300 });
+        }
+        pullImageLogCache.push(serverMessage.data)
+        setViewLogData([])
+        setViewLogData(pullImageLogCache)
+      });
+    }
+  
     //启动
     if (type === 'start') {
-      startContainer(props.dockerId,record.Id).then((res) => {
+      startContainer(props.dockerId, record.Id).then((res) => {
         const { success, msg } = res.data;
         if (success) {
           Notification.success({ content: msg, duration: 300 });
@@ -84,7 +69,7 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
     }
     //重启
     if (type === 'restart') {
-      restartContainer(props.dockerId,record.Id).then((res) => {
+      restartContainer(props.dockerId, record.Id).then((res) => {
         const { success, msg } = res.data;
         if (success) {
           Notification.success({ content: msg, duration: 300 });
@@ -94,7 +79,7 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
     }
     //停止
     if (type === 'stop') {
-      stopContainer(props.dockerId,record.Id).then((res) => {
+      stopContainer(props.dockerId, record.Id).then((res) => {
         const { success, msg } = res.data;
         if (success) {
           Notification.success({ content: msg, duration: 300 });
@@ -123,31 +108,32 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
   }
 
 
-    //查看日志
-    const [viewLogData, setViewLogData] = useState([]);
-    const [isViewLog, setIsViewLog] = useState(false);
+  //查看日志
+  const [viewLogData, setViewLogData] = useState([]);
+  const [isViewLog, setIsViewLog] = useState(false);
 
-    //重命名
-    const [viewRenameId, setViewRenameId] = useState();
-    const [isViewRename, setIsViewRename] = useState(false);
-  
-    function rename(record) {
-      setViewRenameId(record.Id);
-      setIsViewRename(true);
-    }
+  //重命名
+  const [viewRenameId, setViewRenameId] = useState();
+  const [isViewRename, setIsViewRename] = useState(false);
 
-    function confirmRename(){
-      formRef.current.validate().then((values) => {
-        renameContainer(props.dockerId,viewRenameId,values.names).then((res) => {
-          const { success, msg } = res.data;
-          if (success) {
-            Notification.success({ content: msg, duration: 300 });
-            setIsViewRename(false)
-            fetchData();
-          }
-        });
+  function rename(record) {
+    setViewRenameId(record.Id);
+    setIsViewRename(true);
+    closeWebSocket()
+  }
+
+  function confirmRename() {
+    formRef.current.validate().then((values) => {
+      renameContainer(props.dockerId, viewRenameId, values.names).then((res) => {
+        const { success, msg } = res.data;
+        if (success) {
+          Notification.success({ content: msg, duration: 300 });
+          setIsViewRename(false)
+          fetchData();
+        }
       });
-    }
+    });
+  }
 
   //删除
   function removeData(dockerId, imageId) {
@@ -158,6 +144,12 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
         fetchData();
       }
     });
+  }
+
+  function onCancelLog() {
+    setIsViewLog(false);
+    setViewLogData([])
+    closeWebSocket()
   }
 
   //获取表格展示列表、绑定操作列回调
@@ -267,34 +259,32 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
       >
         <Form ref={formRef}>
           <Form.Item
-          field={'names'}
-          label={t['searchTable.columns.Names']}
-          rules={[
-            { required: true, message: t['searchForm.dockerName.placeholder'] },
-          ]}
+            field={'names'}
+            label={t['searchTable.columns.Names']}
+            rules={[
+              { required: true, message: t['searchForm.dockerName.placeholder'] },
+            ]}
           >
-            <Input/>
+            <Input />
           </Form.Item>
         </Form>
       </Modal>
       <Modal
-      title={t['searchTable.info.title']}
-      visible={isViewLog}
-      onOk={() => {
-        setIsViewLog(false);
-      }}
-      onCancel={() => {
-        setIsViewLog(false);
-      }}
-      style={{ width: "80%", minHeight: "70%" }}
-      autoFocus={false}
-      focusLock={true}
-      maskClosable={false}
-    >
-      <section className={styles['log-body']}>
-        {viewLogData}
-      </section>
-    </Modal> 
+        title={t['searchTable.info.title']}
+        visible={isViewLog}
+        onOk={() => {
+          onCancelLog();
+        }}
+        onCancel={() => {
+          onCancelLog();
+        }}
+        style={{ width: "80%", minHeight: "70%" }}
+        autoFocus={false}
+        focusLock={true}
+        maskClosable={false}
+      >
+        <LogCompennet values={viewLogData} />
+      </Modal>
     </Card>
   );
 }
