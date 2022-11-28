@@ -1,5 +1,6 @@
 package game.server.manager.common.mode;
 
+import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 
 import java.io.Serial;
@@ -35,7 +36,7 @@ public class ClientData implements Serializable {
     /**
      * 环境变量
      */
-    private String env;
+    private JSONObject env;
 
     /**
      * 系统信息
