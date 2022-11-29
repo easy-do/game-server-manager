@@ -175,7 +175,7 @@ public class DockerContainerService {
         log.info("Docker logContainer {}", containerId);
 
         LogContainerCmd logContainerCmd = dockerClient.logContainerCmd(containerId);
-        logContainerCmd.withStdOut(true).withStdErr(true).withTail(100);
+        logContainerCmd.withStdOut(true).withStdErr(true).withTail(1000);
         ResultCallback.Adapter<Frame> callback = logContainerCmd.exec(new ResultCallback.Adapter<Frame>() {
             @Override
             public void onNext(Frame frame) {
