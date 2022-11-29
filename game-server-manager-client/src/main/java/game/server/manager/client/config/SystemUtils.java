@@ -7,8 +7,10 @@ import cn.hutool.crypto.asymmetric.RSA;
 import game.server.manager.common.mode.ClientInitData;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,9 @@ import java.util.Map;
 public class SystemUtils {
 
     public static final Map<String,Object> VALUES = new HashMap<>();
+
+    @Resource
+    Environment environment;
 
     @Value("${model:socket}")
     private String model;
@@ -71,5 +76,8 @@ public class SystemUtils {
         return (ClientInitData) VALUES.get("clientInitData");
     }
 
+    public String getPort() {
+        return environment.getProperty("local.server.port");
+    }
 
 }

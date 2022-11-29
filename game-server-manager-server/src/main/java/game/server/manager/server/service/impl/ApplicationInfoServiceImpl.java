@@ -172,7 +172,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
     }
 
     @Override
-    public long countByServerId(String id) {
+    public long countByDeviceId(String id) {
         LambdaQueryWrapper<ApplicationInfo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(ApplicationInfo::getDeviceId,id);
         return baseMapper.selectCount(wrapper);
@@ -302,7 +302,7 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
             throw ExceptionFactory.bizException("应用不存在或不属于你");
         }
         String state = app.getStatus();
-        if( CharSequenceUtil.equals(state, AppStatusEnum.NO_DEPLOYMENT.getDesc()) || CharSequenceUtil.equals(state, AppStatusEnum.UNINSTALL.getDesc())){
+        if( CharSequenceUtil.equals(state, AppStatusEnum.NO_DEPLOYMENT.getDesc()) || CharSequenceUtil.equals(state, AppStatusEnum.UNINSTALL.getDesc()) || ( app.getDeviceType().equals(DeviceTypeEnum.SERVER.getType()) && !serverInfoService.exists(Long.valueOf(app.getDeviceId())))){
             boolean result = remove(wrapper);
             if(result){
                 executeLogService.removeByApplicationId(id);

@@ -115,8 +115,8 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo<
     public boolean delete(Serializable id) {
         //校验授权信息
         checkAuthorization("serverDel");
-        long count = applicationInfoService.countByServerId(String.valueOf(id));
-        if(count >= 1){
+        long count = applicationInfoService.countByDeviceId(String.valueOf(id));
+        if(count > 0){
             DataResult.fail("拒绝删除,已绑定应用");
         }
         LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();

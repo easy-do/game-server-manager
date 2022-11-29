@@ -43,6 +43,7 @@ public class ClientDataServer {
         clientData.setIp(IpRegionSearchUtil.searchServerIp());
         clientData.setEnv(getEnv());
         clientData.setSystemInfo(new SystemInfo());
+        clientData.setPort(systemUtils.getPort());
         return clientData;
     }
 

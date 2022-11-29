@@ -26,7 +26,7 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
 
   const formRef = useRef<FormInstance>();
 
-  const pullImageLogCache = []
+  const containerLogCache = []
 
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
@@ -51,9 +51,9 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
         if (serverMessage.type === 'sync_result_end') {
           Notification.success({ content: "完成", duration: 300 });
         }
-        pullImageLogCache.push(serverMessage.data)
+        containerLogCache.push(serverMessage.data)
         setViewLogData([])
-        setViewLogData(pullImageLogCache)
+        setViewLogData(containerLogCache)
       });
     }
   
@@ -150,6 +150,7 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
     setIsViewLog(false);
     setViewLogData([])
     closeWebSocket()
+    containerLogCache.length=0
   }
 
   //获取表格展示列表、绑定操作列回调

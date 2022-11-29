@@ -15,7 +15,7 @@ function Exception403() {
           status="403"
           subTitle={t['exception.result.403.description']}
           extra={
-            <Button key="back" type="primary">
+            <Button key="back" type="primary" onClick={()=>{window.location.href='/'}}>
               {t['exception.result.403.back']}
             </Button>
           }

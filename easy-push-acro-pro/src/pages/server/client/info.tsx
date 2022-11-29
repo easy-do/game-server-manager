@@ -14,6 +14,7 @@ function InfoPage(props: { id: number, visible, setVisible }) {
     clientId: "",
     env: "",
     ip: "",
+    port:"",
     systemInfo: {
       cpuInfo: "",
       memory: "",
@@ -70,6 +71,14 @@ function InfoPage(props: { id: number, visible, setVisible }) {
     {
       label: t['searchTable.columns.clientData.version'],
       value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.version ? clientData.version : '未同步',
+    },
+    {
+      label: t['searchTable.columns.clientData.ip'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.ip ? clientData.ip : '未同步',
+    },
+    {
+      label: t['searchTable.columns.clientData.port'],
+      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : clientData && clientData.port ? clientData.port : '未同步',
     },
     {
       label: t['searchTable.columns.clientData.systemInfo.osName'],
