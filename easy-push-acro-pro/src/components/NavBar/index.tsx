@@ -48,7 +48,7 @@ function Navbar({ topMenu, show }: { topMenu; show: boolean }) {
         localStorage.clear();
         sessionStorage.clear();
         cookie.remove('token')
-        window.location.href = '/';
+        location.reload();
       }
     });
   }

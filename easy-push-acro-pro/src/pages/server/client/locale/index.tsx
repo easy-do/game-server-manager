@@ -26,6 +26,8 @@ const i18n = {
     'searchTable.columns.clientData.systemInfo.osName': 'OsName',
     'searchTable.columns.clientData.systemInfo.cpuInfo': 'Cpu Info',
     'searchTable.columns.clientData.systemInfo.memory': 'Memory',
+    'searchTable.columns.clientData.ip': 'IP',
+    'searchTable.columns.clientData.port': 'Local Port',
 
     'searchTable.columns.operations': 'Operation',
     'searchTable.columns.operations.view': 'View',
@@ -94,6 +96,8 @@ const i18n = {
     'searchTable.columns.clientData.systemInfo.osName': '系统',
     'searchTable.columns.clientData.systemInfo.cpuInfo': 'cpu信息',
     'searchTable.columns.clientData.systemInfo.memory': '内存',
+    'searchTable.columns.clientData.ip': 'IP',
+    'searchTable.columns.clientData.port': '本地端口',
 
     'searchTable.columns.operations.view': '查看',
     'searchTable.columns.operations.update': '修改',

@@ -64,7 +64,7 @@ public interface ApplicationInfoService extends BaseService<ApplicationInfo, MpB
      * @author laoyu
      * @date 2022/5/22
      */
-    long countByServerId(String id);
+    long countByDeviceId(String id);
 
     /**
      * 绑定了APP的应用数量

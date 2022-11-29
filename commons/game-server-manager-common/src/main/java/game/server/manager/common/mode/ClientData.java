@@ -29,6 +29,16 @@ public class ClientData implements Serializable {
     private String ip;
 
     /**
+     * 功能描述
+     *
+     * @param null null
+     * @return
+     * @author laoyu
+     * @date 2022/11/29
+     */
+    private String port;
+
+    /**
      * 客户端版本
      */
     private String version;
