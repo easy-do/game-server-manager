@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * @description web设置
  * @date 2022/11/19
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class WebConfig implements WebMvcConfigurer {
 
     @Resource

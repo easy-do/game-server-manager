@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Data
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class DockerConfig {
 
     @Value("${secret:}")
