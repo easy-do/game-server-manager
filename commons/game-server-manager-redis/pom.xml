@@ -46,7 +46,6 @@
         <dependency>
             <groupId>io.lettuce</groupId>
             <artifactId>lettuce-core</artifactId>
-            <version>6.2.0.RELEASE</version>
         </dependency>
 
         <!--        解决找不到org/apache/commons/pool2/impl/GenericObjectPoolConfig-->
@@ -59,20 +58,20 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.4</version>
+            <version>2.14.0</version>
         </dependency>
 
         <!--jetcache缓存-->
         <dependency>
             <groupId>com.alicp.jetcache</groupId>
             <artifactId>jetcache-starter-redis</artifactId>
-            <version>2.7.0</version>
+            <version>2.7.1</version>
         </dependency>
 
         <dependency>
             <groupId>com.alicp.jetcache</groupId>
             <artifactId>jetcache-starter-redis-lettuce</artifactId>
-            <version>2.7.0</version>
+            <version>2.7.1</version>
         </dependency>
 
     </dependencies>

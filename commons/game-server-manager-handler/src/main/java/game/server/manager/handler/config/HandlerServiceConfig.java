@@ -20,7 +20,7 @@ import java.util.Map;
  * @author laoyu
  * @version 1.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class HandlerServiceConfig implements ApplicationContextAware, SmartInitializingSingleton {
 
     Logger logger = LoggerFactory.getLogger(HandlerServiceConfig.class);
