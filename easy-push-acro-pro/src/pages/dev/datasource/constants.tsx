@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Popconfirm } from '@arco-design/web-react';
 import { dictLabelEnum, getDictList } from '@/utils/dictDataUtils';
+import PermissionWrapper from '@/components/PermissionWrapper';
 
 export const statusEnum = dictLabelEnum('status_select','string')
 
@@ -121,28 +122,47 @@ export function getColumns(
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => (
         <div>
-          <Button
-            type="text"
-            size="small"
-            onClick={() => callback(record, 'view')}
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'dev:dataSource', actions: ['info'] },
+            ]}
           >
-            {t['searchTable.columns.operations.view']}
-          </Button>
-          <Button
-            type="text"
-            size="small"
-            onClick={() => callback(record, 'update')}
-          >
-            {t['searchTable.columns.operations.update']}
-          </Button>
-          <Popconfirm
-            title={t['searchTable.columns.operations.remove.confirm']}
-            onOk={() => callback(record, 'remove')}
-          >
-            <Button type="text" status="warning" size="small">
-              {t['searchTable.columns.operations.remove']}
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'view')}
+            >
+                {t['searchTable.columns.operations.view']}
             </Button>
-          </Popconfirm>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'dev:dataSource', actions: ['update'] },
+            ]}
+          >
+         
+           <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'update')}
+            >
+                {t['searchTable.columns.operations.update']}
+            </Button>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'dev:dataSource', actions: ['remove'] },
+            ]}
+          >
+            <Popconfirm
+                title={t['searchTable.columns.operations.remove.confirm']}
+                onOk={() => callback(record, 'remove')}
+            >
+                <Button type="text" status="warning" size="small">
+                {t['searchTable.columns.operations.remove']}
+                </Button>
+            </Popconfirm>
+          </PermissionWrapper>
         </div>
       ),
     },
