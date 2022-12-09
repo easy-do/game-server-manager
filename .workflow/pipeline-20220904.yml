@@ -27,7 +27,7 @@ stages:
           - '# 执行编译命令'
           - npm install yarn
           - 'yarn install --registry=https://registry.npmmirror.com '
-          - yarn build
+          - npm run build
         artifacts:
           - name: BUILD_ARTIFACT_WEB
             path:
