@@ -54,10 +54,10 @@ stages:
         password: Yu5358915200!
         tag: web-1.0.1
         dockerfile: ./easy-push-arco-pro/Dockerfile
-        context: ''
+        context: ./easy-push-arco-pro
         artifacts:
           - ${BUILD_ARTIFACT_WEB}
-        isCache: false
+        isCache: true
         notify: []
         strategy:
           retry: '0'
