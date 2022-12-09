@@ -14,13 +14,6 @@ stages:
     trigger: auto
     executor: []
     steps:
-      - step: sc@opensca
-        name: open_sca
-        displayName: OpenSCA 开源组件检测
-        detectPath: ./game-server-manager
-        notify: []
-        strategy:
-          retry: '0'
       - step: build@nodejs
         name: build_nodejs
         displayName: Nodejs 构建
@@ -32,12 +25,14 @@ stages:
           - cd easy-push-arco-pro
           - ''
           - '# 执行编译命令'
-          - npm install && npm run build
+          - 'npm install --registry=https://registry.npmmirror.com '
+          - npm run build
         artifacts:
           - name: BUILD_ARTIFACT_WEB
             path:
-              - ./dist
+              - ./build
               - nginx.conf
+              - DockerFile
         caches:
           - ~/.npm
           - ~/.yarn
