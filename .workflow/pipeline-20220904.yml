@@ -25,9 +25,9 @@ stages:
           - cd easy-push-arco-pro
           - ''
           - '# 执行编译命令'
-          - npm install yarn
           - 'yarn install --registry=https://registry.npmmirror.com '
-          - npm run build
+          - ls
+          - yarn npm run build
         artifacts:
           - name: BUILD_ARTIFACT_WEB
             path:
