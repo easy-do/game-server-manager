@@ -22,12 +22,11 @@ stages:
           - '# 设置NPM源，提升安装速度'
           - npm config set registry https://registry.npmmirror.com
           - ''
-          - cd easy-push-arco-pro
+          - cd easy-push-acro-pro
           - ''
           - '# 执行编译命令'
           - 'yarn install --registry=https://registry.npmmirror.com '
-          - ls
-          - yarn npm run build
+          - yarn run build
         artifacts:
           - name: BUILD_ARTIFACT_WEB
             path:
