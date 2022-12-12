@@ -219,7 +219,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void importGenTable(String dataSourceId, List<DbListVo> tableList) {
-        String operationName = "easy-do";
+        String operationName = "easy-push";
         try {
             for (DbListVo table : tableList) {
                 GenTable genTable = new GenTable();
