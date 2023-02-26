@@ -248,6 +248,10 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
 
     @Override
     public String getInstallCmd(String id) {
+        ClientInfo client = getById(id);
+        if(Objects.isNull(client)){
+            throw ExceptionFactory.bizException("客户端不存在.");
+        }
         String clientInstallCmd = sysDictDataService.getSingleDictData("system_config", "client_install_cmd")
                 .getData().getDictValue();
         String appId = sysDictDataService.getSingleDictData("system_config", "client_app_id").getData().getDictValue();
@@ -256,6 +260,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
         env.put("APP_ID", appId);
         env.put("CLIENT_ID", id);
         env.put("CLIENT_VERSION", appInfo.getVersion());
+        env.put("PUBLIC_KEY", client.getPublicKey());
         String installScriptId = getInstallScriptId();
         return clientInstallCmd + " "+ AppScriptUtils.generateExecShellEnvs(env,appEnvInfoService.getVoListByScriptId(Long.valueOf(installScriptId)));
     }
