@@ -53,6 +53,8 @@ public class MessageTypeConstants {
     public static final String CREATE_CONTAINER = "createContainer";
     public static final String CANCEL_SYNC = "cancel_sync";
 
+    public static final String DEPLOY_APP = "deploy_app";
+
     private MessageTypeConstants() {
     }
 

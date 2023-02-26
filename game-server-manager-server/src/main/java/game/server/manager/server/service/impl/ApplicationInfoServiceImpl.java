@@ -14,6 +14,7 @@ import game.server.manager.common.application.DeployParam;
 import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.common.enums.ClientMessageTypeEnum;
 import game.server.manager.common.enums.DeviceTypeEnum;
+import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.BizException;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.vo.ApplicationInfoVo;
@@ -37,10 +38,13 @@ import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
 import game.server.manager.server.service.ExecuteLogService;
 import game.server.manager.server.service.ServerInfoService;
+import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.web.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.websocket.Session;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -157,15 +161,15 @@ public class ApplicationInfoServiceImpl extends BaseServiceImpl<ApplicationInfo,
                 redisStreamUtils.add(ApplicationDeployListenerMessage.DEFAULT_STREAM_NAME, BeanUtil.beanToMap(deployParam));
                 return true;
             }else{
-                //生成客户端消息
-                ClientMessage messageEntity = ClientMessage.builder()
-                        .clientId(application.getDeviceId())
-                        .message(JSON.toJSONString(deployParam))
-                        .createBy(getUserId())
-                        .updateBy(getUserId())
-                        .messageType(ClientMessageTypeEnum.SCRIPT.getCode())
-                        .build();
-                return clientMessageService.save(messageEntity);
+                //获得客户端session
+                Session clientSession = SocketSessionCache.getClientByClientId(clientInfo.getId());
+                if(Objects.isNull(clientSession)){
+                    throw ExceptionFactory.bizException("客户端不在线,或断开连接.");
+                }
+                //发送部署消息
+                SessionUtils.sendSimpleServerMessage(clientSession,clientSession.getId(), JSON.toJSONString(deployParam) ,ServerMessageTypeEnum.DEPLOY_APP);
+                //响应游览器
+                return true;
             }
         }
         return false;
