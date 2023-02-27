@@ -7,7 +7,6 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
-import cn.hutool.core.text.CharSequenceUtil;
 import com.alicp.jetcache.anno.CacheInvalidate;
 import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
@@ -17,6 +16,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Maps;
 import game.server.manager.auth.AuthorizationUtil;
+import game.server.manager.common.constant.SystemSourceTypeEnum;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.common.enums.ResourceTypeEnum;
 import game.server.manager.common.enums.StatusEnum;
@@ -330,29 +330,15 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
             return Collections.emptySet();
         }
         List<SysResource> menuList = getRoleResourceList(roleIds);
-        List<Tree<Long>> treeList = buildResourceTree(menuList);
         Set<String> permissions = new HashSet<>();
-        buildPermissions("",permissions,treeList);
+        buildPermissions(permissions,menuList);
         return permissions;
     }
 
-    private void buildPermissions(String prefix, Set<String> permissions, List<Tree<Long>> treeList) {
-        String p = ":";
-        treeList.forEach(longTree -> {
-            String permissionCode = "";
-            if(longTree.getParentId() != 0){
-                Object code = longTree.get("resourceCode");
-                if(Objects.nonNull(code)){
-                    if(CharSequenceUtil.isBlank(prefix)){
-                        permissionCode = (String) code;
-                    }else {
-                        permissionCode = prefix + p + code;
-                    }
-                    permissions.add(permissionCode);
-                }
-            }
-            if(Objects.nonNull(longTree.getChildren())){
-                buildPermissions(permissionCode,permissions,longTree.getChildren());
+    private void buildPermissions(Set<String> permissions,List<SysResource> menuList) {
+        menuList.forEach(menu -> {
+            if(menu.getResourceType().equals(SystemSourceTypeEnum.INTERFACE.getValue())){
+                permissions.add(menu.getPath());
             }
         });
     }

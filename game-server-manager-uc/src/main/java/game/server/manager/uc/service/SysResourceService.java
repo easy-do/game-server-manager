@@ -111,7 +111,7 @@ public interface SysResourceService extends BaseService<SysResource, SysResource
     List<Tree<Long>> userResource();
 
     /**
-     * 获得用户权限列表
+     * 获得用户接口权限列表
      *
      * @param userId userId
      * @return java.util.List<java.lang.String>

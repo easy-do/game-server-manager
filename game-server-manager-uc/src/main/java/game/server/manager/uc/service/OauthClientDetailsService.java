@@ -1,13 +1,19 @@
 package game.server.manager.uc.service;
 
+import game.server.manager.web.base.BaseService;
+import game.server.manager.uc.dto.OauthClientDetailsDto;
+import game.server.manager.uc.qo.OauthClientDetailsQo;
+import game.server.manager.uc.vo.OauthClientDetailsVo;
 import game.server.manager.uc.entity.OauthClientDetails;
-import com.baomidou.mybatisplus.extension.service.IService;
+
 
 /**
-* @author yuzhanfeng
-* @description 针对表【oauth_client_details(授权客户端信息)】的数据库操作Service
-* @createDate 2023-02-27 09:29:32
-*/
-public interface OauthClientDetailsService extends IService<OauthClientDetails> {
+ * 授权客户端信息Service接口
+ * 
+ * @author yuzhanfeng
+ * @date 2023-02-27 16:01:25
+ */
+public interface OauthClientDetailsService extends BaseService<OauthClientDetails, OauthClientDetailsQo, OauthClientDetailsVo, OauthClientDetailsDto>{
+
 
 }
