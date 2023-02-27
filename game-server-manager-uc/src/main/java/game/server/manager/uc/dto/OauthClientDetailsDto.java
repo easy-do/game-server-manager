@@ -1,7 +1,6 @@
 package game.server.manager.uc.dto;
 
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +33,6 @@ public class OauthClientDetailsDto implements Serializable {
 
     /** 客户端id */
 
-    @NotNull(message = "客户端id必填",groups = {Insert.class, Update.class})
     private String clientId;
 
     /** 客户端名称 */
@@ -44,12 +42,10 @@ public class OauthClientDetailsDto implements Serializable {
 
     /** 客户端密钥 */
 
-    @NotNull(message = "客户端密钥必填",groups = {Insert.class, Update.class})
     private String clientSecret;
 
     /** 权限 */
 
-    @NotNull(message = "权限必填",groups = {Insert.class, Update.class})
     private String scope;
 
     /** 授权模式 */
@@ -62,7 +58,6 @@ public class OauthClientDetailsDto implements Serializable {
 
     /** access_token的有效时间(秒) */
 
-    @NotNull(message = "access_token的有效时间(秒)必填",groups = {Insert.class, Update.class})
     private Long accessTokenValidity;
 
     /** 刷新token的有效时间(秒) */
@@ -76,12 +71,10 @@ public class OauthClientDetailsDto implements Serializable {
 
     /** 状态 */
 
-    @NotNull(message = "状态必填",groups = {Insert.class, Update.class})
     private Integer status;
 
     /** 审核状态 */
 
-    @NotNull(message = "审核状态必填",groups = {Insert.class, Update.class})
     private Integer isAudit;
 
     /** 备注 */
@@ -92,7 +85,6 @@ public class OauthClientDetailsDto implements Serializable {
 
     /** 创建时间 */
 
-    @NotNull(message = "创建时间必填",groups = {Insert.class, Update.class})
     private LocalDateTime createTime;
 
     /** 更新者 */

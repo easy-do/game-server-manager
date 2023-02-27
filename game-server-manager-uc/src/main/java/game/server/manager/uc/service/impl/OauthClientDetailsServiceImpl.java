@@ -1,8 +1,11 @@
 package game.server.manager.uc.service.impl;
 
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import game.server.manager.common.exception.BizException;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.uc.dto.OauthClientDetailsDto;
 import game.server.manager.uc.entity.OauthClientDetails;
@@ -89,6 +92,7 @@ public class OauthClientDetailsServiceImpl extends BaseServiceImpl<OauthClientDe
     @Override
     public boolean add(OauthClientDetailsDto oauthClientDetailsDto) {
         OauthClientDetails entity = OauthClientDetailsMapstruct.INSTANCE.dtoToEntity(oauthClientDetailsDto);
+        entity.setClientSecret(UUID.fastUUID().toString(true));
         entity.setCreateBy(getUserId());
         return save(entity);
     }
@@ -101,6 +105,9 @@ public class OauthClientDetailsServiceImpl extends BaseServiceImpl<OauthClientDe
      */
     @Override
     public boolean edit(OauthClientDetailsDto oauthClientDetailsDto) {
+        if(CharSequenceUtil.isEmpty(oauthClientDetailsDto.getClientSecret())){
+            throw new BizException("500","授权码不能为空");
+        }
         OauthClientDetails entity = OauthClientDetailsMapstruct.INSTANCE.dtoToEntity(oauthClientDetailsDto);
         return updateById(entity);
     }

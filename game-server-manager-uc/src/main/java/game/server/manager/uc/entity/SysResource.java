@@ -45,6 +45,9 @@ public class SysResource implements Serializable {
     /** 资源编码 */
     private String resourceCode;
 
+    /** 权限编码 */
+    private String permissions;
+
     /** 父级ID */
     private Long parentId;
 

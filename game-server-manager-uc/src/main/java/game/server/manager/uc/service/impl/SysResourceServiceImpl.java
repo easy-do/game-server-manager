@@ -7,6 +7,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.alicp.jetcache.anno.CacheInvalidate;
 import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
@@ -337,8 +338,9 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
 
     private void buildPermissions(Set<String> permissions,List<SysResource> menuList) {
         menuList.forEach(menu -> {
-            if(menu.getResourceType().equals(SystemSourceTypeEnum.INTERFACE.getValue())){
-                permissions.add(menu.getPath());
+            String permission = menu.getPermissions();
+            if(CharSequenceUtil.isNotEmpty(permission)){
+                permissions.addAll(CharSequenceUtil.split(permission,","));
             }
         });
     }

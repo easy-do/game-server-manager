@@ -37,6 +37,8 @@ public class SysResourceVo implements Serializable {
     private String resourceName;
     /** 资源编码 */
     private String resourceCode;
+    /** 权限编码 */
+    private String permissions;
     /** 父级ID */
     private Long parentId;
     /** 资源类型 */

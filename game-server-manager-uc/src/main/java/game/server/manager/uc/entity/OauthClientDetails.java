@@ -35,7 +35,7 @@ public class OauthClientDetails implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** 客户端id */
-    @TableId(value = "client_id" , type = IdType.AUTO)
+    @TableId(value = "client_id" , type = IdType.ASSIGN_UUID)
     private String clientId;
 
     /** 客户端名称 */

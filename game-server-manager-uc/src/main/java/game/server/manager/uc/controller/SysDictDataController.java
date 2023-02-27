@@ -2,9 +2,6 @@ package game.server.manager.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
-import cn.dev33.satoken.id.SaIdUtil;
-import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.text.CharSequenceUtil;
 import game.server.manager.api.SysDictDataApi;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.dto.ChangeStatusDto;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import game.server.manager.common.exception.BizException;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.common.vaild.Insert;
