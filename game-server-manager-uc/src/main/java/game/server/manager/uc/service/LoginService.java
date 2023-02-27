@@ -13,7 +13,6 @@ import game.server.manager.common.vo.SysRoleVo;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.redis.config.RedisUtils;
 import game.server.manager.uc.dto.LoginModel;
-import game.server.manager.uc.entity.SysResource;
 import game.server.manager.uc.entity.UserInfo;
 import game.server.manager.uc.mapstruct.UserInfoMapstruct;
 import me.zhyd.oauth.model.AuthUser;
@@ -234,5 +233,24 @@ public class LoginService {
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         StpUtil.logout(tokenInfo.loginId);
         redisUtils.delete(USER_PERMISSION+tokenInfo.loginId);
+    }
+
+    /**
+     * 根据openId获取登录的用户信息
+     *
+     * @param openId openId
+     * @return game.server.manager.common.vo.UserInfoVo
+     * @author laoyu
+     * @date 2023-02-27
+     */
+    public UserInfoVo getUserInfoByOpenId(String openId) {
+        List<String> ids = CharSequenceUtil.split(openId, "_");
+        UserInfo user = userInfoService.getById(ids.get(1));
+        if(Objects.isNull(user)){
+            throw new BizException("500","可能为非密码模式授权,无法获取到用户信息。");
+        }
+        UserInfoVo userInfoVo = UserInfoMapstruct.INSTANCE.entityToVo(user);
+        buildUserRoleAndPermission(userInfoVo);
+        return userInfoVo;
     }
 }

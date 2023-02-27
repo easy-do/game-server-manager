@@ -214,7 +214,12 @@ sa-token:
     password: ${REDIS_PASSWORD:n2H%yuXZFS}
     # 连接超时时间
     timeout: 10s
-
+    # OAuth2.0 配置
+  oauth2:
+    is-code: true
+    is-implicit: true
+    is-password: true
+    is-client: true
 springdoc:
   swagger-ui:
     # 修改Swagger UI路径

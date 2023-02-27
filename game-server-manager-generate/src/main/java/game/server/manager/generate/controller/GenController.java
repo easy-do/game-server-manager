@@ -342,5 +342,20 @@ public class GenController {
         genCode(response, data, OCTET_STREAM, "jonGenerate.zip");
     }
 
+    /**
+     * 根据openApi格式数据源生成模型
+     *
+     * @param response response
+     * @param dto      dto
+     * @author laoyu
+     */
+    @PostMapping("/openApiGenerate")
+    public void openApiGenerate(HttpServletResponse response, @RequestParam("url") String url) throws IOException {
+//        byte[] data = generateService.jsonGenerate(response, url);
+//        genCode(response, data, OCTET_STREAM, "jonGenerate.zip");
+    }
+
+
+
 
 }
