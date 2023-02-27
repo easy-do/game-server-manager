@@ -68,6 +68,11 @@ export function getColumns(
       ellipsis: true,
     },
     {
+      title: t['searchTable.columns.dictValue'],
+      dataIndex: 'dictValue',
+      ellipsis: true,
+    },
+    {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis: true,

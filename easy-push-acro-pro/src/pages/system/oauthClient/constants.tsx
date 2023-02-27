@@ -5,6 +5,7 @@ import PermissionWrapper from '@/components/PermissionWrapper';
 import { dictLabelEnum, getDictList } from '@/utils/dictDataUtils';
 
 export const statusEnum = dictLabelEnum('status_select','string')
+const auditStatus = dictLabelEnum("audit_status",'string')
 
 export interface DataInfoVo{
     clientId: string,
@@ -112,12 +113,14 @@ export function getColumns(
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis:true,
+      render: (_, record) => (statusEnum[record.status]),
     },
 
     {
       title: t['searchTable.columns.isAudit'],
       dataIndex: 'isAudit',
       ellipsis:true,
+      render: (_, record) => (auditStatus[record.status]),
     },
 
     {

@@ -7,7 +7,8 @@ export interface props{
   dictCode:string
   value?:string;
   onChange?:(value)=>void;
-  placeholder?:string
+  placeholder?:string;
+  modal?:'multiple' | 'tags';
 }
 
 function DictDataSelect(props:props) {
@@ -46,6 +47,7 @@ function DictDataSelect(props:props) {
       loading={loading}
       showSearch
       options={options}
+      mode={props.modal}
       filterOption={(inputValue, option) =>
         option.props.children.toLowerCase().indexOf(inputValue.toLowerCase()) >=
         0

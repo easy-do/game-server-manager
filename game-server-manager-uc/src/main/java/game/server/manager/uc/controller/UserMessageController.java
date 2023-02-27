@@ -1,7 +1,7 @@
 package game.server.manager.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.id.SaIdUtil;
+import cn.dev33.satoken.same.SaSameUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -107,7 +107,7 @@ public class UserMessageController {
     public R<Long> insert(@RequestBody UserMessageDto userMessageDto) {
         if (!StpUtil.isLogin()) {
             // 不是用户请求的则校验 Id-Token 身份凭证
-            SaIdUtil.checkCurrentRequestToken();
+            SaSameUtil.checkCurrentRequestToken();
         }
         UserMessage userMessage = UserMessageMapstruct.INSTANCE.dtoToEntity(userMessageDto);
         return userMessageService.save(userMessage) ? DataResult.ok() : DataResult.fail();

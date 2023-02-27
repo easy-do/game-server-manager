@@ -32,7 +32,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/oauthClient")
-public class OauthClientDetailsController extends BaseController<OauthClientDetailsService,OauthClientDetails,Long, OauthClientDetailsQo,OauthClientDetailsVo,OauthClientDetailsDto> {
+public class OauthClientDetailsController extends BaseController<OauthClientDetailsService,OauthClientDetails,String, OauthClientDetailsQo,OauthClientDetailsVo,OauthClientDetailsDto> {
 
     /**
      * 获取所有授权客户端信息列表
@@ -61,7 +61,7 @@ public class OauthClientDetailsController extends BaseController<OauthClientDeta
     @SaCheckPermission("uc:oauthClient:info")
     @GetMapping("/info/{id}")
     @Override
-    public R<OauthClientDetailsVo> info(@PathVariable("id")Long id) {
+    public R<OauthClientDetailsVo> info(@PathVariable("id")String id) {
         return super.info(id);
     }
 
@@ -94,7 +94,7 @@ public class OauthClientDetailsController extends BaseController<OauthClientDeta
 	@GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "授权客户端信息", description = "删除授权客户端信息: ?1", expressions = {"#p1"}, actionType = "删除")
     @Override
-    public R<Object> remove(@PathVariable("id")Long id) {
+    public R<Object> remove(@PathVariable("id")String id) {
         return super.remove(id);
     }
 }

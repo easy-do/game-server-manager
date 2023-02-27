@@ -23,6 +23,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
       setLoading(true)
       infoRequest(id).then((res) => {
         const { success, data } = res.data;
+        data.authorizedGrantTypes = data.authorizedGrantTypes.split(",");
         if (success) {
           formRef.current.setFieldsValue(data);
         }
@@ -40,6 +41,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
   //提交修改
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
+      values.authorizedGrantTypes = values.authorizedGrantTypes.join(",");
       updateRequest(values).then((res) => {
         const { success, msg} = res.data
         if(success){
@@ -107,7 +109,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
             { required: true, message: t['searchTable.rules.authorizedGrantTypes.required'] },
           ]}
         >
-           <DictDataSelect dictCode={'oauth2_grant_type'} placeholder={t['searchForm.authorizedGrantTypes.placeholder']} />
+           <DictDataSelect modal={'multiple'} dictCode={'oauth2_grant_type'} placeholder={t['searchForm.authorizedGrantTypes.placeholder']} />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.redirectUri']}
