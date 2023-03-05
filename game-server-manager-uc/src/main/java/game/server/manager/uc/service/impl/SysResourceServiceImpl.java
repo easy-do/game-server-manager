@@ -8,6 +8,7 @@ import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.IdUtil;
 import com.alicp.jetcache.anno.CacheInvalidate;
 import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
@@ -17,10 +18,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Maps;
 import game.server.manager.auth.AuthorizationUtil;
-import game.server.manager.common.constant.SystemSourceTypeEnum;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.common.enums.ResourceTypeEnum;
 import game.server.manager.common.enums.StatusEnum;
+import game.server.manager.common.exception.BizException;
 import game.server.manager.uc.dto.AuthRoleMenuDto;
 import game.server.manager.uc.entity.SysRoleResource;
 import game.server.manager.uc.service.SysRoleResourceService;
@@ -40,11 +41,13 @@ import org.springframework.stereotype.Service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -124,7 +127,20 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     @Override
     @CacheInvalidate(name = "SysResourceService.roleResource")
     public boolean add(SysResourceDto sysResourceDto) {
+        checkResourceCode(sysResourceDto.getResourceCode());
         SysResource entity = SysResourceMapstruct.INSTANCE.dtoToEntity(sysResourceDto);
+        String id = IdUtil.getSnowflakeNextIdStr();
+        String resourcePath;
+        if (Objects.nonNull(sysResourceDto.getParentId()) && !Objects.equals(sysResourceDto.getParentId(),0L)) {
+            SysResource parent = getById(sysResourceDto.getParentId());
+            if (Objects.isNull(parent)) {
+                throw new BizException("父资源不存在");
+            }
+            resourcePath = parent.getResourcePath();
+        } else {
+            resourcePath = "/" + id +"/";
+        }
+        entity.setResourcePath(resourcePath);
         entity.setCreateBy(getUserId());
         return save(entity);
     }
@@ -138,8 +154,30 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     @Override
     @CacheInvalidate(name = "SysResourceService.roleResource")
     public boolean edit(SysResourceDto sysResourceDto) {
+        if(Objects.equals(sysResourceDto.getId(),sysResourceDto.getParentId())){
+            throw new BizException("不能选择自己作为父节点");
+        }
+        SysResource oldResource = checkResource(sysResourceDto.getId());
+        checkResourceCode(sysResourceDto.getId(), sysResourceDto.getResourceCode());
         SysResource entity = SysResourceMapstruct.INSTANCE.dtoToEntity(sysResourceDto);
-        return updateById(entity);
+        boolean isUpdateParent = !Objects.equals(oldResource.getParentId(), sysResourceDto.getParentId());
+        if (isUpdateParent) {
+            if(Objects.equals(sysResourceDto.getParentId(),0L)){
+                entity.setResourcePath("/" + oldResource.getId() +"/");
+            }else {
+                SysResource parent = getById(sysResourceDto.getParentId());
+                if (Objects.isNull(parent)) {
+                    throw new BizException("选择的资源节点不存在");
+                }
+                entity.setResourcePath(parent.getResourcePath() + entity.getId() + "/");
+            }
+        }
+        boolean result = updateById(entity);
+        if (result && isUpdateParent) {
+            //递归更新所有子节点的path
+            updateResourcePathByParent(entity);
+        }
+        return result;
     }
 
     /**
@@ -173,10 +211,32 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
         return updateById(entity);
     }
 
+    @Override
+    public List<SysResourceVo> treeList(SysResourceQo sysResourceQo) {
+        LambdaQueryWrapper<SysResource> wrapper = sysResourceQo.buildSearchWrapper();
+        Map<String, Object> param = sysResourceQo.getSearchParam();
+        if(Objects.nonNull(param) && Objects.nonNull(param.get("parentId"))){
+            wrapper.likeRight(SysResource::getResourcePath,"/"+ param.get("parentId"));
+        }
+        List<SysResource> resourceList = list(wrapper);
+        if(resourceList.isEmpty()){
+            return Collections.emptyList();
+        }
+        List<SysResourceVo> voList = SysResourceMapstruct.INSTANCE.entityToVo(resourceList);
+        voList.stream().forEach(vo -> vo.setChildren(new ArrayList()));
+        Map<Long, SysResourceVo> resourceMap = voList.parallelStream().collect(Collectors.toMap(SysResourceVo::getId, sysResourceVo -> sysResourceVo));
+        voList.forEach(vo -> {
+            if (resourceMap.containsKey(vo.getParentId()))
+                resourceMap.get(vo.getParentId()).getChildren().add(vo);
+        });
+        Long min = voList.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();
+        return voList.stream().filter(vo -> Objects.equals(min,vo.getParentId())).collect(Collectors.toList());
+    }
+
     /**
      * 获取所有资源下拉树(带详情)
      *
-     * @return java.util.List<cn.hutool.core.lang.tree.Tree<java.lang.Long>>
+     * @return java.util.List<cn.hutool.core.lang.tree.Tree < java.lang.Long>>
      * @author laoyu
      * @date 2022/9/20
      */
@@ -191,7 +251,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     /**
      * 获取所有资源下拉树选择
      *
-     * @return java.util.List<cn.hutool.core.lang.tree.Tree<java.lang.Long>>
+     * @return java.util.List<cn.hutool.core.lang.tree.Tree < java.lang.Long>>
      * @author laoyu
      * @date 2022/9/20
      */
@@ -319,7 +379,6 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
             }
             return roleResource(roleIds);
         } else {
-
             return roleResource(List.of(ANONYMOUS_ID));
         }
     }
@@ -327,69 +386,69 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     @Override
     public Set<String> userPermissionList(Long userId) {
         List<Long> roleIds = sysUserRoleService.getRoleIdListByUserId(userId);
-        if(roleIds.isEmpty()){
+        if (roleIds.isEmpty()) {
             return Collections.emptySet();
         }
         List<SysResource> menuList = getRoleResourceList(roleIds);
         Set<String> permissions = new HashSet<>();
-        buildPermissions(permissions,menuList);
+        buildPermissions(permissions, menuList);
         return permissions;
     }
 
-    private void buildPermissions(Set<String> permissions,List<SysResource> menuList) {
+    private void buildPermissions(Set<String> permissions, List<SysResource> menuList) {
         menuList.forEach(menu -> {
             String permission = menu.getPermissions();
-            if(CharSequenceUtil.isNotEmpty(permission)){
-                permissions.addAll(CharSequenceUtil.split(permission,","));
+            if (CharSequenceUtil.isNotEmpty(permission)) {
+                permissions.addAll(CharSequenceUtil.split(permission, ","));
             }
         });
     }
 
-        @Override
+    @Override
     public Map<String, List<String>> userResourceAction(Long userId) {
         List<Long> roleIds = sysUserRoleService.getRoleIdListByUserId(userId);
-        if(roleIds.isEmpty()){
+        if (roleIds.isEmpty()) {
             return Maps.newHashMap();
         }
         List<SysResource> roleResourceList = getRoleResourceList(roleIds);
-        if(roleResourceList.isEmpty()){
+        if (roleResourceList.isEmpty()) {
             return Maps.newHashMap();
         }
         return buildResourceAction(roleResourceList);
     }
 
-    private Map<String,List<String>> buildResourceAction(List<SysResource> resourceList){
+    private Map<String, List<String>> buildResourceAction(List<SysResource> resourceList) {
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         NodeParser<SysResource, Long> nodeParser = (sysResource, treeNode) -> {
             treeNode.setId(sysResource.getId());
             treeNode.setParentId(sysResource.getParentId());
             treeNode.setName(sysResource.getResourceName());
             treeNode.setWeight(sysResource.getOrderNumber());
-            treeNode.putExtra("type",sysResource.getResourceType());
-            treeNode.putExtra("resourceCode",sysResource.getResourceCode());
+            treeNode.putExtra("type", sysResource.getResourceType());
+            treeNode.putExtra("resourceCode", sysResource.getResourceCode());
         };
         Long min = resourceList.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();
         List<Tree<Long>> treeList = TreeUtil.build(resourceList, min, treeNodeConfig, nodeParser);
-        Map<String,List<String>> actionMap = Maps.newHashMap();
-        buildResourceAction(actionMap,treeList);
+        Map<String, List<String>> actionMap = Maps.newHashMap();
+        buildResourceAction(actionMap, treeList);
         return actionMap;
     }
 
-    private Map<String,List<String>> buildResourceAction(Map<String,List<String>> actionMap,List<Tree<Long>> treeList){
+    private Map<String, List<String>> buildResourceAction(Map<String, List<String>> actionMap, List<Tree<Long>> treeList) {
         treeList.forEach(tree -> {
             String type = (String) tree.get("type");
-            if(type.equals(ResourceTypeEnum.MENU.getType()) && isChildrenMenu(tree)){
+            if (type.equals(ResourceTypeEnum.MENU.getType()) && isChildrenMenu(tree)) {
                 //是菜单 并且子节点存在菜单 继续向下遍历
-                buildResourceAction(actionMap,tree.getChildren());
-            }else if(type.equals(ResourceTypeEnum.MENU.getType()) && !isChildrenMenu(tree)){
+                buildResourceAction(actionMap, tree.getChildren());
+            } else if (type.equals(ResourceTypeEnum.MENU.getType()) && !isChildrenMenu(tree)) {
                 //是菜单 但子节点已经不存在菜单 直接组装
                 String perms = (String) tree.get("resourceCode");
                 List<Tree<Long>> children = tree.getChildren();
-                if(Objects.nonNull(children)){
+                if (Objects.nonNull(children)) {
                     List<Tree<Long>> actionsResource = children.stream().filter(longTree -> ResourceTypeEnum.ACTION.getType().equals(longTree.get("type").toString())).toList();
-                    if(!actionsResource.isEmpty()){
+                    if (!actionsResource.isEmpty()) {
                         List<String> actions = actionsResource.stream().map(tree1 -> tree1.get("resourceCode").toString()).toList();
-                        actionMap.put(perms,actions);
+                        actionMap.put(perms, actions);
                     }
                 }
             }
@@ -397,12 +456,12 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
         return actionMap;
     }
 
-    private boolean isChildrenMenu(Tree<Long> tree){
+    private boolean isChildrenMenu(Tree<Long> tree) {
         List<Tree<Long>> childrenList = tree.getChildren();
-        if(Objects.isNull(childrenList)){
+        if (Objects.isNull(childrenList)) {
             return false;
         }
-        for (Tree<Long> children: childrenList) {
+        for (Tree<Long> children : childrenList) {
             if (children.get("type").equals(ResourceTypeEnum.MENU.getType())) {
                 return true;
             }
@@ -454,12 +513,62 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
             treeNode.setName(sysResourceVo.getResourceName());
             treeNode.setWeight(sysResourceVo.getOrderNumber());
             treeNode.putExtra("details", sysResourceVo);
-            treeNode.putExtra("key", sysResourceVo.getPath());
+            treeNode.putExtra("key", sysResourceVo.getUrl());
             treeNode.putExtra("type", sysResourceVo.getResourceType());
             treeNode.putExtra("resourceCode", sysResourceVo.getResourceCode());
-            treeNode.putExtra("visible", StatusEnum.DISABLE.getCode().equals(sysResourceVo.getVisible()));
+            treeNode.putExtra("visible", StatusEnum.DISABLE.getCode().equals(sysResourceVo.getStatus()));
         };
         Long min = voList.stream().min((a, b) -> (int) (a.getParentId() - b.getParentId())).get().getParentId();
         return TreeUtil.build(voList, min, treeNodeConfig, nodeParser);
     }
+
+    private void checkResourceCode(String resourceCode) {
+        LambdaQueryWrapper<SysResource> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(SysResource::getResourceCode, resourceCode);
+        if (!list(wrapper).isEmpty()) {
+            throw new BizException("资源编码[" + resourceCode + "]已存在");
+        }
+    }
+
+    private void checkResourceCode(Long resourceId, String resourceCode) {
+        LambdaQueryWrapper<SysResource> wrapper = Wrappers.lambdaQuery();
+        wrapper.ne(SysResource::getId, resourceId);
+        wrapper.eq(SysResource::getResourceCode, resourceCode);
+        if (!list(wrapper).isEmpty()) {
+            throw new BizException("资源编码[" + resourceCode + "]已存在");
+        }
+    }
+
+    private SysResource checkResource(Long id) {
+        SysResource entity = getById(id);
+        if (Objects.isNull(entity)) {
+            throw new BizException("资源不存在");
+        }
+        return entity;
+    }
+
+
+    private void updateResourcePathByParent(SysResource parent) {
+        Long parentId = parent.getId();
+        List<SysResource> children = getByParentId(parentId);
+        List<SysResource> entityList = new ArrayList<>();
+        if (!children.isEmpty()) {
+            String parentResourcePath = parent.getResourcePath();
+            children.parallelStream().forEach(sysResource -> {
+                sysResource.setResourcePath(parentResourcePath + sysResource.getId() + "/");
+                entityList.add(sysResource);
+                updateResourcePathByParent(sysResource);
+            });
+        }
+        updateBatchById(entityList);
+    }
+
+
+    private List<SysResource> getByParentId(Long parentId) {
+        LambdaQueryWrapper<SysResource> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(SysResource::getParentId, parentId);
+        return list(wrapper);
+    }
+
+
 }

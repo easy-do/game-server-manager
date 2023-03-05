@@ -117,46 +117,80 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
            <DictDataSelect dictCode={'system_resource_type'} placeholder={t['searchForm.resourceType.placeholder']} />
         </Form.Item>
         <Form.Item
+          label={t['searchTable.columns.url']}
+          field="url"
+          rules={[
+            {
+              required: true,
+              message: t['searchTable.rules.url.required'],
+            },
+          ]}
+        >
+          <TextArea placeholder={t['searchForm.url.placeholder']} allowClear />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.icon']} field="icon">
+          <Input placeholder={t['searchForm.icon.placeholder']} allowClear />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.iconType']} field="iconType">
+        <DictDataSelect
+            dictCode={'icon_type'}
+            placeholder={t['searchForm.iconType.placeholder']}
+          />
+        </Form.Item>
+        <Form.Item
           label={t['searchTable.columns.orderNumber']}
           field="orderNumber"
         >
-          <Input placeholder={t['searchForm.orderNumber.placeholder']} allowClear />
+          <Input
+            placeholder={t['searchForm.orderNumber.placeholder']}
+            allowClear
+          />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.authFlag']} field="authFlag" initialValue={1}>
+          <DictDataSelect
+            dictCode={'is_no_select'}
+            placeholder={t['searchForm.authFlag.placeholder']}
+          />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.path']}
-          field="path"
+          label={t['searchTable.columns.permissions']}
+          field="permissions"
         >
-          <Input placeholder={t['searchForm.path.placeholder']} allowClear />
+          <TextArea placeholder={t['searchForm.permissions.placeholder']} />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.routeMode']} field="routeMode">
+          <DictDataSelect
+            dictCode={'route_mode'}
+            placeholder={t['searchForm.routeMode.placeholder']}
+          />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.param']}
-          field="param"
+          label={t['searchTable.columns.embeddedType']}
+          field="embeddedType"
         >
-          <TextArea placeholder={t['searchForm.param.placeholder']} />
+          <DictDataSelect
+            placeholder={t['searchForm.embeddedType.placeholder']}
+            dictCode={'embedded_type'}
+          />
         </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.isCache']}
-          field="isCache"
-        >
-           <DictDataSelect dictCode={'is_no_select'} placeholder={t['searchForm.isCache.placeholder']} />
+        <Form.Item label={t['searchTable.columns.subRoutes']} field="subRoutes">
+          <TextArea placeholder={t['searchForm.subRoutes.placeholder']} />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.status']}
           field="status"
+          initialValue={0}
         >
-           <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.status.placeholder']} />
+          <DictDataSelect
+            dictCode={'status_select'}
+            placeholder={t['searchForm.status.placeholder']}
+          />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.icon']}
-          field="icon"
+          label={t['searchTable.columns.resourceDesc']}
+          field="resourceDesc"
         >
-          <Input placeholder={t['searchForm.icon.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.remark']}
-          field="remark"
-        >
-          <TextArea placeholder={t['searchForm.remark.placeholder']} />
+          <TextArea placeholder={t['searchForm.resourceDesc.placeholder']} />
         </Form.Item>
       </Spin>
       </Form>

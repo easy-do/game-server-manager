@@ -129,6 +129,15 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
     }
 
     /**
+     * 树列表
+     */
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
+    @PostMapping("/treeList")
+    public R<List<SysResourceVo>> treeList(@RequestBody SysResourceQo sysResourceQo) {
+        return DataResult.ok(baseService.treeList(sysResourceQo));
+    }
+
+    /**
      * 获取所有资源下拉树(带详情)
      */
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)

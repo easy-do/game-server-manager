@@ -7,6 +7,9 @@ import {
   Space,
   Typography,
   Notification,
+  TreeSelect,
+  Spin,
+  Tree,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
 import { IconPlus } from '@arco-design/web-react/icon';
@@ -15,7 +18,7 @@ import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
 import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
-import { changeStatus, managerPage, removeRequest } from '@/api/resource';
+import { changeStatus, resourceTreeList, removeRequest } from '@/api/resource';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
@@ -112,13 +115,7 @@ function SearchTable() {
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
 
   const [data, setData] = useState([]);
-  const [pagination, setPatination] = useState<PaginationProps>({
-    sizeCanChange: true,
-    showTotal: true,
-    pageSize: 10,
-    current: 1,
-    pageSizeChangeResetCurrent: true,
-  });
+
   const [loading, setLoading] = useState(true);
   const [formParams, setFormParams] = useState({});
   const [orders, setOrders] = useState(getDefaultOrders());
@@ -126,38 +123,25 @@ function SearchTable() {
   useEffect(() => {
     fetchData();
   }, [
-    pagination.current,
-    pagination.pageSize,
     JSON.stringify(formParams),
     orders,
   ]);
 
   // 获取数据
   function fetchData() {
-    const { current, pageSize } = pagination;
     setLoading(true);
-    managerPage({
-      currentPage: current,
-      pageSize,
+    resourceTreeList({
       searchParam: formParams,
-      orders: orders,
       columns: getSearChColumns(),
       searchConfig: searchConfig(),
     }).then((res) => {
       setData(res.data.data);
-      setPatination({
-        ...pagination,
-        current,
-        pageSize,
-        total: res.data.total,
-      });
       setLoading(false);
     });
   }
 
   //表格搜索排序回调函数
   function onChangeTable(
-    pagination: PaginationProps,
     sorter: SorterResult,
     _filters: Partial<any>,
     _extra: {
@@ -165,11 +149,6 @@ function SearchTable() {
       action: 'paginate' | 'sort' | 'filter';
     }
   ) {
-    setPatination({
-      ...pagination,
-      current: pagination.current,
-      pageSize: pagination.pageSize,
-    });
     if (sorter) {
       if (sorter.direction === 'ascend') {
         setOrders([{ column: sorter.field, asc: true }]);
@@ -183,7 +162,6 @@ function SearchTable() {
 
   //点击搜索按钮
   function handleSearch(params) {
-    setPatination({ ...pagination, current: 1 });
     setFormParams(params);
   }
 
@@ -204,14 +182,12 @@ function SearchTable() {
           </Space>
         </div>
       </PermissionWrapper>
+      <Spin tip='loading Data...' loading={loading}>
       <Table
-        rowKey="id"
-        loading={loading}
-        onChange={onChangeTable}
-        pagination={pagination}
         columns={columns}
         data={data}
       />
+      </Spin>
       <AddPage
         visible={isAddData}
         setVisible={setIsAddData}

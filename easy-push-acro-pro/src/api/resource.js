@@ -6,7 +6,7 @@ export const removeRequest = (id) => get("/uc/resource/remove/" + id);
 export const managerPage = (param) => postRequestBody("/uc/resource/page",param);
 export const addRequest = (param) => postRequestBody("/uc/resource/add",param);
 export const updateRequest = (param) => postRequestBody("/uc/resource/update",param);
-
+export const resourceTreeList = (param) => postRequestBody("/uc/resource/treeList",param);
 
 
 export const roleResource = (id) => get("/uc/resource/roleResource/"+id);
