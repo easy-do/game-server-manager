@@ -1,7 +1,7 @@
 import { get,postRequestBody} from "../utils/request"
 
-export const managerPage = (param) => postRequestBody("/log-audit/sysLog/page",param);
-export const infoRequest = (id) => get("/log-audit/sysLog/info/" + id);
-export const removeRequest = (id) => get("/log-audit/sysLog/remove/" + id);
-export const clean = () => get("/log-audit/sysLog/clean");
+export const managerPage = (param) => postRequestBody("/uc/sysLog/page",param);
+export const infoRequest = (id) => get("/uc/sysLog/info/" + id);
+export const removeRequest = (id) => get("/uc/sysLog/remove/" + id);
+export const clean = () => get("/uc/sysLog/clean");
 
