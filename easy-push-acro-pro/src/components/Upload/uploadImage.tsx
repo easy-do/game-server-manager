@@ -60,7 +60,7 @@ export const imgeUrlcovertFiles = (imgesUrls:string)=>{
         files.push(
             {
                 uid: index+1+'',
-                url: '/api/oss/minio/'+item,
+                url: '/api/server/minio/'+item,
                 name: item,
                 response:{
                   url:item

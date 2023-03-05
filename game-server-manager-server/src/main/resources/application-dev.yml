@@ -149,3 +149,25 @@ feign:
   httpclient:
     maxConnections: 1000
     connectionTimeout: 3000
+
+oss:
+  #minio文件存储
+  minio:
+    #是否开启 使用@EnableFileStoreServer注解时生效
+    enable: true
+    #minio地址
+    server-address: ${MINIO_SERVER:https://minio.server:9000}
+    #账号
+    access-key: ${MINIO_ACCESS_KEY:minioadmin}
+    #密码
+    secret-key: ${MINIO_SECRET_KEY:minioadmin}
+    #默认桶名称
+    default-bucket: ${DEFAULT_BUCKET:file-store}
+  #本地文件存储
+  local:
+    #是否开启 使用@EnableFileStoreServer注解时生效
+    enable: false
+    #默认分组名称
+    default-group-name: defaultGroup
+    #存储文件的系统绝对路径
+    store-path: D:\defaultOss-path\
