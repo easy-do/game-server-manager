@@ -130,6 +130,27 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--minio 对象存储  -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.4.6</version>
+        </dependency>
+
+        <!--  okhttp作为http请求的客户端-->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.10.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
