@@ -4,9 +4,17 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { infoRequest } from '@/api/resource';
 import { DataInfoVo } from './constants';
+import { dictLabelEnum } from '@/utils/dictDataUtils';
 
 
 function InfoPage(props: {id:number,visible,setVisible}) {
+
+  const statusEnum = dictLabelEnum('status_select','string')
+  const isNoSelecEnum = dictLabelEnum('is_no_select','string')
+  const embeddedTypeEnum = dictLabelEnum('embedded_type','string')
+  const iconTypeEnum = dictLabelEnum('icon_type','string')
+  const routeModeEnum = dictLabelEnum('route_mode','string')
+  
   
     const [loading,setLoading] = useState(false)
 
@@ -33,36 +41,72 @@ function InfoPage(props: {id:number,visible,setVisible}) {
 
   const data = [
     {
-      label: t['searchTable.columns.resourceName'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.resourceName:'',
+      label: t['searchTable.columns.id'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.id:'',
     },
     {
       label: t['searchTable.columns.resourceCode'],
       value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.resourceCode:'',
     },
     {
+      label: t['searchTable.columns.resourcePath'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.resourcePath:'',
+    },
+    {
       label: t['searchTable.columns.resourceType'],
       value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.resourceType:'',
     },
     {
-      label: t['searchTable.columns.path'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.path:'',
+      label: t['searchTable.columns.icon'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.icon:'',
     },
     {
-      label: t['searchTable.columns.param'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.param:'',
-    },
-    {
-      label: t['searchTable.columns.isCache'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.isCache:'',
+      label: t['searchTable.columns.iconType'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? iconTypeEnum[infoData.iconType]:'',
     },
     {
       label: t['searchTable.columns.status'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.status:'',
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? statusEnum[infoData.status]:'',
     },
     {
-      label: t['searchTable.columns.remark'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.remark:'',
+      label: t['searchTable.columns.orderNumber'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.orderNumber:'',
+    },
+    {
+      label: t['searchTable.columns.authFlag'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? isNoSelecEnum[infoData.authFlag]:'',
+    },
+    {
+      label: t['searchTable.columns.url'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.url:'',
+    },
+    {
+      label: t['searchTable.columns.permissions'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.permissions:'',
+    },
+    {
+      label: t['searchTable.columns.routeMode'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? routeModeEnum[infoData.routeMode]:'',
+    },
+    {
+      label: t['searchTable.columns.embeddedType'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? embeddedTypeEnum[infoData.embeddedType]:'',
+    },
+    {
+      label: t['searchTable.columns.subRoutes'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.subRoutes:'',
+    },
+    {
+      label: t['searchTable.columns.resourceDesc'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.resourceDesc:'',
+    },
+    {
+      label: t['searchTable.columns.createTime'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.createTime:'',
+    },
+    {
+      label: t['searchTable.columns.updateTime'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.updateTime:'',
     },
   ];
 

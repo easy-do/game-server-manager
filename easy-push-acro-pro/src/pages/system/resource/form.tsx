@@ -76,18 +76,10 @@ function SearchForm(props: {
           </Col> 
           <Col span={colSpan}>
             <Form.Item
-              label={t['searchTable.columns.path']}
-              field="path"
+              label={t['searchTable.columns.url']}
+              field="url"
             >
-              <Input placeholder={t['searchForm.path.placeholder']} allowClear />
-            </Form.Item>
-          </Col> 
-          <Col span={colSpan}>
-            <Form.Item
-              label={t['searchTable.columns.isCache']}
-              field="isCache"
-            >
-              <DictDataSelect dictCode={'is_no_select'} placeholder={t['searchForm.isCache.placeholder']} />
+              <Input placeholder={t['searchForm.url.placeholder']} allowClear />
             </Form.Item>
           </Col> 
           <Col span={colSpan}>

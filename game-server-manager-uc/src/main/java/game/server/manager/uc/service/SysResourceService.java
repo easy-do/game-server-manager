@@ -34,6 +34,15 @@ public interface SysResourceService extends BaseService<SysResource, SysResource
 
 
     /**
+     * 树列表
+     *
+     * @return java.util.List<cn.hutool.core.lang.tree.Tree<java.lang.Long>>
+     * @author laoyu
+     * @date 2022/9/20
+     */
+    List<SysResourceVo> treeList(SysResourceQo sysResourceQo);
+
+    /**
      * 获取所有资源下拉树(带详情)
      *
      * @return java.util.List<cn.hutool.core.lang.tree.Tree<java.lang.Long>>
