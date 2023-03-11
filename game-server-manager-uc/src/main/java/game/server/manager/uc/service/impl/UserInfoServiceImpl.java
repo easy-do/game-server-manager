@@ -60,6 +60,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Autowired
     private SysRoleService sysRoleService;
 
+    @Autowired
+    private AuthorizationUtil authorizationUtil;
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -120,7 +123,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean authorization(UserInfoVo userInfoVo, String authorizationCode) {
+    public boolean authorization(String authorizationCode) {
         boolean result;
         LambdaQueryWrapper<AuthorizationCode> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(AuthorizationCode::getCode, authorizationCode);
@@ -129,7 +132,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             if (authorizationCodeEntity.getState() == 1) {
                 throw new AuthorizationException("授权码已被使用");
             }
-            UserInfo userEntity = baseMapper.selectById(userInfoVo.getId());
+            UserInfo userEntity = baseMapper.selectById(AuthorizationUtil.getSimpleUser().getId());
             if (Objects.isNull(userEntity)) {
                 throw new HasPermissionException("用户不存在");
             }
@@ -141,7 +144,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 result = setUserAuthorization(authorizationConfigDto, userEntity);
                 if (result) {
                     newUserInfoVo.setAuthorization(JSON.toJSONString(authorizationConfigDto));
-                    AuthorizationUtil.reloadUserCache(newUserInfoVo);
+                    authorizationUtil.reloadUserCache(newUserInfoVo);
                     basePublishEventServer.publishAuthorizationCodeEvent(userEntity.getId(),authorizationConfigDto);
                 }
                 return result;
@@ -152,7 +155,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 authorizationCodeEntity.setState(1);
                 result = authorizationCodeService.updateById(authorizationCodeEntity);
                 if(result){
-                    AuthorizationUtil.reloadUserCache(newUserInfoVo);
+                    authorizationUtil.reloadUserCache(newUserInfoVo);
                     basePublishEventServer.publishAuthorizationCodeEvent(userEntity.getId(),authorizationConfigDto);
                 }
                 return result;
@@ -188,7 +191,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             user.setEmail(email);
             boolean updateResult = updateById(user);
             if (updateResult) {
-                AuthorizationUtil.reloadUserCache(UserInfoMapstruct.INSTANCE.entityToVo(user));
+                authorizationUtil.reloadUserCache(UserInfoMapstruct.INSTANCE.entityToVo(user));
                 basePublishEventServer.publishBindingEmailEvent(id);
                 return true;
             }
@@ -245,15 +248,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public boolean resetSecret() {
-        UserInfoVo cacheUser = AuthorizationUtil.getUser();
+        UserInfoVo cacheUser = authorizationUtil.getUser();
         String secret = UUID.fastUUID().toString(true);
         UserInfo entity = UserInfo.builder().id(cacheUser.getId()).secret(secret).build();
         boolean result = updateById(entity);
         if (result) {
             cacheUser.setSecret(secret);
-            AuthorizationUtil.reloadUserCache(cacheUser);
+            authorizationUtil.reloadUserCache(cacheUser);
             basePublishEventServer.publishResetSecretEvent(cacheUser.getId());
-            StpUtil.login(cacheUser.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, cacheUser));
+            StpUtil.login(cacheUser.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, UserInfoMapstruct.INSTANCE.voToSimpleVo(cacheUser)));
         }
         return result;
     }

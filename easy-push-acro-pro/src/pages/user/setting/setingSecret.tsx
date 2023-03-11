@@ -1,4 +1,4 @@
-import { resetSecretRequest } from '@/api/oauth';
+import { getUserInfo, resetSecretRequest } from '@/api/oauth';
 import { Modal } from '@arco-design/web-react';
 import React from 'react';
 import { Notification } from '@arco-design/web-react';
@@ -17,18 +17,21 @@ function SetingSecret({ visible, setVisible}) {
       resetSecretRequest().then((res) => {
         const { success, data, msg } = res.data
         if(success){
-          // const token = cookie.load('token')
           localStorage.setItem('token',data)
-          const tokenInfo: any = decode(data);
-          localStorage.setItem('userInfo', JSON.stringify(tokenInfo.userInfo));
-          dispatch({
-            type: 'update-userInfo',
-            payload: {
-              userInfo: tokenInfo.userInfo,
-            },
-          });
           Notification.success({ content: msg, duration: 3000 })
           setVisible(false)
+          getUserInfo().then((res) => {
+            const { success, data } = res.data;
+            if (success) {
+              localStorage.setItem('userInfo', JSON.stringify(data));
+              dispatch({
+                type: 'update-userInfo',
+                payload: {
+                  userInfo: data,
+                },
+              });
+            }
+          });
         }
       });
   };

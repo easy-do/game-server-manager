@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static game.server.manager.common.constant.SystemConstant.USER_PERMISSION;
 
 /**
  * @author yuzhanfeng
@@ -19,14 +18,14 @@ import static game.server.manager.common.constant.SystemConstant.USER_PERMISSION
 public class StpInterfaceImpl implements StpInterface {
 
     @Autowired
-    private RedisUtils<List<String>> redisUtils;
+    private AuthorizationUtil authorizationUtil;
 
     /**
      * 返回一个账号所拥有的权限码集合
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        return redisUtils.get(USER_PERMISSION+loginId);
+        return authorizationUtil.getUser(loginId).getPermissions();
     }
 
     /**
@@ -34,7 +33,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        UserInfoVo user = AuthorizationUtil.getUser();
+        UserInfoVo user = authorizationUtil.getUser(loginId);
         return user.getRoles();
     }
 

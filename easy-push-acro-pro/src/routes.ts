@@ -4,70 +4,68 @@ import { useState } from 'react';
 export type IRoute = AuthParams & {
   name: string;
   key: string;
-  // 当前页是否展示面包屑
+  url: string;
+  //启用状态 0 启用
+  status?: number;
+  icon?: string; 
+  //图标类型 0-组件（默认）、1-图片
+  iconType?: number;
+  // // 当前页是否展示面包屑
   breadcrumb?: boolean;
   children?: IRoute[];
-  // 当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问。
-  visible?: boolean;
-  // 是否禁用
-  disabled?: false
-  icon?: string;
-  details?: any;
-  type?:string;
-  resourceCode?:string;
 };
 
 
 export const staticRoutes: IRoute[] = [
   {
     name: "侧边导航",
-    key: '',
-    type: "M",
-    visible:true,
+    key: 'sideNavigate',
+    url: '',
+    status:1,
     children:[
       {
         name: '首页',
-        key: 'dashboard/workplace',
-        type: "M",
-        visible:true,
+        key: 'home',
+        url: 'dashboard/workplace',
+        status:0,
         children: [],
     },
     ]
   },
   {
     name: "顶部导航",
-    key: '',
-    type: "M",
-    visible:true,
+    key: 'topNavigate',
+    url: '',
+    status:1,
     children:[
       {
         name: '首页',
-        key: 'dashboard/workplace',
-        type: "M",
-        visible:true,
+        key: '',
+        url: 'dashboard/workplace',
+        status:0,
         children: [],
     },
     ]
   },
   {
     name: '登录成功',
-    key: 'loginSuccess',
-    type: "M",
-    visible:true,
+    key: '',
+    url: 'loginSuccess',
+    status:1,
     children:[]
   },
   {
     name: '登录失败',
-    key: 'loginError',
-    type: "M",
-    visible:true,
+    key: '',
+    url: 'loginError',
+    status:1,
     children:[]
   },
   {
     name: '讨论详情页',
-    key: '/server/discussion/discussionInfo',
-    type: "M",
-    visible:true,
+    key: '',
+    url: '/server/discussion/discussionInfo',
+    status:1,
     children:[]
   },
 ];

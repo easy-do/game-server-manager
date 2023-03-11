@@ -128,7 +128,7 @@ export function getColumns(
         <div>  
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:executeLog', actions: ['info'] },
+              { resource: 'executeLog', actions: ['executeLog:info'] },
             ]}
           >
             <Button

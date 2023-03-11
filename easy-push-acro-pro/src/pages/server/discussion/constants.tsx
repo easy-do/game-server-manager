@@ -110,7 +110,7 @@ export function getColumns(
             </Button>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:discussion', actions: ['update'] },
+              { resource: 'discussion', actions: ['discussion:update'] },
             ]}
           >
             <Button
@@ -123,7 +123,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:discussion', actions: ['remove'] },
+              { resource: 'discussion', actions: ['discussion:remove'] },
             ]}
           >
             <Popconfirm

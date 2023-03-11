@@ -28,13 +28,12 @@ public interface UserInfoService extends IService<UserInfo>{
     /**
      * 用户授权
      *
-     * @param userInfoVo userInfoVo
      * @param authorizationCode authorizationCode
      * @return boolean
      * @author laoyu
      * @date 2022/5/19
      */
-    boolean authorization(UserInfoVo userInfoVo, String authorizationCode);
+    boolean authorization(String authorizationCode);
 
     /**
      * 拉黑用户

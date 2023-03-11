@@ -96,7 +96,7 @@ export function getColumns(
         <div>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'sysDictData', actions: ['info'] },
+              { resource: 'sysDictData', actions: ['sysDictData:info'] },
             ]}
           >
             <Button
@@ -109,7 +109,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'sysDictData', actions: ['update'] },
+              { resource: 'sysDictData', actions: ['sysDictData:update'] },
             ]}
           >
             <Button
@@ -123,7 +123,7 @@ export function getColumns(
 
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'sysDictData', actions: ['remove'] },
+              { resource: 'sysDictData', actions: ['sysDictData:remove'] },
             ]}
           >
             <Popconfirm

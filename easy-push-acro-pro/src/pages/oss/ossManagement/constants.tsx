@@ -106,7 +106,7 @@ export function getColumns(
         <div>  
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'oss:ossManagement', actions: ['info'] },
+              { resource: 'ossManagement', actions: ['ossManagement:info'] },
             ]}
           >
             <Button
@@ -119,7 +119,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'oss:ossManagement', actions: ['remove'] },
+              { resource: 'ossManagement', actions: ['ossManagement:remove'] },
             ]}
           >
             <Popconfirm

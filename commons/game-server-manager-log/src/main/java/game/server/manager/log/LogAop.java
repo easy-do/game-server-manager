@@ -189,7 +189,7 @@ public class LogAop {
     private String getUserName() {
         if(StpUtil.isLogin()){
             try {
-                AuthorizationUtil.getUser().getNickName();
+                AuthorizationUtil.getSimpleUser().getNickName();
             }catch (Exception e){
                 return null;
             }

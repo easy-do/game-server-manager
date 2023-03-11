@@ -3,6 +3,7 @@ package game.server.manager.uc.service;
 import cn.hutool.core.lang.tree.Tree;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.uc.dto.AuthRoleMenuDto;
+import game.server.manager.uc.vo.UserResourceVo;
 import game.server.manager.web.base.BaseService;
 import game.server.manager.uc.dto.SysResourceDto;
 import game.server.manager.uc.qo.SysResourceQo;
@@ -117,17 +118,17 @@ public interface SysResourceService extends BaseService<SysResource, SysResource
      * @author laoyu
      * @date 2022/9/20
      */
-    List<Tree<Long>> userResource();
+    List<UserResourceVo> userResource();
 
     /**
-     * 获得用户接口权限列表
+     * 加载用户资源列表
      *
      * @param userId userId
-     * @return java.util.List<java.lang.String>
+     * @return java.util.List<game.server.manager.uc.vo.UserResourceVo>
      * @author laoyu
-     * @date 2022/9/20
+     * @date 2023/3/11
      */
-    Set<String> userPermissionList(Long userId);
+    List<UserResourceVo> userResource(Long userId);
 
     /**
      * 获取用户资源权限结构数据

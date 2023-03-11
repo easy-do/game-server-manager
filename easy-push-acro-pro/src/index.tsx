@@ -19,6 +19,7 @@ import { IRoute, staticRoutes } from './routes';
 import DiscussionInfo from './pages/server/discussion/discussionInfo';
 import { XtermPage } from './components/XtermCompenent/xtermPage';
 import { getDictDataMap } from './api/dictData';
+import { getUserInfo } from './api/oauth';
 
 
 const store = createStore(rootReducer);
@@ -45,10 +46,18 @@ function Index() {
       type: 'update-userInfo',
       payload: { userLoading: true },
     });
-      store.dispatch({
-        type: 'update-userInfo',
-        payload: { userInfo: userInfo?JSON.parse(userInfo):{}, userLoading: false },
-      });
+    getUserInfo().then((res) => {
+      const { success, data } = res.data;
+      if (success) {
+        localStorage.setItem('userInfo', JSON.stringify(data));
+        store.dispatch({
+          type: 'update-userInfo',
+          payload: {
+            userInfo: data,
+          },
+        });
+      }
+    });
   }
 
   useEffect(() => {

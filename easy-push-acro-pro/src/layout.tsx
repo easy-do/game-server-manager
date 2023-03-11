@@ -61,11 +61,11 @@ function getFlattenRoutes(routes) {
   function travel(_routes) {
     _routes.forEach((route) => {
       const visibleChildren = (route.children || []).filter(
-        (child) => !child.ignore && child.type === 'M'
+        (child) => child.status === 0
       );
       if (route.key && (!route.children || !visibleChildren.length)) {
         try {
-          route.component = lazyload(() => import(`./pages/${route.key}`));
+          route.component = lazyload(() => import(`./pages/${route.url}`));
           res.push(route);
         } catch (e) {
           console.error(e);
@@ -121,15 +121,15 @@ function PageLayout() {
     routeMap.current.clear();
     return function travel(_routes: IRoute[], level, parentNode = []) {
       return _routes.map((route) => {
-        const { breadcrumb = true, visible: ignore, type } = route;
-        //是菜单类型才构建
-        if(type === 'M'){
+        const { breadcrumb = true, status } = route;
+        //菜单开启才构建
+        if(status === 0){
         //获取菜单图标
-        const iconDom = getIconFromKey(route.key);
+        const iconDom = getIconFromKey(route.icon);
         //菜单显示的文字
         const titleDom = (
           <>
-            {iconDom} {locale[route.name] || route.name}
+            {iconDom} {locale[route.key] || route.name}
           </>
         );
 
@@ -141,21 +141,17 @@ function PageLayout() {
 
         //过滤出需要继续递归的菜单？
         const visibleChildren = (route.children || []).filter((child) => {
-          const { visible: ignore, breadcrumb = true, type } = child;
-          if (ignore || route.visible) {
+          const { breadcrumb = true, status} = child;
+          if (status === 1) {
             routeMap.current.set(
               `/${child.key}`,
               breadcrumb ? [...parentNode, route.name, child.name] : []
             );
           }
-          //未设置隐藏、并且是菜单
-          return !ignore && type === 'M';
+          //菜单开启
+          return status === 0;
         });
 
-        //如果不展示只是路由则不组装直接返回空
-        if (ignore) {
-          return '';
-        }
         //如果还有子菜单继续递归构建子菜单
         if (visibleChildren.length) {
           menuMap.current.set(route.key, { subMenu: true });
@@ -185,8 +181,7 @@ function PageLayout() {
     const preload = component.preload();
     NProgress.start();
     preload.then(() => {
-
-      history.push(currentRoute.path ? currentRoute.path : `/${key}`);
+      history.push(`/${currentRoute.url}`);
       NProgress.done();
     });
   }
@@ -300,7 +295,7 @@ function PageLayout() {
                     return (
                       <Route
                         key={index}
-                        path={`/${route.key}`}
+                        path={`/${route.url}`}
                         component={route.component}
                       />
                     );
