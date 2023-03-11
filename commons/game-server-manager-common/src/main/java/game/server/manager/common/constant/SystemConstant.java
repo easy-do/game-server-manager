@@ -26,19 +26,13 @@ public class SystemConstant {
 
     public static final String USER_COUNT = "user_count:";
 
-    public static final String USER_ROLES = "user_roles:";
-
-    public static final String USER_PERMISSION = "user_permission:";
+    public static final String USER_CACHE = "user_cache:";
 
     public static final String MAIL_CODE = "mail_code:";
 
     public static final String USER_COMMENT = "user_comment:";
 
     public static final String TOKEN_USER_INFO = "userInfo";
-
-    public static final String TOKEN_USER_ROLES = "roles";
-
-    public static final String TOKEN_USER_PERMISSIONS = "permissions";
 
     private SystemConstant() {
     }

@@ -4,14 +4,15 @@ import cn.dev33.satoken.jwt.SaJwtUtil;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
+import game.server.manager.auth.vo.SimpleUserInfoVo;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.vo.UserInfoVo;
+import game.server.manager.redis.config.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Objects;
 
 /**
@@ -25,23 +26,27 @@ public class AuthorizationUtil {
     @Autowired(required = false)
     private AbstractAuthorizationCodeService abstractAuthorizationCodeService;
 
-    public static UserInfoVo getUser(){
+    @Autowired
+    private RedisUtils<Object> redisUtils;
+
+    public UserInfoVo getUser(){
         StpUtil.checkLogin();
-        JSONObject userJson = (JSONObject) StpUtil.getExtra(SystemConstant.TOKEN_USER_INFO);
-        return userJsonToBean(userJson);
+        return (UserInfoVo) redisUtils.get(SystemConstant.USER_CACHE + getUserId());
     }
 
-    public static UserInfoVo userJsonToBean(JSONObject userJson) {
-        Integer lastLoginTimeInt = userJson.getInt("lastLoginTime");
-        userJson.remove("lastLoginTime");
-        UserInfoVo userInfoVo = userJson.toBean(UserInfoVo.class);
-        LocalDateTime localDateTime = LocalDateTime.ofEpochSecond(lastLoginTimeInt, 0, ZoneOffset.ofHours(8));
-        userInfoVo.setLastLoginTime(localDateTime);
-        return userInfoVo ;
+    public static SimpleUserInfoVo getSimpleUser(){
+        StpUtil.checkLogin();
+        return (SimpleUserInfoVo) StpUtil.getExtra("userInfo");
     }
 
-    public static void reloadUserCache(UserInfoVo userInfo){
-        StpUtil.login(userInfo.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO,userInfo));
+    public UserInfoVo getUser(Object userId){
+        return (UserInfoVo) redisUtils.get(SystemConstant.USER_CACHE + userId);
+    }
+
+
+    public void reloadUserCache(UserInfoVo userInfo){
+        StpUtil.login(userInfo.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, BeanUtil.copyProperties(userInfo, SimpleUserInfoVo.class)));
+        redisUtils.set(SystemConstant.USER_CACHE + userInfo.getId(), userInfo);
     }
 
     public static long getUserId(){
@@ -52,16 +57,16 @@ public class AuthorizationUtil {
         return StpUtil.hasRole(SystemConstant.SUPER_ADMIN_ROLE);
     }
 
-    public static UserInfoVo checkTokenOrLoadUser(String token) {
+    public static SimpleUserInfoVo checkTokenOrLoadUser(String token) {
         StpLogicJwtForSimple stpLogic = (StpLogicJwtForSimple) StpUtil.stpLogic;
         JSONObject payloads = SaJwtUtil.getPayloadsNotCheck(token, stpLogic.loginType, stpLogic.jwtSecretKey());
-        return userJsonToBean(payloads.getJSONObject("userInfo"));
+        return payloads.get("userInfo",SimpleUserInfoVo.class);
 
     }
 
-    public static boolean isAdmin(String token){
-        UserInfoVo info = checkTokenOrLoadUser(token);
-        return info.getRoles().contains(SystemConstant.SUPER_ADMIN_ROLE);
+    public boolean isAdmin(String token){
+        SimpleUserInfoVo info = checkTokenOrLoadUser(token);
+        return getUser(info.getId()).getRoles().contains(SystemConstant.SUPER_ADMIN_ROLE);
     }
     public static Long getUserId(String token){
         return checkTokenOrLoadUser(token).getId();

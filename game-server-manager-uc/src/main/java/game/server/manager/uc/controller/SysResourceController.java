@@ -8,6 +8,7 @@ import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.dto.ChangeStatusDto;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.uc.dto.AuthRoleMenuDto;
+import game.server.manager.uc.vo.UserResourceVo;
 import game.server.manager.web.base.BaseController;
 import game.server.manager.uc.qo.SysResourceQo;
 import game.server.manager.uc.service.SysResourceService;
@@ -197,7 +198,7 @@ public class SysResourceController extends BaseController<SysResourceService,Sys
      * 加载 用户/游客 资源列表
      */
     @GetMapping(value = "/userResource")
-    public R<List<Tree<Long>>> userResource() {
+    public R<List<UserResourceVo>> userResource() {
         return DataResult.ok(baseService.userResource());
     }
 

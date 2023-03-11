@@ -136,7 +136,7 @@ export function getColumns(
         <div>  
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'uc:oauthClient', actions: ['info'] },
+              { resource: 'oauthClient', actions: ['oauthClient:info'] },
             ]}
           >
             <Button
@@ -149,7 +149,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'uc:oauthClient', actions: ['update'] },
+              { resource: 'oauthClient', actions: ['oauthClient:update'] },
             ]}
           >
             <Button
@@ -162,7 +162,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'uc:oauthClient', actions: ['remove'] },
+              { resource: 'oauthClient', actions: ['oauthClient:remove'] },
             ]}
           >
             <Popconfirm

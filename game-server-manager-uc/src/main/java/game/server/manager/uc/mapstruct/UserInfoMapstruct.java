@@ -1,5 +1,6 @@
 package game.server.manager.uc.mapstruct;
 
+import game.server.manager.auth.vo.SimpleUserInfoVo;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.mapstruct.BaseMapstruct;
 import game.server.manager.uc.dto.UserInfoDto;
@@ -15,5 +16,7 @@ import org.mapstruct.factory.Mappers;
 public interface UserInfoMapstruct extends BaseMapstruct<UserInfo, UserInfoVo, UserInfoDto> {
 
     UserInfoMapstruct INSTANCE = Mappers.getMapper(UserInfoMapstruct.class);
+
+    SimpleUserInfoVo voToSimpleVo(UserInfoVo userInfoVo);
 
 }

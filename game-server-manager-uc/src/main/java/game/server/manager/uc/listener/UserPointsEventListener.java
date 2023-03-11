@@ -32,6 +32,9 @@ public class UserPointsEventListener {
     @Autowired
     private UserPointsLogService userPointsLogService;
 
+    @Autowired
+    private AuthorizationUtil authorizationUtil;
+
     @Async
     @EventListener(UserPointsEvent.class)
     public void sendUserPointsEventMessage(UserPointsEvent userPointsEvent){
@@ -48,7 +51,7 @@ public class UserPointsEventListener {
                         .points(user.getPoints()).currentPoints(newPoints).description(userPointsEvent.getDescription()).createTime(LocalDateTime.now()).build();
                 userPointsLogService.save(pointsLog);
                 UserInfoVo userInfoVo = UserInfoMapstruct.INSTANCE.entityToVo(user);
-                AuthorizationUtil.reloadUserCache(userInfoVo);
+                authorizationUtil.reloadUserCache(userInfoVo);
             }
         }
     }

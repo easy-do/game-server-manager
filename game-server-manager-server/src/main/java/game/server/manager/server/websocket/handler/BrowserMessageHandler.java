@@ -2,6 +2,7 @@ package game.server.manager.server.websocket.handler;
 
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.auth.AuthorizationUtil;
+import game.server.manager.auth.vo.SimpleUserInfoVo;
 import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.handler.HandlerServiceContainer;
@@ -25,15 +26,18 @@ public class BrowserMessageHandler {
     @Resource
     private HandlerServiceContainer<BrowserHandlerData, Void> handlerServiceContainer;
 
+    @Resource
+    private AuthorizationUtil authorizationUtil;
+
 
     public void handle(String message, Session session) {
         BrowserMessage browserMessage = JSON.parseObject(message, BrowserMessage.class);
         //校验token
-        UserInfoVo userInfo = AuthorizationUtil.checkTokenOrLoadUser(browserMessage.getToken());
+        SimpleUserInfoVo userInfo = AuthorizationUtil.checkTokenOrLoadUser(browserMessage.getToken());
         String type = browserMessage.getType();
         BrowserHandlerData browserHandlerData = BrowserHandlerData.builder()
                 .session(session)
-                .userInfo(userInfo)
+                .userInfo(authorizationUtil.getUser(userInfo.getId()))
                 .browserMessage(browserMessage)
                 .build();
         handlerServiceContainer.handler(type,browserHandlerData);

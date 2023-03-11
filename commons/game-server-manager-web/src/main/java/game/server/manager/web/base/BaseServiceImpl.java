@@ -27,8 +27,8 @@ public abstract class BaseServiceImpl<Entity,QO extends MpBaseQo<Entity>, VO, DT
 
 
 
-    protected static UserInfoVo getUser(){
-        return AuthorizationUtil.getUser();
+    protected UserInfoVo getUser(){
+        return authorizationUtil.getUser();
     }
 
     protected static boolean isAdmin(){

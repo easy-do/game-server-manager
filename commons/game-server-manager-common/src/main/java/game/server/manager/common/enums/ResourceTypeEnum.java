@@ -7,11 +7,10 @@ package game.server.manager.common.enums;
  */
 public enum ResourceTypeEnum {
 
-    /**/
+    /** 菜单 */
     MENU("M","菜单"),
-    INTERFACE("I","接口"),
-    ACTION("A","操作"),
-    LINK("L","链接");
+    /** 功能 */
+    FUNCTION("F","功能");
 
 
     private final String type;

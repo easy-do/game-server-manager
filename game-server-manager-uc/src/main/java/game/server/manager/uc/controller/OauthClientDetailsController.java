@@ -37,7 +37,7 @@ public class OauthClientDetailsController extends BaseController<OauthClientDeta
     /**
      * 获取所有授权客户端信息列表
      */
-    @SaCheckPermission("uc:oauthClient:list")
+    @SaCheckPermission("oauthClient:list")
     @RequestMapping("/list")
     @Override
     public R<List<OauthClientDetailsVo>> list() {
@@ -47,7 +47,7 @@ public class OauthClientDetailsController extends BaseController<OauthClientDeta
     /**
      * 分页条件查询授权客户端信息列表
      */
-    @SaCheckPermission("uc:oauthClient:page")
+    @SaCheckPermission("oauthClient:page")
     @PostMapping("/page")
     @Override
     public MpDataResult page(@RequestBody OauthClientDetailsQo oauthClientDetailsQo) {
@@ -58,7 +58,7 @@ public class OauthClientDetailsController extends BaseController<OauthClientDeta
     /**
      * 获取授权客户端信息详细信息
      */
-    @SaCheckPermission("uc:oauthClient:info")
+    @SaCheckPermission("oauthClient:info")
     @GetMapping("/info/{id}")
     @Override
     public R<OauthClientDetailsVo> info(@PathVariable("id")String id) {
@@ -68,7 +68,7 @@ public class OauthClientDetailsController extends BaseController<OauthClientDeta
     /**
      * 新增授权客户端信息
      */
-    @SaCheckPermission("uc:oauthClient:add")
+    @SaCheckPermission("oauthClient:add")
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "授权客户端信息", description = "添加授权客户端信息", actionType = "添加")
     @Override
@@ -79,7 +79,7 @@ public class OauthClientDetailsController extends BaseController<OauthClientDeta
     /**
      * 修改授权客户端信息
      */
-    @SaCheckPermission("uc:oauthClient:update")
+    @SaCheckPermission("oauthClient:update")
     @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "授权客户端信息", description = "编辑授权客户端信息: ?1", expressions = {"#p1.id"},actionType = "编辑")
     @Override
@@ -90,7 +90,7 @@ public class OauthClientDetailsController extends BaseController<OauthClientDeta
     /**
      * 删除授权客户端信息
      */
-    @SaCheckPermission("uc:oauthClient:remove")
+    @SaCheckPermission("oauthClient:remove")
 	@GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "授权客户端信息", description = "删除授权客户端信息: ?1", expressions = {"#p1"}, actionType = "删除")
     @Override

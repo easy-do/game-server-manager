@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import game.server.manager.auth.AuthorizationUtil;
+import game.server.manager.auth.vo.SimpleUserInfoVo;
 import game.server.manager.generate.dto.TemplateManagementDto;
 import game.server.manager.generate.entity.TemplateManagement;
 import game.server.manager.generate.mapper.TemplateManagementMapper;
@@ -94,9 +95,10 @@ public class TemplateManagementServiceImpl extends ServiceImpl<TemplateManagemen
             templateManagement.setFileName(UUID.fastUUID()+".vm");
         }
         templateManagement.setTemplateCode(DEFAULT_TEMPLATE_CODE);
-        templateManagement.setCreateBy(AuthorizationUtil.getUserId());
-        templateManagement.setUpdateBy(AuthorizationUtil.getUserId());
-        templateManagement.setCreateName(AuthorizationUtil.getUser().getNickName());
+        SimpleUserInfoVo suer = AuthorizationUtil.getSimpleUser();
+        templateManagement.setCreateBy(suer.getId());
+        templateManagement.setUpdateBy(suer.getId());
+        templateManagement.setCreateName(suer.getNickName());
         return baseMapper.insert(templateManagement);
     }
 
@@ -109,14 +111,14 @@ public class TemplateManagementServiceImpl extends ServiceImpl<TemplateManagemen
     @Override
     public boolean update(TemplateManagementDto dto) {
         TemplateManagement templateManagement = TemplateMapstruct.INSTANCE.dtoToEntity(dto);
-        long userId = AuthorizationUtil.getUserId();
+        SimpleUserInfoVo user = AuthorizationUtil.getSimpleUser();
         LambdaQueryWrapper<TemplateManagement> wrapper = Wrappers.lambdaQuery();
         if(!AuthorizationUtil.isAdmin()){
-            wrapper.eq(TemplateManagement::getCreateBy,userId);
+            wrapper.eq(TemplateManagement::getCreateBy,user.getId());
         }
         wrapper.eq(TemplateManagement::getId,dto.getId());
-        templateManagement.setUpdateBy(userId);
-        templateManagement.setCreateName(AuthorizationUtil.getUser().getNickName());
+        templateManagement.setUpdateBy(user.getId());
+        templateManagement.setCreateName(user.getNickName());;
         return update(templateManagement,wrapper);
     }
 

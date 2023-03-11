@@ -94,8 +94,8 @@ public class RestAuthController {
         if (authResponse.ok()) {
             AuthUser authUser = authResponse.getData();
             String token = loginService.platformLogin(authUser);
-//            Cookie cookie = new Cookie("token",token);
-//            response.addCookie(cookie);
+            Cookie cookie = new Cookie("token",token);
+            response.addCookie(cookie);
             response.sendRedirect(beDomain + "/login?token=" + token);
         } else {
             response.sendRedirect(beDomain + "/loginFailed");
@@ -133,7 +133,7 @@ public class RestAuthController {
     @SaCheckLogin
     @GetMapping("/getUserInfo")
     public R<UserInfoVo> getUserInfo() {
-        return DataResult.ok(AuthorizationUtil.getUser());
+        return DataResult.ok(authorizationUtil.getUser());
 
     }
 
@@ -144,8 +144,8 @@ public class RestAuthController {
         boolean result = userInfoService.resetSecret();
         if(result){
             String token = StpUtil.getTokenValue();
-//            Cookie cookie = new Cookie("token", token);
-//            response.addCookie(cookie);
+            Cookie cookie = new Cookie("token", token);
+            response.addCookie(cookie);
             return DataResult.ok(token);
         }else {
             return DataResult.fail();
@@ -173,7 +173,7 @@ public class RestAuthController {
     @SaveLog(logType = "授权日志", moduleName = "授权服务", description = "授权码：?1", expressions = {"#p1"}, actionType = "使用授权码")
     @GetMapping("/authorization/{authorizationCode}")
     public R<Object> authorization(@PathVariable("authorizationCode") String authorizationCode) {
-        boolean result = userInfoService.authorization(AuthorizationUtil.getUser(), authorizationCode);
+        boolean result = userInfoService.authorization(authorizationCode);
         return result ? DataResult.ok() : DataResult.fail("授权失败");
 
     }

@@ -97,7 +97,7 @@ export function getColumns(
         <div>  
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'uc:role', actions: ['info'] },
+              { resource: 'role', actions: ['role:info'] },
             ]}
           >
             <Button
@@ -110,7 +110,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'uc:role', actions: ['auth'] },
+              { resource: 'role', actions: ['role:auth'] },
             ]}
           >
             <Button
@@ -123,7 +123,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'uc:role', actions: ['update'] },
+              { resource: 'role', actions: ['role:update'] },
             ]}
           >
             <Button
@@ -136,7 +136,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'uc:role', actions: ['remove'] },
+              { resource: 'role', actions: ['role:remove'] },
             ]}
           >
             <Popconfirm

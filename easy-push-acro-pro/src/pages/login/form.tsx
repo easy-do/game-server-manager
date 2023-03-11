@@ -15,10 +15,7 @@ import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import styles from './style/index.module.less';
 import { loginRequst, platformLogin, sendEmailcode } from '@/api/oauth';
-import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
-import { userResource } from '@/api/resource';
-import { IRoute, staticRoutes } from '@/routes';
 import cookie from 'react-cookies'
 
 export default function LoginForm() {
@@ -92,33 +89,7 @@ export default function LoginForm() {
 
     if (token) {
       setToken(token)
-      const tokenInfo: any = decode(token);
-      localStorage.setItem('userInfo', JSON.stringify(tokenInfo.userInfo));
-      dispatch({
-        type: 'update-userInfo',
-        payload: {
-          userInfo: tokenInfo.userInfo,
-        },
-      });
-      // 获取菜单
-      userResource().then((res) => {
-        const { success } = res.data;
-        const data: IRoute[] = res.data.data;
-        if (success) {
-          const side: IRoute = data[0];
-          staticRoutes.forEach((item) => {
-            side.children.push(item);
-          });   
-          data[0] = side;  
-          // 更新菜单
-          dispatch({
-            type: 'update-routes',
-            payload: { systemRoutes: data},
-          });
-        // 跳转登录成功页
-         window.location.href = '/loginSuccess';
-        }
-      });
+      window.location.href = '/';
     }
   }, []);
 

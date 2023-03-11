@@ -41,7 +41,7 @@ function CardInfo(props: CardInfoProps) {
           </Button>
         <PermissionWrapper
           requiredPermissions={[
-            { resource: 'server:serverInfo', actions: ['info'] },
+            { resource: 'serverInfo', actions: ['serverInfo:info'] },
           ]}
         >
           <Button
@@ -53,7 +53,7 @@ function CardInfo(props: CardInfoProps) {
           </Button>
         </PermissionWrapper><PermissionWrapper
           requiredPermissions={[
-            { resource: 'server:serverInfo', actions: ['update'] },
+            { resource: 'serverInfo', actions: ['serverInfo:update'] },
           ]}
         >
             <Button
@@ -65,7 +65,7 @@ function CardInfo(props: CardInfoProps) {
             </Button>
           </PermissionWrapper><PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:serverInfo', actions: ['remove'] },
+              { resource: 'serverInfo', actions: ['serverInfo:remove'] },
             ]}
           >
             <Popconfirm

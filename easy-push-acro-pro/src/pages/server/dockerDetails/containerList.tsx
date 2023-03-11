@@ -216,7 +216,7 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
       {/* <SearchForm onSearch={handleSearch} /> */}
       {/* <PermissionWrapper
         requiredPermissions={[
-          { resource: 'server:dockerDetails', actions: ['add'] },
+          { resource: 'dockerDetails', actions: ['dockerDetails:add'] },
         ]}
       >
         <div className={styles['button-group']}>

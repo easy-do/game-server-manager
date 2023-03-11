@@ -115,12 +115,12 @@ function AddPage({ visible, setVisible, successCallBack }) {
         <Form.Item
           label={t['searchTable.columns.url']}
           field="url"
-          rules={[
-            {
-              required: true,
-              message: t['searchTable.rules.url.required'],
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: t['searchTable.rules.url.required'],
+          //   },
+          // ]}
         >
           <TextArea placeholder={t['searchForm.url.placeholder']} allowClear />
         </Form.Item>

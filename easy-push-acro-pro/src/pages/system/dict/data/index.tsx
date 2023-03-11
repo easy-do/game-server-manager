@@ -187,7 +187,7 @@ function DictDataSearchTable(props:props) {
       <SearchForm onSearch={handleSearch} />
       {/* <PermissionWrapper
         requiredPermissions={[
-          { resource: 'uc:dictData', actions: ['add'] },
+          { resource: 'dictData', actions: ['dictData:add'] },
         ]}
       > */}
         <div className={styles['button-group']}>

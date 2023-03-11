@@ -78,7 +78,7 @@ export function getColumns(
         <div> 
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['info'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
             ]}
           >
             <Button
@@ -91,7 +91,7 @@ export function getColumns(
           </PermissionWrapper> 
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['info'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
             ]}
           >
             <Button
@@ -104,7 +104,7 @@ export function getColumns(
           </PermissionWrapper> 
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['info'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
             ]}
           >
             <Button
@@ -117,7 +117,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['update'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
             ]}
           >
             <Button
@@ -130,7 +130,7 @@ export function getColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['remove'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:remove'] },
             ]}
           >
             <Popconfirm
@@ -214,7 +214,7 @@ export function getImageListColumns(
         <div> 
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['info'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
             ]}
           >
             <Button
@@ -227,7 +227,7 @@ export function getImageListColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['remove'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:remove'] },
             ]}
           >
             <Popconfirm
@@ -311,7 +311,7 @@ export function getContainerListColumns(
         <div> 
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['info'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
             ]}
           >
             <Button
@@ -324,7 +324,7 @@ export function getContainerListColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['info'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
             ]}
           >
             <Button
@@ -337,7 +337,7 @@ export function getContainerListColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['update'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
             ]}
           >
             <Button
@@ -350,7 +350,7 @@ export function getContainerListColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['update'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
             ]}
           >
             <Button
@@ -363,7 +363,7 @@ export function getContainerListColumns(
           </PermissionWrapper>
                     <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['update'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
             ]}
           >
             <Button
@@ -376,7 +376,7 @@ export function getContainerListColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['update'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
             ]}
           >
             <Button
@@ -389,7 +389,7 @@ export function getContainerListColumns(
           </PermissionWrapper>
           <PermissionWrapper
             requiredPermissions={[
-              { resource: 'server:dockerDetails', actions: ['remove'] },
+              { resource: 'dockerDetails', actions: ['dockerDetails:remove'] },
             ]}
           >
             <Popconfirm

@@ -96,7 +96,7 @@ public class UserInfoVo implements Serializable {
 
     private List<String> roles;
 
-    private Set<String> permissions;
+    private List<String> permissions;
 
     private Map<String,List<String>> resourceAction;
 

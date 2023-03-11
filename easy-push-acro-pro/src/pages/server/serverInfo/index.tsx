@@ -174,7 +174,7 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'server:serverInfo', actions: ['add'] },
+          { resource: 'serverInfo', actions: ['serverInfo:add'] },
         ]}
       >
         <div className={styles['button-group']}>

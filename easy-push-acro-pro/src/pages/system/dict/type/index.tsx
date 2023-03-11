@@ -179,7 +179,7 @@ function SearchTable() {
       <SearchForm onSearch={handleSearch} />
       {/* <PermissionWrapper
         requiredPermissions={[
-          { resource: 'uc:dictType', actions: ['add'] },
+          { resource: 'dictType', actions: ['dictType:add'] },
         ]}
       > */}
         <div className={styles['button-group']}>

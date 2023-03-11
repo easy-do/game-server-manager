@@ -2,6 +2,7 @@ package game.server.manager.uc.service.impl;
 
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
@@ -26,6 +27,8 @@ import game.server.manager.uc.dto.AuthRoleMenuDto;
 import game.server.manager.uc.entity.SysRoleResource;
 import game.server.manager.uc.service.SysRoleResourceService;
 import game.server.manager.uc.service.SysUserRoleService;
+import game.server.manager.uc.vo.FunctionAuthVo;
+import game.server.manager.uc.vo.UserResourceVo;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.uc.dto.SysResourceDto;
 import game.server.manager.uc.entity.SysResource;
@@ -34,6 +37,7 @@ import game.server.manager.uc.vo.SysResourceVo;
 import game.server.manager.uc.mapstruct.SysResourceMapstruct;
 import game.server.manager.uc.mapper.SysResourceMapper;
 import game.server.manager.uc.service.SysResourceService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -344,9 +348,55 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      */
     @Cached(name = "SysResourceService.roleResource", expire = 3200, cacheType = CacheType.BOTH)
     @CacheRefresh(refresh = 60)
-    public List<Tree<Long>> roleResource(List<Long> roleIds) {
-        List<SysResource> menuList = getRoleResourceList(roleIds);
-        return buildResourceTree(menuList);
+    public List<UserResourceVo> roleResource(List<Long> roleIds) {
+        List<SysResource> resourceList = getRoleResourceList(roleIds);
+        return buildUserResource(resourceList);
+    }
+
+    private List<UserResourceVo> buildUserResource(List<SysResource> resourceList) {
+        if(resourceList.isEmpty()){
+            return Collections.emptyList();
+        }
+        List<UserResourceVo> rootList = new ArrayList<>();
+        //拿到所有跟节点菜单
+        resourceList.parallelStream().forEach(resource->{
+            if(resource.getParentId().equals(0L)){
+                UserResourceVo userResourcevo = resourceToUserResourceVo(resource);
+                findChildren(userResourcevo,resource.getId(),resourceList);
+                rootList.add(userResourcevo);
+            }
+        });
+        return rootList.parallelStream().sorted(Comparator.comparing(UserResourceVo::getOrderNumber)).toList();
+    }
+
+    private void findChildren(UserResourceVo resourcevo, Long parentId, List<SysResource> resourceList) {
+        List<UserResourceVo> childrenList = new ArrayList<>();
+        List<FunctionAuthVo> functionAuthList = new ArrayList<>();
+        resourceList.parallelStream().forEach(resource->{
+            if(resource.getParentId().equals(parentId)){
+                if(resource.getResourceType().equals(ResourceTypeEnum.MENU.getType())){
+                    UserResourceVo userResourcevo = resourceToUserResourceVo(resource);
+                    findChildren(userResourcevo,resource.getId(),resourceList);
+                    childrenList.add(userResourcevo);
+                }else {
+                    functionAuthList.add(FunctionAuthVo.builder()
+                                    .name(resource.getResourceName())
+                                    .key(resource.getResourceCode())
+                                    .orderNumber(resource.getOrderNumber())
+                            .build());
+                }
+            }
+        });
+        resourcevo.setChildren(childrenList.parallelStream().sorted(Comparator.comparing(UserResourceVo::getOrderNumber)).toList());
+        resourcevo.setFunctionAuths(functionAuthList.parallelStream().sorted(Comparator.comparing(FunctionAuthVo::getOrderNumber)).toList());
+    }
+
+    @NotNull
+    private static UserResourceVo resourceToUserResourceVo(SysResource resource) {
+        UserResourceVo userResourcevo = BeanUtil.copyProperties(resource, UserResourceVo.class);
+        userResourcevo.setName(resource.getResourceName());
+        userResourcevo.setKey(resource.getResourceCode());
+        return userResourcevo;
     }
 
     /**
@@ -371,7 +421,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
      * @date 2022/9/20
      */
     @Override
-    public List<Tree<Long>> userResource() {
+    public List<UserResourceVo> userResource() {
         if (StpUtil.isLogin()) {
             List<Long> roleIds = sysUserRoleService.getRoleIdListByUserId(AuthorizationUtil.getUserId());
             if (roleIds.isEmpty()) {
@@ -384,24 +434,12 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
     }
 
     @Override
-    public Set<String> userPermissionList(Long userId) {
+    public List<UserResourceVo> userResource(Long userId) {
         List<Long> roleIds = sysUserRoleService.getRoleIdListByUserId(userId);
         if (roleIds.isEmpty()) {
-            return Collections.emptySet();
+            return ListUtil.empty();
         }
-        List<SysResource> menuList = getRoleResourceList(roleIds);
-        Set<String> permissions = new HashSet<>();
-        buildPermissions(permissions, menuList);
-        return permissions;
-    }
-
-    private void buildPermissions(Set<String> permissions, List<SysResource> menuList) {
-        menuList.forEach(menu -> {
-            String permission = menu.getPermissions();
-            if (CharSequenceUtil.isNotEmpty(permission)) {
-                permissions.addAll(CharSequenceUtil.split(permission, ","));
-            }
-        });
+        return roleResource(roleIds);
     }
 
     @Override
@@ -445,11 +483,11 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
                 String perms = (String) tree.get("resourceCode");
                 List<Tree<Long>> children = tree.getChildren();
                 if (Objects.nonNull(children)) {
-                    List<Tree<Long>> actionsResource = children.stream().filter(longTree -> ResourceTypeEnum.ACTION.getType().equals(longTree.get("type").toString())).toList();
-                    if (!actionsResource.isEmpty()) {
-                        List<String> actions = actionsResource.stream().map(tree1 -> tree1.get("resourceCode").toString()).toList();
-                        actionMap.put(perms, actions);
-                    }
+//                    List<Tree<Long>> actionsResource = children.stream().filter(longTree -> ResourceTypeEnum.ACTION.getType().equals(longTree.get("type").toString())).toList();
+//                    if (!actionsResource.isEmpty()) {
+//                        List<String> actions = actionsResource.stream().map(tree1 -> tree1.get("resourceCode").toString()).toList();
+//                        actionMap.put(perms, actions);
+//                    }
                 }
             }
         });

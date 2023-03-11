@@ -15,6 +15,8 @@ import game.server.manager.redis.config.RedisUtils;
 import game.server.manager.uc.dto.LoginModel;
 import game.server.manager.uc.entity.UserInfo;
 import game.server.manager.uc.mapstruct.UserInfoMapstruct;
+import game.server.manager.uc.vo.FunctionAuthVo;
+import game.server.manager.uc.vo.UserResourceVo;
 import me.zhyd.oauth.model.AuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -23,12 +25,14 @@ import org.springframework.stereotype.Component;
 import game.server.manager.common.exception.BizException;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import static game.server.manager.common.constant.SystemConstant.USER_PERMISSION;
 
 /**
  * @author laoyu
@@ -91,11 +95,16 @@ public class LoginService {
         if(Objects.isNull(user)){
            throw  new BizException("500","无效密钥");
         }
-        setUserLastLoginDetails(user);
+        return afterLogin(user);
+    }
+
+    private UserInfoVo afterLogin(UserInfo user) {
         UserInfoVo userInfoVo = UserInfoMapstruct.INSTANCE.entityToVo(user);
+        setUserLastLoginDetails(user);
         buildUserRoleAndPermission(userInfoVo);
-        StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, userInfoVo));
+        StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, UserInfoMapstruct.INSTANCE.voToSimpleVo(userInfoVo)));
         userInfoVo.setToken(StpUtil.getTokenValue());
+        redisUtils.set(SystemConstant.USER_CACHE+userInfoVo.getId(),userInfoVo);
         return userInfoVo;
     }
 
@@ -123,14 +132,9 @@ public class LoginService {
         if(CharSequenceUtil.isBlank(dbPassword)){
             throw new BizException("500","帐号没有设置密码,请重置密码.");
         }
-        //对照结果·
+        //对照密码·
         if(BCrypt.checkpw(password,dbPassword)){
-            setUserLastLoginDetails(user);
-            UserInfoVo userInfoVo = UserInfoMapstruct.INSTANCE.entityToVo(user);
-            buildUserRoleAndPermission(userInfoVo);
-            StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, userInfoVo));
-            userInfoVo.setToken(StpUtil.getTokenValue());
-            return userInfoVo;
+            return afterLogin(user);
         }
         throw new BizException("500","密码错误");
     }
@@ -154,11 +158,7 @@ public class LoginService {
             if(Objects.isNull(user)){
                 throw new BizException("500","邮箱未绑定账号");
             }
-            setUserLastLoginDetails(user);
-            UserInfoVo userInfoVo = UserInfoMapstruct.INSTANCE.entityToVo(user);
-            buildUserRoleAndPermission(userInfoVo);
-            StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, userInfoVo));
-            userInfoVo.setToken(StpUtil.getTokenValue());
+            UserInfoVo userInfoVo = afterLogin(user);
             return userInfoVo;
         }else {
             throw new BizException("500","验证码错误或不存在");
@@ -174,11 +174,9 @@ public class LoginService {
      * @date 2022/6/14
      */
     public String platformLogin(AuthUser authUser) {
-        UserInfoVo user = userInfoService.getOrCreateUserInfo(authUser);
-        setUserLastLoginDetails(user);
-        buildUserRoleAndPermission(user);
-        StpUtil.login(user.getId(), SaLoginConfig.setExtra(SystemConstant.TOKEN_USER_INFO, user));
-        return StpUtil.getTokenValue();
+        UserInfoVo userInfoVo = userInfoService.getOrCreateUserInfo(authUser);
+        userInfoVo = afterLogin(UserInfoMapstruct.INSTANCE.voToEntity(userInfoVo));
+        return userInfoVo.getToken();
     }
 
     //TODO 改造为消息发布
@@ -220,19 +218,52 @@ public class LoginService {
     private void buildUserRoleAndPermission(UserInfoVo userInfoVo) {
         Long userId = userInfoVo.getId();
         List<String> roleList = sysRoleService.selectRolesByUserId(userId).stream().map(SysRoleVo::getRoleKey).toList();
-        Set<String> permissionList = sysResourceService.userPermissionList(userId);
-        redisUtils.set(USER_PERMISSION+userId,permissionList.stream().toList());
         userInfoVo.setRoles(roleList);
-        Map<String,List<String>> resourceAction = sysResourceService.userResourceAction(userId);
+        List<UserResourceVo> userResource = sysResourceService.userResource(userId);
+        Set<String> permissionList = buildPermissions(userResource);
+        userInfoVo.setPermissions(permissionList.stream().toList());
+        Map<String,List<String>> resourceAction = buildResourceAction(userResource);
         userInfoVo.setResourceAction(resourceAction);
     }
 
+    private Map<String, List<String>> buildResourceAction(List<UserResourceVo> userResourceList) {
+        Map<String, List<String>> resourceActions = new HashMap<>();
+        userResourceList.parallelStream().forEach(userResource->{
+            List<FunctionAuthVo> functionAuths = userResource.getFunctionAuths();
+            if(Objects.nonNull(functionAuths) && !functionAuths.isEmpty()){
+                resourceActions.put(userResource.getKey(),functionAuths.parallelStream().map(FunctionAuthVo::getKey).toList());
+            }else {
+                resourceActions.put(userResource.getKey(), Collections.emptyList());
+            }
+            List<UserResourceVo> children = userResource.getChildren();
+            if(Objects.nonNull(children) && !children.isEmpty()){
+                resourceActions.putAll(buildResourceAction(children));
+            }
+        });
+        return resourceActions;
+    }
+
+    private Set<String> buildPermissions(List<UserResourceVo> userResourceList) {
+        Set<String> permissions = new HashSet<>();
+        userResourceList.parallelStream().forEach(userResource->{
+            permissions.add(userResource.getKey());
+            List<FunctionAuthVo> functionAuths = userResource.getFunctionAuths();
+            if (Objects.nonNull(functionAuths) && !functionAuths.isEmpty()) {
+                permissions.addAll(functionAuths.stream().map(FunctionAuthVo::getKey).toList());
+            }
+            List<UserResourceVo> children = userResource.getChildren();
+            if(Objects.nonNull(children) && !children.isEmpty()){
+                permissions.addAll(buildPermissions(children));
+            }
+        });
+        return permissions;
+    }
 
 
     public void logout() {
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         StpUtil.logout(tokenInfo.loginId);
-        redisUtils.delete(USER_PERMISSION+tokenInfo.loginId);
+        redisUtils.delete(SystemConstant.USER_CACHE+tokenInfo.loginId);
     }
 
     /**

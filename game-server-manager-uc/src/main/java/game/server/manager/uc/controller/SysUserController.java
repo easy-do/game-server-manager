@@ -118,7 +118,7 @@ public class SysUserController {
     @GetMapping("/delete/{userId}")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = BaseController.REMOVE_ACTION)
     public R<Object> remove(@PathVariable("userId")Long userId) {
-        if (userId.equals(AuthorizationUtil.getUser().getId())) {
+        if (userId.equals(AuthorizationUtil.getSimpleUser().getId())) {
             return DataResult.fail("不能删除自己");
         }
         return userInfoService.removeById(userId)?DataResult.ok():DataResult.fail();
@@ -130,7 +130,7 @@ public class SysUserController {
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/resetPwd")
     public R<Object> resetPwd(@RequestBody ResetPasswordDto resetPasswordDto) {
-        resetPasswordDto.setUpdateUserId(AuthorizationUtil.getUser().getId());
+        resetPasswordDto.setUpdateUserId(AuthorizationUtil.getSimpleUser().getId());
         return userInfoService.resetPassword(resetPasswordDto)? DataResult.ok():DataResult.fail();
     }
 
@@ -141,7 +141,7 @@ public class SysUserController {
     @PostMapping("/changeStatus")
     @SaveLog(logType = BaseController.LOG_TYPE, moduleName = MODULE_NAME, description = CHANGE_DESCRIPTION, expressions = CHANGE_EXPRESSIONS, actionType = BaseController.EDIT_ACTION)
     public R<Object> changeStatus(@RequestBody ChangeStatusDto changeStatusDto) {
-        changeStatusDto.setUpdateUserId(AuthorizationUtil.getUser().getId());
+        changeStatusDto.setUpdateUserId(AuthorizationUtil.getSimpleUser().getId());
         return userInfoService.updateUserStatus(changeStatusDto)?DataResult.ok():DataResult.fail();
     }
 

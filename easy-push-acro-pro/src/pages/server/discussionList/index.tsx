@@ -117,7 +117,7 @@ function DiscussionList() {
     <Card>
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'server:discussion', actions: ['add'] },
+          { resource: 'discussion', actions: ['discussion:add'] },
         ]}
       >
         <div className={styles['button-group']}>
