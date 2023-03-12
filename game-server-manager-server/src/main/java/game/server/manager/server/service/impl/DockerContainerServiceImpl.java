@@ -183,6 +183,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
         query.eq(DockerDetails::getId,dockerId);
         DockerDetails docker = dockerDetailsService.getOne(query);
         Session browserSession = SocketSessionCache.getBrowserByDockerId(dockerId);
+        assert browserSession != null;
         //没有找到docker
         if (Objects.isNull(docker)) {
             SessionUtils.sendErrorServerMessage(browserSession,browserSession.getId(),"docker不存在");
@@ -196,7 +197,6 @@ public class DockerContainerServiceImpl implements DockerContainerService {
             SessionUtils.close(browserSession);
             return;
         }
-        assert browserSession != null;
         SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(),clientSession.getId());
         ServerContainerLogMessage serverContainerLogMessage = ServerContainerLogMessage.builder()
                 .containerId(socketContainerLogData.getContainerId())
