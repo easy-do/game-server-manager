@@ -37,6 +37,7 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
 
     //日志
     if (type === 'log') {
+      containerLogCache.length=0
       setIsViewLog(true)
       const messageParam = {
         "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
@@ -51,7 +52,6 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
         if (serverMessage.type === 'sync_result_end') {
           Notification.success({ content: "完成", duration: 300 });
         }
-        containerLogCache.length=0
         containerLogCache.push(serverMessage.data)
         setViewLogData([])
         setViewLogData(containerLogCache)
