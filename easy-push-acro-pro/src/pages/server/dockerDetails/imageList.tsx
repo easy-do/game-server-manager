@@ -106,6 +106,7 @@ function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
 
   function okPullImage() {
     if (!pullImageStatus) {
+      pullImageLogCache.length=0
       setPullImageLogData([])
       setViewPullImage(true)
       const messageParam = {
