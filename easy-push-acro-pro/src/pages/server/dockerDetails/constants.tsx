@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import PermissionWrapper from '@/components/PermissionWrapper';
+import moment from 'moment';
 
 export const Status = ['正常', '禁用'];
 
@@ -165,27 +166,27 @@ export function getImageListColumns(
       </Typography.Paragraph>
       ),
     },
-    {
-      title: t['searchTable.columns.Repo'],
-      dataIndex: 'RepoTags[0]',
-      ellipsis:true,
-      render: (_, record) => (
-        <Typography.Paragraph copyable>
-        {record.RepoTags && record.RepoTags[0]? record.RepoTags[0].split(":")[0]:''}
-      </Typography.Paragraph>
+    // {
+    //   title: t['searchTable.columns.Repo'],
+    //   dataIndex: 'RepoTags[0]',
+    //   ellipsis:true,
+    //   render: (_, record) => (
+    //     <Typography.Paragraph copyable>
+    //     {record.RepoTags && record.RepoTags[0]? record.RepoTags[0].split(":")[0]:''}
+    //   </Typography.Paragraph>
         
-      ),
-    },
-    {
-      title: t['searchTable.columns.Tag'],
-      dataIndex: 'RepoTags[0]',
-      ellipsis:true,
-      render: (_, record) => (
-        <Typography.Paragraph copyable>
-        {record.RepoTags && record.RepoTags[0]? record.RepoTags[0].split(":")[1]:''}
-      </Typography.Paragraph>
-      ),
-    },
+    //   ),
+    // },
+    // {
+    //   title: t['searchTable.columns.Tag'],
+    //   dataIndex: 'RepoTags[0]',
+    //   ellipsis:true,
+    //   render: (_, record) => (
+    //     <Typography.Paragraph copyable>
+    //     {record.RepoTags && record.RepoTags[0]? record.RepoTags[0].split(":")[1]:''}
+    //   </Typography.Paragraph>
+    //   ),
+    // },
     {
       title: t['searchTable.columns.Digests'],
       dataIndex: 'RepoDigests[0]',
@@ -196,9 +197,7 @@ export function getImageListColumns(
       </Typography.Paragraph>
       ),
     },
-
     {
-      // title: t['searchTable.columns.createTime'],
       title: '大小',
       dataIndex: 'Size',
       ellipsis:true,
@@ -207,12 +206,20 @@ export function getImageListColumns(
       ),
     },
     {
+      title: '创建日期',
+      dataIndex: 'Created',
+      ellipsis:true,
+      render: (_, record) => (
+        moment(record).format("YYYY/MM/DD HH:mm:ss")
+      ),
+    },
+    {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => (
         <div> 
-          <PermissionWrapper
+          {/* <PermissionWrapper
             requiredPermissions={[
               { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
             ]}
@@ -224,7 +231,7 @@ export function getImageListColumns(
             >
                 {t['searchTable.columns.operations.view']}
             </Button>
-          </PermissionWrapper>
+          </PermissionWrapper> */}
           <PermissionWrapper
             requiredPermissions={[
               { resource: 'dockerDetails', actions: ['dockerDetails:remove'] },
