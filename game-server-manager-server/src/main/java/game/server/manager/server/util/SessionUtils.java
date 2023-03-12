@@ -32,7 +32,9 @@ public class SessionUtils {
      */
     public static void sendMessage(Session session, String message) {
         try {
-            session.getBasicRemote().sendText(message);
+            if(Objects.nonNull(session)){
+                session.getBasicRemote().sendText(message);
+            }
         } catch (IOException exception) {
            throw  ExceptionFactory.bizException(ExceptionUtil.getMessage(exception));
         }
@@ -41,6 +43,7 @@ public class SessionUtils {
     public static void close(Session session) {
         try {
             if(Objects.nonNull(session)){
+                session.getAsyncRemote().sendText("服务器主动断开连接.");
                 session.close();
             }
         } catch (IOException exception) {

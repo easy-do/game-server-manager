@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table,
   Card,
-  Typography,
   Notification,
   Modal,
   Space,
@@ -21,8 +20,6 @@ import { socketAddress } from '@/utils/systemConstant';
 import LogCompennet from '@/components/LogCompenent/logCompennet';
 import { closeWebSocket, createWebSocket } from '@/utils/webSocket';
 
-const { Title } = Typography;
-
 function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
 
   const t = useLocale(locale);
@@ -30,9 +27,9 @@ function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
   //表格操作按钮回调
   const tableCallback = async (record, type) => {
     //查看
-    if (type === 'view') {
-      viewInfo(record);
-    }
+    // if (type === 'view') {
+    //   viewInfo(record);
+    // }
 
     //删除
     if (type === 'remove') {
@@ -41,13 +38,13 @@ function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
   };
 
   //查看
-  const [viewInfoData, setViewInfoData] = useState();
-  const [isViewInfo, setisViewInfo] = useState(false);
+  // const [viewInfoData, setViewInfoData] = useState();
+  // const [isViewInfo, setisViewInfo] = useState(false);
 
-  function viewInfo(record) {
-    setViewInfoData(record);
-    setisViewInfo(true);
-  }
+  // function viewInfo(record) {
+  //   setViewInfoData(record);
+  //   setisViewInfo(true);
+  // }
 
   //删除
   function removeData(dockerId, imageId) {
@@ -153,7 +150,7 @@ function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
         </div>
       </PermissionWrapper>
       <Table rowKey="id" loading={loading} columns={columns} data={data} />
-      <Modal
+      {/* <Modal
         // style={{ minHeight: '100%', width: '100%' }}
         title={t['searchTable.info.title']}
         visible={isViewInfo}
@@ -171,7 +168,7 @@ function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
             {JSON.stringify(viewInfoData)}
           </Typography.Paragraph>
         </Typography>
-      </Modal>
+      </Modal> */}
       <Modal
         title={t['searchTable.info.title']}
         visible={viewPullImage}

@@ -180,18 +180,18 @@ public class DockerContainerServiceImpl implements DockerContainerService {
         if(!userInfo.isAdmin()){
             query.eq(DockerDetails::getCreateBy,userInfo.getId());
         }
+        query.eq(DockerDetails::getId,dockerId);
         DockerDetails docker = dockerDetailsService.getOne(query);
         Session browserSession = SocketSessionCache.getBrowserByDockerId(dockerId);
-        if(Objects.isNull(docker)){
-            assert browserSession != null;
-            SessionUtils.sendErrorServerMessage(browserSession,browserSession.getId(),"等待客户端响应,这需要一点时间....");
+        //没有找到docker
+        if (Objects.isNull(docker)) {
+            SessionUtils.sendErrorServerMessage(browserSession,browserSession.getId(),"docker不存在");
             SessionUtils.close(browserSession);
             return;
         }
         String clientId = docker.getClientId();
         Session clientSession = SocketSessionCache.getClientByClientId(clientId);
         if(Objects.isNull(clientSession)){
-            assert browserSession != null;
             SessionUtils.sendErrorServerMessage(browserSession,browserSession.getId(),"客户端未连接");
             SessionUtils.close(browserSession);
             return;
