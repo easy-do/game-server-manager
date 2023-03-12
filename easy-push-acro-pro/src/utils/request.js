@@ -54,6 +54,7 @@ export const postRequestBody = (url, params) => {
     headers: {
       "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
       "Content-Type": "application/json",
+      "accept-language": localStorage.getItem("arco-lang") ? localStorage.getItem("arco-lang") : "zh-CN",
       charset: "utf-8"
     }
   });
@@ -77,7 +78,8 @@ export const postRequestParam = (url, params) => {
     ],
     headers: {
       "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
-      "Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/x-www-form-urlencoded",
+      "accept-language": localStorage.getItem("arco-lang") ? localStorage.getItem("arco-lang") : "zh-CN",
     }
   });
 };
@@ -90,7 +92,8 @@ export const postFormData = (url, params) => {
     data: params,
     headers: {
       "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
-      "Content-Type": "multipart/form-data"
+      "Content-Type": "multipart/form-data",
+      "accept-language": localStorage.getItem("arco-lang") ? localStorage.getItem("arco-lang") : "zh-CN",
     }
   });
 };
@@ -101,7 +104,8 @@ export const get = url => {
     url: `${baseUrl}${url}`,
     headers: {
       "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
-      "Content-Type": "text/plain"
+      "Content-Type": "text/plain",
+      "accept-language": localStorage.getItem("arco-lang") ? localStorage.getItem("arco-lang") : "zh-CN",
     }
   });
 };
