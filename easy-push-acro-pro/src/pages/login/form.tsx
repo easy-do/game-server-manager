@@ -108,7 +108,7 @@ export default function LoginForm() {
       >
         <Form.Item
           field="loginType"
-          initialValue={'password'}
+          initialValue={'platform'}
           rules={[
             { required: true, message: t['login.form.loginType.errMsg'] },
           ]}
