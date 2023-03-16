@@ -17,6 +17,8 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
     status: '',
   });
 
+  const [dockerInstall, setDockerInstall] = useState('');
+  
   const handleSubmit = () => {
     onlineInstall(id).then((res) => {
       const { success, msg } = res.data;
@@ -31,6 +33,7 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
   function fetchData() {
     if (id !== undefined && visible) {
       setLoading(true);
+      setDockerInstall('docker run -dit -e CLIENT_ID='+id+' -v /data/game-manager-client:/data --privileged=true --pid=host -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker --name manager-client registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0')
       getInstallCmd(id).then((res) => {
         const { success, data } = res.data;
         if (success) {
@@ -95,13 +98,16 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
       }
     >
       <Spin tip="loading Data..." loading={loading}>
-        使用手动安装脚本需要安装wget,centos系统直接运行 yum install -y wget
-        ,其他不支持yum的系统请自行百度安装.
-        <br />
-        <Paragraph copyable={{ text: installCmd }}>
-          安装命令(不支持离线设备):
+        <Paragraph copyable={{ text: installCmd}} code>
+          <strong>宿主机安装(需要jdk-17环境)</strong>:
           <br />
           {installCmd}
+        </Paragraph>
+        {console.info(dockerInstall)}
+        <Paragraph copyable={{ text: dockerInstall }} code>
+        <strong>docker安装(暂不支持执行脚本)</strong>:
+          <br />
+          {dockerInstall}
         </Paragraph>
       </Spin>
     </Modal>
