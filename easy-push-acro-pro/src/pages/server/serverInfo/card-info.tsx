@@ -32,12 +32,26 @@ function CardInfo(props: CardInfoProps) {
   const getButtonGroup = () => {
       return (
         <>
-          <Button
+          {/* <Button
             type="text"
             size="small"
             onClick={() => props.optionCallCack(card, 'shell')}
           >
             {'命令行'}
+          </Button> */}
+          <Button
+            type="text"
+            size="small"
+            onClick={() => props.optionCallCack(card, 'viewLog')}
+          >
+            {'日志'}
+          </Button>
+          <Button
+            type="text"
+            size="small"
+            onClick={() => props.optionCallCack(card, 'execScript')}
+          >
+            {'脚本'}
           </Button>
         <PermissionWrapper
           requiredPermissions={[

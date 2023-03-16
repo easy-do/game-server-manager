@@ -7,7 +7,7 @@ import Application from "../application/application";
 import Server from "../server/server";
 import AuthCode from "../authCode/authCode";
 import AppInfo from "../appInfo/appInfo";
-import AppScript from "../appScript/appScript";
+import AppScript from "../scriptData/scriptData";
 import Job from "../job/job";
 import JobLog from "../jobLog/jobLog";
 import SysLog from "../sysLog/sysLog";
@@ -40,7 +40,7 @@ class RouteStting extends react.Component<any, any> {
         <Route path="/authCode" element={<AuthCode />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/app" element={<AppInfo />}></Route>
-        <Route path="/appScript" element={<AppScript />}></Route>
+        <Route path="/scriptData" element={<AppScript />}></Route>
         <Route path="/job" element={<Job />}></Route>
         <Route path="/jobLog" element={<JobLog />}></Route>
         <Route path="/sysLog" element={<SysLog />}></Route>

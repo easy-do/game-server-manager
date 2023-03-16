@@ -26,10 +26,9 @@ public class TopDataController {
     public R<TopDataVo> topData(){
         long userCount = topDataServer.userCount();
         long onlineUserCount = topDataServer.onlineUserCount();
-        long applicationCount = topDataServer.applicationCount();
         long deployCount = topDataServer.deployCount();
 
-        TopDataVo topDataVo = TopDataVo.builder().userCount(userCount).onlineCount(onlineUserCount).applicationCount(applicationCount).deployCount(deployCount).build();
+        TopDataVo topDataVo = TopDataVo.builder().userCount(userCount).onlineCount(onlineUserCount).deployCount(deployCount).build();
         return DataResult.ok(topDataVo);
     }
 }

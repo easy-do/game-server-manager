@@ -7,36 +7,34 @@ import LogCompennet from '@/components/LogCompenent/logCompennet';
 import { createWebSocket,closeWebSocket } from '@/utils/webSocket';
 
 
-function InfoPage(props: { id: number, applicationId: string, visible, setVisible }) {
+function InfoPage(props: { id: number, deviceId: string, visible, setVisible }) {
 
   const t = useLocale(locale);
 
   const [logResult, setLogResult] = useState([]);
 
-
+  const logCache = []
 
   /**点击日志详情按钮 */
   function fetchData() {
+    logCache.length=0
     if(props.id && props.visible){
       const messageParam = {
         "token": localStorage.getItem("token") ? localStorage.getItem("token") : "",
         "type": "deploy_log",
         "data":{
-          "applicationId": props.applicationId,
+          "deviceId": props.deviceId,
           "logId": props.id
         }
       }
       createWebSocket(socketAddress,JSON.stringify(messageParam),(event)=>{
-        try {
           const logResult = JSON.parse(event.data);
-          if(logResult.type === 'success'){
-            setLogResult(JSON.parse(logResult.data))
-          }else{
-            setLogResult(JSON.parse(logResult.data))
+          const data = logResult.data.split("\n");
+          for (let index = 0; index < data.length; index++) {
+            logCache.push(data[index])
           }
-          } catch (err:any) {
-            setLogResult([event.data])
-          }
+          setLogResult([])
+          setLogResult(logCache)
       });
     }
   }
@@ -44,7 +42,7 @@ function InfoPage(props: { id: number, applicationId: string, visible, setVisibl
 
   useEffect(() => {
     fetchData();
-  }, [props.id,props.applicationId,props.visible]);
+  }, [props.id,props.deviceId,props.visible]);
 
   return (
     <Modal

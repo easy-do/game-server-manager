@@ -15,7 +15,7 @@ import InfoPage from './info';
 
 const { Title } = Typography;
 
-function ExecuteLogSearchTable(props:{applicationId?:string,visible}) {
+function ExecuteLogSearchTable(props:{deviceId?:string,visible}) {
   const t = useLocale(locale);
 
   const {visible=true} = props
@@ -60,7 +60,7 @@ function ExecuteLogSearchTable(props:{applicationId?:string,visible}) {
     pagination.pageSize,
     JSON.stringify(formParams),
     orders,
-    props.applicationId,
+    props.deviceId,
     props.visible,
   ]);
 
@@ -69,7 +69,7 @@ function ExecuteLogSearchTable(props:{applicationId?:string,visible}) {
     if(visible){
       const { current, pageSize } = pagination;
       setLoading(true);
-      const newFormParams:any = {...formParams, applicationId:props.applicationId}
+      const newFormParams:any = {...formParams, deviceId:props.deviceId}
       managerPage({
         currentPage: current,
         pageSize,
@@ -138,7 +138,7 @@ function ExecuteLogSearchTable(props:{applicationId?:string,visible}) {
         id={viewInfoId}
         visible={isViewInfo}
         setVisible={setisViewInfo}
-        applicationId={props.applicationId}
+        deviceId={props.deviceId}
       />
     </Card>
   );

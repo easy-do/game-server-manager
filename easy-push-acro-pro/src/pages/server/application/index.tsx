@@ -22,7 +22,8 @@ import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import AddPage from './add';
 import ExecuteLogSearchTable from '../executeLog';
-import ExecScriptPage from './execScript';
+import ExecScriptPage from '@/components/ExecScript/execScriptPage';
+
 
 const { Title } = Typography;
 
@@ -233,8 +234,8 @@ function SearchTable() {
         setVisible={setisViewInfo}
       />
       <ExecScriptPage        
-        applicationId={execScriptApplicationId}
-        appId={execScriptAppId}
+        deviceId={execScriptApplicationId}
+        deviceType={1}
         visible={isExscScript}
         setVisible={setIsExscScript}
         successCallBack={execScriptSuccess}
@@ -253,7 +254,7 @@ function SearchTable() {
         maskClosable={false}
         style={{ width: "100%", minHeight: "100%" }}
       >
-        <ExecuteLogSearchTable applicationId={viewLogId} visible={isViewLog} />
+        <ExecuteLogSearchTable deviceId={viewLogId} visible={isViewLog} />
       </Modal>
     </Card>
   );

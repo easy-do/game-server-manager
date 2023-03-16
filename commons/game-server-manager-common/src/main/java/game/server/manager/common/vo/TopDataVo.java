@@ -27,7 +27,5 @@ public class TopDataVo implements Serializable {
 
     private Long onlineCount;
 
-    private Long applicationCount;
-
     private Long deployCount;
 }

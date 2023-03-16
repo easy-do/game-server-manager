@@ -10,7 +10,7 @@ import cn.hutool.core.util.RuntimeUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import game.server.manager.client.config.SystemUtils;
-import game.server.manager.common.application.DeployParam;
+import game.server.manager.common.application.ExecScriptParam;
 import game.server.manager.common.enums.DeploymentCallBackTypeEnum;
 import game.server.manager.common.mode.ClientDeployData;
 import game.server.manager.common.mode.DeploymentCallBackData;
@@ -19,7 +19,7 @@ import game.server.manager.common.mode.SyncData;
 import game.server.manager.common.result.R;
 import game.server.manager.common.utils.AppScriptUtils;
 import game.server.manager.common.vo.AppInfoVo;
-import game.server.manager.common.vo.AppScriptVo;
+import game.server.manager.common.vo.ScriptDataVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,14 +67,14 @@ public class ClientDeploymentServer {
     /**
      * 部署应用
      *
-     * @param deployParam deployParam
+     * @param execScriptParam execScriptParam
      * @return java.lang.String
      * @author laoyu
      * @date 2022/8/7
      */
-    public String deployment(DeployParam deployParam) {
+    public String deployment(ExecScriptParam execScriptParam) {
         LocalDateTime startTime = LocalDateTime.now();
-        Long logId = Long.valueOf(deployParam.getLogId());
+        Long logId = Long.valueOf(execScriptParam.getExecuteLogId());
         LinkedList<String> stdout = new LinkedList<>();
         //生成日志
         ExecuteLogModal executeLog = ExecuteLogModal.builder().id(logId).startTime(startTime).build();
@@ -82,47 +82,47 @@ public class ClientDeploymentServer {
             saveLogLine(stdout, "开始执行脚本");
             executeLog.setLogData(String.join("", stdout));
             DeploymentCallBackData beforeData = DeploymentCallBackData.builder()
-                    .applicationId(deployParam.getApplicationId())
-                    .appScriptId(deployParam.getAppScriptId())
+                    .deviceId(execScriptParam.getDeviceId())
+                    .scriptId(execScriptParam.getScriptId())
                     .executeLogModal(executeLog)
-                    .uninstall(deployParam.isUninstall())
+//                    .uninstall(execScriptParam.isUninstall())
                     .type(DeploymentCallBackTypeEnum.BEFORE.getType()).build();
             String resultStr = deploymentCallBack(beforeData);
 
             ClientDeployData clientDeployData = JSON.to(ClientDeployData.class, resultStr);
             //构建并执行脚本
-            extractedBasicScript(deployParam, clientDeployData, stdout);
+            extractedBasicScript(execScriptParam, clientDeployData, stdout);
             //执行主脚本
-            buildAndExecScript(deployParam, clientDeployData.getAppInfo(), clientDeployData.getAppScript(), stdout);
+            buildAndExecScript(execScriptParam, clientDeployData.getAppInfo(), clientDeployData.getAppScript(), stdout);
             saveLogLine(stdout, "------------------流程执行完毕--------------------");
             executeLog.setEndTime(LocalDateTime.now());
             executeLog.setLogData(String.join("", stdout));
             deploymentCallBack(DeploymentCallBackData.builder()
-                    .applicationId(deployParam.getApplicationId())
-                    .appScriptId(deployParam.getAppScriptId())
+                    .deviceId(execScriptParam.getDeviceId())
+                    .scriptId(execScriptParam.getScriptId())
                     .executeLogModal(executeLog)
-                    .uninstall(deployParam.isUninstall())
+//                    .uninstall(execScriptParam.isUninstall())
                     .type(DeploymentCallBackTypeEnum.FINISH.getType()).build());
         } catch (Exception e) {
             saveLogLine(stdout, ExceptionUtil.getMessage(e));
             executeLog.setLogData(String.join("", stdout));
             deploymentCallBack(DeploymentCallBackData.builder()
-                    .applicationId(deployParam.getApplicationId())
-                    .appScriptId(deployParam.getAppScriptId())
-                    .uninstall(deployParam.isUninstall())
+                    .deviceId(execScriptParam.getDeviceId())
+                    .scriptId(execScriptParam.getScriptId())
+//                    .uninstall(execScriptParam.isUninstall())
                     .executeLogModal(executeLog).type(DeploymentCallBackTypeEnum.EXCEPTION.getType()).build());
             return String.join("", stdout);
         }
         return executeLog.getLogData();
     }
 
-    private void extractedBasicScript(DeployParam deployParam, ClientDeployData clientDeployData, LinkedList<String> stdout) throws DeploymentException {
-        List<AppScriptVo> basicScript = clientDeployData.getBasicScript();
+    private void extractedBasicScript(ExecScriptParam execScriptParam, ClientDeployData clientDeployData, LinkedList<String> stdout) throws DeploymentException {
+        List<ScriptDataVo> basicScript = clientDeployData.getBasicScript();
         if (Objects.nonNull(basicScript) && !basicScript.isEmpty()) {
             AppInfoVo appInfoVo = clientDeployData.getAppInfo();
             saveLogLine(stdout, "------------------检测到脚本依赖，先执行依赖的脚本--------------------");
-            for (AppScriptVo appScriptVo : basicScript) {
-                buildAndExecScript(deployParam, appInfoVo, appScriptVo, stdout);
+            for (ScriptDataVo scriptDataVo : basicScript) {
+                buildAndExecScript(execScriptParam, appInfoVo, scriptDataVo, stdout);
             }
             saveLogLine(stdout, "------------------主脚本依赖的脚本执行完毕--------------------");
         }
@@ -131,20 +131,20 @@ public class ClientDeploymentServer {
     /**
      * 构建并执行脚本
      *
-     * @param deployParam deployParam
+     * @param execScriptParam execScriptParam
      * @param stdout      stdout
      * @author laoyu
      * @date 2022/8/7
      */
-    private void buildAndExecScript(DeployParam deployParam, AppInfoVo appInfoVo, AppScriptVo appScriptVo, List<String> stdout) throws DeploymentException {
-        String scriptName = appScriptVo.getScriptName();
+    private void buildAndExecScript(ExecScriptParam execScriptParam, AppInfoVo appInfoVo, ScriptDataVo scriptDataVo, List<String> stdout) throws DeploymentException {
+        String scriptName = scriptDataVo.getScriptName();
         String fileName = UUID.randomUUID() + ".sh";
         String filePath = getJarFilePath() + "/" + fileName;
         File file = null;
         try {
             //1.构建脚本
             saveLogLine(stdout, "------------------构建脚本《" + scriptName + "》--------------------");
-            String scriptStr = appScriptVo.getScriptFile();
+            String scriptStr = scriptDataVo.getScriptFile();
             if (CharSequenceUtil.isEmpty(scriptStr)) {
                 throw new DeploymentException("脚本《" + scriptName + "》内容为空,请编写脚本后再执行!!!");
             }
@@ -160,12 +160,12 @@ public class ClientDeploymentServer {
             exec("chmod -R 777 " + filePath, stdout);
             String execStr = "sh " + filePath;
             StringBuilder stringBuilder = new StringBuilder(execStr);
-            JSONObject env = deployParam.getEnv();
-            env.put("APPLICATION_ID", deployParam.getApplicationId());
+            JSONObject env = execScriptParam.getEnv();
+            env.put("APPLICATION_ID", execScriptParam.getDeviceId());
             env.put("APP_ID", Objects.nonNull(appInfoVo)? appInfoVo.getId():"");
             env.put("APP_VERSION", Objects.nonNull(appInfoVo)? appInfoVo.getVersion():"");
             env.put("CLIENT_VERSION", systemUtils.getVersion());
-            String execShellEnv = AppScriptUtils.generateExecShellEnvs(env,appScriptVo.getScriptEnv());
+            String execShellEnv = AppScriptUtils.generateExecShellEnvs(env, scriptDataVo.getScriptEnv());
             stringBuilder.append(" ").append(execShellEnv);
             exec(stringBuilder.toString(), stdout);
             saveLogLine(stdout, "------------------脚本《" + scriptName + "》运行完毕--------------------");

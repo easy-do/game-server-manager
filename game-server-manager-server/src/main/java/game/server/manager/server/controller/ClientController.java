@@ -8,14 +8,14 @@ import game.server.manager.common.result.R;
 import game.server.manager.common.vaild.Insert;
 import game.server.manager.common.vaild.Update;
 import game.server.manager.common.vo.ClientInfoVo;
+import game.server.manager.server.entity.ScriptData;
 import game.server.manager.web.base.BaseController;
 import game.server.manager.server.dto.ClientInfoDto;
-import game.server.manager.server.entity.AppScript;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.log.SaveLog;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.mybatis.plus.result.MpDataResult;
-import game.server.manager.server.service.AppScriptService;
+import game.server.manager.server.service.ScriptDataService;
 import game.server.manager.server.service.ClientInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -64,7 +64,7 @@ public class ClientController extends BaseController<ClientInfoService, ClientIn
     private SysDictDataApi sysDictDataService;
 
     @Autowired
-    private AppScriptService appScriptService;
+    private ScriptDataService scriptDataService;
 
     @SaCheckLogin
     @RequestMapping("/list")
@@ -124,8 +124,8 @@ public class ClientController extends BaseController<ClientInfoService, ClientIn
     @SaveLog(logType = "操作日志", moduleName = MODULE_NAME, description = "下载客户端安装脚本", actionType = "下载")
     public void installScript() throws IOException {
         String scriptId = sysDictDataService.getSingleDictData("system_config", "client_install_script").getData().getDictValue();
-        AppScript appScript = appScriptService.getById(scriptId);
-        byte[] fileBytes = appScript.getScriptFile().replace(UNIX_LINE_END_CHAR, WINDOW_LINE_END_CHAR).getBytes();
+        ScriptData scriptData = scriptDataService.getById(scriptId);
+        byte[] fileBytes = scriptData.getScriptFile().replace(UNIX_LINE_END_CHAR, WINDOW_LINE_END_CHAR).getBytes();
         String mimeType = "application/octet-stream";
         response.setContentType(mimeType);
         response.setContentLength(fileBytes.length);

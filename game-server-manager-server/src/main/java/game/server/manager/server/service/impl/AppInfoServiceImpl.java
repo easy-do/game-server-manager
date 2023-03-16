@@ -16,7 +16,6 @@ import game.server.manager.common.enums.ScopeEnum;
 import game.server.manager.server.mapstruct.AppInfoMapstruct;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.mapper.AppInfoMapper;
-import game.server.manager.server.service.ApplicationInfoService;
 import game.server.manager.common.vo.AppInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +31,6 @@ import java.util.List;
  */
 @Service
 public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppInfoVo, AppInfoDto, AppInfoMapper> implements AppInfoService {
-
-    @Autowired
-    private ApplicationInfoService applicationInfoService;
 
 
     @Override
@@ -110,11 +106,6 @@ public class AppInfoServiceImpl extends BaseServiceImpl<AppInfo, AppInfoQo, AppI
     @CacheInvalidate(name = "AppInfoService.storePage")
     public boolean delete(Serializable id) {
         //校验授权信息
-        checkAuthorization("appDel");
-        long count = applicationInfoService.countByAppId(id);
-        if (count >= 1) {
-            DataResult.fail("拒绝删除,已有应用绑定");
-        }
         LambdaQueryWrapper<AppInfo> wrapper = getWrapper();
         if (!isAdmin()) {
             wrapper.eq(AppInfo::getCreateBy, getUserId());

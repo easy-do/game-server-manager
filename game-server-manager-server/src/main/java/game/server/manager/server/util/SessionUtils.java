@@ -43,7 +43,11 @@ public class SessionUtils {
     public static void close(Session session) {
         try {
             if(Objects.nonNull(session)){
-                session.getAsyncRemote().sendText("服务器主动断开连接.");
+                ServerMessage serverMessage = ServerMessage.builder()
+                        .type(ServerMessageTypeEnum.SUCCESS.getType())
+                        .data("服务器主动断开连接.")
+                        .build();
+                session.getAsyncRemote().sendText(JSON.toJSONString(serverMessage));
                 session.close();
             }
         } catch (IOException exception) {

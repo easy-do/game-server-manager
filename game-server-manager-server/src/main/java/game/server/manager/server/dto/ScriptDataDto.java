@@ -1,6 +1,5 @@
 package game.server.manager.server.dto;
 
-import game.server.manager.common.vo.AppEnvInfoVo;
 import lombok.Data;
 import game.server.manager.common.vaild.Insert;
 import game.server.manager.common.vaild.Update;
@@ -14,24 +13,13 @@ import java.util.List;
 /**
  * 
  * @author yuzhanfeng
- * @TableName app_script
+ * @TableName script_data
  */
 @Data
-public class AppScriptDto implements Serializable {
+public class ScriptDataDto implements Serializable {
 
     @NotNull(message = "id不能为空",groups = {Update.class})
     private Long id;
-
-    /**
-     * 适配应用
-     */
-    @NotNull(message = "适配应用不能为空",groups = {Insert.class,Update.class})
-    private String adaptationAppId;
-
-    /**
-     * 适配应用名称
-     */
-    private String adaptationAppName;
 
     /**
      * 脚本名称
@@ -52,10 +40,9 @@ public class AppScriptDto implements Serializable {
     private String basicScript;
 
     /**
-     * 作用范围
+     * 可见范围
      *
      */
-    @NotNull(message = "作用范围不能为空",groups = {Insert.class,Update.class})
     private String scriptScope;
 
     /**

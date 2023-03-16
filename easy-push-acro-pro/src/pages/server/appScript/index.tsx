@@ -20,7 +20,7 @@ import {
   getSearChColumns,
   searchConfig,
 } from './constants';
-import { managerPage, removeRequest } from '@/api/appScript';
+import { managerPage, removeRequest } from '@/api/scriptData';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';

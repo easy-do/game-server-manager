@@ -10,8 +10,6 @@ const scopeSelect = dictLabelEnum("scope_select",'string')
 
 export interface DataInfoVo{
     id: string,
-    adaptationAppId: string,
-    adaptationAppName: string,
     scriptName: string,
     scriptType: string,
     scriptScope: string,
@@ -44,7 +42,6 @@ export function getSearChColumns(){
 // 搜索配置
 export function searchConfig() {
   return {
-        'adaptationAppId': SearchTypeEnum.EQ,
         'scriptName': SearchTypeEnum.LIKE,
         'scriptType': SearchTypeEnum.EQ,
         'scriptScope': SearchTypeEnum.EQ,

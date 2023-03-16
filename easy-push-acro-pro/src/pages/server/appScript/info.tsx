@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Descriptions, Modal, Skeleton } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { infoRequest } from '@/api/appScript';
+import { infoRequest } from '@/api/scriptData';
 import { DataInfoVo } from './constants';
 
 
@@ -32,10 +32,6 @@ function InfoPage(props: {id:number,visible,setVisible}) {
   const t = useLocale(locale);
 
   const data = [
-    {
-      label: t['searchTable.columns.adaptationAppName'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.adaptationAppName:'',
-    },
     {
       label: t['searchTable.columns.scriptName'],
       value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.scriptName:'',

@@ -38,18 +38,16 @@ public class ExecuteLogController{
     @PostMapping("/page")
     public MpDataResult page(@RequestBody ExecuteLogQo executeLogQo) {
         LambdaQueryWrapper<ExecuteLog> wrapper = executeLogQo.buildSearchWrapper();
-        String applicationId = executeLogQo.getApplicationId();
+        Object deviceId = executeLogQo.getSearchParam().get("deviceId");
         if (!AuthorizationUtil.isAdmin()) {
             wrapper.eq(ExecuteLog::getCreateBy,AuthorizationUtil.getUserId());
-            wrapper.eq(ExecuteLog::getApplicationId, applicationId);
-        }else {
-            if(Objects.nonNull(applicationId)){
-                wrapper.eq(ExecuteLog::getApplicationId, applicationId);
-            }
+        }
+        if(Objects.nonNull(deviceId)){
+            wrapper.eq(ExecuteLog::getDeviceId, deviceId);
         }
         wrapper.orderByDesc(ExecuteLog::getCreateTime);
-        wrapper.select(ExecuteLog::getId,ExecuteLog::getExecuteState,ExecuteLog::getAppName,ExecuteLog::getScriptName,ExecuteLog::getDeviceName,
-                ExecuteLog::getApplicationName,ExecuteLog::getStartTime,ExecuteLog::getEndTime,ExecuteLog::getCreateTime);
+        wrapper.select(ExecuteLog::getId,ExecuteLog::getExecuteState,ExecuteLog::getScriptName,ExecuteLog::getDeviceName,
+                ExecuteLog::getStartTime,ExecuteLog::getEndTime,ExecuteLog::getCreateTime);
         return MpResultUtil.buildPage(executeLogService.page(executeLogQo.startPage(), wrapper), ExecuteLogVo.class);
     }
 

@@ -73,32 +73,18 @@ export function getColumns(
   return [
 
     {
-      title: t['searchTable.columns.applicationName'],
-      dataIndex: 'applicationName',
-      ellipsis:true,
-      sorter: true,
-    },
-
-    {
-      title: t['searchTable.columns.appName'],
-      dataIndex: 'appName',
-      ellipsis:true,
-      sorter: true,
-    },
-
-    {
       title: t['searchTable.columns.scriptName'],
       dataIndex: 'scriptName',
       ellipsis:true,
       sorter: true,
     },
 
-    {
-      title: t['searchTable.columns.deviceName'],
-      dataIndex: 'deviceName',
-      ellipsis:true,
-      sorter: true,
-    },
+    // {
+    //   title: t['searchTable.columns.deviceName'],
+    //   dataIndex: 'deviceName',
+    //   ellipsis:true,
+    //   sorter: true,
+    // },
 
     {
       title: t['searchTable.columns.startTime'],

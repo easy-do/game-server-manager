@@ -11,7 +11,6 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { statusEnum } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
@@ -66,7 +65,7 @@ function SearchForm(props: {
             >
               <DictDataSelect
                 placeholder={t['searchForm.status.placeholder']}
-                dictCode={'status_select'}
+                dictCode={'script_type'}
               />
             </Form.Item>
           </Col>

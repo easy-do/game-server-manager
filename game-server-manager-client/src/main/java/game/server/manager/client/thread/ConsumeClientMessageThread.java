@@ -3,7 +3,7 @@ package game.server.manager.client.thread;
 import com.alibaba.fastjson2.JSONObject;
 import game.server.manager.client.server.ClientMessageServer;
 import game.server.manager.client.server.ClientDeploymentServer;
-import game.server.manager.common.application.DeployParam;
+import game.server.manager.common.application.ExecScriptParam;
 import game.server.manager.common.enums.ClientMessageStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +48,8 @@ public class ConsumeClientMessageThread {
                     clientMessageVo.setStatus(ClientMessageStatusEnum.CONSUME.getCode());
                     clientMessageServer.messageCallBack(Collections.singletonList(clientMessageVo));
                     String message = clientMessageVo.getMessage();
-                    DeployParam deployParam = JSONObject.parseObject(message, DeployParam.class);
-                    clientDeploymentServer.deployment(deployParam);
+                    ExecScriptParam execScriptParam = JSONObject.parseObject(message, ExecScriptParam.class);
+                    clientDeploymentServer.deployment(execScriptParam);
                 }
             });
             consumeFlag = false;

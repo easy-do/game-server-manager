@@ -27,9 +27,6 @@ public class TopDataServer {
     private UserInfoApi userInfoService;
 
     @Autowired
-    private ApplicationInfoService applicationInfoService;
-
-    @Autowired
     private SysDictDataApi dictDataService;
 
     @Autowired
@@ -48,16 +45,6 @@ public class TopDataServer {
 
     public long onlineUserCount() {
         return redisUtils.keys(SystemConstant.PREFIX + SystemConstant.USER_INFO+"*").size();
-    }
-
-    public long applicationCount() {
-        Object count = redisUtils.get(SystemConstant.COUNT_DATA_KEY_PREFIX + SystemConstant.APPLICATION_COUNT);
-        if(Objects.nonNull(count)){
-            return (long) count;
-        }
-        long newCount = applicationInfoService.count();
-        redisUtils.set(SystemConstant.COUNT_DATA_KEY_PREFIX + SystemConstant.APPLICATION_COUNT,newCount,5L, TimeUnit.MINUTES);
-        return newCount;
     }
 
     public long deployCount() {

@@ -51,7 +51,7 @@ public enum ServerMessageTypeEnum {
 
     CREATE_CONTAINER(MessageTypeConstants.CREATE_CONTAINER,"创建容器"),
 
-    DEPLOY_APP(MessageTypeConstants.DEPLOY_APP,"部署APP");
+    EXEC_SCRIPT(MessageTypeConstants.DEPLOY_APP,"执行脚本");
 
     private final String type;
     private final String desc;

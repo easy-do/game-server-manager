@@ -762,7 +762,7 @@ INSERT INTO `sys_menu` VALUES (2, '系统管理', 19, 99, '', '', '', 1, 0, 'M',
 INSERT INTO `sys_menu` VALUES (3, '服务管理', 19, 2, '/server', '', '', 1, 0, 'C', 0, 0, 'serverManager', 'IconCloud', 17, '2022-07-20 00:22:30', 17, '2022-07-21 15:04:18', '', 0);
 INSERT INTO `sys_menu` VALUES (4, '应用管理', 19, 3, '/application', '', '', 1, 0, 'C', 0, 0, 'application', 'IconAppCenter', 17, '2022-07-20 00:23:47', 17, '2022-07-21 15:08:01', '', 0);
 INSERT INTO `sys_menu` VALUES (5, 'APP创作', 19, 4, '/app', '', '', 1, 0, 'C', 0, 0, 'appInfo', 'IconApps', 17, '2022-07-20 00:24:22', 17, '2022-07-21 15:08:10', '', 0);
-INSERT INTO `sys_menu` VALUES (6, '脚本创作', 19, 5, '/appScript', '', '', 1, 0, 'C', 0, 0, 'appScript', 'IconComment', 17, '2022-07-20 00:24:53', 17, '2022-07-21 15:08:28', '', 0);
+INSERT INTO `sys_menu` VALUES (6, '脚本创作', 19, 5, '/scriptData', '', '', 1, 0, 'C', 0, 0, 'scriptData', 'IconComment', 17, '2022-07-20 00:24:53', 17, '2022-07-21 15:08:28', '', 0);
 INSERT INTO `sys_menu` VALUES (7, '日志管理', 2, 0, '', '', '', 1, 0, 'M', 0, 0, 'logManager', 'IconArticle', 17, '2022-07-20 00:25:50', 17, '2022-07-23 15:31:54', '', 0);
 INSERT INTO `sys_menu` VALUES (8, '任务日志', 7, 9, '/jobLog', '', '', 1, 0, 'C', 0, 0, 'jobLog', 'IconArticle', 17, '2022-07-20 00:26:28', 17, '2022-07-29 16:04:40', '', 0);
 INSERT INTO `sys_menu` VALUES (9, '系统日志', 7, 1, '/sysLog', '', '', 1, 0, 'C', 0, 0, 'sysLog', 'IconArticle', 17, '2022-07-20 00:26:42', 17, '2022-07-23 15:30:43', '', 0);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { updateRequest, infoRequest } from '@/api/appScript';
+import { updateRequest, infoRequest } from '@/api/scriptData';
 import MEditor from '@/components/Medit/MEditor';
 
 function EditScriptPage(props: { id: number; visible; setVisible }) {
