@@ -22,9 +22,9 @@ public class DeploymentCallBackData implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String applicationId;
+    private String deviceId;
 
-    private String appScriptId;
+    private String scriptId;
 
     private String type;
 

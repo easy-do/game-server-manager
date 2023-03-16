@@ -13,11 +13,11 @@ import java.io.Serializable;
 public interface ExecuteLogService extends IService<ExecuteLog> {
 
     /**
-     * 根据应用id删除日志
+     * 根据设备id删除日志
      *
      * @param id id
      * @author laoyu
      * @date 2022/8/11
      */
-    void removeByApplicationId(Serializable id);
+    void removeByDeviceId(Serializable id);
 }

@@ -30,7 +30,7 @@ public class DeploymentLogServer {
     private static final String PREFIX = "easy_push_oauth:deployment_log:";
 
     @Autowired
-    private RedisUtils<Object> redisUtils;
+    private RedisUtils<String> redisUtils;
 
     @Autowired
     private ExecuteLogService executeLogService;
@@ -49,7 +49,7 @@ public class DeploymentLogServer {
         }
         String state = executeLog.getExecuteState();
         //如果进行中则从缓存读取
-        Collection<Object> logs;
+        Collection<String> logs;
         if (state.equals(AppStatusEnum.STARTING.getDesc())) {
             logs = redisUtils.zRange(PREFIX + logId, 0, -1);
             return DeployLogResultVo.builder().isFinish(false).logs(logs).build();
@@ -57,7 +57,7 @@ public class DeploymentLogServer {
             //如果已经执行完成直接返回数据库的日志
             String log = executeLog.getLogData();
             if(CharSequenceUtil.isNotEmpty(log)){
-                logs = List.of(log.split("\n"));
+                logs = List.of(log);
             }else {
                 logs = Collections.emptyList();
             }

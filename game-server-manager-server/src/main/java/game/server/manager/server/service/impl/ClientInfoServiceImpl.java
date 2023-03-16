@@ -13,13 +13,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import game.server.manager.api.SysDictDataApi;
-import game.server.manager.common.application.DeployParam;
+import game.server.manager.common.application.ExecScriptParam;
 import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.common.enums.ClientMessageTypeEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.ClientData;
-import game.server.manager.common.result.DataResult;
 import game.server.manager.common.utils.AppScriptUtils;
 import game.server.manager.common.vo.ClientInfoVo;
 import game.server.manager.common.vo.SysDictDataVo;
@@ -34,7 +33,7 @@ import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.server.entity.ServerInfo;
 import game.server.manager.server.mapper.ClientInfoMapper;
 import game.server.manager.server.mapstruct.ClientInfoMapstruct;
-import game.server.manager.server.redis.ApplicationDeployListenerMessage;
+import game.server.manager.server.redis.ExecScriptListenerMessage;
 import game.server.manager.server.service.AppEnvInfoService;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.ClientInfoService;
@@ -172,15 +171,15 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
             removeById(id);
             basePublishEventServer.publishClientUninstallEvent((String) id);
             clientMessageService.removeByClientId((String) id);
-            executeLogService.removeByApplicationId(id);
+            executeLogService.removeByDeviceId(id);
             return true;
         }
         
         String unInstallScriptId = getUnInstallScriptId();
         //创建执行记录
         ExecuteLog executeLog = ExecuteLog.builder()
-                .applicationId((String) id)
-                .applicationName(clientInfo.getClientName())
+                .deviceId((String) id)
+                .deviceName(clientInfo.getClientName())
                 .createTime(LocalDateTime.now())
                 .executeState(AppStatusEnum.QUEUE.getDesc())
                 .createBy(getUserId())
@@ -189,18 +188,16 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
         //生成客户端消息
         JSONObject env = new JSONObject();
         env.put("CLIENT_ID",id);
-        DeployParam deployParam = DeployParam.builder()
-                .applicationId((String) id)
-                .appScriptId(unInstallScriptId)
+        ExecScriptParam execScriptParam = ExecScriptParam.builder()
+                .deviceId((String) id)
+                .scriptId(unInstallScriptId)
                 .userId(String.valueOf(getUserId()))
                 .env(env)
-                .isClient(true)
-                .uninstall(true)
-                .logId(String.valueOf(executeLog.getId()))
+                .executeLogId(String.valueOf(executeLog.getId()))
                 .build();
         ClientMessage messageEntity = ClientMessage.builder()
                 .clientId((String) id)
-                .message(JSON.toJSONString(deployParam))
+                .message(JSON.toJSONString(execScriptParam))
                 .createBy(getUserId())
                 .updateBy(getUserId())
                 .messageType(ClientMessageTypeEnum.UNINSTALL.getCode())
@@ -224,25 +221,24 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
         
         JSONObject env = new JSONObject();
         env.put("CLIENT_ID",id);
-        DeployParam deployParam = DeployParam.builder()
-                .applicationId(id)
-                .appScriptId(getInstallScriptId())
+        ExecScriptParam execScriptParam = ExecScriptParam.builder()
+                .deviceId(id)
+                .scriptId(getInstallScriptId())
                 .userId(String.valueOf(getUserId()))
                 .env(env)
-                .isClient(true)
                 .build();
         //创建执行记录
         ExecuteLog entity = ExecuteLog.builder()
-                .applicationId(id)
-                .applicationName(clientInfo.getClientName())
+                .deviceId(id)
+                .deviceName(clientInfo.getClientName())
                 .createTime(LocalDateTime.now())
                 .executeState(AppStatusEnum.QUEUE.getDesc())
                 .createBy(getUserId())
                 .build();
         executeLogService.save(entity);
         //发布订阅消息
-        deployParam.setLogId(String.valueOf(entity.getId()));
-        redisStreamUtils.add(ApplicationDeployListenerMessage.DEFAULT_STREAM_NAME, BeanUtil.beanToMap(deployParam));
+        execScriptParam.setExecuteLogId(String.valueOf(entity.getId()));
+        redisStreamUtils.add(ExecScriptListenerMessage.DEFAULT_STREAM_NAME, BeanUtil.beanToMap(execScriptParam));
         return true;
     }
 

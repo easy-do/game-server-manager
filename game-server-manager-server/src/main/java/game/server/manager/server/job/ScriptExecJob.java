@@ -10,10 +10,10 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 import game.server.manager.server.annotation.Job;
-import game.server.manager.server.entity.AppScript;
+import game.server.manager.server.entity.ScriptData;
 import game.server.manager.server.entity.ServerInfo;
 import game.server.manager.server.entity.SysJob;
-import game.server.manager.server.service.AppScriptService;
+import game.server.manager.server.service.ScriptDataService;
 import game.server.manager.server.service.ServerInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ import java.util.UUID;
 public class ScriptExecJob {
 
     @Autowired
-    private AppScriptService appScriptService;
+    private ScriptDataService scriptDataService;
 
     @Autowired
     private ServerInfoService serverInfoService;
@@ -43,7 +43,7 @@ public class ScriptExecJob {
     public String execScript(SysJob sysJob) throws SftpException, IOException {
         String param = sysJob.getJobParam();
         ScriptJobModel jobModel = JSON.parseObject(param, ScriptJobModel.class);
-        AppScript appScript = appScriptService.getById(jobModel.getAppScriptId());
+        ScriptData scriptData = scriptDataService.getById(jobModel.getAppScriptId());
         ServerInfo serverInfo = serverInfoService.getById(jobModel.getServerId());
         String address = serverInfo.getAddress();
         String port = serverInfo.getPort();
@@ -51,7 +51,7 @@ public class ScriptExecJob {
         String password = serverInfo.getPassword();
         Session session = JschUtil.openSession(address, Integer.parseInt(port), userName, password);
         //1.上传脚本
-        String scriptStr = appScript.getScriptFile();
+        String scriptStr = scriptData.getScriptFile();
         scriptStr = scriptStr.replace("\r\n","\n");
         InputStream inputStream = new ByteArrayInputStream(scriptStr.getBytes());
         ChannelSftp sftp = JschUtil.openSftp(session);

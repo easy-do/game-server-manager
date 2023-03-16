@@ -6,18 +6,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.jcraft.jsch.Session;
 import game.server.manager.common.exception.ExceptionFactory;
-import game.server.manager.common.result.DataResult;
 import game.server.manager.common.vo.ServerInfoVo;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
-import game.server.manager.server.application.DeploymentServer;
 import game.server.manager.server.dto.ServerInfoDto;
 import game.server.manager.server.entity.ServerInfo;
 import game.server.manager.server.mapper.ServerInfoMapper;
 import game.server.manager.server.mapstruct.ServerInfoMapstruct;
-import game.server.manager.server.service.ApplicationInfoService;
+import game.server.manager.server.service.ExecScriptService;
 import game.server.manager.server.service.ServerInfoService;
 import game.server.manager.web.base.BaseServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -31,9 +28,6 @@ import java.util.List;
 @Service
 public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo<ServerInfo>,ServerInfoVo, ServerInfoDto, ServerInfoMapper>
     implements ServerInfoService{
-
-    @Autowired
-    private ApplicationInfoService applicationInfoService;
 
     @Override
     public long countByUserId(Long userId) {
@@ -115,16 +109,13 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo<
     public boolean delete(Serializable id) {
         //校验授权信息
         checkAuthorization("serverDel");
-        long count = applicationInfoService.countByDeviceId(String.valueOf(id));
-        if(count > 0){
-            DataResult.fail("拒绝删除,已绑定应用");
-        }
         LambdaQueryWrapper<ServerInfo> wrapper = Wrappers.lambdaQuery();
         if(!isAdmin()){
             wrapper.eq(ServerInfo::getUserId, getUserId());
         }
         wrapper.eq(ServerInfo::getId,id);
         return remove(wrapper);
+        //TODO 删除日志
     }
 
     @Override
@@ -140,7 +131,7 @@ public class ServerInfoServiceImpl extends BaseServiceImpl<ServerInfo, MpBaseQo<
             }
             return true;
         }catch (Exception exception){
-            String exceptionMessage = DeploymentServer.convertExceptionMessage(exception);
+            String exceptionMessage = ExecScriptService.convertExceptionMessage(exception);
             throw ExceptionFactory.bizException(exceptionMessage);
         }
     }

@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
-import game.server.manager.common.mode.socket.BrowserDeployLogMessage;
+import game.server.manager.common.mode.socket.BrowserExecScriptLogMessage;
 import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.vo.DeployLogResultVo;
@@ -13,7 +13,6 @@ import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.handler.AbstractHandlerService;
 import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.application.DeploymentLogServer;
-import game.server.manager.server.service.ApplicationInfoService;
 import game.server.manager.server.util.SessionUtils;
 
 import javax.annotation.Resource;
@@ -30,9 +29,6 @@ import java.util.Objects;
 public class DeployLogHandlerService extends AbstractHandlerService<BrowserHandlerData, Void> {
 
     @Resource
-    private ApplicationInfoService applicationInfoService;
-
-    @Resource
     private DeploymentLogServer deploymentLogServer;
 
     @Override
@@ -40,19 +36,14 @@ public class DeployLogHandlerService extends AbstractHandlerService<BrowserHandl
 
         BrowserMessage browserMessage = browserHandlerData.getBrowserMessage();
         String jsonData = browserMessage.getData();
-        BrowserDeployLogMessage browserDeployLogMessage = JSON.parseObject(jsonData, BrowserDeployLogMessage.class);
-        String logId = browserDeployLogMessage.getLogId();
+        BrowserExecScriptLogMessage browserExecScriptLogMessage = JSON.parseObject(jsonData, BrowserExecScriptLogMessage.class);
+        String logId = browserExecScriptLogMessage.getLogId();
         UserInfoVo userInfo = browserHandlerData.getUserInfo();
         Session session = browserHandlerData.getSession();
             if (!userInfo.isAdmin()) {
-                String applicationId = browserDeployLogMessage.getApplicationId();
-                if (Objects.isNull(applicationId)) {
-                    SessionUtils.sendMessage(session, JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用信息不存在,断开连接")).build()));
-                    SessionUtils.close(session);
-                    return null;
-                }
-                if (!applicationInfoService.exist(applicationId, userInfo.getId())) {
-                    SessionUtils.sendMessage(session, JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("应用不存在或不属于你,断开连接")).build()));
+                String deviceId = browserExecScriptLogMessage.getDeviceId();
+                if (Objects.isNull(deviceId)) {
+                    SessionUtils.sendMessage(session, JSON.toJSONString(DeployLogResultVo.builder().isFinish(false).logs(List.of("设备不存在,断开连接")).build()));
                     SessionUtils.close(session);
                     return null;
                 }
@@ -67,7 +58,7 @@ public class DeployLogHandlerService extends AbstractHandlerService<BrowserHandl
                     logResult = deploymentLogServer.getDeploymentLog(logId);
                     ServerMessage serverMessage = ServerMessage.builder()
                             .type(ServerMessageTypeEnum.SUCCESS.getType())
-                            .data(JSON.toJSONString(logResult.getLogs()))
+                            .data(String.join("",logResult.getLogs()))
                             .build();
                     SessionUtils.sendMessage(session, JSON.toJSONString(serverMessage));
                     if (!logResult.isFinish() && session.isOpen()) {

@@ -20,9 +20,9 @@ public class ExecuteLogServiceImpl extends ServiceImpl<ExecuteLogMapper, Execute
     implements ExecuteLogService{
 
     @Override
-    public void removeByApplicationId(Serializable id) {
+    public void removeByDeviceId(Serializable id) {
         LambdaQueryWrapper<ExecuteLog> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(ExecuteLog::getApplicationId,id);
+        wrapper.eq(ExecuteLog::getDeviceId,id);
         remove(wrapper);
     }
 }

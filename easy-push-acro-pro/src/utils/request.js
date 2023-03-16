@@ -2,7 +2,6 @@ import axios from "axios";
 import { Component } from "react"; 3
 import cookie from 'react-cookies'
 import { Notification } from '@arco-design/web-react';
-// let baseUrl = process.env.NODE_ENV == 'development' ? "/api" : "https://manager.easydo.plus";
 let baseUrl = "/api";
 
 // 请求前拦截

@@ -1,7 +1,7 @@
 package game.server.manager.common.mode;
 
 import game.server.manager.common.vo.AppInfoVo;
-import game.server.manager.common.vo.AppScriptVo;
+import game.server.manager.common.vo.ScriptDataVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class ClientDeployData implements Serializable {
 
     private AppInfoVo appInfo;
 
-    private AppScriptVo appScript;
+    private ScriptDataVo appScript;
 
-    private List<AppScriptVo> basicScript;
+    private List<ScriptDataVo> basicScript;
 }

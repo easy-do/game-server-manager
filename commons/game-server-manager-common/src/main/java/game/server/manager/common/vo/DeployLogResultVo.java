@@ -22,5 +22,5 @@ public class DeployLogResultVo implements Serializable {
 
     private boolean isFinish;
 
-    private Collection<Object> logs;
+    private Collection<String> logs;
 }

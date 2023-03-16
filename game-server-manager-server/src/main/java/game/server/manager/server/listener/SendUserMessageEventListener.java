@@ -7,9 +7,9 @@ import game.server.manager.api.UserMessageApi;
 import game.server.manager.common.dto.UserMessageDto;
 import game.server.manager.common.vo.SysDictDataVo;
 import game.server.manager.event.model.*;
-import game.server.manager.server.entity.AppScript;
+import game.server.manager.server.entity.ScriptData;
 import game.server.manager.server.entity.ClientInfo;
-import game.server.manager.server.service.AppScriptService;
+import game.server.manager.server.service.ScriptDataService;
 import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class SendUserMessageEventListener {
     private SysDictDataApi sysDictDataService;
 
     @Autowired
-    private AppScriptService appScriptService;
+    private ScriptDataService scriptDataService;
 
     @Autowired
     private ClientInfoService clientInfoService;
@@ -85,10 +85,10 @@ public class SendUserMessageEventListener {
     public void sendScriptStartEventMessage(ScriptStartEvent scriptStartEvent) {
         Long userId = scriptStartEvent.getUserId();
         Long scriptId = scriptStartEvent.getAppScriptId();
-        AppScript appScript = appScriptService.getById(scriptId);
-        if(Objects.nonNull(appScript)){
+        ScriptData scriptData = scriptDataService.getById(scriptId);
+        if(Objects.nonNull(scriptData)){
             String title = "脚本开始执行通知";
-            String content = "脚本<"+appScript.getScriptName()+">开始执行。";
+            String content = "脚本<"+ scriptData.getScriptName()+">开始执行。";
             UserMessageDto userMessage = UserMessageDto.builder().userId(userId)
                     .title(title)
                     .content(content).build();

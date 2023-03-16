@@ -17,86 +17,67 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 应用信息
+ * 
  * @author yuzhanfeng
+ * @TableName script_data
  */
-@TableName(value ="application_info")
+@TableName(value ="script_data")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicationInfo implements Serializable {
+public class ScriptData implements Serializable {
 
     @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
     /**
-     * 应用id
+     * 自增主键
      */
-    @TableId(type = IdType.INPUT)
-    private String applicationId;
-
-
-    /**
-     * 应用名称
-     */
-    private String applicationName;
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
-     * 设备id
+     * 脚本名称
      */
-    private String deviceId;
+    private String scriptName;
 
     /**
-     * 设备名称
+     * 脚本类型
      */
-    private String deviceName;
+    private String scriptType;
 
     /**
-     * 设备类型
+     * 依赖脚本
      */
-    private Integer deviceType;
+    private String basicScript;
 
     /**
-     * appId
+     * 可见范围
+     *
      */
-    private Long appId;
+    private String scriptScope;
 
     /**
-     * app名称
+     * 版本
      */
-    private String appName;
+    private String version;
 
     /**
-     * 所属用户
+     * 脚本文件
      */
-    private Long userId;
+    private String scriptFile;
 
     /**
-     * 应用状态
+     * 介绍
      */
-    private String status;
+    private String description;
 
     /**
-     * 通信公钥
+     * 热度
      */
-    private String publicKey;
-
-    /**
-     * 通信私钥
-     */
-    private String privateKey;
-
-    /**
-     * 黑名单
-     */
-    private Integer isBlack;
-
-    /**
-     * 插件信息
-     */
-    private String pluginsData;
+    private Long heat;
 
     /**
      * 创建时间
@@ -111,15 +92,24 @@ public class ApplicationInfo implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 最后在线时间
+     * 创建人
      */
-    private LocalDateTime lastUpTime;
+    private Long createBy;
+
+    /**
+     * 作者
+     */
+    private String author;
+
+    /**
+     * 更新人
+     */
+    private Long updateBy;
 
     /**
      * 删除标记
      */
     @TableLogic
     private Integer delFlag;
-
 
 }

@@ -1,17 +1,17 @@
 package game.server.manager.server.mapper;
 
-import game.server.manager.server.entity.AppScript;
+import game.server.manager.server.entity.ScriptData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author yuzhanfeng
-* @description 针对表【app_script】的数据库操作Mapper
+* @description 针对表【script_data】的数据库操作Mapper
 * @createDate 2022-05-26 18:30:13
-* @Entity game.server.manager.server.entity.AppScript
+* @Entity game.server.manager.server.entity.ScriptData
 */
 @Mapper
-public interface AppScriptMapper extends BaseMapper<AppScript> {
+public interface ScriptDataMapper extends BaseMapper<ScriptData> {
 
     /**
      * 增加热度

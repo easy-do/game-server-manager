@@ -7,11 +7,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import game.server.manager.common.utils.AppScriptUtils;
 import game.server.manager.server.dto.AppEnvInfoDto;
 import game.server.manager.server.entity.AppEnvInfo;
-import game.server.manager.server.entity.AppScript;
+import game.server.manager.server.entity.ScriptData;
 import game.server.manager.server.mapstruct.AppEnvInfoMapstruct;
 import game.server.manager.server.service.AppEnvInfoService;
 import game.server.manager.server.mapper.AppEnvInfoMapper;
-import game.server.manager.server.service.AppScriptService;
+import game.server.manager.server.service.ScriptDataService;
 import game.server.manager.common.vo.AppEnvInfoVo;
 import game.server.manager.common.vo.ScriptEnvListVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +30,19 @@ public class AppEnvInfoServiceImpl extends ServiceImpl<AppEnvInfoMapper, AppEnvI
         implements AppEnvInfoService {
 
     @Autowired
-    private AppScriptService appScriptService;
+    private ScriptDataService scriptDataService;
 
     @Override
     public List<ScriptEnvListVo> listByScriptId(Long scriptId) {
         List<ScriptEnvListVo> allEvenList = new ArrayList<>();
         //检查脚本是否存在依赖脚本，如果存在则查询出依赖脚本的变量
-        AppScript appScript = appScriptService.getById(scriptId);
-        String basicScript = appScript.getBasicScript();
+        ScriptData scriptData = scriptDataService.getById(scriptId);
+        String basicScript = scriptData.getBasicScript();
         if (CharSequenceUtil.isNotBlank(basicScript)) {
             String[] scriptIds = basicScript.split(",");
             if (scriptIds.length > 0) {
                 for (int i = 0; i < scriptIds.length; i++) {
-                    AppScript script = appScriptService.getById(scriptIds[i]);
+                    ScriptData script = scriptDataService.getById(scriptIds[i]);
                     List<AppEnvInfo> list = getListByScriptId(script.getId());
                     ScriptEnvListVo scriptEnvListVo = ScriptEnvListVo.builder()
                             .scriptName(script.getScriptName())
@@ -55,7 +55,7 @@ public class AppEnvInfoServiceImpl extends ServiceImpl<AppEnvInfoMapper, AppEnvI
         //查询主脚本的变量
         List<AppEnvInfo> list = getListByScriptId(scriptId);
         ScriptEnvListVo scriptEnvListVo = ScriptEnvListVo.builder()
-                .scriptName(appScript.getScriptName())
+                .scriptName(scriptData.getScriptName())
                 .env(AppEnvInfoMapstruct.INSTANCE.entityToVo(list))
                 .build();
         allEvenList.add(scriptEnvListVo);

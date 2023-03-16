@@ -1,14 +1,12 @@
 import { appEnvListByScriptId } from '@/api/appEnv';
-import { deploy } from '@/api/applicationInfo';
-import { listByAppId } from '@/api/appScript';
-import RequestSelect from '@/components/RequestSelect/RequestSelect';
+import { execScript, list } from '@/api/scriptData';
 import { GlobalContext } from '@/context';
 import useLocale from '@/utils/useLocale';
 import { Form, FormInstance, Input, Modal, Notification, Select, Spin, Typography } from '@arco-design/web-react';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import locale from './locale';
 
-function ExecScriptPage({ applicationId, appId, visible, setVisible, successCallBack }) {
+function ExecScriptPage({ deviceId, deviceType, visible, setVisible, successCallBack }) {
 
     const t = useLocale(locale);
 
@@ -47,9 +45,10 @@ function ExecScriptPage({ applicationId, appId, visible, setVisible, successCall
 
     //加载数据
     function fetchData() {
-        if (appId !== undefined && applicationId != undefined && visible) {
+        if (deviceId !== undefined && visible) {
+            setEnvs([])
             setLoading(true)
-            listByAppId(appId).then((res) => {
+            list().then((res) => {
                 const { success, data } = res.data;
                 if (success) {
                     const newOptions = [];
@@ -69,13 +68,13 @@ function ExecScriptPage({ applicationId, appId, visible, setVisible, successCall
 
     useEffect(() => {
         fetchData();
-    }, [applicationId, appId, visible]);
+    }, [visible]);
 
 
     //提交
     const handleSubmit = () => {
         formRef.current.validate().then((values: any) => {
-            deploy({...values, applicationId:applicationId}).then((res) => {
+            execScript({...values, deviceId:deviceId,deviceType:deviceType}).then((res) => {
                 const { success, msg } = res.data;
                 if (success) {
                     formRef.current.clearFields()
@@ -113,7 +112,7 @@ function ExecScriptPage({ applicationId, appId, visible, setVisible, successCall
                 <Form.Item
                     onChange={scriptOnchage}
                     label={t['searchTable.columns.script']}
-                    field="appScriptId"
+                    field="scriptId"
                     rules={[
                         { required: true, message: t['searchTable.rules.script.required'] },
                     ]}

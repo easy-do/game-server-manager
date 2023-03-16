@@ -31,7 +31,7 @@ public class RedisStreamConfig {
     private static final int SUB_COUNT = 2;
 
     @Autowired
-    private ApplicationDeployListenerMessage applicationDeployListenerMessage;
+    private ExecScriptListenerMessage execScriptListenerMessage;
 
     @Autowired
     private RedisStreamUtils<Object> redisStreamUtils;
@@ -64,8 +64,8 @@ public class RedisStreamConfig {
      */
     @Bean
     public Subscription subscription(StreamMessageListenerContainer streamMessageListenerContainer){
-        String streamName = ApplicationDeployListenerMessage.DEFAULT_STREAM_NAME;
-        String groupName = ApplicationDeployListenerMessage.DEFAULT_GROUP;
+        String streamName = ExecScriptListenerMessage.DEFAULT_STREAM_NAME;
+        String groupName = ExecScriptListenerMessage.DEFAULT_GROUP;
         Map<String,Object> map = Maps.newHashMapWithExpectedSize(1);
         map.put("message","initStream");
         redisStreamUtils.add(streamName,map);
@@ -75,9 +75,9 @@ public class RedisStreamConfig {
         for (int i = 0; i < SUB_COUNT; i++) {
             log.info("注册stream消费者" + i);
             streamMessageListenerContainer.receive(
-                    Consumer.from(groupName,ApplicationDeployListenerMessage.DEFAULT_NAME + i),
+                    Consumer.from(groupName, ExecScriptListenerMessage.DEFAULT_NAME + i),
                     StreamOffset.create(streamName, ReadOffset.lastConsumed()),
-                    applicationDeployListenerMessage
+                    execScriptListenerMessage
             );
         }
         return null;

@@ -16,20 +16,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeployParam {
+public class ExecScriptParam {
 
-    private String applicationId;
+    private String deviceId;
 
-    private String appScriptId;
+    private String scriptId;
 
     private JSONObject env;
 
-    private String logId;
+    private String executeLogId;
 
     private String userId;
-
-    private boolean isClient;
-
-    private boolean uninstall;
-
 }

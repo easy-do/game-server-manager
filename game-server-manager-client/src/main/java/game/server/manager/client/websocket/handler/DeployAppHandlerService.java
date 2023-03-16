@@ -4,7 +4,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.client.server.ClientDeploymentServer;
 import game.server.manager.client.server.SyncServer;
-import game.server.manager.common.application.DeployParam;
+import game.server.manager.common.application.ExecScriptParam;
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.socket.ServerMessage;
@@ -36,7 +36,7 @@ public class DeployAppHandlerService extends AbstractHandlerService<ServerMessag
         String messageId = serverMessage.getMessageId();
         try {
             String data = serverMessage.getData();
-            clientDeploymentServer.deployment(JSON.parseObject(data, DeployParam.class));
+            clientDeploymentServer.deployment(JSON.parseObject(data, ExecScriptParam.class));
         }catch (Exception e) {
             syncServer.sendFailMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, ExceptionUtil.getMessage(e));
         }

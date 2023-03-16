@@ -39,26 +39,6 @@ public class ExecuteLog implements Serializable {
     private Long id;
 
     /**
-     * 应用id
-     */
-    private String applicationId;
-
-    /**
-     * 应用名称
-     */
-    private String applicationName;
-
-    /**
-     * APPid
-     */
-    private Long appId;
-
-    /**
-     * APP名称
-     */
-    private String appName;
-
-    /**
      * 脚本id
      */
     private Long scriptId;

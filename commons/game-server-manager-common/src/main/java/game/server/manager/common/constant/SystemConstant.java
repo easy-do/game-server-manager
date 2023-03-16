@@ -22,8 +22,6 @@ public class SystemConstant {
 
     public static final String COUNT_DATA_KEY_PREFIX = "system_count_data:";
 
-    public static final String APPLICATION_COUNT = "application_count:";
-
     public static final String USER_COUNT = "user_count:";
 
     public static final String USER_CACHE = "user_cache:";

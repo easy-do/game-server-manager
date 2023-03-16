@@ -12,19 +12,9 @@ import java.util.List;
  * @TableName app_script
  */
 @Data
-public class AppScriptVo implements Serializable {
+public class ScriptDataVo implements Serializable {
 
     private Long id;
-
-    /**
-     * 适配应用
-     */
-    private String adaptationAppId;
-
-    /**
-     * 适配应用名称
-     */
-    private String adaptationAppName;
 
     /**
      * 脚本名称
