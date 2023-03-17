@@ -4,8 +4,10 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.vo.ExecScriptVo;
 import game.server.manager.common.vo.ScriptDataVo;
+import game.server.manager.common.vo.ScriptEnvDataListVo;
 import game.server.manager.server.dto.ScriptDataDto;
 import game.server.manager.server.entity.ScriptData;
+import game.server.manager.server.service.ScriptEnvDataService;
 import game.server.manager.server.service.ExecScriptService;
 import game.server.manager.web.base.BaseController;
 import game.server.manager.log.SaveLog;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import game.server.manager.common.result.R;
@@ -47,6 +50,9 @@ public class ScriptDataController extends BaseController<ScriptDataService, Scri
 
     @Autowired
     private ExecScriptService execScriptService;
+
+    @Autowired
+    private ScriptEnvDataService scriptEnvDataService;
 
     @SaCheckLogin
     @RequestMapping("/list")
@@ -99,6 +105,12 @@ public class ScriptDataController extends BaseController<ScriptDataService, Scri
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = "编辑脚本: ?1 - ?2", expressions = {"#p1.id","#p1.scriptName"},actionType = EDIT_ACTION)
     public R<Object> execScript(@RequestBody ExecScriptVo execScriptVo) {
         return execScriptService.execScript(execScriptVo)? DataResult.ok():DataResult.fail();
+    }
+
+    @SaCheckLogin
+    @RequestMapping("/evnList/{scriptId}")
+    public R<List<ScriptEnvDataListVo>> listByScriptId(@RequestHeader("token") String token, @PathVariable Long scriptId) {
+        return DataResult.ok(scriptEnvDataService.listByScriptId(scriptId));
     }
 
 }

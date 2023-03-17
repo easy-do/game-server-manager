@@ -25,7 +25,7 @@ export default function LoginForm() {
 
   const t = useLocale(locale);
 
-  const [loginType, setLoginType] = useState('password');
+  const [loginType, setLoginType] = useState('platform');
   const [sendMail, setSendMail] = useState(false);
 
   const [token,setToken] = useStorage('token');

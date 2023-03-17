@@ -1,49 +1,49 @@
 package game.server.manager.server.service;
 
-import game.server.manager.common.vo.AppEnvInfoVo;
+import game.server.manager.common.vo.ScriptEnvDataVo;
 import game.server.manager.server.dto.AppEnvInfoDto;
-import game.server.manager.server.entity.AppEnvInfo;
+import game.server.manager.server.entity.ScriptEnvData;
 import com.baomidou.mybatisplus.extension.service.IService;
-import game.server.manager.common.vo.ScriptEnvListVo;
+import game.server.manager.common.vo.ScriptEnvDataListVo;
 
 import java.util.List;
 
 /**
  * @author yuzhanfeng
- * @description 针对表【app_env_info(应用变量)】的数据库操作Service
+ * @description 针对表【script_env_data(脚本变量)】的数据库操作Service
  * @createDate 2022-05-22 17:28:24
  */
-public interface AppEnvInfoService extends IService<AppEnvInfo> {
+public interface ScriptEnvDataService extends IService<ScriptEnvData> {
 
     /**
      * 功能描述
      *
      * @param scriptId appId
-     * @return java.util.List<game.server.manager.server.entity.AppEnvInfo>
+     * @return java.util.List<game.server.manager.server.entity.ScriptEnvData>
      * @author laoyu
      * @date 2022/5/24
      */
-    List<ScriptEnvListVo> listByScriptId(Long scriptId);
+    List<ScriptEnvDataListVo> listByScriptId(Long scriptId);
 
     /**
      * 功能描述
      *
      * @param scriptId appId
-     * @return java.util.List<game.server.manager.server.entity.AppEnvInfo>
+     * @return java.util.List<game.server.manager.server.entity.ScriptEnvData>
      * @author laoyu
      * @date 2022/5/24
      */
-    List<AppEnvInfo> getListByScriptId(Long scriptId);
+    List<ScriptEnvData> getListByScriptId(Long scriptId);
 
     /**
      * 功能描述
      *
      * @param scriptId appId
-     * @return java.util.List<game.server.manager.server.entity.AppEnvInfo>
+     * @return java.util.List<game.server.manager.server.entity.ScriptEnvData>
      * @author laoyu
      * @date 2022/5/24
      */
-    List<AppEnvInfoVo> getVoListByScriptId(Long scriptId);
+    List<ScriptEnvDataVo> getVoListByScriptId(Long scriptId);
 
 
     /**

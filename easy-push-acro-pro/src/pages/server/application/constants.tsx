@@ -1,42 +1,55 @@
 import React from 'react';
-import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { Button, Popconfirm } from '@arco-design/web-react';
+import { SearchTypeEnum } from '@/utils/systemConstant';
+import PermissionWrapper from '@/components/PermissionWrapper';
 import { dictLabelEnum } from '@/utils/dictDataUtils';
 
-export const statusEnum = dictLabelEnum('status_select','string')
+export const statusEnum = dictLabelEnum('application_status','string')
+export const scopeEnum = dictLabelEnum('application_scope','string')
 
 export interface DataInfoVo{
-    applicationId: string,
+    id: string,
     applicationName: string,
-    userId: string,
-    deviceId: string,
-    deviceName: string,
-    deviceType: string,
-    appId: string,
-    appName: string,
     status: string,
-    publicKey: string,
-    privateKey: string,
-    appEnvCache: string,
-    isBlack: string,
-    pluginsData: string,
+    icon: string,
+    author: string,
+    scope: string,
+    description: string,
+    heat: string,
     createTime: string,
     updateTime: string,
-    lastUpTime: string,
+    createBy: string,
+    updateBy: string,
     delFlag: string,
 }
 
 // 后台sql查询字段
 export function getSearChColumns(){
     return [
-    'applicationId',
+    'id',
     'applicationName',
-    'deviceName',
-    'appName',
     'status',
+    'icon',
+    'author',
+    'scope',
+    'description',
+    'heat',
     'createTime',
     'updateTime',
-    'lastUpTime',
+    'createBy',
+    'updateBy',
+    'delFlag',
       ];
+}
+
+// 搜索配置
+export function searchConfig() {
+  return {
+        'applicationName': SearchTypeEnum.LIKE,
+        'status': SearchTypeEnum.EQ,
+        'author': SearchTypeEnum.EQ,
+        'scope': SearchTypeEnum.EQ,
+  }
 }
 
 //默认排序字段
@@ -51,77 +64,116 @@ export function getColumns(
   callback: (record: Record<string, any>, type: string) => Promise<void>
 ) {
   return [
-    {
-      title: t['searchTable.columns.applicationId'],
-      dataIndex: 'applicationId',
-      ellipsis:true,
-      sorter: true,
-    },
+
     {
       title: t['searchTable.columns.applicationName'],
       dataIndex: 'applicationName',
       ellipsis:true,
-      sorter: true,
     },
+
     {
-      title: t['searchTable.columns.deviceName'],
-      dataIndex: 'deviceName',
+      title: t['searchTable.columns.scope'],
+      dataIndex: 'scope',
       ellipsis:true,
-      sorter: true,
+      render: (_, record) => (scopeEnum[record.scope]),
     },
-    {
-      title: t['searchTable.columns.appName'],
-      dataIndex: 'appName',
-      ellipsis:true,
-      sorter: true,
-    },
+
     {
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis:true,
-      sorter: true,
+      render: (_, record) => (statusEnum[record.status]),
     },
+
     {
-      title: t['searchTable.columns.lastUpTime'],
-      dataIndex: 'lastUpTime',
+      title: t['searchTable.columns.heat'],
+      dataIndex: 'heat',
       ellipsis:true,
-      sorter: true,
+    },
+
+    {
+      title: t['searchTable.columns.author'],
+      dataIndex: 'author',
+      ellipsis:true,
+    },
+
+    {
+      title: t['searchTable.columns.createTime'],
+      dataIndex: 'createTime',
+      ellipsis:true,
     },
     {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => (
-        <div>
-          <Button
-            type="text"
-            size="small"
-            onClick={() => callback(record, 'view')}
+        <div>  
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'application', actions: ['application:info'] },
+            ]}
           >
-            {t['searchTable.columns.operations.view']}
-          </Button>
-          <Button
-            type="text"
-            size="small"
-            onClick={() => callback(record, 'execScript')}
-          >
-            {t['searchTable.columns.operations.execScript']}
-          </Button>
-          <Button
-            type="text"
-            size="small"
-            onClick={() => callback(record, 'log')}
-          >
-            {t['searchTable.columns.operations.log']}
-          </Button>
-          <Popconfirm
-            title={t['searchTable.columns.operations.remove.confirm']}
-            onOk={() => callback(record, 'remove')}
-          >
-            <Button type="text" status="warning" size="small">
-              {t['searchTable.columns.operations.remove']}
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'view')}
+            >
+                {t['searchTable.columns.operations.view']}
             </Button>
-          </Popconfirm>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'application', actions: ['application:update'] },
+            ]}
+          >
+            <Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'update')}
+            >
+                {t['searchTable.columns.operations.update']}
+            </Button>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'application', actions: ['application:remove'] },
+            ]}
+          >
+            <Popconfirm
+                title={t['searchTable.columns.operations.remove.confirm']}
+                onOk={() => callback(record, 'remove')}
+            >
+                <Button type="text" status="warning" size="small">
+                {t['searchTable.columns.operations.remove']}
+                </Button>
+            </Popconfirm>
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'application', actions: ['application:update'] },
+            ]}
+          >
+            {record.status !==1 && record.status !==4 ?<Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'submitAudit')}
+            >
+                {'提审'}
+            </Button>:null}
+          </PermissionWrapper>
+          <PermissionWrapper
+            requiredPermissions={[
+              { resource: 'application', actions: ['application:update'] },
+            ]}
+          >
+            {record.status ===2 || record.status ===3 ?<Button
+                type="text"
+                size="small"
+                onClick={() => callback(record, 'audit')}
+            >
+                {'审核'}
+            </Button>:null}
+          </PermissionWrapper>
         </div>
       ),
     },

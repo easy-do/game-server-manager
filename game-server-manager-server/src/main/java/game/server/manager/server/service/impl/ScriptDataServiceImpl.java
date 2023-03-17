@@ -1,11 +1,14 @@
 package game.server.manager.server.service.impl;
 
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.text.StrBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import game.server.manager.common.utils.AppScriptUtils;
+import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.utils.ScriptDataUtils;
 import game.server.manager.common.vo.ScriptDataVo;
+import game.server.manager.common.vo.ScriptEnvDataVo;
 import game.server.manager.server.dto.ScriptDataDto;
 import game.server.manager.server.entity.ScriptData;
 import game.server.manager.web.base.BaseServiceImpl;
@@ -14,10 +17,9 @@ import game.server.manager.common.enums.ScopeEnum;
 import game.server.manager.server.mapstruct.AppEnvInfoMapstruct;
 import game.server.manager.server.mapstruct.ScriptDataMapstruct;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
-import game.server.manager.server.service.AppEnvInfoService;
+import game.server.manager.server.service.ScriptEnvDataService;
 import game.server.manager.server.service.ScriptDataService;
 import game.server.manager.server.mapper.ScriptDataMapper;
-import game.server.manager.common.vo.AppEnvInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,7 @@ public class ScriptDataServiceImpl extends BaseServiceImpl<ScriptData, MpBaseQo<
 
 
     @Autowired
-    private AppEnvInfoService appEnvInfoService;
+    private ScriptEnvDataService scriptEnvDataService;
 
     @Override
     public long countByUserId(Long userId) {
@@ -103,7 +105,7 @@ public class ScriptDataServiceImpl extends BaseServiceImpl<ScriptData, MpBaseQo<
         }
         wrapper.eq(ScriptData::getId, id);
         ScriptDataVo scriptDataVo = ScriptDataMapstruct.INSTANCE.entityToVo(baseMapper.selectOne(wrapper));
-        List<AppEnvInfoVo> envList = AppEnvInfoMapstruct.INSTANCE.entityToVo(appEnvInfoService.getListByScriptId(scriptDataVo.getId()));
+        List<ScriptEnvDataVo> envList = AppEnvInfoMapstruct.INSTANCE.entityToVo(scriptEnvDataService.getListByScriptId(scriptDataVo.getId()));
         scriptDataVo.setScriptEnv(envList);
         return scriptDataVo;
     }
@@ -119,50 +121,62 @@ public class ScriptDataServiceImpl extends BaseServiceImpl<ScriptData, MpBaseQo<
         if (result) {
             List<AppEnvInfoDto> envList = scriptDataDto.getScriptEnv();
             if (Objects.nonNull(envList) && !envList.isEmpty()) {
-                appEnvInfoService.saveOrUpdateScriptEnvList(entity.getId(),envList);
+                scriptEnvDataService.saveOrUpdateScriptEnvList(entity.getId(),envList);
             }
         }
         //生成脚本取参内容
-        String getEnvScript = AppScriptUtils.generateShellEnvScript(appEnvInfoService.getVoListByScriptId(entity.getId()));
-        ScriptData scriptData = ScriptData.builder().id(entity.getId()).scriptFile(AppScriptUtils.SCRIPT_START_LINE+getEnvScript).build();
+        String getEnvScript = ScriptDataUtils.generateShellEnvScript(scriptEnvDataService.getVoListByScriptId(entity.getId()));
+        ScriptData scriptData = ScriptData.builder().id(entity.getId()).scriptFile(ScriptDataUtils.SCRIPT_START_LINE+getEnvScript).build();
         updateById(scriptData);
         return result;
     }
 
     @Override
     public boolean edit(ScriptDataDto scriptDataDto) {
-        //校验授权信息
-        checkAuthorization("appScriptEdit");
+        ScriptData dbScriptData = getById(scriptDataDto.getId());
+        if(Objects.isNull(dbScriptData)){
+            throw ExceptionFactory.bizException("脚本不存在");
+        }
         ScriptData entity = ScriptDataMapstruct.INSTANCE.dtoToEntity(scriptDataDto);
         entity.setUpdateBy(getUserId());
         LambdaQueryWrapper<ScriptData> wrapper = Wrappers.lambdaQuery();
-        if (!isAdmin()) {
-            wrapper.eq(ScriptData::getCreateBy, getUserId());
+        if (!isAdmin() && dbScriptData.getCreateBy() != getUserId()) {
+            throw ExceptionFactory.bizException("只能编辑自己的脚本");
         }
         wrapper.eq(ScriptData::getId, entity.getId());
-        boolean result = update(entity, wrapper);
-        if (result) {
+        boolean updateScriptFile = CharSequenceUtil.isNotEmpty(scriptDataDto.getScriptFile()) && !CharSequenceUtil.equals(scriptDataDto.getScriptFile(),dbScriptData.getScriptFile());
+        //如果不是更新脚本内容、只是编辑脚本基本信息则自动生成一次新的脚本上半部分
+        if (!updateScriptFile) {
             List<AppEnvInfoDto> envList = scriptDataDto.getScriptEnv();
-            appEnvInfoService.saveOrUpdateScriptEnvList(scriptDataDto.getId(), envList);
+            scriptEnvDataService.saveOrUpdateScriptEnvList(scriptDataDto.getId(), envList);
             if(CharSequenceUtil.isEmpty(scriptDataDto.getScriptFile())){
-                //更新脚本取参内容
-                ScriptData dbScriptData = getById(scriptDataDto.getId());
+                //旧的脚本内容
                 String scriptFile = dbScriptData.getScriptFile();
-                int startIndex = scriptFile.indexOf(AppScriptUtils.ENV_GET_START_LINE);
-                int endIndex = scriptFile.indexOf(AppScriptUtils.ENV_GET_END_LINE);
-                String getEnvScript = AppScriptUtils.generateShellEnvScript(appEnvInfoService.getVoListByScriptId(entity.getId()));
-                if(startIndex <=0 && endIndex <=0 ){
+                String scriptContext = "";
+                //脚本正文开始位置
+                int scriptIndex = scriptFile.indexOf(ScriptDataUtils.SCRIPT_CONTEXT);
+                //兼容老的脚本生成
+                if(scriptIndex <=0){
+                    scriptIndex = scriptFile.indexOf(ScriptDataUtils.ENV_GET_START_LINE);
+                    //截取脚本正文内容
+                    scriptContext = CharSequenceUtil.subAfter(scriptFile, ScriptDataUtils.ENV_GET_START_LINE, true);
+                }else {
+                    //截取脚本正文内容
+                    scriptContext = CharSequenceUtil.subAfter(scriptFile, ScriptDataUtils.SCRIPT_CONTEXT, true);
+                }
+                //生成上半部分内容
+                String getEnvScript = ScriptDataUtils.generateShellEnvScript(scriptEnvDataService.getVoListByScriptId(entity.getId()));
+                if(scriptIndex <=0){
+                    //不存在上半部分内容则直接拼接
                     scriptFile = getEnvScript + scriptFile;
                 }else {
-                    getEnvScript = getEnvScript.replace(AppScriptUtils.ENV_GET_END_LINE,"");
-                    String envGetScript = CharSequenceUtil.sub(scriptFile, startIndex, endIndex);
-                    scriptFile = scriptFile.replace(envGetScript,getEnvScript);
+                    //拼接新的上半部分内容拼接到正文前
+                    scriptFile = StrBuilder.create(getEnvScript).append(scriptContext).toString();
                 }
-                ScriptData scriptData = ScriptData.builder().id(entity.getId()).scriptFile(scriptFile).build();
-                updateById(scriptData);
+                entity.setScriptFile(scriptFile);
             }
         }
-        return result;
+        return update(entity, wrapper);
     }
 
     @Override
@@ -176,7 +190,7 @@ public class ScriptDataServiceImpl extends BaseServiceImpl<ScriptData, MpBaseQo<
         wrapper.eq(ScriptData::getId, id);
         boolean result = remove(wrapper);
         if (result) {
-            appEnvInfoService.removeByAppId((Long) id);
+            scriptEnvDataService.removeByAppId((Long) id);
         }
         return result;
     }

@@ -3,8 +3,6 @@ import dayjs from 'dayjs';
 import {
   Form,
   Input,
-  Select,
-  DatePicker,
   Button,
   Grid,
 } from '@arco-design/web-react';
@@ -13,8 +11,6 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { statusEnum } from './constants';
-import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
@@ -53,22 +49,6 @@ function SearchForm(props: {
         wrapperCol={{ span: 19 }}
       >
         <Row gutter={24}>
-          <Col span={colSpan}>
-            <Form.Item
-              label={t['searchTable.columns.applicationName']}
-              field="applicationName"
-            >
-              <Input placeholder={t['searchForm.applicationName.placeholder']} allowClear />
-            </Form.Item>
-          </Col> 
-          <Col span={colSpan}>
-            <Form.Item
-              label={t['searchTable.columns.appName']}
-              field="appName"
-            >
-              <Input placeholder={t['searchForm.appName.placeholder']} allowClear />
-            </Form.Item>
-          </Col> 
           <Col span={colSpan}>
             <Form.Item
               label={t['searchTable.columns.scriptName']}

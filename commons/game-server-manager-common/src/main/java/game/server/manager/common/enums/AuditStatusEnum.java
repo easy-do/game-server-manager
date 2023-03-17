@@ -11,8 +11,8 @@ public enum AuditStatusEnum {
 
     /***/
     DRAFT(0,"草稿"),
-    AUDIT_ING(1,"审核中"),
-    AUDIT_SUCCESS(2,"审核通过"),
+    AUDIT_SUCCESS(1,"审核通过"),
+    AUDIT_ING(2,"审核中"),
     AUDIT_FAILED(3,"审核驳回"),
 
     LOCKED(4,"审核锁定");

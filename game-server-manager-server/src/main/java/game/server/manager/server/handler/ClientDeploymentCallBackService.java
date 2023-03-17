@@ -11,15 +11,13 @@ import cn.hutool.crypto.asymmetric.RSA;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.common.enums.DeploymentCallBackTypeEnum;
-import game.server.manager.common.enums.ScriptTypeEnum;
 import game.server.manager.common.mode.ClientDeployData;
 import game.server.manager.common.mode.DeploymentCallBackData;
 import game.server.manager.common.mode.ExecuteLogModal;
 import game.server.manager.common.mode.SyncData;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
-import game.server.manager.common.vo.AppEnvInfoVo;
-import game.server.manager.common.vo.AppInfoVo;
+import game.server.manager.common.vo.ScriptEnvDataVo;
 import game.server.manager.common.vo.ScriptDataVo;
 import game.server.manager.event.BasePublishEventServer;
 import game.server.manager.handler.AbstractHandlerService;
@@ -27,7 +25,7 @@ import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.entity.ScriptData;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.ExecuteLog;
-import game.server.manager.server.service.AppEnvInfoService;
+import game.server.manager.server.service.ScriptEnvDataService;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.ScriptDataService;
 import game.server.manager.server.service.ClientInfoService;
@@ -57,7 +55,7 @@ public class ClientDeploymentCallBackService extends AbstractHandlerService<Sync
     private ScriptDataService scriptDataService;
 
     @Autowired
-    private AppEnvInfoService appEnvInfoService;
+    private ScriptEnvDataService scriptEnvDataService;
 
     @Autowired
     private BasePublishEventServer basePublishEventServer;
@@ -177,7 +175,7 @@ public class ClientDeploymentCallBackService extends AbstractHandlerService<Sync
     private ScriptDataVo getAppScriptVo(String appScriptId){
         ScriptData scriptData = scriptDataService.getById(appScriptId);
         ScriptDataVo scriptDataVo = BeanUtil.copyProperties(scriptData, ScriptDataVo.class);
-        List<AppEnvInfoVo> envInfoVoList = appEnvInfoService.getVoListByScriptId(scriptData.getId());
+        List<ScriptEnvDataVo> envInfoVoList = scriptEnvDataService.getVoListByScriptId(scriptData.getId());
         scriptDataVo.setScriptEnv(envInfoVoList);
         return scriptDataVo;
     }
@@ -189,7 +187,7 @@ public class ClientDeploymentCallBackService extends AbstractHandlerService<Sync
             String[] basicScriptIds = basicScriptStr.split(",");
             for (String basicScriptId: basicScriptIds) {
                 ScriptData basicScript = scriptDataService.getById(basicScriptId);
-                List<AppEnvInfoVo> basicScriptEnvInfoVoList = appEnvInfoService.getVoListByScriptId(scriptDataVo.getId());
+                List<ScriptEnvDataVo> basicScriptEnvInfoVoList = scriptEnvDataService.getVoListByScriptId(scriptDataVo.getId());
                 ScriptDataVo basicScriptVo = BeanUtil.copyProperties(basicScript, ScriptDataVo.class);
                 basicScriptVo.setScriptEnv(basicScriptEnvInfoVoList);
                 appScriptList.add(basicScriptVo);

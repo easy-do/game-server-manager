@@ -1,27 +1,50 @@
-import React, { useContext, useRef } from 'react';
-import { Form, FormInstance, Input, Modal, DatePicker, Select, Notification, Upload } from '@arco-design/web-react';
+import { Form, FormInstance, Input, Modal, Select, Spin, Notification, Upload } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { addRequest } from '@/api/application';
+import { updateRequest, infoRequest } from '@/api/application';
 import { GlobalContext } from '@/context';
+import { useContext, useEffect, useRef } from 'react';
+import React from 'react';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
-import { customRequest, onPreview, onRemove } from '@/components/Upload/fileToBase64';
+import { base6CcovertFile, customRequest, onPreview, onRemove } from '@/components/Upload/fileToBase64';
 
-function AddPage({ visible, setVisible, successCallBack }) {
-  
+function UpdatePage({ id, visible, setVisible, successCallBack }) {
+
   const TextArea = Input.TextArea;
-  
+
   const formRef = useRef<FormInstance>();
 
   const { lang } = useContext(GlobalContext);
 
+  const [loading, setLoading] = React.useState(false);
+  
+  //加载数据
+  function fetchData() {
+    if (id !== undefined && visible) {
+      setLoading(true)
+      infoRequest(id).then((res) => {
+        const { success, data } = res.data;
+        if (success) {
+          const icons = base6CcovertFile(data.icon)
+          formRef.current.setFieldsValue({...data,icon:icons});
+        }
+        setLoading(false)
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [id,visible]);
+
   const t = useLocale(locale);
 
+  //提交修改
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
       const icon = values.icon;
       const iocnBase64 = icon[0].response;
-      addRequest({
+      updateRequest({
         ...values,
         icon: iocnBase64
       }).then((res) => {
@@ -36,7 +59,7 @@ function AddPage({ visible, setVisible, successCallBack }) {
 
   return (
     <Modal
-      title={t['searchTable.operations.add']}
+      title={t['searchTable.update.title']}
       visible={visible}
       onOk={() => {
         handleSubmit();
@@ -49,12 +72,20 @@ function AddPage({ visible, setVisible, successCallBack }) {
       maskClosable={false}
     >
       <Form
-        ref={formRef}
         style={{ width: '95%', marginTop: '6px' }}
         labelCol={{ span: lang === 'en-US' ? 7 : 6 }}
         wrapperCol={{ span: lang === 'en-US' ? 17 : 18 }}
+        ref={formRef}
         labelAlign="left"
       >
+      <Spin tip='loading Data...' loading={loading}>
+        <Form.Item
+          label={t['searchTable.columns.id']}
+          field="id"
+          hidden
+        >
+          <Input placeholder={t['searchForm.id.placeholder']} allowClear />
+        </Form.Item>
         <Form.Item
           label={t['searchTable.columns.applicationName']}
           field="applicationName"
@@ -65,6 +96,7 @@ function AddPage({ visible, setVisible, successCallBack }) {
           <Input placeholder={t['searchForm.applicationName.placeholder']} allowClear />
         </Form.Item>
         <Form.Item
+          triggerPropName='fileList'
           label={t['searchTable.columns.icon']}
           field="icon"
           rules={[
@@ -84,7 +116,6 @@ function AddPage({ visible, setVisible, successCallBack }) {
         <Form.Item
           label={t['searchTable.columns.scope']}
           field="scope"
-          initialValue={0}
           rules={[
             { required: true, message: t['searchTable.rules.scope.required'] },
           ]}
@@ -100,9 +131,10 @@ function AddPage({ visible, setVisible, successCallBack }) {
         >
           <TextArea placeholder={t['searchForm.description.placeholder']} />
         </Form.Item>
+      </Spin>
       </Form>
     </Modal>
   );
 }
 
-export default AddPage;
+export default UpdatePage;

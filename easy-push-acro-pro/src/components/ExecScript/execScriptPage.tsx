@@ -1,4 +1,4 @@
-import { appEnvListByScriptId } from '@/api/appEnv';
+import { envDataListByScriptId } from '@/api/scriptData';
 import { execScript, list } from '@/api/scriptData';
 import { GlobalContext } from '@/context';
 import useLocale from '@/utils/useLocale';
@@ -21,26 +21,33 @@ function ExecScriptPage({ deviceId, deviceType, visible, setVisible, successCall
     const [envs, setEnvs] = useState([]);
 
     function scriptOnchage(value) {
-        setLoading(true)
-        appEnvListByScriptId(value).then((res) => {
-            const { success, data } = res.data;
-            if (success) {
-                const envs = []
-                data.map((item) => {
-                    item.env.map((item1) => {
-                        envs.push(
-                            <Form.Item
-                                label={item1.envName}
-                                initialValue={item1.envValue}
-                                field={'env.' + item1.envKey} >
-                                <Input />
-                            </Form.Item>)
-                    })
-                })
-                setEnvs(envs)
+        try{
+            const values = value.split('--');
+            if(values.length === 2){
+                setLoading(true)
+                envDataListByScriptId(values[0]).then((res) => {
+                    const { success, data } = res.data;
+                    if (success) {
+                        const envs = []
+                        data.map((item) => {
+                            item.env.map((item1) => {
+                                envs.push(
+                                    <Form.Item
+                                        label={item1.envName}
+                                        initialValue={item1.envValue}
+                                        field={'env.' + item1.envKey} >
+                                        <Input />
+                                    </Form.Item>)
+                            })
+                        })
+                        setEnvs(envs)
+                    }
+                    setLoading(false);
+                });
             }
-            setLoading(false);
-        });
+        }catch{
+
+        }
     }
 
     //加载数据
@@ -54,8 +61,8 @@ function ExecScriptPage({ deviceId, deviceType, visible, setVisible, successCall
                     const newOptions = [];
                     data.map((item) => {
                         newOptions.push({
-                            value: item.id,
-                            label: item.scriptName,
+                            value: item.id+'--'+item.scriptName,
+                            label: item.scriptName + ':' + item.version +' by:'+ item.author,
                             key: item.id,
                         });
                     });
@@ -118,6 +125,7 @@ function ExecScriptPage({ deviceId, deviceType, visible, setVisible, successCall
                     ]}
                 >
                     <Select
+                        showSearch
                         placeholder={t['searchForm.script.placeholder']}
                         options={options}
                         onChange={scriptOnchage}

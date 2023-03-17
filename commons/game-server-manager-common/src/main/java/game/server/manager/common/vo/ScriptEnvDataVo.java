@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppEnvInfoVo implements Serializable {
+public class ScriptEnvDataVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
