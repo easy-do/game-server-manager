@@ -5,7 +5,7 @@ import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSONObject;
 import game.server.manager.common.exception.BizException;
-import game.server.manager.common.vo.AppEnvInfoVo;
+import game.server.manager.common.vo.ScriptEnvDataVo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,18 +18,14 @@ import java.util.List;
  * @date 2022/8/20
  */
 
-public class AppScriptUtils {
+public class ScriptDataUtils {
 
 
-    public static final List<AppEnvInfoVo> GLOBAL_ENV_LIST = ListUtil.toList(
-            AppEnvInfoVo.builder().envName("应用id").envKey("APPLICATION_ID").envValue("no").shellKey("a").description("全局变量(勿删)-应用id").build(),
-            AppEnvInfoVo.builder().envName("appId").envKey("APP_ID").envValue("no").shellKey("b").description("全局变量(勿删)-app的Id").build(),
-            AppEnvInfoVo.builder().envName("app版本").envKey("APP_VERSION").envValue("no").shellKey("c").description("全局变量(勿删)-应用版本").build(),
-            AppEnvInfoVo.builder().envName("客户端id").envKey("CLIENT_ID").envValue("no").shellKey("d").description("全局变量(勿删)-客户端id").build(),
-            AppEnvInfoVo.builder().envName("客户端版本").envKey("CLIENT_VERSION").envValue("no").shellKey("e").description("全局变量(勿删)-客户端版本").build()
+    public static final List<ScriptEnvDataVo> GLOBAL_ENV_LIST = ListUtil.toList(
+            ScriptEnvDataVo.builder().envName("脚本版本").envKey("SCRIPT_VERSION").envValue("no").shellKey("c").description("全局变量(勿删)-应用版本").build()
     );
 
-    public static final List<String> GLOBAL_SHELL_KEY_LIST = Arrays.asList("a","b","c","d","e");
+    public static final List<String> GLOBAL_SHELL_KEY_LIST = Arrays.asList("a");
 
     public static final String SCRIPT_START_LINE = "#!/bin/bash\n";
 
@@ -68,7 +64,9 @@ public class AppScriptUtils {
 
     public static final String EXEC_LINE = "#脚本执行示例: sh xxx.sh #shellEnvs \n";
 
-    private AppScriptUtils() {
+    public static final String SCRIPT_CONTEXT = "#-----scriptContent-----\n";
+
+    private ScriptDataUtils() {
     }
 
     /**
@@ -110,16 +108,16 @@ public class AppScriptUtils {
     /**
      * 生成变量取参脚本
      *
-     * @param appEnvInfoVoList appEnvInfoVoList
+     * @param scriptEnvDataVoList scriptEnvDataVoList
      * @return java.lang.String
      * @author laoyu
      * @date 2022/8/21
      */
-    public static String generateShellEnvScript(List<AppEnvInfoVo> appEnvInfoVoList){
+    public static String generateShellEnvScript(List<ScriptEnvDataVo> scriptEnvDataVoList){
         //添加固定的全局变量
-        List<AppEnvInfoVo> allEnvList = new ArrayList<>();
+        List<ScriptEnvDataVo> allEnvList = new ArrayList<>();
         allEnvList.addAll(GLOBAL_ENV_LIST);
-        allEnvList.addAll(appEnvInfoVoList);
+        allEnvList.addAll(scriptEnvDataVoList);
         //开始生成脚本
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(ENV_GET_START_LINE);
@@ -128,15 +126,15 @@ public class AppScriptUtils {
             stringBuilder.append(EXPORT.replace("#envKey",appEnvInfoVo.getEnvKey()).replace("#envValue",appEnvInfoVo.getEnvValue()));
         });
         StringBuilder shellKeysBuilder = new StringBuilder();
-        for (AppEnvInfoVo appEnvInfoVo:allEnvList) {
-            shellKeysBuilder.append(":").append(appEnvInfoVo.getShellKey());
+        for (ScriptEnvDataVo scriptEnvDataVo :allEnvList) {
+            shellKeysBuilder.append(":").append(scriptEnvDataVo.getShellKey());
         }
         stringBuilder.append(WHILE_LINE.replace("#shellKeys",shellKeysBuilder.toString()));
         stringBuilder.append(DO_LINE);
         stringBuilder.append(CASE_LINE);
-        for (AppEnvInfoVo appEnvInfoVo:allEnvList) {
-            stringBuilder.append(SHELL_KEY_LINE.replace("#shellKey",appEnvInfoVo.getShellKey()));
-            stringBuilder.append(SET_KEY_LINE.replace("#envKey",appEnvInfoVo.getEnvKey()));
+        for (ScriptEnvDataVo scriptEnvDataVo :allEnvList) {
+            stringBuilder.append(SHELL_KEY_LINE.replace("#shellKey", scriptEnvDataVo.getShellKey()));
+            stringBuilder.append(SET_KEY_LINE.replace("#envKey", scriptEnvDataVo.getEnvKey()));
         }
         stringBuilder.append(OTHER_KEY_LINE);
         stringBuilder.append(ECHO_NO_LINE);
@@ -151,14 +149,15 @@ public class AppScriptUtils {
         allEnvList.forEach(appEnvInfoVo -> execShellEnvs.append("-").append(appEnvInfoVo.getShellKey()).append(" '").append(appEnvInfoVo.getEnvValue()).append("' "));
         stringBuilder.append(EXEC_LINE.replace("#shellEnvs",execShellEnvs.toString()));
         stringBuilder.append(ENV_GET_END_LINE);
+        stringBuilder.append(SCRIPT_CONTEXT);
         return stringBuilder.toString();
     }
 
-    public static String generateExecShellEnvs(JSONObject env, List<AppEnvInfoVo> appEnvInfoVoList) {
+    public static String generateExecShellEnvs(JSONObject env, List<ScriptEnvDataVo> scriptEnvDataVoList) {
         //添加固定的全局变量
-        List<AppEnvInfoVo> allEnvList = new ArrayList<>();
+        List<ScriptEnvDataVo> allEnvList = new ArrayList<>();
         allEnvList.addAll(GLOBAL_ENV_LIST);
-        allEnvList.addAll(appEnvInfoVoList);
+        allEnvList.addAll(scriptEnvDataVoList);
         //开始生成传参指令
         StringBuilder stringBuilder = new StringBuilder();
         allEnvList.forEach(appEnvInfoVo -> {

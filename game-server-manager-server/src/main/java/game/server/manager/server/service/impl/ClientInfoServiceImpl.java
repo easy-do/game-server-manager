@@ -19,7 +19,7 @@ import game.server.manager.common.enums.ClientMessageTypeEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.ClientData;
-import game.server.manager.common.utils.AppScriptUtils;
+import game.server.manager.common.utils.ScriptDataUtils;
 import game.server.manager.common.vo.ClientInfoVo;
 import game.server.manager.common.vo.SysDictDataVo;
 import game.server.manager.event.BasePublishEventServer;
@@ -34,7 +34,7 @@ import game.server.manager.server.entity.ServerInfo;
 import game.server.manager.server.mapper.ClientInfoMapper;
 import game.server.manager.server.mapstruct.ClientInfoMapstruct;
 import game.server.manager.server.redis.ExecScriptListenerMessage;
-import game.server.manager.server.service.AppEnvInfoService;
+import game.server.manager.server.service.ScriptEnvDataService;
 import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
@@ -85,7 +85,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
     private BasePublishEventServer basePublishEventServer;
 
     @Autowired
-    private AppEnvInfoService appEnvInfoService;
+    private ScriptEnvDataService scriptEnvDataService;
 
     @Override
     public void listSelect(LambdaQueryWrapper<ClientInfo> wrapper) {
@@ -258,7 +258,7 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
         env.put("CLIENT_VERSION", appInfo.getVersion());
         env.put("PUBLIC_KEY", client.getPublicKey());
         String installScriptId = getInstallScriptId();
-        return clientInstallCmd + " "+ AppScriptUtils.generateExecShellEnvs(env,appEnvInfoService.getVoListByScriptId(Long.valueOf(installScriptId)));
+        return clientInstallCmd + " "+ ScriptDataUtils.generateExecShellEnvs(env, scriptEnvDataService.getVoListByScriptId(Long.valueOf(installScriptId)));
     }
 
     @Override

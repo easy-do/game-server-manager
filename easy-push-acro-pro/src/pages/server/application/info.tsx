@@ -2,14 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Descriptions, Modal, Skeleton } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { infoRequest } from '@/api/applicationInfo';
-import { DataInfoVo } from './constants';
-import Paragraph from '@arco-design/web-react/es/Typography/paragraph';
+import { infoRequest } from '@/api/application';
+import { DataInfoVo, scopeEnum, statusEnum } from './constants';
 
 
 function InfoPage(props: {id:number,visible,setVisible}) {
-
-  const t = useLocale(locale);
   
     const [loading,setLoading] = useState(false)
 
@@ -32,73 +29,53 @@ function InfoPage(props: {id:number,visible,setVisible}) {
         fetchData();
       }, [props.id,props.visible]);
 
-
-
-  let pluginsData:any = {}
-  if(infoData && infoData.pluginsData){
-    pluginsData = JSON.parse(infoData.pluginsData)
-  }
+  const t = useLocale(locale);
 
   const data = [
     {
-      label: t['searchTable.columns.applicationId'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.applicationId:'',
+      // label: t['searchTable.columns.icon'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? <img
+      src={infoData.icon}
+      style={{
+        maxWidth: '100%',
+      }}
+    ></img>:'',
+    },
+    {
+      label: t['searchTable.columns.id'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.id:'',
     },
     {
       label: t['searchTable.columns.applicationName'],
       value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.applicationName:'',
     },
     {
-      label: t['searchTable.columns.deviceName'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.deviceName:'',
-    },
-    // {
-    //   label: t['searchTable.columns.deviceType'],
-    //   value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.deviceType:'',
-    // },
-    {
-      label: t['searchTable.columns.appName'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.appName:'',
-    },
-    {
       label: t['searchTable.columns.status'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.status:'',
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? statusEnum[infoData.status]:'',
+    },
+    {
+      label: t['searchTable.columns.scope'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? scopeEnum[infoData.scope]:'',
+    },
+    {
+      label: t['searchTable.columns.description'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.description:'',
+    },
+    {
+      label: t['searchTable.columns.author'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.author:'',
+    },
+    {
+      label: t['searchTable.columns.heat'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.heat:'',
     },
     {
       label: t['searchTable.columns.createTime'],
       value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.createTime:'',
     },
-    // {
-    //   label: t['searchTable.columns.updateTime'],
-    //   value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.updateTime:'',
-    // },
     {
-      label: t['searchTable.columns.lastUpTime'],
-      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.lastUpTime:'',
-    },
-    {
-      label: t['searchTable.columns.pluingsData.version'],
-      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : pluginsData && pluginsData.version ? pluginsData.version : '未同步',
-    },
-    {
-      label: t['searchTable.columns.pluingsData.ip'],
-      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : pluginsData && pluginsData.ip ? pluginsData.ip : '未同步',
-    },
-    {
-      label: t['searchTable.columns.pluingsData.systemInfo.osName'],
-      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : pluginsData && pluginsData.systemInfo ? pluginsData.systemInfo.osName : '未同步',
-    },
-    {
-      label: t['searchTable.columns.pluingsData.systemInfo.cpuInfo'],
-      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : pluginsData && pluginsData.systemInfo ? pluginsData.systemInfo.cpuInfo : '未同步',
-    },
-    {
-      label: t['searchTable.columns.pluingsData.systemInfo.memory'],
-      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : pluginsData && pluginsData.systemInfo ? pluginsData.systemInfo.memory : '未同步',
-    },
-    {
-      label: t['searchTable.columns.pluginsData'],
-      value: loading ? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : pluginsData ? <Paragraph copyable={{tooltips:pluginsData.config,text:pluginsData.config}} >点击复制</Paragraph> : '未同步',
+      label: t['searchTable.columns.updateTime'],
+      value: loading? <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation /> : infoData? infoData.updateTime:'',
     },
   ];
 

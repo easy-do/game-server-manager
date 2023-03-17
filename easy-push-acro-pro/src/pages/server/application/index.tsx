@@ -7,23 +7,26 @@ import {
   Space,
   Typography,
   Notification,
-  Modal,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
+import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
-import { managerPage, removeRequest } from '@/api/applicationInfo';
-import { SearchTypeEnum } from '@/utils/systemConstant';
+import {
+  getColumns,
+  getDefaultOrders,
+  getSearChColumns,
+  searchConfig,
+} from './constants';
+import { managerPage, removeRequest } from '@/api/application';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
+import UpdatePage from './update';
 import AddPage from './add';
-import ExecuteLogSearchTable from '../executeLog';
-import ExecScriptPage from '@/components/ExecScript/execScriptPage';
-
+import { audit, commitAudit } from '@/api/audit';
+import AuditModal from '@/pages/audit/auditModal';
 
 const { Title } = Typography;
 
@@ -34,34 +37,37 @@ function SearchTable() {
   const tableCallback = async (record, type) => {
     //查看
     if (type === 'view') {
-      viewInfo(record.applicationId);
-    }
-    //删除
-    if (type === 'remove') {
-      removeData(record.applicationId);
-    }
-    //查看日志
-    if (type === 'log') {
-      viewLog(record.applicationId);
+      viewInfo(record.id);
     }
 
-    //执行脚本
-    if (type === 'execScript') {
-      execScript(record.applicationId,record.appId);
+    //编辑
+    if (type === 'update') {
+      updateInfo(record.id);
+    }
+
+    //删除
+    if (type === 'remove') {
+      removeData(record.id);
+    }
+
+    //提交审核
+    if (type === 'submitAudit') {
+      submitAudit({ id: record.id, auditType: 2 });
+    }
+    //审核
+    if (type === 'audit') {
+      audit(record.id);
     }
   };
 
+  //查看
   const [viewInfoId, setViewInfoId] = useState();
   const [isViewInfo, setisViewInfo] = useState(false);
 
-  //查看
   function viewInfo(id) {
     setViewInfoId(id);
     setisViewInfo(true);
   }
-
-  const [updateId, setUpdateId] = useState();
-  const [isUpdateInfo, setisUpdateInfo] = useState(false);
 
   //新增
   const [isAddData, setIsAddData] = useState(false);
@@ -75,44 +81,55 @@ function SearchTable() {
     fetchData();
   }
 
-  //删除
-  function removeData(id) {
-    removeRequest(id).then((res) => {
-      const { success, msg } = res.data
-      if (success) {
-        Notification.success({ content: msg, duration: 300 })
-        fetchData();
-      }
-    })
+  const [updateId, setUpdateId] = useState();
+  const [isUpdateInfo, setisUpdateInfo] = useState(false);
+
+  //编辑
+  function updateInfo(id) {
+    setUpdateId(id);
+    setisUpdateInfo(true);
   }
 
-  //查看日志
-  const [viewLogId, setViewLogId] = useState();
-  const [isViewLog, setIsViewLog] = useState(false);
-
-
-  function viewLog(id) {
-    setViewLogId(id);
-    setIsViewLog(true);
-  }
-
-  //执行脚本
-  const [execScriptApplicationId, setExecScriptApplicationId] = useState();
-  const [execScriptAppId, setExecScriptAppId] = useState();
-  const [isExscScript, setIsExscScript] = useState(false);
-
-
-  function execScript(applicationId,appId) {
-    setExecScriptApplicationId(applicationId);
-    setExecScriptAppId(appId);
-    setIsExscScript(true);
-  }
-
-  function execScriptSuccess() {
-    setIsExscScript(false);
+  function updateSuccess() {
+    setisUpdateInfo(false);
     fetchData();
   }
 
+  //删除
+  function removeData(id) {
+    removeRequest(id).then((res) => {
+      const { success, msg } = res.data;
+      if (success) {
+        Notification.success({ content: msg, duration: 300 });
+        fetchData();
+      }
+    });
+  }
+
+  //提交审核
+  function submitAudit(id) {
+    commitAudit(id).then((res) => {
+      const { success, msg } = res.data;
+      if (success) {
+        Notification.success({ content: msg, duration: 300 });
+        fetchData();
+      }
+    });
+  }
+
+  //审核
+  function audit(id) {
+    setAuditId(id);
+    setIsaudit(true);
+  }
+
+  const [auditId, setAuditId] = useState();
+  const [isAudit, setIsaudit] = useState(false);
+
+  function auditSuccess() {
+    setIsaudit(false);
+    fetchData();
+  }
 
   //获取表格展示列表、绑定操作列回调
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
@@ -148,12 +165,7 @@ function SearchTable() {
       searchParam: formParams,
       orders: orders,
       columns: getSearChColumns(),
-      searchConfig: {
-        applicationName: SearchTypeEnum.LIKE,
-        deviceName: SearchTypeEnum.LIKE,
-        appName: SearchTypeEnum.LIKE,
-        lastUpTime: SearchTypeEnum.BETWEEN,
-      },
+      searchConfig: searchConfig(),
     }).then((res) => {
       setData(res.data.data);
       setPatination({
@@ -209,7 +221,11 @@ function SearchTable() {
       >
         <div className={styles['button-group']}>
           <Space>
-            <Button type="primary" icon={<IconPlus />} onClick={() => addData()}>
+            <Button
+              type="primary"
+              icon={<IconPlus />}
+              onClick={() => addData()}
+            >
               {t['searchTable.operations.add']}
             </Button>
           </Space>
@@ -233,29 +249,20 @@ function SearchTable() {
         visible={isViewInfo}
         setVisible={setisViewInfo}
       />
-      <ExecScriptPage        
-        deviceId={execScriptApplicationId}
-        deviceType={1}
-        visible={isExscScript}
-        setVisible={setIsExscScript}
-        successCallBack={execScriptSuccess}
-        />
-      <Modal
-        title={t['searchTable.operations.add']}
-        visible={isViewLog}
-        onOk={() => {
-          setIsViewLog(false);
-        }}
-        onCancel={() => {
-          setIsViewLog(false);
-        }}
-        autoFocus={false}
-        focusLock={true}
-        maskClosable={false}
-        style={{ width: "100%", minHeight: "100%" }}
-      >
-        <ExecuteLogSearchTable deviceId={viewLogId} visible={isViewLog} />
-      </Modal>
+      <UpdatePage
+        id={updateId}
+        visible={isUpdateInfo}
+        setVisible={setisUpdateInfo}
+        successCallBack={updateSuccess}
+      />
+      <AuditModal
+        title="应用审核"
+        id={auditId}
+        auditType={2}
+        visible={isAudit}
+        setVisible={setIsaudit}
+        successCallBack={auditSuccess}
+      />
     </Card>
   );
 }

@@ -45,7 +45,7 @@ public class ScriptDataVo implements Serializable {
     /**
      * 环境变量
      */
-    private List<AppEnvInfoVo> scriptEnv;
+    private List<ScriptEnvDataVo> scriptEnv;
 
     /**
      * 脚本文件

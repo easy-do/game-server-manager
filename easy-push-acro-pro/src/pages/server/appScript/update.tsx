@@ -15,14 +15,14 @@ import {
 } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { updateRequest, infoRequest } from '@/api/appScript';
+import { updateRequest, infoRequest } from '@/api/scriptData';
 import { GlobalContext } from '@/context';
 import { useContext, useEffect, useRef } from 'react';
 import React from 'react';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 import RequestSelect from '@/components/RequestSelect/RequestSelect';
 import { list as appList } from '@/api/appInfo';
-import { list as scriptList } from '@/api/appScript';
+import { list as scriptList } from '@/api/scriptData';
 import { IconDelete } from '@arco-design/web-react/icon';
 
 function UpdatePage({ id, visible, setVisible, successCallBack }) {
@@ -124,20 +124,6 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
               <Input
                 placeholder={t['searchForm.scriptName.placeholder']}
                 allowClear
-              />
-            </Form.Item>
-          </Grid.Col>
-          <Grid.Col span={8}>
-            <Form.Item
-              label={t['searchTable.columns.adaptationAppId']}
-              field="adaptationAppId"
-            >
-              <RequestSelect
-                placeholder={t['searchForm.adaptationAppId.placeholder']}
-                lableFiled="appName"
-                valueFiled="id"
-                valueType="string"
-                request={() => appList()}
               />
             </Form.Item>
           </Grid.Col>

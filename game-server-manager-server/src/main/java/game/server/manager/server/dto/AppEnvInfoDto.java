@@ -6,7 +6,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 应用变量
+ * 脚本变量
  * @author yuzhanfeng
  */
 @Data

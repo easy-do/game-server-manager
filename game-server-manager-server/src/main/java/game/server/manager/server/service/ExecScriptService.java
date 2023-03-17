@@ -22,12 +22,11 @@ import game.server.manager.common.enums.DeviceTypeEnum;
 import game.server.manager.common.enums.ExecScriptEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
-import game.server.manager.common.utils.AppScriptUtils;
+import game.server.manager.common.utils.ScriptDataUtils;
 import game.server.manager.common.vo.ExecScriptVo;
 import game.server.manager.event.BasePublishEventServer;
 import game.server.manager.redis.config.RedisStreamUtils;
 import game.server.manager.server.application.DeploymentLogServer;
-import game.server.manager.server.entity.AppInfo;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.server.entity.ScriptData;
@@ -85,7 +84,7 @@ public class ExecScriptService {
     private BasePublishEventServer basePublishEventServer;
 
     @Autowired
-    private AppEnvInfoService appEnvInfoService;
+    private ScriptEnvDataService scriptEnvDataService;
 
     @Autowired
     private DeploymentLogServer deploymentLogServer;
@@ -271,7 +270,7 @@ public class ExecScriptService {
             if(Objects.isNull(env)){
                 env = new JSONObject();
             }
-            String execShellEnv = AppScriptUtils.generateExecShellEnvs(env,appEnvInfoService.getVoListByScriptId(scriptData.getId()));
+            String execShellEnv = ScriptDataUtils.generateExecShellEnvs(env, scriptEnvDataService.getVoListByScriptId(scriptData.getId()));
             stringBuilder.append(" ").append(execShellEnv);
             exec(session, stringBuilder.toString(), CharsetUtil.CHARSET_UTF_8, logId, stdout);
             saveLogLine(logId, stdout, "------------------脚本《" + scriptName + "》运行完毕--------------------");

@@ -16,16 +16,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 应用变量
+ * 脚本变量
  * @author yuzhanfeng
- * @TableName app_env_info
+ * @TableName script_env_data
  */
 @Data
 @Builder
-@TableName(value ="app_env_info")
+@TableName(value ="script_env_data")
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppEnvInfo implements Serializable {
+public class ScriptEnvData implements Serializable {
 
     @Serial
     @TableField(exist = false)
@@ -40,7 +40,7 @@ public class AppEnvInfo implements Serializable {
     /**
      * 所属脚本id
      */
-    private Long appId;
+    private Long scriptId;
 
     /**
      * 变量名称

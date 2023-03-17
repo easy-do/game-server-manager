@@ -6,8 +6,9 @@ import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.event.BasePublishEventServer;
 import game.server.manager.server.dto.AuditDto;
 import game.server.manager.server.entity.AppInfo;
+import game.server.manager.server.entity.Application;
 import game.server.manager.server.entity.Discussion;
-import game.server.manager.server.service.AppInfoService;
+import game.server.manager.server.service.ApplicationService;
 import game.server.manager.server.service.AuditService;
 import game.server.manager.server.service.DiscussionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class AuditServiceImpl implements AuditService {
     private DiscussionService discussionService;
 
     @Autowired
-    private AppInfoService appInfoService;
+    private ApplicationService applicationService;
 
     @Override
     @CacheInvalidate(name = "AppInfoService.storePage")
@@ -41,7 +42,7 @@ public class AuditServiceImpl implements AuditService {
             case 1:
                 return auditDiscussion(dto);
             case 2:
-                return auditApp(dto);
+                return auditApplication(dto);
             default:
                 return false;
         }
@@ -55,24 +56,24 @@ public class AuditServiceImpl implements AuditService {
             case 1:
                 return commitDiscussionAudit(auditDto);
             case 2:
-                return commitAppAudit(auditDto);
+                return commitApplicationAudit(auditDto);
             default:
                 return false;
         }
     }
 
-    private boolean commitAppAudit(AuditDto auditDto) {
-        AppInfo appInfo = appInfoService.getById(auditDto.getId());
-        if(Objects.isNull(appInfo)){
-            throw ExceptionFactory.bizException("APP不存在");
+    private boolean commitApplicationAudit(AuditDto auditDto) {
+        Application application = applicationService.getById(auditDto.getId());
+        if(Objects.isNull(application)){
+            throw ExceptionFactory.bizException("应用不存在");
         }
-        if(!AuditStatusEnum.canCommitAudit(appInfo.getIsAudit())){
+        if(!AuditStatusEnum.canCommitAudit(application.getStatus())){
             throw ExceptionFactory.bizException("当前状态无法在提交审核.");
         }
-        AppInfo entity = AppInfo.builder().id(auditDto.getId()).isAudit(AuditStatusEnum.AUDIT_ING.getState()).build();
-        boolean result = appInfoService.updateById(entity);
+        Application entity = Application.builder().id(auditDto.getId()).status(AuditStatusEnum.AUDIT_ING.getState()).build();
+        boolean result = applicationService.updateById(entity);
         //发送待审核事件
-        basePublishEventServer.publishAwaitAuditEvent("APP待审核通知",appInfo.getAppName(),"");
+        basePublishEventServer.publishAwaitAuditEvent("应用待审核通知",application.getApplicationName(),"");
         return result;
     }
 
@@ -110,20 +111,20 @@ public class AuditServiceImpl implements AuditService {
     }
 
 
-    private boolean auditApp(AuditDto dto){
-        AppInfo appInfo = appInfoService.getById(dto.getId());
-        if(Objects.isNull(appInfo)){
-            throw ExceptionFactory.bizException("APP不存在");
+    private boolean auditApplication(AuditDto dto){
+        Application application = applicationService.getById(dto.getId());
+        if(Objects.isNull(application)){
+            throw ExceptionFactory.bizException("应用不存在");
         }
         int status = dto.getStatus();
-        AppInfo entity = AppInfo.builder().id(dto.getId()).isAudit(status).build();
-        boolean result = appInfoService.updateById(entity);
+        Application entity = Application.builder().id(dto.getId()).status(status).build();
+        boolean result = applicationService.updateById(entity);
         if(result){
-            String title = "APP审核";
+            String title = "应用审核";
             //发布计算积分事件
-            basePublishEventServer.publishUserPointsEvent(appInfo.getCreateBy(),dto.getPoints(),title);
+            basePublishEventServer.publishUserPointsEvent(application.getCreateBy(),dto.getPoints(),title);
             //发布用户消息事件
-            basePublishEventServer.publishAuditEvent(appInfo.getCreateBy(),title, appInfo.getAppName(), AuditStatusEnum.getDesc(status),dto.getDescription());
+            basePublishEventServer.publishAuditEvent(application.getCreateBy(),title, application.getApplicationName(), AuditStatusEnum.getDesc(status),dto.getDescription());
         }
         return result;
     }

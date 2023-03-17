@@ -17,7 +17,7 @@ import game.server.manager.common.mode.DeploymentCallBackData;
 import game.server.manager.common.mode.ExecuteLogModal;
 import game.server.manager.common.mode.SyncData;
 import game.server.manager.common.result.R;
-import game.server.manager.common.utils.AppScriptUtils;
+import game.server.manager.common.utils.ScriptDataUtils;
 import game.server.manager.common.vo.AppInfoVo;
 import game.server.manager.common.vo.ScriptDataVo;
 import org.slf4j.Logger;
@@ -165,7 +165,7 @@ public class ClientDeploymentServer {
             env.put("APP_ID", Objects.nonNull(appInfoVo)? appInfoVo.getId():"");
             env.put("APP_VERSION", Objects.nonNull(appInfoVo)? appInfoVo.getVersion():"");
             env.put("CLIENT_VERSION", systemUtils.getVersion());
-            String execShellEnv = AppScriptUtils.generateExecShellEnvs(env, scriptDataVo.getScriptEnv());
+            String execShellEnv = ScriptDataUtils.generateExecShellEnvs(env, scriptDataVo.getScriptEnv());
             stringBuilder.append(" ").append(execShellEnv);
             exec(stringBuilder.toString(), stdout);
             saveLogLine(stdout, "------------------脚本《" + scriptName + "》运行完毕--------------------");

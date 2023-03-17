@@ -19,12 +19,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScriptEnvListVo implements Serializable {
+public class ScriptEnvDataListVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     String scriptName;
 
-    List<AppEnvInfoVo> env;
+    List<ScriptEnvDataVo> env;
 }
