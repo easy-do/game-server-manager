@@ -1,8 +1,14 @@
 package game.server.manager.server.service.impl;
 
+import com.alicp.jetcache.anno.CacheInvalidate;
+import com.alicp.jetcache.anno.CacheRefresh;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import game.server.manager.common.enums.AuditStatusEnum;
+import game.server.manager.common.enums.ScopeEnum;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.server.dto.ApplicationDto;
@@ -88,6 +94,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
      * @return 结果
      */
     @Override
+    @CacheInvalidate(name = "AppInfoService.storePage")
     public boolean add(ApplicationDto applicationDto) {
         Application entity = ApplicationMapstruct.INSTANCE.dtoToEntity(applicationDto);
         UserInfoVo user = getUser();
@@ -103,9 +110,11 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
      * @return 结果
      */
     @Override
+    @CacheInvalidate(name = "AppInfoService.storePage")
     public boolean edit(ApplicationDto applicationDto) {
         Application entity = ApplicationMapstruct.INSTANCE.dtoToEntity(applicationDto);
         entity.setUpdateBy(getUserId());
+        entity.setStatus(AuditStatusEnum.DRAFT.getState());
         return updateById(entity);
     }
 
@@ -120,4 +129,14 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
         return removeById(id);
     }
 
+    @Override
+    @Cached(name = "AppInfoService.storePage", expire = 300, cacheType = CacheType.BOTH)
+    @CacheRefresh(refresh = 60)
+    public IPage<ApplicationVo> storePage(ApplicationQo applicationQo) {
+        LambdaQueryWrapper<Application> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Application::getStatus, AuditStatusEnum.AUDIT_SUCCESS.getState());
+        wrapper.eq(Application::getScope, 1);
+        wrapper.orderByDesc(Application::getHeat);
+        return page(applicationQo.startPage(), wrapper).convert(ApplicationMapstruct.INSTANCE::entityToVo);
+    }
 }

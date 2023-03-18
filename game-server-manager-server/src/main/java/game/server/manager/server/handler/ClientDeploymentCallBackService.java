@@ -26,7 +26,6 @@ import game.server.manager.server.entity.ScriptData;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.server.service.ScriptEnvDataService;
-import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.ScriptDataService;
 import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ExecuteLogService;
@@ -44,9 +43,6 @@ public class ClientDeploymentCallBackService extends AbstractHandlerService<Sync
 
     @Autowired
     private ClientInfoService clientInfoService;
-
-    @Autowired
-    private AppInfoService appInfoService;
 
     @Autowired
     private ExecuteLogService executeLogService;

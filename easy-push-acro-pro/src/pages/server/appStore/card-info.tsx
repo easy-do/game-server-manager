@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import cs from 'classnames';
 import {
-  Avatar,
   Button,
   Card,
-  Carousel,
   Descriptions,
+  Notification,
+  Divider,
+  Image,
   Skeleton,
+  Space,
 } from '@arco-design/web-react';
 import useLocale from '@/utils/useLocale';
-import locale from '../appInfo/locale';
+import locale from '../application/locale';
 import styles from './style/index.module.less';
-import { downloadPath } from '@/api/oss';
 
 interface CardInfoProps {
   card: any;
-  optionCallCack?:(card,type)=>void
+  optionCallCack?: (card, type) => void;
   loading?: boolean;
 }
 
@@ -29,59 +30,42 @@ function CardInfo(props: CardInfoProps) {
     setLoading(props.loading);
   }, [props.loading]);
 
-
-  const getButtonGroup = () => {
-      return (
-        <>
-          <Button type='outline'>start</Button>
-        </>
-      );
-  };
-
   const getContent = () => {
     if (loading) {
       return (
         <Skeleton
-          text={{ rows: 3}}
+          text={{ rows: 5 }}
           animation
           className={styles['card-block-skeleton']}
         />
       );
     }
     return (
-      <>
-      <Carousel
-        
-      >
-        {card.picture.split(',').map((src, index) => (
-          <div key={index}>
-            <img
-              src={downloadPath + src}
-              style={{ width: '100%' }} 
-              />
-          </div>
-        ))}
-      </Carousel>
       <Descriptions
-          column={1}
-          data={[
-             {
-              label: t['searchTable.columns.version'],
-              value: card.version,
-            },
-            {
-              label: t['searchTable.columns.author'],
-              value: card.author,
-            },
-            {
-              label: t['searchTable.columns.description'],
-              value: card.description,
-            },
-            {
-              label: t['searchTable.columns.heat'],
-              value: card.heat,
-            },
-          ]} /></>
+        column={1}
+        data={[
+          {
+            label: t['searchTable.columns.applicationName'],
+            value: card.applicationName,
+          },
+          {
+            label: t['searchTable.columns.version'],
+            value: card.version,
+          },
+          {
+            label: t['searchTable.columns.author'],
+            value: card.author,
+          },
+          {
+            label: t['searchTable.columns.description'],
+            value: card.description,
+          },
+          {
+            label: t['searchTable.columns.heat'],
+            value: card.heat,
+          },
+        ]}
+      />
     );
   };
 
@@ -92,29 +76,16 @@ function CardInfo(props: CardInfoProps) {
       bordered={true}
       className={className}
       size="small"
-      title={
-        loading ? (
-          <Skeleton
-            animation
-            text={{ rows: 1, width: ['100%'] }}
-            style={{ width: '120px', height: '24px' }}
-            className={styles['card-block-skeleton']}
-          />
-        ) : (
-          <>
-          <Avatar
-            size={50}
-            className={styles['info-avatar']}
-          >
-            <img src={ downloadPath + card.icon} />
-          </Avatar>
-          {card.appName}
-          </>
-        )
-      }
+      extra={<Button type="outline" onClick={()=>{        Notification.success({
+        closable: false,
+        title: '',
+        content: '保持期待哦',
+      })}}>安装</Button>}
     >
-      <div >{getContent()}</div>
-      <div className={styles.extra}>{getButtonGroup()}</div>
+      <Space split={<Divider type="vertical" />}>
+        <Image height={'120px'} width={'120px'} src={card.icon} />
+        <div>{getContent()}</div>
+      </Space>
     </Card>
   );
 }

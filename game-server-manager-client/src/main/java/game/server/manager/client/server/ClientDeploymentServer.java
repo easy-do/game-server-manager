@@ -18,7 +18,6 @@ import game.server.manager.common.mode.ExecuteLogModal;
 import game.server.manager.common.mode.SyncData;
 import game.server.manager.common.result.R;
 import game.server.manager.common.utils.ScriptDataUtils;
-import game.server.manager.common.vo.AppInfoVo;
 import game.server.manager.common.vo.ScriptDataVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +92,7 @@ public class ClientDeploymentServer {
             //构建并执行脚本
             extractedBasicScript(execScriptParam, clientDeployData, stdout);
             //执行主脚本
-            buildAndExecScript(execScriptParam, clientDeployData.getAppInfo(), clientDeployData.getAppScript(), stdout);
+            buildAndExecScript(execScriptParam, clientDeployData.getAppScript(), stdout);
             saveLogLine(stdout, "------------------流程执行完毕--------------------");
             executeLog.setEndTime(LocalDateTime.now());
             executeLog.setLogData(String.join("", stdout));
@@ -119,10 +118,9 @@ public class ClientDeploymentServer {
     private void extractedBasicScript(ExecScriptParam execScriptParam, ClientDeployData clientDeployData, LinkedList<String> stdout) throws DeploymentException {
         List<ScriptDataVo> basicScript = clientDeployData.getBasicScript();
         if (Objects.nonNull(basicScript) && !basicScript.isEmpty()) {
-            AppInfoVo appInfoVo = clientDeployData.getAppInfo();
             saveLogLine(stdout, "------------------检测到脚本依赖，先执行依赖的脚本--------------------");
             for (ScriptDataVo scriptDataVo : basicScript) {
-                buildAndExecScript(execScriptParam, appInfoVo, scriptDataVo, stdout);
+                buildAndExecScript(execScriptParam, scriptDataVo, stdout);
             }
             saveLogLine(stdout, "------------------主脚本依赖的脚本执行完毕--------------------");
         }
@@ -136,7 +134,7 @@ public class ClientDeploymentServer {
      * @author laoyu
      * @date 2022/8/7
      */
-    private void buildAndExecScript(ExecScriptParam execScriptParam, AppInfoVo appInfoVo, ScriptDataVo scriptDataVo, List<String> stdout) throws DeploymentException {
+    private void buildAndExecScript(ExecScriptParam execScriptParam, ScriptDataVo scriptDataVo, List<String> stdout) throws DeploymentException {
         String scriptName = scriptDataVo.getScriptName();
         String fileName = UUID.randomUUID() + ".sh";
         String filePath = getJarFilePath() + "/" + fileName;
@@ -161,10 +159,6 @@ public class ClientDeploymentServer {
             String execStr = "sh " + filePath;
             StringBuilder stringBuilder = new StringBuilder(execStr);
             JSONObject env = execScriptParam.getEnv();
-            env.put("APPLICATION_ID", execScriptParam.getDeviceId());
-            env.put("APP_ID", Objects.nonNull(appInfoVo)? appInfoVo.getId():"");
-            env.put("APP_VERSION", Objects.nonNull(appInfoVo)? appInfoVo.getVersion():"");
-            env.put("CLIENT_VERSION", systemUtils.getVersion());
             String execShellEnv = ScriptDataUtils.generateExecShellEnvs(env, scriptDataVo.getScriptEnv());
             stringBuilder.append(" ").append(execShellEnv);
             exec(stringBuilder.toString(), stdout);

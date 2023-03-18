@@ -68,9 +68,9 @@ function SearchTable() {
 
   //构建卡片列表、绑定操作回调
   const cardList = data.map((item, index) => {
-    return <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} key={index}>
-      <CardInfo card={item} loading={loading}/>
-    </Col>;
+    return <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12} key={index}>
+           <CardInfo card={item} loading={loading}/>
+           </Col>;
   })
 
   return (

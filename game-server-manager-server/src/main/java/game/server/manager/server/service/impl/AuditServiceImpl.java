@@ -5,10 +5,11 @@ import game.server.manager.common.enums.AuditStatusEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.event.BasePublishEventServer;
 import game.server.manager.server.dto.AuditDto;
-import game.server.manager.server.entity.AppInfo;
 import game.server.manager.server.entity.Application;
+import game.server.manager.server.entity.ApplicationVersion;
 import game.server.manager.server.entity.Discussion;
 import game.server.manager.server.service.ApplicationService;
+import game.server.manager.server.service.ApplicationVersionService;
 import game.server.manager.server.service.AuditService;
 import game.server.manager.server.service.DiscussionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class AuditServiceImpl implements AuditService {
     @Autowired
     private ApplicationService applicationService;
 
+    @Autowired
+    private ApplicationVersionService applicationVersionService;
+
     @Override
     @CacheInvalidate(name = "AppInfoService.storePage")
     @CacheInvalidate(name = "DiscussionService.page")
@@ -43,6 +47,8 @@ public class AuditServiceImpl implements AuditService {
                 return auditDiscussion(dto);
             case 2:
                 return auditApplication(dto);
+            case 3:
+                return auditApplicationVersion(dto);
             default:
                 return false;
         }
@@ -57,6 +63,8 @@ public class AuditServiceImpl implements AuditService {
                 return commitDiscussionAudit(auditDto);
             case 2:
                 return commitApplicationAudit(auditDto);
+            case 3:
+                return commitApplicationVersionAudit(auditDto);
             default:
                 return false;
         }
@@ -74,6 +82,21 @@ public class AuditServiceImpl implements AuditService {
         boolean result = applicationService.updateById(entity);
         //发送待审核事件
         basePublishEventServer.publishAwaitAuditEvent("应用待审核通知",application.getApplicationName(),"");
+        return result;
+    }
+
+    private boolean commitApplicationVersionAudit(AuditDto auditDto) {
+        ApplicationVersion applicationVersion = applicationVersionService.getById(auditDto.getId());
+        if(Objects.isNull(applicationVersion)){
+            throw ExceptionFactory.bizException("应用版本不存在");
+        }
+        if(!AuditStatusEnum.canCommitAudit(applicationVersion.getStatus())){
+            throw ExceptionFactory.bizException("当前状态无法在提交审核.");
+        }
+        ApplicationVersion entity = ApplicationVersion.builder().id(auditDto.getId()).status(AuditStatusEnum.AUDIT_ING.getState()).build();
+        boolean result = applicationVersionService.updateById(entity);
+        //发送待审核事件
+        basePublishEventServer.publishAwaitAuditEvent("应用版本待审核通知",applicationVersion.getApplicationName(),"");
         return result;
     }
 
@@ -125,6 +148,24 @@ public class AuditServiceImpl implements AuditService {
             basePublishEventServer.publishUserPointsEvent(application.getCreateBy(),dto.getPoints(),title);
             //发布用户消息事件
             basePublishEventServer.publishAuditEvent(application.getCreateBy(),title, application.getApplicationName(), AuditStatusEnum.getDesc(status),dto.getDescription());
+        }
+        return result;
+    }
+
+    private boolean auditApplicationVersion(AuditDto dto){
+        ApplicationVersion applicationVersion = applicationVersionService.getById(dto.getId());
+        if(Objects.isNull(applicationVersion)){
+            throw ExceptionFactory.bizException("应用版本不存在");
+        }
+        int status = dto.getStatus();
+        ApplicationVersion entity = ApplicationVersion.builder().id(dto.getId()).status(status).build();
+        boolean result = applicationVersionService.updateById(entity);
+        if(result){
+            String title = "应用审核";
+            //发布计算积分事件
+            basePublishEventServer.publishUserPointsEvent(applicationVersion.getCreateBy(),dto.getPoints(),title);
+            //发布用户消息事件
+            basePublishEventServer.publishAuditEvent(applicationVersion.getCreateBy(),title, applicationVersion.getApplicationName(), AuditStatusEnum.getDesc(status),dto.getDescription());
         }
         return result;
     }

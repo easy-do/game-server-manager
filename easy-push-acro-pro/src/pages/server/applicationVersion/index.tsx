@@ -9,22 +9,28 @@ import {
   Notification,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
+import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from './constants';
-import { managerPage, removeRequest } from '@/api/appInfo';
-import { SearchTypeEnum } from '@/utils/systemConstant';
+import {
+  getColumns,
+  getDefaultOrders,
+  getSearChColumns,
+  searchConfig,
+} from './constants';
+import { managerPage, removeRequest } from '@/api/applicationVersion';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
+import AuditModal from '@/pages/audit/auditModal';
+import { commitAudit } from '@/api/audit';
 
 const { Title } = Typography;
 
-function SearchTable() {
+function ApplicationVersionSearchTable({ applicationId, visible }) {
   const t = useLocale(locale);
 
   //表格操作按钮回调
@@ -43,8 +49,15 @@ function SearchTable() {
     if (type === 'remove') {
       removeData(record.id);
     }
+    //提交审核
+    if (type === 'submitAudit') {
+      submitAudit({ id: record.id, auditType: 3 });
+    }
+    //审核
+    if (type === 'audit') {
+      audit(record.id);
+    }
   };
-
 
   //查看
   const [viewInfoId, setViewInfoId] = useState();
@@ -58,10 +71,10 @@ function SearchTable() {
   //新增
   const [isAddData, setIsAddData] = useState(false);
 
-  function addData(){
+  function addData() {
     setIsAddData(true);
   }
-  
+
   function addDataSuccess() {
     setIsAddData(false);
     fetchData();
@@ -75,22 +88,49 @@ function SearchTable() {
     setUpdateId(id);
     setisUpdateInfo(true);
   }
-  
+
   function updateSuccess() {
     setisUpdateInfo(false);
     fetchData();
   }
 
   //删除
-  function removeData(id){
-    removeRequest(id).then((res)=>{
-      const { success, msg} = res.data
-      if(success){
-        Notification.success({ content: msg, duration: 300 })
+  function removeData(id) {
+    removeRequest(id).then((res) => {
+      const { success, msg } = res.data;
+      if (success) {
+        Notification.success({ content: msg, duration: 300 });
         fetchData();
       }
-    })
+    });
   }
+
+  //提交审核
+  function submitAudit(id) {
+    commitAudit(id).then((res) => {
+      const { success, msg } = res.data;
+      if (success) {
+        Notification.success({ content: msg, duration: 300 });
+        fetchData();
+      }
+    });
+  }
+
+  //审核
+  function audit(id) {
+    setAuditId(id);
+    setIsaudit(true);
+  }
+
+  const [auditId, setAuditId] = useState();
+  const [isAudit, setIsaudit] = useState(false);
+
+  function auditSuccess() {
+    setIsaudit(false);
+    fetchData();
+  }
+  const [versionId, setVersionId] = useState();
+  const [isVersion, setIsVersion] = useState(false);
 
   //获取表格展示列表、绑定操作列回调
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
@@ -104,12 +144,16 @@ function SearchTable() {
     pageSizeChangeResetCurrent: true,
   });
   const [loading, setLoading] = useState(true);
-  const [formParams, setFormParams] = useState({});
+  const [formParams, setFormParams] = useState({
+    applicationId: applicationId,
+  });
   const [orders, setOrders] = useState(getDefaultOrders());
 
   useEffect(() => {
     fetchData();
   }, [
+    applicationId,
+    visible,
     pagination.current,
     pagination.pageSize,
     JSON.stringify(formParams),
@@ -120,6 +164,7 @@ function SearchTable() {
   function fetchData() {
     const { current, pageSize } = pagination;
     setLoading(true);
+    formParams.applicationId = applicationId;
     managerPage({
       currentPage: current,
       pageSize,
@@ -174,15 +219,19 @@ function SearchTable() {
   return (
     <Card>
       <Title heading={6}>{t['list.searchTable']}</Title>
-      <SearchForm onSearch={handleSearch} />
+      <SearchForm onSearch={handleSearch} applicationId={applicationId} />
       <PermissionWrapper
         requiredPermissions={[
-          { resource: 'appInfo', actions: ['appInfo:add'] },
+          { resource: 'application', actions: ['application:add'] },
         ]}
       >
         <div className={styles['button-group']}>
           <Space>
-            <Button type="primary" icon={<IconPlus />} onClick={()=>addData()}>
+            <Button
+              type="primary"
+              icon={<IconPlus />}
+              onClick={() => addData()}
+            >
               {t['searchTable.operations.add']}
             </Button>
           </Space>
@@ -197,6 +246,7 @@ function SearchTable() {
         data={data}
       />
       <AddPage
+        applicationId={applicationId}
         visible={isAddData}
         setVisible={setIsAddData}
         successCallBack={addDataSuccess}
@@ -212,8 +262,16 @@ function SearchTable() {
         setVisible={setisUpdateInfo}
         successCallBack={updateSuccess}
       />
+      <AuditModal
+        title="应用审核"
+        id={auditId}
+        auditType={3}
+        visible={isAudit}
+        setVisible={setIsaudit}
+        successCallBack={auditSuccess}
+      />
     </Card>
   );
 }
 
-export default SearchTable;
+export default ApplicationVersionSearchTable;

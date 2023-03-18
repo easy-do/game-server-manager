@@ -1,0 +1,140 @@
+package game.server.manager.server.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import game.server.manager.common.enums.AuditStatusEnum;
+import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.server.entity.Application;
+import game.server.manager.server.mapper.ApplicationMapper;
+import game.server.manager.web.base.BaseServiceImpl;
+import game.server.manager.server.dto.ApplicationVersionDto;
+import game.server.manager.server.entity.ApplicationVersion;
+import game.server.manager.server.qo.ApplicationVersionQo;
+import game.server.manager.server.vo.ApplicationVersionVo;
+import game.server.manager.server.mapstruct.ApplicationVersionMapstruct;
+import game.server.manager.server.mapper.ApplicationVersionMapper;
+import game.server.manager.server.service.ApplicationVersionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+
+
+/**
+ * 应用版本信息Service层
+ * 
+ * @author yuzhanfeng
+ * @date 2023-03-18 14:56:21
+ */
+@Service
+public class ApplicationVersionServiceImpl extends BaseServiceImpl<ApplicationVersion,ApplicationVersionQo, ApplicationVersionVo, ApplicationVersionDto, ApplicationVersionMapper> implements ApplicationVersionService {
+
+    @Autowired
+    private ApplicationMapper applicationMapper;
+
+    @Override
+    public void listSelect(LambdaQueryWrapper<ApplicationVersion> wrapper) {
+        
+    }
+
+    @Override
+    public void pageSelect(LambdaQueryWrapper<ApplicationVersion> wrapper) {
+
+    }
+
+
+    /**
+     * 获取所有应用版本信息列表
+     *
+     * @return 应用版本信息
+     */
+    @Override
+    public List<ApplicationVersionVo> voList() {
+        LambdaQueryWrapper<ApplicationVersion> wrapper = Wrappers.lambdaQuery();
+        wrapper.orderByDesc(ApplicationVersion::getCreateTime);
+        listSelect(wrapper);
+        return ApplicationVersionMapstruct.INSTANCE.entityToVo(list(wrapper));
+    }
+
+
+     /**
+     * 分页条件查询应用版本信息列表
+     * 
+     * @param mpBaseQo 查询条件封装
+     * @return 应用版本信息
+     */
+    @Override
+    public IPage<ApplicationVersionVo> page(ApplicationVersionQo mpBaseQo) {
+        mpBaseQo.initInstance(ApplicationVersion.class);
+        return page(mpBaseQo.getPage(), mpBaseQo.getWrapper()).convert(ApplicationVersionMapstruct.INSTANCE::entityToVo);
+    }
+
+
+    /**
+     * 查询应用版本信息
+     * 
+     * @param id id
+     * @return 应用版本信息
+     */
+    @Override
+    public ApplicationVersionVo info(Serializable id) {
+        return ApplicationVersionMapstruct.INSTANCE.entityToVo(getById(id));
+    }
+
+
+
+
+    /**
+     * 新增应用版本信息
+     * 
+     * @param applicationVersionDto 数据传输对象
+     * @return 结果
+     */
+    @Override
+    public boolean add(ApplicationVersionDto applicationVersionDto) {
+        ApplicationVersion entity = ApplicationVersionMapstruct.INSTANCE.dtoToEntity(applicationVersionDto);
+        entity.setCreateBy(getUserId());
+        Application application = applicationMapper.selectById(applicationVersionDto.getApplicationId());
+        if(Objects.isNull(application)){
+            throw ExceptionFactory.baseException("应用不存在");
+        }
+        entity.setApplicationName(application.getApplicationName());
+        return save(entity);
+    }
+
+    /**
+     * 修改应用版本信息
+     * 
+     * @param applicationVersionDto 数据传输对象
+     * @return 结果
+     */
+    @Override
+    public boolean edit(ApplicationVersionDto applicationVersionDto) {
+        ApplicationVersion entity = ApplicationVersionMapstruct.INSTANCE.dtoToEntity(applicationVersionDto);
+        entity.setStatus(AuditStatusEnum.DRAFT.getState());
+        return updateById(entity);
+    }
+
+    /**
+     * 批量删除应用版本信息
+     * 
+     * @param id 需要删除的应用版本信息ID
+     * @return 结果
+     */
+    @Override
+    public boolean delete(Serializable id) {
+        ApplicationVersion applicationVersion = getById(id);
+        if(Objects.isNull(applicationVersion)){
+            throw ExceptionFactory.baseException("版本不存在");
+        }
+        if(!isAdmin() && applicationVersion.getCreateBy() != getUserId()){
+            throw ExceptionFactory.baseException("无权删除");
+        }
+        return removeById(id);
+    }
+
+}
