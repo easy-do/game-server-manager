@@ -23,6 +23,9 @@ import java.util.Objects;
  */
 public class SessionUtils {
 
+    private SessionUtils() {
+    }
+
     /**
      * 发送消息
      *
@@ -81,10 +84,10 @@ public class SessionUtils {
      * @author laoyu
      * @date 2022/11/27
      */
-    public static ClientMessage timeoutGetClientMessage(String messageId,long timeoutMs){
+    public static <T> ClientMessage<T> timeoutGetClientMessage(String messageId,long timeoutMs){
         long timeoutExpiredMs = System.currentTimeMillis() + timeoutMs;
         while (true) {
-            ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
+            ClientMessage<T> message = SessionResultCache.getResultByMessageId(messageId);
             if(Objects.nonNull(message)){
                 SessionResultCache.removeMessageById(messageId);
                 return message;
@@ -109,7 +112,7 @@ public class SessionUtils {
      */
     public static <T> R<List<T>> sendMessageAndGetListResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
         sendMessage(clientSession, JSON.toJSONString(serverMessage));
-        ClientMessage clientMessage = timeoutGetClientMessage(messageId, 3000);
+        ClientMessage<String> clientMessage = timeoutGetClientMessage(messageId, 3000);
         if(Objects.isNull(clientMessage)){
             return DataResult.fail("获取客户端消息超时.");
         }
@@ -129,11 +132,11 @@ public class SessionUtils {
      */
     public static <T> R<T> sendMessageAndGetResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
         sendMessage(clientSession, JSON.toJSONString(serverMessage));
-        ClientMessage clientMessage = timeoutGetClientMessage(messageId, 3000);
+        ClientMessage<T> clientMessage = timeoutGetClientMessage(messageId, 3000);
         if(Objects.isNull(clientMessage)){
             return DataResult.fail("获取客户端消息超时.");
         }
-        return clientMessage.isSuccess()? DataResult.ok()
+        return clientMessage.isSuccess()? DataResult.ok(clientMessage.getData())
                 :DataResult.fail(clientMessage.getData());
     }
 

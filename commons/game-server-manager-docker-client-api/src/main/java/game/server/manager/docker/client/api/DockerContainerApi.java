@@ -46,61 +46,61 @@ public interface DockerContainerApi {
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/startContainer?containerId={containerId}")
     @GetMapping("/v1/startContainer")
-    public R<Void> startContainer(@Param("containerId")String containerId);
+    public R<Object> startContainer(@Param("containerId")String containerId);
 
 
     /**
      * 重启容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/restartContainer?containerId={containerId}")
     @GetMapping("/v1/restartContainer")
-    public R<Void> restartContainer(@Param("containerId")String containerId);
+    public R<Object> restartContainer(@Param("containerId")String containerId);
 
     /**
      * 停止容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/stopContainer?containerId={containerId}")
     @GetMapping("/v1/stopContainer")
-    public R<Void> stopContainer(@Param("containerId")String containerId);
+    public R<Object> stopContainer(@Param("containerId")String containerId);
 
     /**
      * 删除容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Headers({"Content-Type: application/json"})
     @RequestLine("DELETE /v1/removeContainer?containerId={containerId}")
     @DeleteMapping("/v1/removeContainer")
-    public R<Void> removeContainer(@Param("containerId")String containerId);
+    public R<Object> removeContainer(@Param("containerId")String containerId);
 
     /**
      * 重命名容器
      *
      * @param containerId containerId
      * @param name name
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/renameContainer?containerId={containerId}&name={name}")
     @GetMapping("/v1/renameContainer")
-    public R<Void> renameContainer(@Param("containerId")String containerId,@Param("name")String name);
+    public R<Object> renameContainer(@Param("containerId")String containerId,@Param("name")String name);
 
     /**
      * 创建容器
@@ -113,7 +113,7 @@ public interface DockerContainerApi {
     @Headers({"Content-Type: application/json"})
     @RequestLine("POST /v1/createContainer")
     @PostMapping("/v1/createContainer")
-    public R<CreateContainerResponse> createContainer(@RequestBody CreateContainerDto createContainerDto);
+    public R<Object> createContainer(@RequestBody CreateContainerDto createContainerDto);
 
     @Headers({"Content-Type: application/json"})
     @RequestLine("GET /v1/logContainer?containerId={containerId}")

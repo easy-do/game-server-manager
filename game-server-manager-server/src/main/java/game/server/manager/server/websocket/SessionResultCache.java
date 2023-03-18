@@ -26,7 +26,7 @@ public class SessionResultCache {
         MESSAGE_CACHE.schedulePrune(1000);
     }
 
-   public static ClientMessage getResultByMessageId(String messageId){
+   public static <T> ClientMessage<T> getResultByMessageId(String messageId){
       return MESSAGE_CACHE.get(messageId,false);
    }
 

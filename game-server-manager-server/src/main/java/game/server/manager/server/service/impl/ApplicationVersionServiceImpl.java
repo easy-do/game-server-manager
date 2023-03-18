@@ -1,7 +1,6 @@
 package game.server.manager.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.common.enums.AuditStatusEnum;
@@ -100,12 +99,17 @@ public class ApplicationVersionServiceImpl extends BaseServiceImpl<ApplicationVe
      */
     @Override
     public boolean add(ApplicationVersionDto applicationVersionDto) {
-        ApplicationVersion entity = ApplicationVersionMapstruct.INSTANCE.dtoToEntity(applicationVersionDto);
-        entity.setCreateBy(getUserId());
         Application application = applicationMapper.selectById(applicationVersionDto.getApplicationId());
         if(Objects.isNull(application)){
-            throw ExceptionFactory.baseException("应用不存在");
+            throw ExceptionFactory.bizException("应用不存在");
         }
+        ApplicationVersion applicationVersion = getByApplicationIdAndVersion(application.getId(), applicationVersionDto.getVersion());
+        if(Objects.nonNull(applicationVersion)){
+            throw ExceptionFactory.bizException("版本已存在");
+        }
+        ApplicationVersion entity = ApplicationVersionMapstruct.INSTANCE.dtoToEntity(applicationVersionDto);
+        entity.setCreateBy(getUserId());
+
         entity.setApplicationName(application.getApplicationName());
         return save(entity);
     }
@@ -148,4 +152,18 @@ public class ApplicationVersionServiceImpl extends BaseServiceImpl<ApplicationVe
         return removeById(id);
     }
 
+    @Override
+    public List<ApplicationVersionVo> versionList(Long applicationId) {
+        LambdaQueryWrapper<ApplicationVersion> wrapper = getWrapper();
+        wrapper.eq(ApplicationVersion::getApplicationId,applicationId);
+        return ApplicationVersionMapstruct.INSTANCE.entityToVo(baseMapper.selectList(wrapper));
+    }
+
+    @Override
+    public ApplicationVersion getByApplicationIdAndVersion(Long applicationId, String version) {
+        LambdaQueryWrapper<ApplicationVersion> wrapper = getWrapper();
+        wrapper.eq(ApplicationVersion::getApplicationId,applicationId);
+        wrapper.eq(ApplicationVersion::getVersion,version);
+        return getOne(wrapper);
+    }
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Card,
   PaginationProps,
-  Typography,
   Grid,
   Pagination,
 } from '@arco-design/web-react';
@@ -16,8 +15,8 @@ import {
 } from '../appScript/constants';
 import { page } from '@/api/appStore';
 import CardInfo from './card-info';
+import InsallApplicationPage from '@/components/InstallApplication/installApplication';
 
-const { Title } = Typography;
 
 const { Row, Col } = Grid;
 
@@ -66,34 +65,53 @@ function SearchTable() {
     });
   }
 
+  const [installApplicationId, setInstallApplicationId] = useState();
+  const [isInstallApplication, setIsInstallApplication] = useState(false);
+
+  //安装应用
+  function installApplication(id) {
+    setInstallApplicationId(id);
+    setIsInstallApplication(true);
+  }
+  function installApplicationSuccess() {
+    setIsInstallApplication(false);
+    fetchData();
+  }
+
   //构建卡片列表、绑定操作回调
   const cardList = data.map((item, index) => {
     return <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12} key={index}>
-           <CardInfo card={item} loading={loading}/>
+           <CardInfo data={item} loading={loading} installApplication={installApplication}/>
            </Col>;
   })
 
   return (
-    <Card>
+    <><Card>
       <div className={styles.container}>
-        {
-          <Row gutter={24} className={styles['card-content']}>
-            {cardList}
-          </Row>
-        }
+        {<Row gutter={24} className={styles['card-content']}>
+          {cardList}
+        </Row>}
       </div>
-      <Pagination  
+      <Pagination
         sizeCanChange={pagination.sizeCanChange}
         showTotal={pagination.showTotal}
         pageSize={pagination.pageSize}
         current={pagination.current}
         pageSizeChangeResetCurrent={pagination.pageSizeChangeResetCurrent}
         total={pagination.total}
-        onChange={(pageNumber, pageSize)=>setPatination({ ...pagination,
+        onChange={(pageNumber, pageSize) => setPatination({
+          ...pagination,
           current: pageNumber,
-          pageSize: pageSize,})}
-       />
+          pageSize: pageSize,
+        })} />
     </Card>
+    <InsallApplicationPage
+        applicationId={installApplicationId}
+        visible={isInstallApplication}
+        setVisible={setIsInstallApplication}
+        successCallBack={installApplicationSuccess} />
+      </>
+      
   );
 }
 

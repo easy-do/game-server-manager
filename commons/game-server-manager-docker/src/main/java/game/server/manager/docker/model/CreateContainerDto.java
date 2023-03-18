@@ -1,7 +1,10 @@
 package game.server.manager.docker.model;
 
 import com.alibaba.fastjson2.JSONObject;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,6 +15,9 @@ import java.util.List;
  * @date 2022/11/19
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateContainerDto {
 
     private String image;
@@ -23,17 +29,17 @@ public class CreateContainerDto {
     /**
      * 标准输出
      */
-    private Boolean attachStdin;
+    private Boolean attachStdin = Boolean.TRUE;
 
     /**
      * 标准输入
      */
-    private Boolean stdinOpen;
+    private Boolean stdinOpen = Boolean.TRUE;
 
     /**
      * 开启终端？
      */
-    private Boolean tty;
+    private Boolean tty = Boolean.TRUE;
 
     /**
      * host模式	-–net=host	容器和宿主机共享 Network namespace。

@@ -34,8 +34,6 @@ function InfoPage(props: { id: number; visible; setVisible }) {
     delFlag: null,
   });
 
-  const [confDataNode, setConfDataNode] = useState();
-
   function fetchData() {
     setLoading(true);
     if (props.id !== undefined && props.visible) {
@@ -74,7 +72,7 @@ function InfoPage(props: { id: number; visible; setVisible }) {
     },
     {
       title: t['searchTable.columns.envDescription'],
-      dataIndex: 'envDescription',
+      dataIndex: 'description',
       ellipsis: true,
     },
   ];

@@ -1,9 +1,12 @@
 package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.result.R;
 
 import game.server.manager.server.dto.DockerDetailsDto;
@@ -121,6 +124,14 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
      */
     @Override
     public boolean add(DockerDetailsDto dockerDetailsDto) {
+        String clientId = dockerDetailsDto.getClientId();
+        if(Objects.nonNull(clientId)){
+            LambdaQueryWrapper<DockerDetails> wrapper = getWrapper();
+            wrapper.eq(DockerDetails::getClientId,clientId);
+            if(baseMapper.exists(wrapper)){
+                throw ExceptionFactory.bizException("客户端["+clientId+"]已绑定docker");
+            }
+        }
         DockerDetails entity = DockerDetailsMapstruct.INSTANCE.dtoToEntity(dockerDetailsDto);
         //设置密钥
         entity.setDockerSecret(UUID.fastUUID().toString(true));
@@ -136,6 +147,13 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
      */
     @Override
     public boolean edit(DockerDetailsDto dockerDetailsDto) {
+        DockerDetails dockerDetails = getById(dockerDetailsDto);
+        if(Objects.isNull(dockerDetails)){
+            throw ExceptionFactory.bizException("docker不存在");
+        }
+        if(!CharSequenceUtil.equals(dockerDetails.getClientId(),dockerDetailsDto.getClientId())){
+            throw ExceptionFactory.bizException("客户端不可更改");
+        }
         LambdaQueryWrapper<DockerDetails> wrapper = Wrappers.lambdaQuery();
         if(!isAdmin()){
             wrapper.eq(DockerDetails::getCreateBy,getUserId());
@@ -161,4 +179,10 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
         return remove(wrapper);
     }
 
+    @Override
+    public DockerDetailsVo getByClientId(String clientId) {
+        LambdaQueryWrapper<DockerDetails> wrapper = getWrapper();
+        wrapper.eq(DockerDetails::getClientId,clientId);
+        return DockerDetailsMapstruct.INSTANCE.entityToVo(getOne(wrapper));
+    }
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientMessage {
+public class ClientMessage<T> {
 
     private String clientId;
 
@@ -23,7 +23,7 @@ public class ClientMessage {
 
     private String type;
 
-    private String data;
+    private T data;
 
     private boolean success;
 

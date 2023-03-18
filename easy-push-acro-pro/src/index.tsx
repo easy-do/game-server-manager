@@ -27,7 +27,6 @@ const store = createStore(rootReducer);
 function Index() {
   const [lang, setLang] = useStorage('arco-lang', 'zh-CN');
   const [theme, setTheme] = useStorage('arco-theme', 'light');
-  const [userInfo, _setUserInfo] = useStorage('userInfo','');
   const [dictDataMap, setDictDataMap] = useStorage('dictDataMap','');
 
   function getArcoLocale() {

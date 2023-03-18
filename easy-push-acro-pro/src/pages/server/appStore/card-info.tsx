@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   Descriptions,
-  Notification,
   Divider,
   Image,
   Skeleton,
@@ -15,13 +14,14 @@ import locale from '../application/locale';
 import styles from './style/index.module.less';
 
 interface CardInfoProps {
-  card: any;
+  data: any;
   optionCallCack?: (card, type) => void;
   loading?: boolean;
+  installApplication:(id) => void;
 }
 
 function CardInfo(props: CardInfoProps) {
-  const { card = {} } = props;
+  const { data = {} } = props;
   const [loading, setLoading] = useState(props.loading);
 
   const t = useLocale(locale);
@@ -29,6 +29,10 @@ function CardInfo(props: CardInfoProps) {
   useEffect(() => {
     setLoading(props.loading);
   }, [props.loading]);
+
+  const installApplicationButton = () =>{
+    props.installApplication(data.id)
+  }
 
   const getContent = () => {
     if (loading) {
@@ -46,23 +50,23 @@ function CardInfo(props: CardInfoProps) {
         data={[
           {
             label: t['searchTable.columns.applicationName'],
-            value: card.applicationName,
+            value: data.applicationName,
           },
           {
             label: t['searchTable.columns.version'],
-            value: card.version,
+            value: data.version,
           },
           {
             label: t['searchTable.columns.author'],
-            value: card.author,
+            value: data.author,
           },
           {
             label: t['searchTable.columns.description'],
-            value: card.description,
+            value: data.description,
           },
           {
             label: t['searchTable.columns.heat'],
-            value: card.heat,
+            value: data.heat,
           },
         ]}
       />
@@ -76,14 +80,10 @@ function CardInfo(props: CardInfoProps) {
       bordered={true}
       className={className}
       size="small"
-      extra={<Button type="outline" onClick={()=>{        Notification.success({
-        closable: false,
-        title: '',
-        content: '保持期待哦',
-      })}}>安装</Button>}
+      extra={<Button type="outline" onClick={installApplicationButton}>安装</Button>}
     >
       <Space split={<Divider type="vertical" />}>
-        <Image height={'120px'} width={'120px'} src={card.icon} />
+        <Image height={'120px'} width={'120px'} src={data.icon} />
         <div>{getContent()}</div>
       </Space>
     </Card>
