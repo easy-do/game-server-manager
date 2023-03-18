@@ -156,6 +156,12 @@ export function getColumns(
             >
                 {t['searchTable.columns.operations.submitAudit']}
             </Button>:null}
+          </PermissionWrapper>
+          <PermissionWrapper            
+          requiredPermissions={[
+              { resource: 'application', actions: ['application:audit'] },
+            ]}
+          >
             {record.status ===2 || record.status ===3 ?<Button
                 type="text"
                 size="small"

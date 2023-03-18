@@ -5,10 +5,12 @@ import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.common.enums.AuditStatusEnum;
 import game.server.manager.common.enums.ScopeEnum;
+import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.server.dto.ApplicationDto;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -37,7 +40,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
 
     @Override
     public void listSelect(LambdaQueryWrapper<Application> wrapper) {
-        
+        wrapper.select(Application::getId,Application::getApplicationName,Application::getStatus,Application::getAuthor);
     }
 
     @Override
@@ -69,7 +72,11 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
     @Override
     public IPage<ApplicationVo> page(ApplicationQo mpBaseQo) {
         mpBaseQo.initInstance(Application.class);
-        return page(mpBaseQo.getPage(), mpBaseQo.getWrapper()).convert(ApplicationMapstruct.INSTANCE::entityToVo);
+        LambdaQueryWrapper<Application> wrapper = mpBaseQo.getWrapper().lambda();
+        if(!isAdmin()){
+            wrapper.eq(Application::getCreateBy,getUserId());
+        }
+        return page(mpBaseQo.getPage(), wrapper).convert(ApplicationMapstruct.INSTANCE::entityToVo);
     }
 
 
@@ -113,6 +120,13 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
     @CacheInvalidate(name = "AppInfoService.storePage")
     public boolean edit(ApplicationDto applicationDto) {
         Application entity = ApplicationMapstruct.INSTANCE.dtoToEntity(applicationDto);
+        Application oldData = getById(applicationDto.getId());
+        if(Objects.isNull(oldData)){
+            throw ExceptionFactory.baseException("应用不存在");
+        }
+        if(!isAdmin() && oldData.getCreateBy() != getUserId()){
+            throw ExceptionFactory.baseException("无权操作");
+        }
         entity.setUpdateBy(getUserId());
         entity.setStatus(AuditStatusEnum.DRAFT.getState());
         return updateById(entity);
@@ -126,6 +140,13 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
      */
     @Override
     public boolean delete(Serializable id) {
+        Application oldData = getById(id);
+        if(Objects.isNull(oldData)){
+            throw ExceptionFactory.baseException("应用不存在");
+        }
+        if(!isAdmin() && oldData.getCreateBy() != getUserId()){
+            throw ExceptionFactory.baseException("无权操作");
+        }
         return removeById(id);
     }
 

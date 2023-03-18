@@ -1,6 +1,7 @@
 package game.server.manager.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.common.enums.AuditStatusEnum;
@@ -38,12 +39,11 @@ public class ApplicationVersionServiceImpl extends BaseServiceImpl<ApplicationVe
 
     @Override
     public void listSelect(LambdaQueryWrapper<ApplicationVersion> wrapper) {
-        
+        wrapper.select(ApplicationVersion::getId,ApplicationVersion::getApplicationName,ApplicationVersion::getStatus);
     }
 
     @Override
     public void pageSelect(LambdaQueryWrapper<ApplicationVersion> wrapper) {
-
     }
 
 
@@ -70,7 +70,11 @@ public class ApplicationVersionServiceImpl extends BaseServiceImpl<ApplicationVe
     @Override
     public IPage<ApplicationVersionVo> page(ApplicationVersionQo mpBaseQo) {
         mpBaseQo.initInstance(ApplicationVersion.class);
-        return page(mpBaseQo.getPage(), mpBaseQo.getWrapper()).convert(ApplicationVersionMapstruct.INSTANCE::entityToVo);
+        LambdaQueryWrapper<ApplicationVersion> wrapper = mpBaseQo.getWrapper().lambda();
+        if(!isAdmin()){
+            wrapper.eq(ApplicationVersion::getCreateBy,getUserId());
+        }
+        return page(mpBaseQo.getPage(), wrapper).convert(ApplicationVersionMapstruct.INSTANCE::entityToVo);
     }
 
 
@@ -114,6 +118,13 @@ public class ApplicationVersionServiceImpl extends BaseServiceImpl<ApplicationVe
      */
     @Override
     public boolean edit(ApplicationVersionDto applicationVersionDto) {
+        ApplicationVersion applicationVersion = getById(applicationVersionDto.getId());
+        if(Objects.isNull(applicationVersion)){
+            throw ExceptionFactory.baseException("版本不存在");
+        }
+        if(!isAdmin() && applicationVersion.getCreateBy() != getUserId()){
+            throw ExceptionFactory.baseException("无权操作");
+        }
         ApplicationVersion entity = ApplicationVersionMapstruct.INSTANCE.dtoToEntity(applicationVersionDto);
         entity.setStatus(AuditStatusEnum.DRAFT.getState());
         return updateById(entity);
