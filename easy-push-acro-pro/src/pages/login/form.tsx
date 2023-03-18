@@ -106,6 +106,7 @@ export default function LoginForm() {
         ref={formRef}
         initialValues={{ userName: '', password: '' }}
       >
+        
         <Form.Item
           field="loginType"
           initialValue={'platform'}

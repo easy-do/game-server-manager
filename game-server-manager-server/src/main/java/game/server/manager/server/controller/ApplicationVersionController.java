@@ -2,6 +2,7 @@ package game.server.manager.server.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import game.server.manager.common.result.DataResult;
 import game.server.manager.web.base.BaseController;
 import game.server.manager.server.qo.ApplicationVersionQo;
 import game.server.manager.server.service.ApplicationVersionService;
@@ -96,5 +97,14 @@ public class ApplicationVersionController extends BaseController<ApplicationVers
     @Override
     public R<Object> remove(@PathVariable("id")Long id) {
         return super.remove(id);
+    }
+
+    /**
+     * 获取应用的所有版本列表
+     */
+    @SaCheckLogin
+    @GetMapping("/versionList/{applicationId}")
+    public R<List<ApplicationVersionVo>> versionList(@PathVariable("applicationId")Long applicationId) {
+        return DataResult.ok(baseService.versionList(applicationId));
     }
 }

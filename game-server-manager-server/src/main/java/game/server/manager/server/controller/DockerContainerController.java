@@ -2,7 +2,6 @@ package game.server.manager.server.controller;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
-import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.docker.model.CreateContainerDto;
 import game.server.manager.server.service.DockerContainerService;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -46,12 +46,12 @@ public class DockerContainerController {
      * 启动容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Objct>
      * @author laoyu
      * @date 2022/11/19
      */
     @GetMapping("/v1/start/{dockerId}/{containerId}")
-    public R<Void> startContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
+    public R<Object> startContainer(@PathVariable("dockerId")Long dockerId,@PathVariable("containerId")String containerId){
         return dockerContainerService.startContainer(dockerId,containerId);
     }
 
@@ -60,12 +60,12 @@ public class DockerContainerController {
      * 重启容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @GetMapping("/v1/restart/{dockerId}/{containerId}")
-    public R<Void> restartContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
+    public R<Object> restartContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
         return dockerContainerService.restartContainer(dockerId,containerId);
     }
 
@@ -73,12 +73,12 @@ public class DockerContainerController {
      * 停止容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @GetMapping("/v1/stop/{dockerId}/{containerId}")
-    public R<Void> stopContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
+    public R<Object> stopContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
         return dockerContainerService.stopContainer(dockerId,containerId);
     }
 
@@ -86,12 +86,12 @@ public class DockerContainerController {
      * 删除容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @GetMapping("/v1/remove/{dockerId}/{containerId}")
-    public R<Void> removeContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
+    public R<Object> removeContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
         return dockerContainerService.removeContainer(dockerId,containerId);
     }
 
@@ -100,12 +100,12 @@ public class DockerContainerController {
      *
      * @param containerId containerId
      * @param name name
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @GetMapping("/v1/rename/{dockerId}/{containerId}")
-    public R<Void> renameContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId,@RequestParam("name")String name){
+    public R<Object> renameContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId,@RequestParam("name")String name){
         return dockerContainerService.renameContainer(dockerId,containerId,name);
     }
 
@@ -113,7 +113,7 @@ public class DockerContainerController {
      * 查看容器日志
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
@@ -131,7 +131,7 @@ public class DockerContainerController {
      * @date 2022/11/19
      */
     @PostMapping("/v1/createContainer")
-    public R<CreateContainerResponse> createContainer(@RequestParam("dockerId")String dockerId,@RequestBody CreateContainerDto createContainerDto){
+    public R<Object> createContainer(@RequestParam("dockerId") Long dockerId, @RequestBody CreateContainerDto createContainerDto){
         return dockerContainerService.createContainer(dockerId,createContainerDto);
     }
 }

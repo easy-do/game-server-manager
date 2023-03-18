@@ -81,7 +81,7 @@ function ExecScriptPage({ deviceId, deviceType, visible, setVisible, successCall
     //提交
     const handleSubmit = () => {
         formRef.current.validate().then((values: any) => {
-            execScript({...values, deviceId:deviceId,deviceType:deviceType}).then((res) => {
+            execScript({...values, deviceId:deviceId,deviceType:deviceType,scriprId:values.scriptId.split()[0]}).then((res) => {
                 const { success, msg } = res.data;
                 if (success) {
                     formRef.current.clearFields()

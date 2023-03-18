@@ -205,7 +205,9 @@ public class DockerContainerService {
     public CreateContainerResponse createContainer(CreateContainerDto createContainerDto) {
         CreateContainerCmd createContainerCmd = dockerClient.createContainerCmd(createContainerDto.getImage());
         //容器名称
-        createContainerCmd.withName(createContainerDto.getName());
+        if(CharSequenceUtil.isNotEmpty(createContainerDto.getName())){
+            createContainerCmd.withName(createContainerDto.getName());
+        }
         //标准输出
         createContainerCmd.withAttachStdin(createContainerDto.getAttachStdin());
         //标准输入

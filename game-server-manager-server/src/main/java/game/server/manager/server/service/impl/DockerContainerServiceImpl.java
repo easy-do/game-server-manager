@@ -4,7 +4,6 @@ import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import game.server.manager.common.enums.ClientModelEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
@@ -24,11 +23,11 @@ import game.server.manager.server.util.SessionUtils;
 import game.server.manager.common.mode.socket.RenameContainerData;
 import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.server.websocket.handler.browser.SocketContainerLogData;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.websocket.Session;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,15 +46,15 @@ public class DockerContainerServiceImpl implements DockerContainerService {
     @Resource
     private DockerClientApiEndpoint dockerClientApiEndpoint;
 
-    private DockerDetailsVo getDetails(String dockerId){
+    private DockerDetailsVo getDetails(Serializable dockerId){
         DockerDetailsVo dockerDetailsVo = dockerDetailsService.info(dockerId);
         if(Objects.isNull(dockerDetailsVo)){
-            throw ExceptionFactory.bizException("客户端不存在");
+            throw ExceptionFactory.bizException("docker不存在");
         }
         return dockerDetailsVo;
     }
 
-    private DockerContainerApi dockerContainerApi(String dockerId){
+    private DockerContainerApi dockerContainerApi(Serializable dockerId){
         DockerDetailsVo dockerDetailsVo = dockerDetailsService.info(dockerId);
         return dockerClientApiEndpoint.dockerContainerApi(dockerDetailsVo.getDockerHost(), dockerDetailsVo.getDockerSecret());
     }
@@ -77,7 +76,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
     }
 
     @Override
-    public R<Void> startContainer(String dockerId, String containerId) {
+    public R<Object> startContainer(Long dockerId, String containerId) {
         DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
         if(dockerDetailsVo.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetailsVo.getClientId());
@@ -94,7 +93,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
     }
 
     @Override
-    public R<Void> restartContainer(String dockerId, String containerId) {
+    public R<Object> restartContainer(String dockerId, String containerId) {
         DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
         if(dockerDetailsVo.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetailsVo.getClientId());
@@ -111,7 +110,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
     }
 
     @Override
-    public R<Void> stopContainer(String dockerId, String containerId) {
+    public R<Object> stopContainer(String dockerId, String containerId) {
         DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
         if(dockerDetailsVo.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetailsVo.getClientId());
@@ -128,7 +127,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
     }
 
     @Override
-    public R<Void> removeContainer(String dockerId, String containerId) {
+    public R<Object> removeContainer(String dockerId, String containerId) {
         DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
         if(dockerDetailsVo.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetailsVo.getClientId());
@@ -145,7 +144,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
     }
 
     @Override
-    public R<Void> renameContainer(String dockerId, String containerId, String name) {
+    public R<Object> renameContainer(String dockerId, String containerId, String name) {
         DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
         if(dockerDetailsVo.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetailsVo.getClientId());
@@ -160,11 +159,23 @@ public class DockerContainerServiceImpl implements DockerContainerService {
                     .build();
             return sendMessageAndUnPackage(clientSession, messageId, serverMessage);
         }
-        return dockerContainerApi(dockerId). renameContainer(containerId,name);
+        return dockerContainerApi(dockerId).renameContainer(containerId,name);
     }
 
     @Override
-    public R<CreateContainerResponse> createContainer(String dockerId, CreateContainerDto createContainerDto) {
+    public R<Object> createContainer(Long dockerId, CreateContainerDto createContainerDto) {
+        DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
+        if(dockerDetailsVo.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
+            Session clientSession = SessionUtils.getClientSession(dockerDetailsVo.getClientId());
+            String messageId = UUID.fastUUID().toString(true);
+            ServerMessage serverMessage = ServerMessage.builder()
+                    .messageId(messageId)
+                    .type(ServerMessageTypeEnum.CREATE_CONTAINER.getType())
+                    .sync(0)
+                    .data(JSON.toJSONString(createContainerDto))
+                    .build();
+            return sendMessageAndUnPackage(clientSession, messageId, serverMessage);
+        }
         return dockerContainerApi(dockerId).createContainer(createContainerDto);
     }
 
@@ -204,8 +215,9 @@ public class DockerContainerServiceImpl implements DockerContainerService {
         SessionUtils.sendSyncServerMessage(clientSession,browserSession.getId(),JSON.toJSONString(serverContainerLogMessage),ServerMessageTypeEnum.CONTAINER_LOG);
     }
 
-    @NotNull
-    private R<Void> sendMessageAndUnPackage(Session clientSession, String messageId, ServerMessage serverMessage) {
+    private <T> R<T> sendMessageAndUnPackage(Session clientSession, String messageId, ServerMessage serverMessage) {
         return SessionUtils.sendMessageAndGetResultMessage(clientSession, messageId, serverMessage);
     }
+
+
 }

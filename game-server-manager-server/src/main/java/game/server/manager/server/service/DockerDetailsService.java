@@ -16,4 +16,13 @@ import game.server.manager.server.vo.DockerDetailsVo;
 public interface DockerDetailsService extends BaseService<DockerDetails, DockerDetailsQo, DockerDetailsVo, DockerDetailsDto>{
 
 
+    /**
+     * 根据客户端获取docker信息
+     *
+     * @param clientId clientId
+     * @return game.server.manager.server.vo.DockerDetailsVo
+     * @author laoyu
+     * @date 2023/3/19
+     */
+    DockerDetailsVo getByClientId(String clientId);
 }

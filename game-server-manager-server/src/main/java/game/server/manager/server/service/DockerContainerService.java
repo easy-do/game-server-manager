@@ -32,44 +32,44 @@ public interface DockerContainerService {
      *
      * @param dockerId dockerId
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Void> startContainer(String dockerId, String containerId);
+    R<Object> startContainer(Long dockerId, String containerId);
 
     /**
      * 重启容器
      *
      * @param dockerId dockerId
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Void> restartContainer(String dockerId, String containerId);
+    R<Object> restartContainer(String dockerId, String containerId);
 
     /**
      * 停止容器
      *
      * @param dockerId dockerId
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Void> stopContainer(String dockerId, String containerId);
+    R<Object> stopContainer(String dockerId, String containerId);
 
     /**
      * 删除容器
      *
      * @param dockerId dockerId
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Void> removeContainer(String dockerId, String containerId);
+    R<Object> removeContainer(String dockerId, String containerId);
 
     /**
      * 重命名容器
@@ -77,22 +77,22 @@ public interface DockerContainerService {
      * @param dockerId dockerId
      * @param containerId containerId
      * @param name name
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Void> renameContainer(String dockerId, String containerId, String name);
+    R<Object> renameContainer(String dockerId, String containerId, String name);
 
     /**
      * 创建容器
      *
      * @param dockerId dockerId
      * @param createContainerDto createContainerDto
-     * @return game.server.manager.common.result.R<com.github.dockerjava.api.command.CreateContainerResponse>
+     * @return game.server.manager.common.result.R<com.github.dockerjava.api.command.Object>
      * @author laoyu
      * @date 2022/11/19
      */
-    R<CreateContainerResponse> createContainer(String dockerId, CreateContainerDto createContainerDto);
+    R<Object> createContainer(Long dockerId, CreateContainerDto createContainerDto);
 
     /**
      * 查看容器日志

@@ -25,7 +25,7 @@ public class ClientMessageHandler {
     private HandlerServiceContainer<ClientHandlerData, Void> handlerServiceContainer;
 
     public void handle(String message, Session session) {
-        ClientMessage clientMessage;
+        ClientMessage<String> clientMessage;
         try{
             clientMessage = JSON.parseObject(message, ClientMessage.class);
         }catch (Exception exception){

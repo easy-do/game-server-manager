@@ -1,7 +1,10 @@
 package game.server.manager.server.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import game.server.manager.common.result.DataResult;
+import game.server.manager.server.dto.InstallApplicationDto;
 import game.server.manager.web.base.BaseController;
 import game.server.manager.server.qo.ApplicationQo;
 import game.server.manager.server.service.ApplicationService;
@@ -98,5 +101,12 @@ public class ApplicationController extends BaseController<ApplicationService,App
         return super.remove(id);
     }
 
-
+    /**
+     * 分页条件查询应用信息列表
+     */
+    @SaCheckLogin
+    @PostMapping("/install")
+    public R<Object> install(@RequestBody InstallApplicationDto installApplicationDto) {
+        return DataResult.ok(baseService.install(installApplicationDto));
+    }
 }

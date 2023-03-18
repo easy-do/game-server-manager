@@ -1,5 +1,6 @@
 package game.server.manager.server.service.impl;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.alicp.jetcache.anno.CacheInvalidate;
 import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
@@ -8,10 +9,23 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import game.server.manager.common.enums.AuditStatusEnum;
 import game.server.manager.common.enums.ScopeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.result.R;
 import game.server.manager.common.vo.UserInfoVo;
+import game.server.manager.docker.model.CreateContainerDto;
+import game.server.manager.server.dto.InstallApplicationDto;
+import game.server.manager.server.dto.VersionConfData;
+import game.server.manager.server.entity.ApplicationVersion;
+import game.server.manager.server.entity.ClientInfo;
+import game.server.manager.server.entity.DockerDetails;
+import game.server.manager.server.service.ApplicationVersionService;
+import game.server.manager.server.service.ClientInfoService;
+import game.server.manager.server.service.DockerContainerService;
+import game.server.manager.server.service.DockerDetailsService;
+import game.server.manager.server.vo.DockerDetailsVo;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.server.dto.ApplicationDto;
 import game.server.manager.server.entity.Application;
@@ -20,6 +34,7 @@ import game.server.manager.server.vo.ApplicationVo;
 import game.server.manager.server.mapstruct.ApplicationMapstruct;
 import game.server.manager.server.mapper.ApplicationMapper;
 import game.server.manager.server.service.ApplicationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -37,6 +52,17 @@ import java.util.Objects;
 @Service
 public class ApplicationServiceImpl extends BaseServiceImpl<Application,ApplicationQo, ApplicationVo, ApplicationDto, ApplicationMapper> implements ApplicationService {
 
+
+    @Autowired
+    private ApplicationVersionService applicationVersionService;
+    @Autowired
+    private ClientInfoService clientInfoService;
+
+    @Autowired
+    private DockerDetailsService dockerDetailsService;
+
+    @Autowired
+    private DockerContainerService dockerContainerService;
 
     @Override
     public void listSelect(LambdaQueryWrapper<Application> wrapper) {
@@ -159,5 +185,38 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
         wrapper.eq(Application::getScope, 1);
         wrapper.orderByDesc(Application::getHeat);
         return page(applicationQo.startPage(), wrapper).convert(ApplicationMapstruct.INSTANCE::entityToVo);
+    }
+
+    @Override
+    public Object install(InstallApplicationDto installApplicationDto) {
+        Long applicationId = installApplicationDto.getApplicationId();
+        Application application = getById(applicationId);
+        if(Objects.isNull(application)){
+            throw ExceptionFactory.baseException("应用不存在");
+        }
+        ApplicationVersion version = applicationVersionService.getById(installApplicationDto.getVersion());
+        if(Objects.isNull(version)){
+            throw ExceptionFactory.baseException("应用版本不存在");
+        }
+        String clientId = installApplicationDto.getClientId();
+        ClientInfo client = clientInfoService.getById(clientId);
+        if(Objects.isNull(client)){
+            throw ExceptionFactory.baseException("客户端不存在");
+        }
+        DockerDetailsVo dockerDetailsVo = dockerDetailsService.getByClientId(client.getId());
+        if(Objects.nonNull(dockerDetailsVo)){
+            VersionConfData versionConfData = JSONObject.parseObject(version.getConfData(), VersionConfData.class);
+            CreateContainerDto createContainerDto = CreateContainerDto.builder()
+                    .image(versionConfData.getImage())
+                    .build();
+            R<Object> resultData = dockerContainerService.createContainer(dockerDetailsVo.getId(), createContainerDto);
+           if(resultData.isSuccess()){
+               Object data = resultData.getData();
+               CreateContainerResponse res = JSONObject.parseObject(data.toString(), CreateContainerResponse.class);
+               return dockerContainerService.startContainer(dockerDetailsVo.getId(),res.getId()).getData();
+           }
+            return false;
+        }
+        return null;
     }
 }

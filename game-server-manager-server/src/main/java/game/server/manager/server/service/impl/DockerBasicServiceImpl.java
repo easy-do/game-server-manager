@@ -71,7 +71,7 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_INFO,clientSession);
-            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
+            ClientMessage<String> clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
             if(Objects.isNull(clientMessage)){
                 return DataResult.fail("获取客户端消息超时.");
             }
@@ -88,7 +88,7 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_VERSION,clientSession);
-            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
+            ClientMessage<String> clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
             if(Objects.isNull(clientMessage)){
                 return DataResult.fail("获取客户端消息超时.");
             }

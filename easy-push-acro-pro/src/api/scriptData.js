@@ -8,4 +8,4 @@ export const addRequest = (param) => postRequestBody("/server/scriptData/add",pa
 export const updateRequest = (param) => postRequestBody("/server/scriptData/update",param);
 export const listByAppId = (appId) => get("/server/scriptData/listByAppid/" + appId);
 export const execScript = (param) => postRequestBody("/server/scriptData/execScript",param);
-export const envDataListByScriptId = (id) => get("/server/scriptData/envDatalist/" + id);
+export const envDataListByScriptId = (id) => get("/server/scriptData/evnList/" + id);

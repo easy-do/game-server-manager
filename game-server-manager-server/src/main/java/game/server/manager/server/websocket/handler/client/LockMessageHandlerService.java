@@ -24,7 +24,7 @@ public class LockMessageHandlerService extends AbstractHandlerService<ClientHand
 
     @Override
     public Void handler(ClientHandlerData clientHandlerData) {
-        ClientMessage clientMessage = clientHandlerData.getClientMessage();
+        ClientMessage<String> clientMessage = clientHandlerData.getClientMessage();
         Session session = clientHandlerData.getSession();
         //寻找游览器session
         Session browserSession = SocketSessionCache.getBrowserSessionByClientSessionId(session.getId());

@@ -54,13 +54,13 @@ public class DockerContainerController implements DockerContainerApi {
      * 启动容器列
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Override
     @GetMapping("/startContainer")
-    public R<Void> startContainer(@RequestParam("containerId")String containerId){
+    public R<Object> startContainer(@RequestParam("containerId")String containerId){
         try {
             return DataResult.ok(dockerContainerService.startContainer(containerId));
         }catch (Exception e){
@@ -73,13 +73,13 @@ public class DockerContainerController implements DockerContainerApi {
      * 重启容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Override
     @GetMapping("/restartContainer")
-    public R<Void> restartContainer(@RequestParam("containerId")String containerId){
+    public R<Object> restartContainer(@RequestParam("containerId")String containerId){
         try {
             return DataResult.ok(dockerContainerService.restartContainer(containerId));
         }catch (Exception e){
@@ -91,13 +91,13 @@ public class DockerContainerController implements DockerContainerApi {
      * 停止容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Override
     @GetMapping("/stopContainer")
-    public R<Void> stopContainer(@RequestParam("containerId")String containerId){
+    public R<Object> stopContainer(@RequestParam("containerId")String containerId){
         try {
             return DataResult.ok(dockerContainerService.stopContainer(containerId));
         }catch (Exception e){
@@ -109,13 +109,13 @@ public class DockerContainerController implements DockerContainerApi {
      * 删除容器
      *
      * @param containerId containerId
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Override
     @DeleteMapping("/removeContainer")
-    public R<Void> removeContainer(@RequestParam("containerId")String containerId){
+    public R<Object> removeContainer(@RequestParam("containerId")String containerId){
         try {
             return DataResult.ok(dockerContainerService.removeContainer(containerId));
         }catch (Exception e){
@@ -128,13 +128,13 @@ public class DockerContainerController implements DockerContainerApi {
      *
      * @param containerId containerId
      * @param name name
-     * @return game.server.manager.common.result.R<java.lang.Void>
+     * @return game.server.manager.common.result.R<java.lang.Object>
      * @author laoyu
      * @date 2022/11/19
      */
     @Override
     @GetMapping("/renameContainer")
-    public R<Void> renameContainer(@RequestParam("containerId")String containerId,@RequestParam("name")String name){
+    public R<Object> renameContainer(@RequestParam("containerId")String containerId,@RequestParam("name")String name){
         try {
             return DataResult.ok(dockerContainerService.renameContainer(containerId,name));
         }catch (Exception e){
@@ -152,7 +152,7 @@ public class DockerContainerController implements DockerContainerApi {
      */
     @Override
     @PostMapping("/createContainer")
-    public R<CreateContainerResponse> createContainer(@RequestBody CreateContainerDto createContainerDto){
+    public R<Object> createContainer(@RequestBody CreateContainerDto createContainerDto){
         try {
             return DataResult.ok(dockerContainerService.createContainer(createContainerDto));
         }catch (Exception e){
