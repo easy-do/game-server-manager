@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
-import dayjs from 'dayjs';
 import {
   Form,
   Input,
-  Select,
-  DatePicker,
   Button,
   Grid,
 } from '@arco-design/web-react';
@@ -13,15 +10,14 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { statusEnum } from './constants';
 import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
-const TextArea = Input.TextArea;
 
 function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
+  applicationId
 }) {
   
   
@@ -33,12 +29,13 @@ function SearchForm(props: {
 
   const handleSubmit = () => {
     const values = form.getFieldsValue();
+    values.applicationId = props.applicationId;
     props.onSearch(values);
   };
 
   const handleReset = () => {
     form.resetFields();
-    props.onSearch({});
+    props.onSearch({applicationId:props.applicationId});
   };
 
   const colSpan = lang === 'zh-CN' ? 8 : 12;
@@ -55,36 +52,32 @@ function SearchForm(props: {
         <Row gutter={24}>
           <Col span={colSpan}>
             <Form.Item
-              label={t['searchTable.columns.appName']}
-              field="appName"
+              label={t['searchTable.columns.applicationName']}
+              field="applicationName"
             >
-              <Input placeholder={t['searchForm.appName.placeholder']} allowClear />
+              <Input placeholder={t['searchForm.applicationName.placeholder']} allowClear />
             </Form.Item>
           </Col> 
           <Col span={colSpan}>
             <Form.Item
-              label={t['searchTable.columns.state']}
-              field="state"
+              label={t['searchTable.columns.version']}
+              field="version"
             >
-              <DictDataSelect dictCode={'status_select'} placeholder={t['searchForm.state.placeholder']} />
+              <Input placeholder={t['searchForm.version.placeholder']} allowClear />
             </Form.Item>
           </Col> 
           <Col span={colSpan}>
-            <Form.Item
-              label={t['searchTable.columns.isAudit']}
-              field="isAudit"
+            <Form.Item 
+              label={t['searchTable.columns.status']}
+              field="status"
             >
-              <DictDataSelect dictCode={'audit_status'} placeholder={t['searchForm.isAudit.placeholder']} />
+              <DictDataSelect
+                dictCode='application_status'
+                placeholder={t['searchForm.status.placeholder']}
+
+              />
             </Form.Item>
-          </Col> 
-          <Col span={colSpan}>
-            <Form.Item
-              label={t['searchTable.columns.appScope']}
-              field="appScope"
-            >
-              <DictDataSelect dictCode={'scope_select'} placeholder={t['searchForm.appScope.placeholder']} />
-            </Form.Item>
-          </Col> 
+          </Col>
         </Row>
       </Form>
       <div className={styles['right-button']}>

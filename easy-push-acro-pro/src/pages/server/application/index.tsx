@@ -7,6 +7,7 @@ import {
   Space,
   Typography,
   Notification,
+  Modal,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
 import { IconPlus } from '@arco-design/web-react/icon';
@@ -27,6 +28,7 @@ import UpdatePage from './update';
 import AddPage from './add';
 import { audit, commitAudit } from '@/api/audit';
 import AuditModal from '@/pages/audit/auditModal';
+import ApplicationVersionSearchTable from '../applicationVersion';
 
 const { Title } = Typography;
 
@@ -57,6 +59,10 @@ function SearchTable() {
     //审核
     if (type === 'audit') {
       audit(record.id);
+    }
+    //版本管理
+    if (type === 'version_manager') {
+      versionManger(record.id);
     }
   };
 
@@ -129,6 +135,14 @@ function SearchTable() {
   function auditSuccess() {
     setIsaudit(false);
     fetchData();
+  }
+  const [versionId, setVersionId] = useState();
+  const [isVersion, setIsVersion] = useState(false);
+
+  //版本管理
+  function versionManger(id) {
+    setVersionId(id);
+    setIsVersion(true);
   }
 
   //获取表格展示列表、绑定操作列回调
@@ -263,6 +277,25 @@ function SearchTable() {
         setVisible={setIsaudit}
         successCallBack={auditSuccess}
       />
+      <Modal
+        title={'版本管理'}
+        visible={isVersion}
+        onOk={() => {
+          setIsVersion(false);
+        }}
+        onCancel={() => {
+          setIsVersion(false);
+        }}
+        autoFocus={false}
+        focusLock={true}
+        maskClosable={false}
+        style={{ width: '100%', minHeight: '100%' }}
+      >
+        <ApplicationVersionSearchTable
+          applicationId={versionId}
+          visible={isVersion}
+        />
+      </Modal>
     </Card>
   );
 }

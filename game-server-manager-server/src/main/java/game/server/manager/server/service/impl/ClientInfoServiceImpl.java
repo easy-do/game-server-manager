@@ -26,7 +26,6 @@ import game.server.manager.event.BasePublishEventServer;
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.redis.config.RedisStreamUtils;
 import game.server.manager.server.dto.ClientInfoDto;
-import game.server.manager.server.entity.AppInfo;
 import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.ClientMessage;
 import game.server.manager.server.entity.ExecuteLog;
@@ -35,7 +34,6 @@ import game.server.manager.server.mapper.ClientInfoMapper;
 import game.server.manager.server.mapstruct.ClientInfoMapstruct;
 import game.server.manager.server.redis.ExecScriptListenerMessage;
 import game.server.manager.server.service.ScriptEnvDataService;
-import game.server.manager.server.service.AppInfoService;
 import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
 import game.server.manager.server.service.ExecuteLogService;
@@ -74,9 +72,6 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
 
     @Autowired
     private SysDictDataApi sysDictDataService;
-
-    @Autowired
-    private AppInfoService appInfoService;
 
     @Autowired
     private ClientMessageService clientMessageService;
@@ -250,12 +245,8 @@ public class ClientInfoServiceImpl extends BaseServiceImpl<ClientInfo, MpBaseQo<
         }
         String clientInstallCmd = sysDictDataService.getSingleDictData("system_config", "client_install_cmd")
                 .getData().getDictValue();
-        String appId = sysDictDataService.getSingleDictData("system_config", "client_app_id").getData().getDictValue();
-        AppInfo appInfo = appInfoService.getById(appId);
         JSONObject env = new JSONObject();
-        env.put("APP_ID", appId);
         env.put("CLIENT_ID", id);
-        env.put("CLIENT_VERSION", appInfo.getVersion());
         env.put("PUBLIC_KEY", client.getPublicKey());
         String installScriptId = getInstallScriptId();
         return clientInstallCmd + " "+ ScriptDataUtils.generateExecShellEnvs(env, scriptEnvDataService.getVoListByScriptId(Long.valueOf(installScriptId)));

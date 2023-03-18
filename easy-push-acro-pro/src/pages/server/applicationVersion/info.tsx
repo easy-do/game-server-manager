@@ -1,15 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Descriptions, Modal, Skeleton } from '@arco-design/web-react';
+import {
+  Descriptions,
+  Modal,
+  Skeleton,
+  Table,
+  Typography,
+} from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
-import { infoRequest } from '@/api/appInfo';
-import { DataInfoVo } from './constants';
-import { downloadPath } from '@/api/oss';
+import { infoRequest } from '@/api/applicationVersion';
+import { DataInfoVo, statusEnum } from './constants';
+import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 
 function InfoPage(props: { id: number; visible; setVisible }) {
   const [loading, setLoading] = useState(false);
 
-  const [infoData, setInfoData] = useState<DataInfoVo>();
+  const [infoData, setInfoData] = useState<DataInfoVo>({
+    id: null,
+    applicationId: null,
+    applicationName: null,
+    version: null,
+    status: null,
+    description: null,
+    heat: null,
+    confData: {
+      envs: [],
+      image: '',
+    },
+    createTime: null,
+    updateTime: null,
+    createBy: null,
+    updateBy: null,
+    delFlag: null,
+  });
+
+  const [confDataNode, setConfDataNode] = useState();
 
   function fetchData() {
     setLoading(true);
@@ -17,6 +42,7 @@ function InfoPage(props: { id: number; visible; setVisible }) {
       infoRequest(props.id).then((res) => {
         const { success, data } = res.data;
         if (success) {
+          data.confData = JSON.parse(data.confData);
           setInfoData(data);
         }
         setLoading(false);
@@ -26,17 +52,50 @@ function InfoPage(props: { id: number; visible; setVisible }) {
 
   useEffect(() => {
     fetchData();
-  }, [props.id,props.visible]);
+  }, [props.id, props.visible]);
 
   const t = useLocale(locale);
 
+  const tablecolumns = [
+    {
+      title: t['searchTable.columns.envName'],
+      dataIndex: 'envName',
+      ellipsis: true,
+    },
+    {
+      title: t['searchTable.columns.envKey'],
+      dataIndex: 'envKey',
+      ellipsis: true,
+    },
+    {
+      title: t['searchTable.columns.envValue'],
+      dataIndex: 'envValue',
+      ellipsis: true,
+    },
+    {
+      title: t['searchTable.columns.envDescription'],
+      dataIndex: 'envDescription',
+      ellipsis: true,
+    },
+  ];
+
   const data = [
     {
-      label: t['searchTable.columns.appName'],
+      label: t['searchTable.columns.id'],
       value: loading ? (
         <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
       ) : infoData ? (
-        infoData.appName
+        infoData.id
+      ) : (
+        ''
+      ),
+    },
+    {
+      label: t['searchTable.columns.applicationName'],
+      value: loading ? (
+        <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
+      ) : infoData ? (
+        infoData.applicationName
       ) : (
         ''
       ),
@@ -52,113 +111,51 @@ function InfoPage(props: { id: number; visible; setVisible }) {
       ),
     },
     {
-      label: t['searchTable.columns.state'],
+      label: t['searchTable.columns.image'],
       value: loading ? (
         <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
       ) : infoData ? (
-        infoData.state
+        infoData.confData.image
       ) : (
         ''
       ),
     },
     {
-      label: t['searchTable.columns.startCmd'],
+      label: t['searchTable.columns.status'],
       value: loading ? (
         <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
       ) : infoData ? (
-        infoData.startCmd
+        statusEnum[infoData.status]
       ) : (
         ''
       ),
     },
     {
-      label: t['searchTable.columns.stopCmd'],
+      label: t['searchTable.columns.heat'],
       value: loading ? (
         <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
       ) : infoData ? (
-        infoData.stopCmd
+        infoData.heat
       ) : (
         ''
       ),
     },
     {
-      label: t['searchTable.columns.configFilePath'],
+      label: t['searchTable.columns.createTime'],
       value: loading ? (
         <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
       ) : infoData ? (
-        infoData.configFilePath
+        infoData.createTime
       ) : (
         ''
       ),
     },
     {
-      label: t['searchTable.columns.icon'],
+      label: t['searchTable.columns.updateTime'],
       value: loading ? (
         <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
       ) : infoData ? (
-        <img
-          src={downloadPath + infoData.icon}
-          style={{
-            maxWidth: '100%',
-          }}
-        ></img>
-      ) : (
-        ''
-      ),
-    },
-    {
-      label: t['searchTable.columns.picture'],
-      value: loading ? (
-        <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
-      ) : infoData ? (
-          infoData.picture.split(',').map((item) => {
-            <img
-              src={downloadPath + item}
-              style={{
-                maxWidth: '100%',
-              }}
-            ></img>;
-          })
-      ) : (
-        ''
-      ),
-    },
-    {
-      label: t['searchTable.columns.author'],
-      value: loading ? (
-        <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
-      ) : infoData ? (
-        infoData.author
-      ) : (
-        ''
-      ),
-    },
-    {
-      label: t['searchTable.columns.isAudit'],
-      value: loading ? (
-        <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
-      ) : infoData ? (
-        infoData.isAudit
-      ) : (
-        ''
-      ),
-    },
-    {
-      label: t['searchTable.columns.appScope'],
-      value: loading ? (
-        <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
-      ) : infoData ? (
-        infoData.appScope
-      ) : (
-        ''
-      ),
-    },
-    {
-      label: t['searchTable.columns.description'],
-      value: loading ? (
-        <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
-      ) : infoData ? (
-        infoData.description
+        infoData.updateTime
       ) : (
         ''
       ),
@@ -167,6 +164,7 @@ function InfoPage(props: { id: number; visible; setVisible }) {
 
   return (
     <Modal
+      style={{ width: '100%', minHeight: '70%' }}
       title={t['searchTable.info.title']}
       visible={props.visible}
       onOk={() => {
@@ -179,11 +177,30 @@ function InfoPage(props: { id: number; visible; setVisible }) {
       focusLock={true}
       maskClosable={false}
     >
+      <Typography.Title heading={6}>
+        {t['searchTable.columns.basicInfo']}
+      </Typography.Title>
       <Descriptions
         column={1}
         data={data}
         style={{ marginBottom: 20 }}
         labelStyle={{ paddingRight: 36 }}
+      />
+      <Typography.Title heading={6}>
+        {t['searchTable.columns.EnvInfo']}
+      </Typography.Title>
+      <Table
+        rowKey="key"
+        columns={tablecolumns}
+        data={infoData.confData.envs}
+        pagination={false}
+      />
+      <Typography.Title heading={6}>
+        {t['searchTable.columns.description']}
+      </Typography.Title>
+      <MarkdownEditor
+        value={infoData ? infoData.description : ''}
+        previewOnly
       />
     </Modal>
   );

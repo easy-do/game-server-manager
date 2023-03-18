@@ -1,6 +1,5 @@
 package game.server.manager.common.mode;
 
-import game.server.manager.common.vo.AppInfoVo;
 import game.server.manager.common.vo.ScriptDataVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +23,6 @@ public class ClientDeployData implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private AppInfoVo appInfo;
 
     private ScriptDataVo appScript;
 

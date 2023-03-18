@@ -89,6 +89,7 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
         <Form.Item
           label={t['searchTable.columns.applicationName']}
           field="applicationName"
+          disabled
           rules={[
             { required: true, message: t['searchTable.rules.applicationName.required'] },
           ]}

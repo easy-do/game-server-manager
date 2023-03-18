@@ -1,21 +1,23 @@
 import React from 'react';
-import { Button, Popconfirm } from '@arco-design/web-react';
+import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { dictLabelEnum } from '@/utils/dictDataUtils';
+import { dictLabelEnum, getDictList } from '@/utils/dictDataUtils';
 
 export const statusEnum = dictLabelEnum('application_status','string')
-export const scopeEnum = dictLabelEnum('application_scope','string')
 
 export interface DataInfoVo{
-    id: string,
+    id: number,
+    applicationId: string,
     applicationName: string,
+    version: string,
     status: string,
-    icon: string,
-    author: string,
-    scope: string,
     description: string,
     heat: string,
+    confData: {
+      envs:[],
+      image:''
+    },
     createTime: string,
     updateTime: string,
     createBy: string,
@@ -27,13 +29,13 @@ export interface DataInfoVo{
 export function getSearChColumns(){
     return [
     'id',
+    'applicationId',
     'applicationName',
+    'version',
     'status',
-    'icon',
-    'author',
-    'scope',
     'description',
     'heat',
+    'confData',
     'createTime',
     'updateTime',
     'createBy',
@@ -45,10 +47,10 @@ export function getSearChColumns(){
 // 搜索配置
 export function searchConfig() {
   return {
+        'applicationId': SearchTypeEnum.EQ,
         'applicationName': SearchTypeEnum.LIKE,
+        'version': SearchTypeEnum.EQ,
         'status': SearchTypeEnum.EQ,
-        'author': SearchTypeEnum.EQ,
-        'scope': SearchTypeEnum.EQ,
   }
 }
 
@@ -66,16 +68,21 @@ export function getColumns(
   return [
 
     {
+      title: t['searchTable.columns.id'],
+      dataIndex: 'id',
+      ellipsis:true,
+    },
+
+    {
       title: t['searchTable.columns.applicationName'],
       dataIndex: 'applicationName',
       ellipsis:true,
     },
 
     {
-      title: t['searchTable.columns.scope'],
-      dataIndex: 'scope',
+      title: t['searchTable.columns.version'],
+      dataIndex: 'version',
       ellipsis:true,
-      render: (_, record) => (scopeEnum[record.scope]),
     },
 
     {
@@ -91,17 +98,6 @@ export function getColumns(
       ellipsis:true,
     },
 
-    {
-      title: t['searchTable.columns.author'],
-      dataIndex: 'author',
-      ellipsis:true,
-    },
-
-    {
-      title: t['searchTable.columns.createTime'],
-      dataIndex: 'createTime',
-      ellipsis:true,
-    },
     {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',
@@ -153,14 +149,7 @@ export function getColumns(
               { resource: 'application', actions: ['application:update'] },
             ]}
           >
-            <Button
-                type="text"
-                size="small"
-                onClick={() => callback(record, 'version_manager')}
-            >
-                {t['searchTable.columns.operations.versionManager']}
-            </Button>
-            {record.status !==1 && record.status !==2 && record.status !==4 ?<Button
+           {record.status !==1 && record.status !==2 && record.status !==4 ?<Button
                 type="text"
                 size="small"
                 onClick={() => callback(record, 'submitAudit')}
