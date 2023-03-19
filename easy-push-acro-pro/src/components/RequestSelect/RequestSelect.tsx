@@ -11,6 +11,7 @@ export interface props {
     request?: () => AxiosPromise<any>;
     valueType?: 'string' | 'number';
     mode?: 'multiple' | 'tags';
+    disabled?:boolean;
 }
 
 function RequestSelect(props?: props) {
@@ -49,6 +50,7 @@ function RequestSelect(props?: props) {
 
     return (
         <Select
+            disabled={props.disabled}
             mode={props.mode}
             value={props.value}
             placeholder={props.placeholder}

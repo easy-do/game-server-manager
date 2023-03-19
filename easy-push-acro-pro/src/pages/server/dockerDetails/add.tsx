@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { Form, FormInstance, Input, Modal, DatePicker, Select, Notification } from '@arco-design/web-react';
 import locale from './locale';
@@ -12,13 +12,17 @@ import { list as clientList } from '@/api/clientInfo';
 
 function AddPage({ visible, setVisible, successCallBack }) {
   
-  const TextArea = Input.TextArea;
   
   const formRef = useRef<FormInstance>();
 
   const { lang } = useContext(GlobalContext);
 
   const t = useLocale(locale);
+
+  const [dockerModel, setDockerModel] = useState('http');
+  const chageDockerModel = (value)=>{
+    setDockerModel(value);
+  }
 
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
@@ -31,6 +35,8 @@ function AddPage({ visible, setVisible, successCallBack }) {
       });
     });
   };
+
+
 
   return (
     <Modal
@@ -63,15 +69,6 @@ function AddPage({ visible, setVisible, successCallBack }) {
           <Input placeholder={t['searchForm.dockerName.placeholder']} allowClear />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.dockerHost']}
-          field="dockerHost"
-          // rules={[
-          //   { required: true, message: t['searchTable.rules.dockerHost.required'] },
-          // ]}
-        >
-          <Input placeholder={t['searchForm.dockerHost.placeholder']} allowClear />
-        </Form.Item>
-        <Form.Item
           label={t['searchTable.columns.dockerModel']}
           field="dockerModel"
           initialValue={'socket'}
@@ -79,12 +76,25 @@ function AddPage({ visible, setVisible, successCallBack }) {
             { required: true, message: t['searchTable.rules.dockerModel.required'] },
           ]}
         >
-          <Select placeholder={t['searchForm.dockerModel.placeholder']} allowClear >
+          <Select placeholder={t['searchForm.dockerModel.placeholder']} onChange={chageDockerModel} allowClear >
             <Select.Option value={'http'}>API直连</Select.Option>
             <Select.Option value={'socket'}>socket通信</Select.Option>
-            </Select>
+          </Select>
         </Form.Item>
-        <Form.Item
+        {
+          dockerModel === 'http'?
+          <Form.Item
+          label={t['searchTable.columns.dockerHost']}
+          field="dockerHost"
+          rules={[
+            { required: true, message: t['searchTable.rules.dockerHost.required'] },
+          ]}
+        >
+          <Input placeholder={t['searchForm.dockerHost.placeholder']} allowClear />
+        </Form.Item>:null
+        }
+        {
+          dockerModel === 'socket'?        <Form.Item
           label={t['searchTable.columns.imageList.clientId']}
           field="clientId"
           rules={[
@@ -92,7 +102,9 @@ function AddPage({ visible, setVisible, successCallBack }) {
           ]}
         >
           <RequestSelect placeholder={t['searchForm.clientId.placeholder']} lableFiled='clientName' valueFiled='id' request={() => clientList()} />
-        </Form.Item>
+        </Form.Item>:null
+        }
+
         {/* <Form.Item
           label={t['searchTable.columns.dockerIsSsl']}
           field="dockerIsSsl"

@@ -4,20 +4,19 @@ import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Image;
 import game.server.manager.common.enums.ClientModelEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.mode.socket.ServerPullImageMessage;
-import game.server.manager.common.result.R;
 import game.server.manager.common.vo.UserInfoVo;
-import game.server.manager.docker.client.api.DockerClientApiEndpoint;
-import game.server.manager.docker.client.api.DockerImageApi;
+import game.server.manager.docker.service.DockerImageBaseService;
 import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerDetailsService;
 import game.server.manager.server.service.DockerImageService;
-import game.server.manager.server.vo.DockerDetailsVo;
+import game.server.manager.server.util.DockerUtils;
 import game.server.manager.server.util.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.server.websocket.handler.browser.SocketPullImageData;
@@ -43,26 +42,21 @@ public class DockerImageServiceImpl implements DockerImageService {
     private DockerDetailsService dockerDetailsService;
 
     @Resource
-    private DockerClientApiEndpoint dockerClientApiEndpoint;
+    private DockerImageBaseService dockerImageBaseService;
 
-    private DockerDetailsVo getDetails(String dockerId){
-        DockerDetailsVo dockerDetailsVo = dockerDetailsService.info(dockerId);
-        if(Objects.isNull(dockerDetailsVo)){
+    private DockerDetails getDetails(String dockerId){
+        DockerDetails dockerDetails = dockerDetailsService.getById(dockerId);
+        if(Objects.isNull(dockerDetails)){
             throw ExceptionFactory.bizException("客户端不存在");
         }
-        return dockerDetailsVo;
-    }
-
-
-    private DockerImageApi dockerImageApi(DockerDetailsVo dockerDetailsVo){
-        return dockerClientApiEndpoint.dockerImageApi(dockerDetailsVo.getDockerHost(), dockerDetailsVo.getDockerSecret());
+        return dockerDetails;
     }
 
     @Override
-    public R<List<Image>> listImages(String dockerId) {
-        DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
-        if(dockerDetailsVo.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
-            Session clientSession = SessionUtils.getClientSession(dockerDetailsVo.getClientId());
+    public List<Image> listImages(String dockerId) {
+        DockerDetails dockerDetails = getDetails(dockerId);
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
+            Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             ServerMessage serverMessage = ServerMessage.builder()
                     .messageId(messageId)
@@ -71,15 +65,19 @@ public class DockerImageServiceImpl implements DockerImageService {
                     .build();
             return SessionUtils.sendMessageAndGetListResultMessage(clientSession, messageId, serverMessage);
         }
-        return dockerImageApi(dockerDetailsVo).listImages();
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())){
+            DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
+            return dockerImageBaseService.listImages(dockerClient);
+        }
+       return null;
     }
 
 
     @Override
-    public R<Object> removeImage(String dockerId, String imageId) {
-        DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
-        if(dockerDetailsVo.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
-            Session clientSession = SessionUtils.getClientSession(dockerDetailsVo.getClientId());
+    public Object removeImage(String dockerId, String imageId) {
+        DockerDetails dockerDetails = getDetails(dockerId);
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
+            Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             ServerMessage serverMessage = ServerMessage.builder()
                     .messageId(messageId)
@@ -89,20 +87,42 @@ public class DockerImageServiceImpl implements DockerImageService {
                     .build();
             return SessionUtils.sendMessageAndGetResultMessage(clientSession, messageId, serverMessage);
         }
-        return dockerImageApi(dockerDetailsVo).removeImage(imageId);
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())){
+            DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
+            return dockerImageBaseService.removeImage(dockerClient,imageId);
+        }
+        return null;
     }
 
 
     @Override
-    public R<String> pullImage(String dockerId, String repository){
-        DockerDetailsVo dockerDetailsVo = getDetails(dockerId);
-        return dockerImageApi(dockerDetailsVo).pullImage(repository);
+    public String pullImage(String dockerId, String repository){
+        DockerDetails dockerDetails = getDetails(dockerId);
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
+            Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
+            String messageId = UUID.fastUUID().toString(true);
+            ServerMessage serverMessage = ServerMessage.builder()
+                    .messageId(messageId)
+                    .type(ServerMessageTypeEnum.PULL_IMAGE.getType())
+                    .sync(0)
+                    .data(repository)
+                    .build();
+            return SessionUtils.sendMessageAndGetResultMessage(clientSession, messageId, serverMessage);
+        }
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())){
+            DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
+            try {
+                return dockerImageBaseService.pullImage(dockerClient,repository);
+            }catch (InterruptedException exception){
+                throw ExceptionFactory.bizException("pull镜像异常:{}",exception.getMessage());
+            }
+        }
+        return null;
     }
 
     @Override
     public void socketPullImage(SocketPullImageData socketPullImageData, UserInfoVo userInfo){
         String dockerId = socketPullImageData.getDockerId();
-
         LambdaQueryWrapper<DockerDetails> query = Wrappers.lambdaQuery();
         if(!userInfo.isAdmin()){
             query.eq(DockerDetails::getCreateBy,userInfo.getId());

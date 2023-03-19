@@ -1,18 +1,21 @@
 package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
+import com.alibaba.fastjson2.JSON;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.api.model.Version;
 import game.server.manager.common.enums.ClientModelEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.result.DataResult;
-import game.server.manager.docker.client.api.DockerClientApi;
-import game.server.manager.docker.client.api.DockerClientApiEndpoint;
 import game.server.manager.common.result.R;
+import game.server.manager.docker.service.DockerBaseService;
 import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerBasicService;
 import game.server.manager.server.service.DockerDetailsService;
-import game.server.manager.server.websocket.SessionResultCache;
+import game.server.manager.server.util.DockerUtils;
 import game.server.manager.server.util.SessionUtils;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +36,7 @@ public class DockerBasicServiceImpl implements DockerBasicService {
     private DockerDetailsService dockerDetailsService;
 
     @Resource
-    private DockerClientApiEndpoint dockerClientApiEndpoint;
+    private DockerBaseService dockerBaseService;
 
     private DockerDetails getDetails(String dockerId){
         DockerDetails dockerDetails = dockerDetailsService.getById(dockerId);
@@ -43,9 +46,6 @@ public class DockerBasicServiceImpl implements DockerBasicService {
         return dockerDetails;
     }
 
-    private DockerClientApi dockerClientApi(DockerDetails dockerDetails){
-        return dockerClientApiEndpoint.dockerClientApi(dockerDetails.getDockerHost(), dockerDetails.getDockerSecret());
-    }
 
     @Override
     public Object ping(String dockerId) {
@@ -54,18 +54,22 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.PING_DOCKER,clientSession);
-            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 3000);
+            ClientMessage<String> clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 3000);
             if(Objects.isNull(clientMessage)){
                 return DataResult.fail("获取客户端消息超时.");
             }
             return clientMessage.isSuccess()? DataResult.ok(clientMessage.getData())
                     :DataResult.fail(clientMessage.getData());
         }
-        return dockerClientApi(dockerDetails).ping();
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())){
+            DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
+            return dockerBaseService.ping(dockerClient);
+        }
+        return null;
     }
 
     @Override
-    public R<String> info(String dockerId) {
+    public Info info(String dockerId) {
         DockerDetails dockerDetails = getDetails(dockerId);
         if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
@@ -73,16 +77,22 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_INFO,clientSession);
             ClientMessage<String> clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
             if(Objects.isNull(clientMessage)){
-                return DataResult.fail("获取客户端消息超时.");
+                throw ExceptionFactory.bizException("获取客户端消息失败");
             }
-            return clientMessage.isSuccess()? DataResult.ok(clientMessage.getData())
-                    :DataResult.fail(clientMessage.getData());
+            if(clientMessage.isSuccess()){
+                return JSON.parseObject(clientMessage.getData(),Info.class);
+            }
+            throw ExceptionFactory.bizException(clientMessage.getData());
         }
-        return dockerClientApi(dockerDetails).info();
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())){
+            DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
+            return dockerBaseService.info(dockerClient);
+        }
+        return null;
     }
 
     @Override
-    public R<String> version(String id) {
+    public Version version(String id) {
         DockerDetails dockerDetails = getDetails(id);
         if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
@@ -90,11 +100,17 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_VERSION,clientSession);
             ClientMessage<String> clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
             if(Objects.isNull(clientMessage)){
-                return DataResult.fail("获取客户端消息超时.");
+                throw ExceptionFactory.bizException("获取客户端消息失败.");
             }
-            return clientMessage.isSuccess()? DataResult.ok(clientMessage.getData())
-                    :DataResult.fail(clientMessage.getData());
+            if(clientMessage.isSuccess()){
+                return JSON.parseObject(clientMessage.getData(),Version.class);
+            }
+            throw ExceptionFactory.bizException(clientMessage.getData());
         }
-        return dockerClientApi(dockerDetails).version();
+        if(dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())){
+            DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
+            return dockerBaseService.version(dockerClient);
+        }
+        return null;
     }
 }

@@ -204,18 +204,13 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
             throw ExceptionFactory.baseException("客户端不存在");
         }
         DockerDetailsVo dockerDetailsVo = dockerDetailsService.getByClientId(client.getId());
-        if(Objects.nonNull(dockerDetailsVo)){
+        if(Objects.nonNull(dockerDetailsVo)) {
             VersionConfData versionConfData = JSONObject.parseObject(version.getConfData(), VersionConfData.class);
             CreateContainerDto createContainerDto = CreateContainerDto.builder()
                     .image(versionConfData.getImage())
                     .build();
-            R<Object> resultData = dockerContainerService.createContainer(dockerDetailsVo.getId(), createContainerDto);
-           if(resultData.isSuccess()){
-               Object data = resultData.getData();
-               CreateContainerResponse res = JSONObject.parseObject(data.toString(), CreateContainerResponse.class);
-               return dockerContainerService.startContainer(dockerDetailsVo.getId(),res.getId()).getData();
-           }
-            return false;
+            CreateContainerResponse res = dockerContainerService.createContainer(dockerDetailsVo.getId(), createContainerDto);
+            return dockerContainerService.startContainer(dockerDetailsVo.getId(), res.getId());
         }
         return null;
     }
