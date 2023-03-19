@@ -1,6 +1,7 @@
 package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -134,7 +135,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
         }
         if (dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())) {
             DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
-            return dockerContainerBaseService.restartContainer(dockerClient, containerId);
+            return dockerContainerBaseService.stopContainer(dockerClient, containerId);
         }
         return null;
     }
@@ -223,7 +224,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
             try {
                 return dockerContainerBaseService.logContainer(dockerClient, containerId);
             } catch (InterruptedException e) {
-                throw ExceptionFactory.bizException("获取容器镜像异常:{}", e.getMessage());
+                throw ExceptionFactory.bizException("获取容器日志异常:{}", e.getMessage());
             }
         }
         return null;
@@ -246,18 +247,34 @@ public class DockerContainerServiceImpl implements DockerContainerService {
             SessionUtils.close(browserSession);
             return;
         }
-        String clientId = docker.getClientId();
-        Session clientSession = SocketSessionCache.getClientByClientId(clientId);
-        if (Objects.isNull(clientSession)) {
-            SessionUtils.sendErrorServerMessage(browserSession, browserSession.getId(), "客户端未连接");
-            SessionUtils.close(browserSession);
-            return;
+        if (docker.getDockerModel().equals(ClientModelEnum.SOCKET.getType())) {
+            String clientId = docker.getClientId();
+            Session clientSession = SocketSessionCache.getClientByClientId(clientId);
+            if (Objects.isNull(clientSession)) {
+                SessionUtils.sendErrorServerMessage(browserSession, browserSession.getId(), "客户端未连接");
+                SessionUtils.close(browserSession);
+                return;
+            }
+            SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(), clientSession.getId());
+            ServerContainerLogMessage serverContainerLogMessage = ServerContainerLogMessage.builder()
+                    .containerId(socketContainerLogData.getContainerId())
+                    .build();
+            SessionUtils.sendSyncServerMessage(clientSession, browserSession.getId(), JSON.toJSONString(serverContainerLogMessage), ServerMessageTypeEnum.CONTAINER_LOG);
         }
-        SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(), clientSession.getId());
-        ServerContainerLogMessage serverContainerLogMessage = ServerContainerLogMessage.builder()
-                .containerId(socketContainerLogData.getContainerId())
-                .build();
-        SessionUtils.sendSyncServerMessage(clientSession, browserSession.getId(), JSON.toJSONString(serverContainerLogMessage), ServerMessageTypeEnum.CONTAINER_LOG);
+        if (docker.getDockerModel().equals(ClientModelEnum.HTTP.getType())) {
+            DockerClient dockerClient = DockerUtils.createDockerClient(docker);
+            try {
+                String data = dockerContainerBaseService.logContainer(dockerClient, socketContainerLogData.getContainerId());
+                List<String> datas = CharSequenceUtil.split(data, "\r\n");
+                for (String str: datas) {
+                    SessionUtils.sendOkServerMessage(browserSession,browserSession.getId(),str);
+                }
+                SessionUtils.sendSimpleServerMessage(browserSession,browserSession.getId(),"获取完毕",ServerMessageTypeEnum.SYNC_RESULT_END);
+                SessionUtils.close(browserSession);
+            } catch (InterruptedException e) {
+                throw ExceptionFactory.bizException("获取容器镜像异常:{}", e.getMessage());
+            }
+        }
     }
 
     private <T> T sendMessageAndUnPackage(Session clientSession, String messageId, ServerMessage serverMessage) {

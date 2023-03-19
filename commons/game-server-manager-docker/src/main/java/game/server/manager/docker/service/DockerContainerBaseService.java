@@ -1,6 +1,6 @@
 package game.server.manager.docker.service;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
+
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrBuilder;
 import com.alibaba.fastjson2.JSON;
@@ -23,7 +23,6 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.PortBinding;
-import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.docker.model.BindDto;
 import game.server.manager.docker.model.CreateContainerDto;
 import game.server.manager.docker.model.LinkDto;
@@ -147,7 +146,7 @@ public class DockerContainerBaseService {
         log.info("Docker logContainer start {}", containerId);
         StrBuilder strBuilder = CharSequenceUtil.strBuilder();
         LogContainerCmd logContainerCmd = dockerClient.logContainerCmd(containerId);
-        logContainerCmd.withStdOut(true).withStdErr(true);
+        logContainerCmd.withStdOut(true).withStdErr(true).withTail(500);
         ResultCallback.Adapter<Frame> result = logContainerCmd.exec(new ResultCallback.Adapter<Frame>() {
             @Override
             public void onNext(Frame frame) {
@@ -161,7 +160,7 @@ public class DockerContainerBaseService {
 
     public ResultCallback.Adapter<Frame> logContainer(DockerClient dockerClient, String containerId, ResultCallback.Adapter<Frame> resultCallback) {
         LogContainerCmd logContainerCmd = dockerClient.logContainerCmd(containerId);
-        logContainerCmd.withStdOut(true).withStdErr(true).withTail(1000);
+        logContainerCmd.withStdOut(true).withStdErr(true).withTail(500);
         return logContainerCmd.exec(resultCallback);
     }
 

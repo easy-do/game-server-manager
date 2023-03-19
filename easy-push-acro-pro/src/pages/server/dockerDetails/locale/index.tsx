@@ -78,6 +78,9 @@ const i18n = {
     'searchTable.columns.imageList.clientId': 'Client',
     'searchForm.clientId.placeholder': 'Please Select the Client',
     'searchTable.rules.clientId.required': 'ClientCan not be empty',
+    'searchTable.columns.exited': 'exited',
+    'searchTable.columns.running': 'running',
+    'searchTable.columns.runTime': 'runTime',
     
   },
   'zh-CN': {
@@ -159,6 +162,9 @@ const i18n = {
     'searchTable.columns.imageList.clientId': '客户端',
     'searchForm.clientId.placeholder': '请选择客户端',
     'searchTable.rules.clientId.required': '客户端必选',
+    'searchTable.columns.exited': '停止',
+    'searchTable.columns.running': '启动',
+    'searchTable.columns.runTime': '运行时长',
     
     
     

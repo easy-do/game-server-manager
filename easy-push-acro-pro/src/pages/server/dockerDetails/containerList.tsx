@@ -9,7 +9,6 @@ import {
   Input,
   FormInstance,
 } from '@arco-design/web-react';
-import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import { getContainerListColumns } from './constants';
@@ -18,7 +17,6 @@ import { socketAddress } from '@/utils/systemConstant';
 import LogCompennet from '@/components/LogCompenent/logCompennet';
 import { closeWebSocket, createWebSocket } from '@/utils/webSocket';
 
-const { Title } = Typography;
 
 function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
 
@@ -155,7 +153,7 @@ function ContainerList(props: { isViewContainerList: boolean; dockerId: any }) {
   }
 
   //获取表格展示列表、绑定操作列回调
-  const columns = useMemo(() => getContainerListColumns(t, tableCallback), [t]);
+  const columns = getContainerListColumns(t, tableCallback);
 
   const [data, setData] = useState([]);
 
