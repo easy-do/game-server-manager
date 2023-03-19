@@ -252,10 +252,11 @@ function SearchTable() {
         visible={isViewImageList}
         onOk={() => {
           setisViewImageList(false);
+          setViewImageId(null)
         }}
         onCancel={() => {
           setisViewImageList(false);
-          
+          setViewImageId(null)
         }}
         autoFocus={false}
         focusLock={true}
@@ -268,10 +269,11 @@ function SearchTable() {
         visible={isViewContainerList}
         onOk={() => {
           setIsViewContainerList(false);
+          setViewContainerId(null)
         }}
         onCancel={() => {
           setIsViewContainerList(false);
-          
+          setViewContainerId(null)
         }}
         autoFocus={false}
         focusLock={true}

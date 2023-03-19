@@ -58,7 +58,7 @@ function ImageList(props: { isViewImageList: boolean, dockerId: any }) {
   }
 
   //获取表格展示列表、绑定操作列回调
-  const columns = useMemo(() => getImageListColumns(t, tableCallback), [t]);
+  const columns = getImageListColumns(t, tableCallback);
 
   const [data, setData] = useState([]);
 

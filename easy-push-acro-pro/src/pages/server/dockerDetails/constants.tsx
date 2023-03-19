@@ -253,7 +253,7 @@ export function getImageListColumns(
 }
 
 
-//镜像列表展示字段
+//容器列表展示字段
 export function getContainerListColumns(
   t: any,
   callback: (record: Record<string, any>, type: string) => Promise<void>
@@ -276,7 +276,7 @@ export function getContainerListColumns(
       ellipsis:true,
       render: (_, record) => (
         <Typography.Paragraph copyable>
-        {record.Names}
+        {record.Names[0].replace('/','')}
       </Typography.Paragraph>
       ),
     },
@@ -291,22 +291,32 @@ export function getContainerListColumns(
       ),
     },
     {
-      title: t['searchTable.columns.NetworkMode'],
-      dataIndex: 'HostConfig.NetworkMode',
+      title: t['searchTable.columns.Status'],
+      dataIndex: 'State',
       ellipsis:true,
       render: (_, record) => (
-        <Typography.Paragraph copyable>
-        {record.HostConfig.NetworkMode}
+        <Typography.Paragraph>
+        {t['searchTable.columns.'+record.State]}
       </Typography.Paragraph>
       ),
     },
     {
-      title: t['searchTable.columns.Status'],
+      title: t['searchTable.columns.runTime'],
       dataIndex: 'Status',
       ellipsis:true,
       render: (_, record) => (
-        <Typography.Paragraph copyable>
+        <Typography.Paragraph>
         {record.Status}
+      </Typography.Paragraph>
+      ),
+    },
+    {
+      title: t['searchTable.columns.NetworkMode'],
+      dataIndex: 'HostConfig.NetworkMode',
+      ellipsis:true,
+      render: (_, record) => (
+        <Typography.Paragraph>
+        {record.HostConfig.NetworkMode}
       </Typography.Paragraph>
       ),
     },
@@ -316,11 +326,6 @@ export function getContainerListColumns(
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => (
         <div> 
-          <PermissionWrapper
-            requiredPermissions={[
-              { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
-            ]}
-          >
             <Button
                 type="text"
                 size="small"
@@ -328,12 +333,6 @@ export function getContainerListColumns(
             >
                 {t['searchTable.columns.operations.view']}
             </Button>
-          </PermissionWrapper>
-          <PermissionWrapper
-            requiredPermissions={[
-              { resource: 'dockerDetails', actions: ['dockerDetails:info'] },
-            ]}
-          >
             <Button
                 type="text"
                 size="small"
@@ -341,25 +340,14 @@ export function getContainerListColumns(
             >
                 {t['searchTable.columns.operations.log']}
             </Button>
-          </PermissionWrapper>
-          <PermissionWrapper
-            requiredPermissions={[
-              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
-            ]}
-          >
             <Button
                 type="text"
                 size="small"
+                disabled={record.State === 'running'}
                 onClick={() => callback(record, 'start')}
             >
                 {t['searchTable.columns.operations.start']}
             </Button>
-          </PermissionWrapper>
-          <PermissionWrapper
-            requiredPermissions={[
-              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
-            ]}
-          >
             <Button
                 type="text"
                 size="small"
@@ -367,25 +355,14 @@ export function getContainerListColumns(
             >
                 {t['searchTable.columns.operations.restart']}
             </Button>
-          </PermissionWrapper>
-                    <PermissionWrapper
-            requiredPermissions={[
-              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
-            ]}
-          >
             <Button
                 type="text"
                 size="small"
+                disabled={record.State === 'exited'}
                 onClick={() => callback(record, 'stop')}
             >
                 {t['searchTable.columns.operations.stop']}
             </Button>
-          </PermissionWrapper>
-          <PermissionWrapper
-            requiredPermissions={[
-              { resource: 'dockerDetails', actions: ['dockerDetails:update'] },
-            ]}
-          >
             <Button
                 type="text"
                 size="small"
@@ -393,13 +370,8 @@ export function getContainerListColumns(
             >
                 {t['searchTable.columns.operations.rename']}
             </Button>
-          </PermissionWrapper>
-          <PermissionWrapper
-            requiredPermissions={[
-              { resource: 'dockerDetails', actions: ['dockerDetails:remove'] },
-            ]}
-          >
             <Popconfirm
+                disabled={record.State === 'running'}
                 title={t['searchTable.columns.operations.remove.confirm']}
                 onOk={() => callback(record, 'remove')}
             >
@@ -407,7 +379,6 @@ export function getContainerListColumns(
                 {t['searchTable.columns.operations.remove']}
                 </Button>
             </Popconfirm>
-          </PermissionWrapper>
         </div>
       ),
     },

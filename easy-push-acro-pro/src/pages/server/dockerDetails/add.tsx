@@ -78,7 +78,7 @@ function AddPage({ visible, setVisible, successCallBack }) {
         >
           <Select placeholder={t['searchForm.dockerModel.placeholder']} onChange={chageDockerModel} allowClear >
             <Select.Option value={'http'}>API直连</Select.Option>
-            <Select.Option value={'socket'}>socket通信</Select.Option>
+            <Select.Option value={'socket'}>客户端</Select.Option>
           </Select>
         </Form.Item>
         {
