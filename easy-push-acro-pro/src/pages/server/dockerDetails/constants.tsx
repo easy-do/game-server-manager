@@ -28,7 +28,7 @@ export function getSearChColumns(){
     'dockerName',
     'dockerHost',
     'dockerCert',
-    'dockerIsSsl',
+    'sslFlag',
     'dockerCertPassword',
     'createBy',
     'createTime',
