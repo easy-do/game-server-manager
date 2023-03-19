@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.Version;
+import game.server.manager.docker.service.DockerBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,9 @@ public class DockerService {
     @Autowired(required = false)
     private DockerClient dockerClient;
 
+    @Autowired
+    private DockerBaseService dockerBaseService;
+
 
     /**
      * ping
@@ -34,20 +38,17 @@ public class DockerService {
      */
     public Void ping() {
         log.info("Docker ping");
-        PingCmd pingCmd = dockerClient.pingCmd();
-        return pingCmd.exec();
+        return dockerBaseService.ping(dockerClient);
     }
 
     public Info info() {
         log.info("Docker info");
-        InfoCmd infoCmd = dockerClient.infoCmd();
-        return infoCmd.exec();
+        return dockerBaseService.info(dockerClient);
     }
 
     public Version version() {
         log.info("Docker info");
-        VersionCmd versionCmd = dockerClient.versionCmd();
-        return versionCmd.exec();
+        return dockerBaseService.version(dockerClient);
     }
 
 }

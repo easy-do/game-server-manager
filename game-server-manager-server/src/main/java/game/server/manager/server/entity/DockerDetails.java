@@ -57,7 +57,7 @@ public class DockerDetails implements Serializable {
     private String dockerCert;
 
     /** 验证连接 */
-    private Long dockerIsSsl;
+    private Boolean sslFlag;
 
     /** 证书密码 */
     private String dockerCertPassword;

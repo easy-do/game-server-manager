@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.hutool.core.date.DatePattern;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.api.model.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -45,7 +47,7 @@ public class DockerDetailsVo implements Serializable {
     /** 证书 */
     private String dockerCert;
     /** 验证连接 */
-    private Long dockerIsSsl;
+    private Boolean sslFlag;
     /** 证书密码 */
     private String dockerCertPassword;
     /** 创建人 */
@@ -58,8 +60,8 @@ public class DockerDetailsVo implements Serializable {
     /** 更新时间 */
     private LocalDateTime updateTime;
     /** docker实时信息 */
-    private String detailsJson;
+    private Info info;
     /** version详细信息 */
-    private String versionJson;
+    private Version version;
 
 }

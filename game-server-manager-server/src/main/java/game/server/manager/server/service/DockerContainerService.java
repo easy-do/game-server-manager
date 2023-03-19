@@ -25,7 +25,7 @@ public interface DockerContainerService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<List<Container>> containerList(String dockerId);
+    List<Container> containerList(String dockerId);
 
     /**
      * 启动容器
@@ -36,7 +36,7 @@ public interface DockerContainerService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Object> startContainer(Long dockerId, String containerId);
+    Object startContainer(Long dockerId, String containerId);
 
     /**
      * 重启容器
@@ -47,7 +47,7 @@ public interface DockerContainerService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Object> restartContainer(String dockerId, String containerId);
+    Object restartContainer(String dockerId, String containerId);
 
     /**
      * 停止容器
@@ -58,7 +58,7 @@ public interface DockerContainerService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Object> stopContainer(String dockerId, String containerId);
+    Object stopContainer(String dockerId, String containerId);
 
     /**
      * 删除容器
@@ -69,7 +69,7 @@ public interface DockerContainerService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Object> removeContainer(String dockerId, String containerId);
+    Object removeContainer(String dockerId, String containerId);
 
     /**
      * 重命名容器
@@ -81,7 +81,7 @@ public interface DockerContainerService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Object> renameContainer(String dockerId, String containerId, String name);
+    Object renameContainer(String dockerId, String containerId, String name);
 
     /**
      * 创建容器
@@ -92,7 +92,7 @@ public interface DockerContainerService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Object> createContainer(Long dockerId, CreateContainerDto createContainerDto);
+    CreateContainerResponse createContainer(Long dockerId, CreateContainerDto createContainerDto);
 
     /**
      * 查看容器日志
@@ -103,7 +103,7 @@ public interface DockerContainerService {
      * @author laoyu
      * @date 2022/11/20
      */
-    R<String> logContainer(String dockerId, String containerId);
+    String logContainer(String dockerId, String containerId);
 
     /**
      * socket查看容器日志

@@ -24,7 +24,7 @@ public interface DockerImageService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<List<Image>> listImages(String dockerId);
+    List<Image> listImages(String dockerId);
 
     /**
      * 删除镜像
@@ -35,7 +35,7 @@ public interface DockerImageService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<Object> removeImage(String dockerId, String imageId);
+    Object removeImage(String dockerId, String imageId);
 
     /**
      * pull镜像
@@ -46,7 +46,7 @@ public interface DockerImageService {
      * @author laoyu
      * @date 2022/11/24
      */
-    R<String> pullImage(String dockerId, String repository);
+    String pullImage(String dockerId, String repository);
 
     /**
      * socket方式pull镜像

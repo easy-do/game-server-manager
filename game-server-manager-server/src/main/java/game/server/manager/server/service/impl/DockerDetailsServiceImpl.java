@@ -2,15 +2,15 @@ package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.text.CharSequenceUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.api.model.Version;
+import game.server.manager.common.enums.DockerModelEnum;
 import game.server.manager.common.exception.ExceptionFactory;
-import game.server.manager.common.result.R;
 
 import game.server.manager.server.dto.DockerDetailsDto;
-import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerBasicService;
 import game.server.manager.web.base.BaseServiceImpl;
@@ -19,6 +19,7 @@ import game.server.manager.server.vo.DockerDetailsVo;
 import game.server.manager.server.mapstruct.DockerDetailsMapstruct;
 import game.server.manager.server.mapper.DockerDetailsMapper;
 import game.server.manager.server.service.DockerDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
@@ -34,6 +35,7 @@ import java.util.Objects;
  * @author yuzhanfeng
  * @date 2022-11-13 12:10:30
  */
+@Slf4j
 @Service
 public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, DockerDetailsQo, DockerDetailsVo, DockerDetailsDto, DockerDetailsMapper> implements DockerDetailsService {
 
@@ -101,13 +103,13 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
         wrapper.eq(DockerDetails::getId,id);
         DockerDetailsVo vo = DockerDetailsMapstruct.INSTANCE.entityToVo(getOne(wrapper));
         if(Objects.nonNull(vo)){
-            R<String> info = dockerBasicService.info(id.toString());
-            if(Objects.nonNull(info)){
-                vo.setDetailsJson(info.getData());
-            }
-            R<String> version = dockerBasicService.version(id.toString());
-            if(Objects.nonNull(version)){
-                vo.setVersionJson(version.getData());
+            try{
+                Info info = dockerBasicService.info(id.toString());
+                vo.setInfo(info);
+                Version version = dockerBasicService.version(id.toString());
+                vo.setVersion(version);
+            }catch (Exception e) {
+                log.warn("获取docker详情失败:{}",e.getMessage());
             }
         }
         return vo;
@@ -151,15 +153,18 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
         if(Objects.isNull(dockerDetails)){
             throw ExceptionFactory.bizException("docker不存在");
         }
-        if(!CharSequenceUtil.equals(dockerDetails.getClientId(),dockerDetailsDto.getClientId())){
+        if(!isAdmin() && dockerDetails.getCreateBy() != getUserId()){
+            throw ExceptionFactory.bizException("无权操作");
+        }
+        if(CharSequenceUtil.isNotEmpty(dockerDetailsDto.getClientId())
+                && CharSequenceUtil.equals(DockerModelEnum.SOCKET.getType(),dockerDetailsDto.getDockerModel())
+                && !CharSequenceUtil.equals(dockerDetails.getClientId(),dockerDetailsDto.getClientId())){
             throw ExceptionFactory.bizException("客户端不可更改");
         }
-        LambdaQueryWrapper<DockerDetails> wrapper = Wrappers.lambdaQuery();
-        if(!isAdmin()){
-            wrapper.eq(DockerDetails::getCreateBy,getUserId());
-        }
-        wrapper.eq(DockerDetails::getId,dockerDetailsDto.getId());
         DockerDetails entity = DockerDetailsMapstruct.INSTANCE.dtoToEntity(dockerDetailsDto);
+        if(CharSequenceUtil.equals(DockerModelEnum.HTTP.getType(),dockerDetailsDto.getDockerModel())){
+            entity.setClientId("");
+        }
         return updateById(entity);
     }
 

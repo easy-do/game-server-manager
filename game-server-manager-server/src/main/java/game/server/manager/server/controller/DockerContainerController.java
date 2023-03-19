@@ -2,6 +2,7 @@ package game.server.manager.server.controller;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
+import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.docker.model.CreateContainerDto;
 import game.server.manager.server.service.DockerContainerService;
@@ -39,7 +40,7 @@ public class DockerContainerController {
      */
     @GetMapping("/v1/list/{dockerId}")
     public R<List<Container>> containerList(@PathVariable("dockerId")String dockerId){
-        return dockerContainerService.containerList(dockerId);
+        return DataResult.ok(dockerContainerService.containerList(dockerId));
     }
 
     /**
@@ -52,7 +53,7 @@ public class DockerContainerController {
      */
     @GetMapping("/v1/start/{dockerId}/{containerId}")
     public R<Object> startContainer(@PathVariable("dockerId")Long dockerId,@PathVariable("containerId")String containerId){
-        return dockerContainerService.startContainer(dockerId,containerId);
+        return DataResult.ok(dockerContainerService.startContainer(dockerId,containerId));
     }
 
 
@@ -66,7 +67,7 @@ public class DockerContainerController {
      */
     @GetMapping("/v1/restart/{dockerId}/{containerId}")
     public R<Object> restartContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
-        return dockerContainerService.restartContainer(dockerId,containerId);
+        return DataResult.ok(dockerContainerService.restartContainer(dockerId,containerId));
     }
 
     /**
@@ -79,7 +80,7 @@ public class DockerContainerController {
      */
     @GetMapping("/v1/stop/{dockerId}/{containerId}")
     public R<Object> stopContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
-        return dockerContainerService.stopContainer(dockerId,containerId);
+        return DataResult.ok(dockerContainerService.stopContainer(dockerId,containerId));
     }
 
     /**
@@ -92,7 +93,7 @@ public class DockerContainerController {
      */
     @GetMapping("/v1/remove/{dockerId}/{containerId}")
     public R<Object> removeContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId){
-        return dockerContainerService.removeContainer(dockerId,containerId);
+        return DataResult.ok(dockerContainerService.removeContainer(dockerId,containerId));
     }
 
     /**
@@ -106,7 +107,7 @@ public class DockerContainerController {
      */
     @GetMapping("/v1/rename/{dockerId}/{containerId}")
     public R<Object> renameContainer(@PathVariable("dockerId")String dockerId,@PathVariable("containerId")String containerId,@RequestParam("name")String name){
-        return dockerContainerService.renameContainer(dockerId,containerId,name);
+        return DataResult.ok(dockerContainerService.renameContainer(dockerId,containerId,name));
     }
 
     /**
@@ -118,8 +119,8 @@ public class DockerContainerController {
      * @date 2022/11/19
      */
     @GetMapping("/v1/log/{dockerId}/{containerId}")
-    public R<String> logContainer(@PathVariable("dockerId")String dockerId, @PathVariable("containerId")String containerId) {
-        return dockerContainerService.logContainer(dockerId,containerId);
+    public R<String> logContainer(@PathVariable("dockerId")String dockerId, @PathVariable("containerId")String containerId){
+        return DataResult.ok(dockerContainerService.logContainer(dockerId,containerId));
     }
 
     /**
@@ -132,6 +133,6 @@ public class DockerContainerController {
      */
     @PostMapping("/v1/createContainer")
     public R<Object> createContainer(@RequestParam("dockerId") Long dockerId, @RequestBody CreateContainerDto createContainerDto){
-        return dockerContainerService.createContainer(dockerId,createContainerDto);
+        return DataResult.ok(dockerContainerService.createContainer(dockerId,createContainerDto));
     }
 }

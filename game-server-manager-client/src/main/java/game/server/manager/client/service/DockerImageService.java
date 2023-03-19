@@ -11,6 +11,7 @@ import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
+import game.server.manager.docker.service.DockerImageBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,9 @@ public class DockerImageService {
     @Autowired(required = false)
     private DockerClient dockerClient;
 
+    @Autowired
+    private DockerImageBaseService dockerImageBaseService;
+
     @Resource
     private SyncServer syncServer;
 
@@ -46,8 +50,7 @@ public class DockerImageService {
      */
     public List<Image> listImages() {
         log.info("Docker listImages");
-        ListImagesCmd listImagesCmd = dockerClient.listImagesCmd();
-        return listImagesCmd.exec();
+        return dockerImageBaseService.listImages(dockerClient);
     }
 
 
@@ -103,18 +106,7 @@ public class DockerImageService {
      */
     public String pullImage(String repository) throws InterruptedException {
         log.info("Docker pullImage {}", repository);
-        StringBuilder sb = new StringBuilder();
-        PullImageCmd pullImageCmd = dockerClient.pullImageCmd(repository);
-        PullImageResultCallback callback = pullImageCmd.exec(new PullImageResultCallback() {
-            @Override
-            public void onNext(PullResponseItem item) {
-                    sb.append(item.getStatus() +"\n");
-                log.info("pullImage ==> {},{}", repository, item.getStatus());
-                super.onNext(item);
-            }
-        });
-        callback.awaitCompletion();
-        return sb.toString();
+        return dockerImageBaseService.pullImage(dockerClient,repository);
     }
 
 
@@ -128,8 +120,7 @@ public class DockerImageService {
      */
     public Object removeImage(String imageId) {
         log.info("Docker removeImage {}", imageId);
-        RemoveImageCmd removeImageCmd = dockerClient.removeImageCmd(imageId);
-        return removeImageCmd.exec();
+        return dockerImageBaseService.removeImage(dockerClient,imageId);
     }
 
 }

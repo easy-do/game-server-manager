@@ -110,14 +110,16 @@ public class SessionUtils {
      * @author laoyu
      * @date 2022/11/27
      */
-    public static <T> R<List<T>> sendMessageAndGetListResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
+    public static <T> List<T> sendMessageAndGetListResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
         sendMessage(clientSession, JSON.toJSONString(serverMessage));
         ClientMessage<String> clientMessage = timeoutGetClientMessage(messageId, 3000);
         if(Objects.isNull(clientMessage)){
-            return DataResult.fail("获取客户端消息超时.");
+            throw ExceptionFactory.bizException("获取客户端消息失败");
         }
-        return clientMessage.isSuccess()? DataResult.ok(JSON.parseObject(clientMessage.getData(),List.class))
-                :DataResult.fail(clientMessage.getData());
+        if(clientMessage.isSuccess()){
+            return JSON.parseObject(clientMessage.getData(),List.class);
+        }
+        return null;
     }
 
     /**
@@ -130,14 +132,13 @@ public class SessionUtils {
      * @author laoyu
      * @date 2022/11/27
      */
-    public static <T> R<T> sendMessageAndGetResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
+    public static <T> T sendMessageAndGetResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
         sendMessage(clientSession, JSON.toJSONString(serverMessage));
         ClientMessage<T> clientMessage = timeoutGetClientMessage(messageId, 3000);
         if(Objects.isNull(clientMessage)){
-            return DataResult.fail("获取客户端消息超时.");
+            throw ExceptionFactory.bizException("获取客户端消息超时.");
         }
-        return clientMessage.isSuccess()? DataResult.ok(clientMessage.getData())
-                :DataResult.fail(clientMessage.getData());
+        return clientMessage.getData();
     }
 
     /**

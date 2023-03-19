@@ -1,6 +1,7 @@
 package game.server.manager.server.service;
 
-import game.server.manager.common.result.R;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.api.model.Version;
 
 /**
  * @author laoyu
@@ -29,7 +30,7 @@ public interface DockerBasicService {
      * @author laoyu
      * @date 2022/11/19
      */
-    R<String> info(String dockerId);
+    Info info(String dockerId);
 
     /**
      * Version
@@ -39,5 +40,5 @@ public interface DockerBasicService {
      * @author laoyu
      * @date 2022/11/27
      */
-    R<String> version(String id);
+    Version version(String id);
 }
