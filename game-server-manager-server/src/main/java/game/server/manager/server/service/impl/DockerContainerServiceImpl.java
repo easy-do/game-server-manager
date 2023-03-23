@@ -3,6 +3,7 @@ package game.server.manager.server.service.impl;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.dockerjava.api.DockerClient;
@@ -196,7 +197,8 @@ public class DockerContainerServiceImpl implements DockerContainerService {
                     .sync(0)
                     .data(JSON.toJSONString(createContainerDto))
                     .build();
-            return sendMessageAndUnPackage(clientSession, messageId, serverMessage);
+            String data = sendMessageAndUnPackage(clientSession, messageId, serverMessage);
+            return JSONObject.parseObject(data,CreateContainerResponse.class);
         }
         if (dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())) {
             DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
