@@ -1,7 +1,7 @@
 package game.server.manager.server;
 
 import com.alicp.jetcache.anno.config.EnableMethodCache;
-import game.server.manager.server.netty.CoordinationNettyServer;
+//import game.server.manager.server.netty.CoordinationNettyServer;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

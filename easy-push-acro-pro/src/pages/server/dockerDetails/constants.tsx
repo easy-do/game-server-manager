@@ -17,8 +17,8 @@ export interface DataInfoVo{
     createTime: string,
     updateBy: string,
     updateTime: string,
-    detailsJson:any,
-    versionJson:any,
+    info:any,
+    version:any,
 }
 
 // 后台sql查询字段
