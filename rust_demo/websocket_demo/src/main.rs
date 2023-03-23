@@ -43,6 +43,6 @@ async fn main() {
         println!("Got:{}", ss);
         let mut w = w_arc_clone.lock().unwrap();
         //根据服务端信息进行相关处理
-        // w.send_text(send_str.to_string()).await.unwrap();
+        w.send_text(send_str.to_string()).await.unwrap();
     }
 }
