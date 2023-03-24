@@ -35,8 +35,7 @@ public class DockerConfig {
         }
         DockerClient client = null;
         DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
-//                .createDefaultConfigBuilder().build();
-                .createDefaultConfigBuilder().withDockerHost("tcp://192.168.123.88:2375").build();
+                .createDefaultConfigBuilder().build();
         try {
             client = DockerClientBuilder.getInstance(dockerClientConfig)
                     .build();

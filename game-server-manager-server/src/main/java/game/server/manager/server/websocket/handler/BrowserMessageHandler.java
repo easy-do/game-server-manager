@@ -4,14 +4,14 @@ import com.alibaba.fastjson2.JSON;
 import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.auth.vo.SimpleUserInfoVo;
 import game.server.manager.common.mode.socket.BrowserMessage;
-import game.server.manager.common.vo.UserInfoVo;
-import game.server.manager.handler.HandlerServiceContainer;
 import game.server.manager.server.websocket.handler.browser.BrowserHandlerData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.websocket.Session;
+import java.util.Map;
 
 /**
  * @author yuzhanfeng
@@ -23,8 +23,8 @@ import javax.websocket.Session;
 public class BrowserMessageHandler {
 
 
-    @Resource
-    private HandlerServiceContainer<BrowserHandlerData, Void> handlerServiceContainer;
+    @Autowired
+    private Map<String, AbstractHandlerService<BrowserHandlerData>> handlerServiceContainer;
 
     @Resource
     private AuthorizationUtil authorizationUtil;
@@ -40,7 +40,7 @@ public class BrowserMessageHandler {
                 .userInfo(authorizationUtil.getUser(userInfo.getId()))
                 .browserMessage(browserMessage)
                 .build();
-        handlerServiceContainer.handler(type,browserHandlerData);
+        handlerServiceContainer.get(type).handler(browserHandlerData);
     }
 
 

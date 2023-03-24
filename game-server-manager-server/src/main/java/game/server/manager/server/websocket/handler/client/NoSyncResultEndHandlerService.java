@@ -2,10 +2,10 @@ package game.server.manager.server.websocket.handler.client;
 
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.mode.socket.ClientMessage;
-import game.server.manager.handler.AbstractHandlerService;
-import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.websocket.SessionResultCache;
+import game.server.manager.server.websocket.handler.AbstractHandlerService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
  * @author yuzhanfeng
@@ -13,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
  * @Description 客户端返回的非同步消息处理服务
  */
 @Slf4j
-@HandlerService(MessageTypeConstants.NO_SYNC_RESULT)
-public class NoSyncResultEndHandlerService extends AbstractHandlerService<ClientHandlerData, Void> {
+@Service(MessageTypeConstants.NO_SYNC_RESULT)
+public class NoSyncResultEndHandlerService implements AbstractHandlerService<ClientHandlerData> {
 
     @Override
     public Void handler(ClientHandlerData clientHandlerData) {

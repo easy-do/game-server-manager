@@ -11,15 +11,11 @@ import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.result.R;
 import game.server.manager.common.utils.http.HttpModel;
 import game.server.manager.common.utils.http.HttpRequestUtil;
-import game.server.manager.handler.HandlerServiceContainer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 
 
 /**
@@ -38,9 +34,9 @@ public class SyncServer {
     private ClientDataServer clientDataServer;
 
     @Autowired
-    private HandlerServiceContainer handlerServiceContainer;
-
     private ClientWebsocketEndpoint client;
+
+
 
     public R<String> sync(SyncData syncData) {
         String resultStr = HttpRequestUtil.post(
@@ -49,27 +45,6 @@ public class SyncServer {
                         .path(PathConstants.SYNC)
                         .body(JSON.toJSONString(syncData)).build());
         return HttpRequestUtil.unPackage(resultStr);
-    }
-
-    public void createClient() {
-        URI uri = null;
-        try {
-            uri = new URI(systemUtils.getServerSocketUrl());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        this.client = new ClientWebsocketEndpoint(uri,systemUtils.getClientId(),handlerServiceContainer);
-        log.info("初始化服务端连接");
-        try {
-            client.connect();
-            ClientMessage message = ClientMessage.builder()
-                    .type(ClientSocketTypeEnum.HEARTBEAT.getType())
-                    .clientId(systemUtils.getClientId())
-                    .build();
-            sendMessage(JSON.toJSONString(message));
-        }catch (Exception e) {
-            log.warn("初始化服务端连接失败,{}", ExceptionUtil.getMessage(e));
-        }
     }
 
     public void sendOkMessage(ClientSocketTypeEnum type, String messageId, String message){

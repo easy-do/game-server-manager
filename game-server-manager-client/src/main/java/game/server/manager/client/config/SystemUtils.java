@@ -27,17 +27,11 @@ public class SystemUtils {
     @Resource
     Environment environment;
 
-    @Value("${model:socket}")
-    private String model;
-
     @Value("${manager-url:https://manager.easydo.plus}")
     private String managerUrl;
 
     @Value("${server-socket-url:https://manager.easydo.plus}")
     private String serverSocketUrl;
-
-    @Value("${socket-url:wss://manager.easydo.plus/wss/syncClientData}")
-    private String socketUrl;
 
     @Value("${client-id:no}")
     private String clientId;

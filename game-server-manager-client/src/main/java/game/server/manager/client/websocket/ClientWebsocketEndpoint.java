@@ -3,15 +3,19 @@ package game.server.manager.client.websocket;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
+import game.server.manager.client.websocket.handler.AbstractHandlerService;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
-import game.server.manager.handler.HandlerServiceContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author laoyu
@@ -26,8 +30,18 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
 
     private static volatile String lockMessageId;
 
+    private final String clientId;
 
-    private HandlerServiceContainer handlerServiceContainer;
+    @Autowired
+    private Map<String, AbstractHandlerService> handlerContainer;
+
+
+    public ClientWebsocketEndpoint(URI serverUri,String clientId) {
+        super(serverUri);
+        log.info("初始化客户端连接");
+        this.clientId = clientId;
+        connect();
+    }
 
     /**
      * 是否被某个消息锁定
@@ -86,16 +100,6 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
         return false;
     }
 
-
-
-    private String clientId;
-
-    public ClientWebsocketEndpoint(URI serverUri,String clientId,HandlerServiceContainer handlerServiceContainer) {
-        super(serverUri);
-        this.clientId = clientId;
-        this.handlerServiceContainer = handlerServiceContainer;
-    }
-
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
         log.info("开启与服务端的连接.");
@@ -110,7 +114,12 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
         log.info("接收到服务端消息,{}",message);
         ServerMessage serverMessage = JSON.parseObject(message, ServerMessage.class);
         if(!isLock(serverMessage)){
-            handlerServiceContainer.handler(serverMessage.getType(),serverMessage);
+            AbstractHandlerService handlerService = handlerContainer.get(serverMessage.getType());
+            if(Objects.isNull(handlerService)){
+                log.warn("{} handler not found",serverMessage.getType());
+            }else {
+                handlerService.handler(serverMessage);
+            }
         }else {
             log.warn("消息被锁定.");
             this.send(JSON.toJSONString(ClientMessage.builder().clientId(clientId).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));

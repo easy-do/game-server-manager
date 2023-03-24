@@ -4,13 +4,13 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.socket.ClientMessage;
-import game.server.manager.handler.HandlerServiceContainer;
 import game.server.manager.server.websocket.handler.client.ClientHandlerData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.websocket.Session;
+import java.util.Map;
 
 /**
  * @author yuzhanfeng
@@ -21,8 +21,8 @@ import javax.websocket.Session;
 @Component
 public class ClientMessageHandler {
 
-    @Resource
-    private HandlerServiceContainer<ClientHandlerData, Void> handlerServiceContainer;
+    @Autowired
+    private Map<String, AbstractHandlerService<ClientHandlerData>> handlerServiceContainer;
 
     public void handle(String message, Session session) {
         ClientMessage<String> clientMessage;
@@ -36,7 +36,7 @@ public class ClientMessageHandler {
                 .session(session)
                 .clientMessage(clientMessage)
                         .build();
-        handlerServiceContainer.handler(type,clientHandlerData);
+        handlerServiceContainer.get(type).handler(clientHandlerData);
     }
 
 }
