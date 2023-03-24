@@ -8,9 +8,8 @@ import game.server.manager.client.service.DockerService;
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.socket.ServerMessage;
-import game.server.manager.handler.AbstractHandlerService;
-import game.server.manager.handler.annotation.HandlerService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -21,8 +20,8 @@ import javax.annotation.Resource;
  * @Description 服务端心跳处理服务
  */
 @Slf4j
-@HandlerService(MessageTypeConstants.DOCKER_INFO)
-public class DockerInfoHandlerService extends AbstractHandlerService<ServerMessage, Void> {
+@Service(MessageTypeConstants.DOCKER_INFO)
+public class DockerInfoHandlerService implements AbstractHandlerService {
 
     @Resource
     private SyncServer syncServer;

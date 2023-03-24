@@ -3,11 +3,11 @@ package game.server.manager.server.websocket.handler.client;
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.mode.socket.ClientMessage;
-import game.server.manager.handler.AbstractHandlerService;
-import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.util.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
+import game.server.manager.server.websocket.handler.AbstractHandlerService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import javax.websocket.Session;
 import java.util.Objects;
@@ -18,8 +18,8 @@ import java.util.Objects;
  * @Description 客户端返回的连续数据的处理服务
  */
 @Slf4j
-@HandlerService(MessageTypeConstants.SYNC_RESULT)
-public class SyncResultHandlerService extends AbstractHandlerService<ClientHandlerData, Void> {
+@Service(MessageTypeConstants.SYNC_RESULT)
+public class SyncResultHandlerService implements AbstractHandlerService<ClientHandlerData> {
 
     @Override
     public Void handler(ClientHandlerData clientHandlerData) {

@@ -1,6 +1,7 @@
 package game.server.manager.common.utils;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import org.lionsoul.ip2region.xdb.Searcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ public class IpRegionSearchUtil {
     private static final Logger log = LoggerFactory.getLogger(IpRegionSearchUtil.class);
 
     private static Searcher searcher;
+
+    public static String ip;
 
     static {
         ClassPathResource classPathResource = new ClassPathResource("ip.xdb");
@@ -62,7 +65,9 @@ public class IpRegionSearchUtil {
     }
 
     public static String searchServerIp() {
-        String ip = MyWebIpUtil.getnowIp();
+        if(CharSequenceUtil.isEmpty(ip)){
+            ip = MyWebIpUtil.getnowIp();
+        }
         return search(ip);
     }
 

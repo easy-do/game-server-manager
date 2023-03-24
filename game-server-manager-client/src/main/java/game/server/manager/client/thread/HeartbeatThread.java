@@ -27,9 +27,6 @@ public class HeartbeatThread {
     @Autowired
     private SyncServer syncServer;
 
-    @Autowired
-    private SystemUtils systemUtils;
-
     @Scheduled(fixedDelay = 1000 * 30)
     public void HeartbeatCheck() {
         ClientData clientData = clientDataServer.getClientData();

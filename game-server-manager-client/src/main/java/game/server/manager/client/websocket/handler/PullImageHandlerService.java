@@ -5,9 +5,8 @@ import game.server.manager.client.service.DockerImageService;
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.mode.socket.ServerPullImageMessage;
-import game.server.manager.handler.AbstractHandlerService;
-import game.server.manager.handler.annotation.HandlerService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -18,8 +17,8 @@ import javax.annotation.Resource;
  * @Description 服务端心跳处理服务
  */
 @Slf4j
-@HandlerService(MessageTypeConstants.PULL_IMAGE)
-public class PullImageHandlerService extends AbstractHandlerService<ServerMessage, Void> {
+@Service(MessageTypeConstants.PULL_IMAGE)
+public class PullImageHandlerService implements AbstractHandlerService {
 
     @Resource
     private DockerImageService dockerImageService;

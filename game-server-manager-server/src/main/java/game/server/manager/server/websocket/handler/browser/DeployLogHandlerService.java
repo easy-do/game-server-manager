@@ -10,10 +10,10 @@ import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.vo.DeployLogResultVo;
 import game.server.manager.common.vo.UserInfoVo;
-import game.server.manager.handler.AbstractHandlerService;
-import game.server.manager.handler.annotation.HandlerService;
 import game.server.manager.server.application.DeploymentLogServer;
 import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.websocket.handler.AbstractHandlerService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.websocket.Session;
@@ -25,8 +25,8 @@ import java.util.Objects;
  * @Date 2022/11/26 22:45
  * @Description 游览器部署日志socket消息处理服务
  */
-@HandlerService(MessageTypeConstants.DEPLOY_LOG)
-public class DeployLogHandlerService extends AbstractHandlerService<BrowserHandlerData, Void> {
+@Service(MessageTypeConstants.DEPLOY_LOG)
+public class DeployLogHandlerService implements AbstractHandlerService<BrowserHandlerData> {
 
     @Resource
     private DeploymentLogServer deploymentLogServer;
