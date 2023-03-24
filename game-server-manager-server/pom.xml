@@ -120,7 +120,7 @@
 
         <dependency>
             <groupId>game.server.manager</groupId>
-            <artifactId>game-server-manager-docker-client</artifactId>
+            <artifactId>game-server-manager-docker</artifactId>
             <version>1.0.0</version>
         </dependency>
 
