@@ -375,7 +375,7 @@ export function getContainerListColumns(
                 title={t['searchTable.columns.operations.remove.confirm']}
                 onOk={() => callback(record, 'remove')}
             >
-                <Button type="text" status="warning" size="small">
+                <Button type="text" disabled={record.State === 'running'} status="warning" size="small">
                 {t['searchTable.columns.operations.remove']}
                 </Button>
             </Popconfirm>

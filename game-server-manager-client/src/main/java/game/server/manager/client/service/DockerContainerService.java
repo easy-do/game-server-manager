@@ -103,7 +103,7 @@ public class DockerContainerService {
      */
     public Void stopContainer(String containerId) {
         log.info("Docker stopContainer {}", containerId);
-        return dockerContainerBaseService.restartContainer(dockerClient,containerId);
+        return dockerContainerBaseService.stopContainer(dockerClient,containerId);
     }
 
     /**
