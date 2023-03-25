@@ -9,9 +9,8 @@ import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.socket.RenameContainerData;
 import game.server.manager.common.mode.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 
 /**
@@ -23,10 +22,10 @@ import javax.annotation.Resource;
 @Service(MessageTypeConstants.RENAME_CONTAINER)
 public class RenameContainerHandlerService implements AbstractHandlerService {
 
-    @Resource
+    @Autowired
     private SyncServer syncServer;
 
-    @Resource
+    @Autowired
     private DockerContainerService dockerContainerService;
 
     @Override

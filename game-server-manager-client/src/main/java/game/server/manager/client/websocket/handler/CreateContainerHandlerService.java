@@ -10,9 +10,8 @@ import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.docker.model.CreateContainerDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * @author laoyu
@@ -22,10 +21,10 @@ import javax.annotation.Resource;
 @Slf4j
 @Service(MessageTypeConstants.CREATE_CONTAINER)
 public class CreateContainerHandlerService implements AbstractHandlerService {
-    @Resource
+    @Autowired
     private SyncServer syncServer;
 
-    @Resource
+    @Autowired
     private DockerContainerService dockerContainerService;
 
     @Override

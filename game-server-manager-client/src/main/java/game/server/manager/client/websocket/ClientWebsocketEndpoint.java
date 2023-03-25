@@ -35,10 +35,13 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
     @Autowired
     private Map<String, AbstractHandlerService> handlerContainer;
 
+    public void setHandlerContainer(Map<String, AbstractHandlerService> handlerContainer) {
+        this.handlerContainer = handlerContainer;
+    }
 
-    public ClientWebsocketEndpoint(URI serverUri,String clientId) {
+    public ClientWebsocketEndpoint(URI serverUri, String clientId) {
         super(serverUri);
-        log.info("初始化客户端连接");
+        log.info("init client connect");
         this.clientId = clientId;
         connect();
     }
@@ -102,7 +105,7 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        log.info("开启与服务端的连接.");
+        log.info("open server connect");
         ClientMessage connectMessage = ClientMessage.builder()
                 .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(clientId)
                 .build();
@@ -111,7 +114,7 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        log.info("接收到服务端消息,{}",message);
+        log.info("server message,{}",message);
         ServerMessage serverMessage = JSON.parseObject(message, ServerMessage.class);
         if(!isLock(serverMessage)){
             AbstractHandlerService handlerService = handlerContainer.get(serverMessage.getType());
@@ -121,19 +124,19 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
                 handlerService.handler(serverMessage);
             }
         }else {
-            log.warn("消息被锁定.");
+            log.warn("message lock.");
             this.send(JSON.toJSONString(ClientMessage.builder().clientId(clientId).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
         }
     }
 
     @Override
     public void onClose(int i, String s, boolean b) {
-        log.info("与服务端连接断开。");
+        log.info("server disconnect 。");
     }
 
     @Override
     public void onError(Exception e) {
-        log.warn("socket异常, {}", ExceptionUtil.getMessage(e));
+        log.warn("socket exception, {}", ExceptionUtil.getMessage(e));
     }
 
 }

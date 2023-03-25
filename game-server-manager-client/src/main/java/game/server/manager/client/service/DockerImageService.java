@@ -3,10 +3,8 @@ package game.server.manager.client.service;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PullImageResultCallback;
-import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
 import game.server.manager.client.server.SyncServer;
@@ -16,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,7 +35,7 @@ public class DockerImageService {
     @Autowired
     private DockerImageBaseService dockerImageBaseService;
 
-    @Resource
+    @Autowired
     private SyncServer syncServer;
 
     /**

@@ -1,37 +1,20 @@
 package game.server.manager.client.service;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.core.text.StrBuilder;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.*;
-import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Link;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.PullResponseItem;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
-import game.server.manager.docker.model.BindDto;
 import game.server.manager.docker.model.CreateContainerDto;
-import game.server.manager.docker.model.LinkDto;
-import game.server.manager.docker.model.PortBindDto;
 import game.server.manager.docker.service.DockerContainerBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author laoyu
@@ -50,7 +33,7 @@ public class DockerContainerService {
     @Autowired
     private DockerContainerBaseService dockerContainerBaseService;
 
-    @Resource
+    @Autowired
     private SyncServer syncServer;
 
 
