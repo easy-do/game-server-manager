@@ -30,6 +30,7 @@
     </dependencies>
 
     <build>
+        <finalName>demo</finalName>
         <plugins>
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
