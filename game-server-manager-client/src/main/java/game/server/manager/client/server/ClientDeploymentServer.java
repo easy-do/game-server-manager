@@ -12,6 +12,7 @@ import com.alibaba.fastjson2.JSONObject;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.common.application.ExecScriptParam;
 import game.server.manager.common.enums.DeploymentCallBackTypeEnum;
+import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.ClientDeployData;
 import game.server.manager.common.mode.DeploymentCallBackData;
 import game.server.manager.common.mode.ExecuteLogModal;
@@ -25,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.DeploymentException;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.time.LocalDateTime;
@@ -115,7 +115,7 @@ public class ClientDeploymentServer {
         return executeLog.getLogData();
     }
 
-    private void extractedBasicScript(ExecScriptParam execScriptParam, ClientDeployData clientDeployData, LinkedList<String> stdout) throws DeploymentException {
+    private void extractedBasicScript(ExecScriptParam execScriptParam, ClientDeployData clientDeployData, LinkedList<String> stdout) {
         List<ScriptDataVo> basicScript = clientDeployData.getBasicScript();
         if (Objects.nonNull(basicScript) && !basicScript.isEmpty()) {
             saveLogLine(stdout, "------------------检测到脚本依赖，先执行依赖的脚本--------------------");
@@ -134,7 +134,7 @@ public class ClientDeploymentServer {
      * @author laoyu
      * @date 2022/8/7
      */
-    private void buildAndExecScript(ExecScriptParam execScriptParam, ScriptDataVo scriptDataVo, List<String> stdout) throws DeploymentException {
+    private void buildAndExecScript(ExecScriptParam execScriptParam, ScriptDataVo scriptDataVo, List<String> stdout) {
         String scriptName = scriptDataVo.getScriptName();
         String fileName = UUID.randomUUID() + ".sh";
         String filePath = getJarFilePath() + "/" + fileName;
@@ -144,7 +144,7 @@ public class ClientDeploymentServer {
             saveLogLine(stdout, "------------------构建脚本《" + scriptName + "》--------------------");
             String scriptStr = scriptDataVo.getScriptFile();
             if (CharSequenceUtil.isEmpty(scriptStr)) {
-                throw new DeploymentException("脚本《" + scriptName + "》内容为空,请编写脚本后再执行!!!");
+                ExceptionFactory.bizException("脚本《" + scriptName + "》内容为空,请编写脚本后再执行!!!");
             }
             scriptStr = scriptStr.replace(UNIX_LINE_END_CHAR, WINDOW_LINE_END_CHAR);
             // 在本地生成脚本文件
@@ -165,19 +165,19 @@ public class ClientDeploymentServer {
             saveLogLine(stdout, "------------------脚本《" + scriptName + "》运行完毕--------------------");
             saveLogLine(stdout, "注意：如果没有脚本的详细安装信息可能代表运行失败。");
         } catch (Exception e) {
-            throw new DeploymentException(ExceptionUtil.getMessage(e));
+            ExceptionFactory.bizException(ExceptionUtil.getMessage(e));
         } finally {
             //3.删除脚本文件
             FileUtil.del(file);
         }
     }
 
-    public void exec(String cmd, List<String> stdout) throws DeploymentException {
+    public void exec(String cmd, List<String> stdout) {
         try {
             String line = RuntimeUtil.execForStr(cmd);
             saveLogLine(stdout, line);
         } catch (Exception e) {
-            throw new DeploymentException(ExceptionUtil.getMessage(e));
+            ExceptionFactory.bizException(ExceptionUtil.getMessage(e));
         }
     }
 

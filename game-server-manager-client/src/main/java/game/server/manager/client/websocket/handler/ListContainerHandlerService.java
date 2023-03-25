@@ -9,9 +9,9 @@ import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ClientSocketTypeEnum;
 import game.server.manager.common.mode.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -24,10 +24,10 @@ import java.util.List;
 @Service(MessageTypeConstants.CONTAINER_LIST)
 public class ListContainerHandlerService implements AbstractHandlerService {
 
-    @Resource
+    @Autowired
     private SyncServer syncServer;
 
-    @Resource
+    @Autowired
     private DockerContainerService dockerContainerService;
 
     @Override

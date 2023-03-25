@@ -6,9 +6,9 @@ import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.mode.socket.ServerContainerLogMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 
 
 /**
@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 public class ContainerLogHandlerService implements AbstractHandlerService {
 
 
-    @Resource
+    @Autowired
     private DockerContainerService dockerContainerService;
 
     @Override

@@ -6,11 +6,11 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import game.server.manager.common.mode.ClientInitData;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public class SystemUtils {
 
     public static final Map<String,Object> VALUES = new HashMap<>();
 
-    @Resource
+    @Autowired
     Environment environment;
 
     @Value("${manager-url:https://manager.easydo.plus}")
@@ -41,6 +41,9 @@ public class SystemUtils {
 
     @Value("${client_version:0}")
     private String version;
+
+    @Value("${secret:}")
+    private String secret;
 
     public void init(ClientInitData clientInitData){
         String publicKey = clientInitData.getPublicKey();
