@@ -5,8 +5,8 @@ FROM ghcr.io/graalvm/graalvm-ce:22.3.1
 RUN \
     # For SDKMAN to work we need unzip & zip
     # yum install -y unzip zip (graalvm/graalvm-c 默认没有yum所以改用rpm安装)
-    rpm -ivh https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/getPackage/unzip-6.0-46.el8.x86_64.rpm && \
-    rpm -ivh https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/getPackage/zip-3.0-23.el8.x86_64.rpm && \
+    rpm -ivh https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/getPackage/unzip-6.0-46.el8.x86_64.rpm --nodeps --force && \
+    rpm -ivh https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/getPackage/zip-3.0-23.el8.x86_64.rpm --nodeps --force && \
     # Install SDKMAN
     curl -s "https://get.sdkman.io" | bash; \
     source "$HOME/.sdkman/bin/sdkman-init.sh"; \
