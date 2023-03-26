@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.model.ClientData;
 import game.server.manager.client.model.SystemInfo;
-import game.server.manager.client.utils.IpRegionSearchUtil;
+import game.server.manager.client.utils.IpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class ClientDataServer {
         logger.info("loading pluginsData......");
         clientData.setClientId(systemUtils.getClientId());
         clientData.setVersion(systemUtils.getVersion());
-        clientData.setIp(IpRegionSearchUtil.searchServerIp());
+        clientData.setIp(IpUtil.getIpAddress());
         clientData.setEnv(getEnv());
         clientData.setSystemInfo(new SystemInfo());
         clientData.setPort(systemUtils.getPort());
