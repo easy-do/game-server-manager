@@ -7,17 +7,11 @@ import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.socket.ClientMessage;
 import game.server.manager.client.model.socket.ServerMessage;
-import game.server.manager.client.websocket.handler.AbstractHandlerService;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author laoyu
@@ -26,33 +20,27 @@ import java.util.Objects;
  * @date 2022/11/21
  */
 @Slf4j
-@Component
 public class ClientWebsocketEndpoint extends WebSocketClient {
 
     private static volatile boolean messageLock;
 
     private static volatile String lockMessageId;
 
-    private final String clientId;
+    private WebSocketClientHandlerService handlerService;
 
-    @Autowired
-    private Map<String, AbstractHandlerService> handlerContainer;
+    private SystemUtils systemUtils;
 
-    public void setHandlerContainer(Map<String, AbstractHandlerService> handlerContainer) {
-        this.handlerContainer = handlerContainer;
+    public void setHandlerService(WebSocketClientHandlerService handlerService) {
+        this.handlerService = handlerService;
     }
 
-//    public ClientWebsocketEndpoint(URI serverUri, String clientId) {
-//        super(serverUri);
-//        log.info("init client connect");
-//        this.clientId = clientId;
-//        connect();
-//    }
+    public void setSystemUtils(SystemUtils systemUtils) {
+        this.systemUtils = systemUtils;
+    }
 
-    public ClientWebsocketEndpoint(SystemUtils systemUtils) throws URISyntaxException {
-        super(new URI(systemUtils.getServerSocketUrl()));
+    public ClientWebsocketEndpoint(URI serverSocketUrI) {
+        super(serverSocketUrI);
         log.info("init client connect");
-        this.clientId = systemUtils.getClientId();
         connect();
     }
 
@@ -117,7 +105,7 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
     public void onOpen(ServerHandshake serverHandshake) {
         log.info("open server connect");
         ClientMessage connectMessage = ClientMessage.builder()
-                .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(clientId)
+                .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(systemUtils.getClientId())
                 .build();
         send(JSON.toJSONString(connectMessage));
     }
@@ -127,15 +115,10 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
         log.info("server message,{}",message);
         ServerMessage serverMessage = JSON.parseObject(message, ServerMessage.class);
         if(!isLock(serverMessage)){
-            AbstractHandlerService handlerService = handlerContainer.get(serverMessage.getType());
-            if(Objects.isNull(handlerService)){
-                log.warn("{} handler not found",serverMessage.getType());
-            }else {
-                handlerService.handler(serverMessage);
-            }
+            handlerService.handler(serverMessage);
         }else {
             log.warn("message lock.");
-            this.send(JSON.toJSONString(ClientMessage.builder().clientId(clientId).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
+            this.send(JSON.toJSONString(ClientMessage.builder().clientId(systemUtils.getClientId()).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
         }
     }
 
