@@ -7,6 +7,8 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.KeystoreSSLConfig;
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.server.entity.DockerDetails;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.time.Duration;
 
 /**
  * @author laoyu
@@ -64,7 +67,14 @@ public class DockerUtils {
     public static DockerClient createDockerClient(DockerDetails dockerDetails) {
         try {
             DockerClientConfig dockerClientConfig = initConfig(dockerDetails);
-            return DockerClientBuilder.getInstance(dockerClientConfig).build();
+            DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+                    .dockerHost(dockerClientConfig.getDockerHost())
+                    .sslConfig(dockerClientConfig.getSSLConfig())
+                    .maxConnections(100)
+                    .connectionTimeout(Duration.ofSeconds(30))
+                    .responseTimeout(Duration.ofSeconds(45))
+                    .build();
+            return DockerClientBuilder.getInstance(dockerClientConfig).withDockerHttpClient(httpClient).build();
         } catch (Exception e) {
             throw ExceptionFactory.bizException("创建客户端连接失败:{}", e.getMessage());
         }
