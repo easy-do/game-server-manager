@@ -10,8 +10,11 @@ import game.server.manager.client.model.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * @author laoyu
@@ -20,28 +23,66 @@ import java.net.URI;
  * @date 2022/11/21
  */
 @Slf4j
-public class ClientWebsocketEndpoint extends WebSocketClient {
+@Component
+public class ClientWebsocketEndpoint {
 
     private static volatile boolean messageLock;
 
     private static volatile String lockMessageId;
 
+    public static WebSocketClient CLIENT;
+
+
     private WebSocketClientHandlerService handlerService;
 
     private SystemUtils systemUtils;
 
-    public void setHandlerService(WebSocketClientHandlerService handlerService) {
-        this.handlerService = handlerService;
-    }
+//    public void setHandlerService(WebSocketClientHandlerService handlerService) {
+//        this.handlerService = handlerService;
+//    }
+//
+//    public void setSystemUtils(SystemUtils systemUtils) {
+//        this.systemUtils = systemUtils;
+//    }
 
-    public void setSystemUtils(SystemUtils systemUtils) {
-        this.systemUtils = systemUtils;
-    }
-
-    public ClientWebsocketEndpoint(URI serverSocketUrI) {
-        super(serverSocketUrI);
+    public ClientWebsocketEndpoint(SystemUtils systemUtils,WebSocketClientHandlerService handlerService) throws URISyntaxException {
         log.info("init client connect");
-        connect();
+        this.systemUtils = systemUtils;
+        this.handlerService = handlerService;
+        URI serverSocketUrI = new URI(systemUtils.getServerSocketUrl());
+        this.CLIENT = new WebSocketClient(serverSocketUrI) {
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                log.info("open server connect");
+                ClientMessage connectMessage = ClientMessage.builder()
+                        .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(systemUtils.getClientId())
+                        .build();
+                send(JSON.toJSONString(connectMessage));
+            }
+
+            @Override
+            public void onMessage(String message) {
+                log.info("server message,{}",message);
+                ServerMessage serverMessage = JSON.parseObject(message, ServerMessage.class);
+                if(!isLock(serverMessage)){
+                    handlerService.handler(serverMessage);
+                }else {
+                    log.warn("message lock.");
+                    this.send(JSON.toJSONString(ClientMessage.builder().clientId(systemUtils.getClientId()).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
+                }
+            }
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+                log.info("server disconnect 。");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                log.warn("socket exception, {}", ExceptionUtil.getMessage(e));
+            }
+        };
+        CLIENT.connect();
     }
 
     /**
@@ -52,7 +93,7 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
      * @author laoyu
      * @date 2022/11/22
      */
-    private synchronized boolean isLock(ServerMessage serverMessage){
+    private static synchronized boolean isLock(ServerMessage serverMessage){
         //不是需要同步传输的消息
         if(!serverMessage.isSync()){
             return false;
@@ -75,7 +116,7 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
      * @author laoyu
      * @date 2022/11/22
      */
-    public synchronized boolean lock(String messageId){
+    public static synchronized boolean lock(String messageId){
         if(!messageLock){
             messageLock = true;
             lockMessageId = messageId;
@@ -92,44 +133,13 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
      * @author laoyu
      * @date 2022/11/22
      */
-    public synchronized boolean unLock(String messageId){
+    public static synchronized boolean unLock(String messageId){
         if(messageLock && CharSequenceUtil.equals(lockMessageId,messageId)){
             messageLock = false;
             lockMessageId = "";
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onOpen(ServerHandshake serverHandshake) {
-        log.info("open server connect");
-        ClientMessage connectMessage = ClientMessage.builder()
-                .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(systemUtils.getClientId())
-                .build();
-        send(JSON.toJSONString(connectMessage));
-    }
-
-    @Override
-    public void onMessage(String message) {
-        log.info("server message,{}",message);
-        ServerMessage serverMessage = JSON.parseObject(message, ServerMessage.class);
-        if(!isLock(serverMessage)){
-            handlerService.handler(serverMessage);
-        }else {
-            log.warn("message lock.");
-            this.send(JSON.toJSONString(ClientMessage.builder().clientId(systemUtils.getClientId()).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
-        }
-    }
-
-    @Override
-    public void onClose(int i, String s, boolean b) {
-        log.info("server disconnect 。");
-    }
-
-    @Override
-    public void onError(Exception e) {
-        log.warn("socket exception, {}", ExceptionUtil.getMessage(e));
     }
 
 }

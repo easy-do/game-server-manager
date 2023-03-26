@@ -85,7 +85,7 @@ public class DockerImageService {
             syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END,"客户端执行pull镜像线程异常："+ExceptionUtil.getMessage(interruptedException));
         }finally {
             //释放锁
-            syncServer.getClient().unLock(messageId);
+            syncServer.unLock(messageId);
         }
     }
 

@@ -28,10 +28,6 @@ public class SyncServer {
     @Autowired
     private ClientDataServer clientDataServer;
 
-    @Autowired
-    private ClientWebsocketEndpoint client;
-
-
     public void sendOkMessage(ClientSocketTypeEnum type, String messageId, String message){
         ClientMessage clientMessage = ClientMessage.builder()
                 .clientId(systemUtils.getClientId())
@@ -60,27 +56,30 @@ public class SyncServer {
                 .success(true)
                 .data(message)
                 .build();
-        if(client.isOpen()){
+        if(ClientWebsocketEndpoint.CLIENT.isOpen()){
             sendMessage(JSON.toJSONString(clientMessage));
             }else {
                     log.error("连接断开,尝试重连。");
-                    client.reconnect();
-                    client.send(JSON.toJSONString(clientMessage));
+            ClientWebsocketEndpoint.CLIENT.reconnect();
+            ClientWebsocketEndpoint.CLIENT.send(JSON.toJSONString(clientMessage));
             }
     }
 
     public void sendMessage(String message){
-        if(client.isOpen()){
-            client.send(message);
+        if(ClientWebsocketEndpoint.CLIENT.isOpen()){
+            ClientWebsocketEndpoint.CLIENT.send(message);
         }else {
             try {
                 log.error("连接断开,尝试重连。");
-                client.reconnectBlocking();
-                client.send(message);
+                ClientWebsocketEndpoint.CLIENT.reconnectBlocking();
+                ClientWebsocketEndpoint.CLIENT.send(message);
             } catch (InterruptedException ex) {
                 log.error("重连失败,{}",ExceptionUtil.getMessage(ex));
             }
         }
     }
 
+    public void unLock(String messageId) {
+        ClientWebsocketEndpoint.unLock(messageId);
+    }
 }
