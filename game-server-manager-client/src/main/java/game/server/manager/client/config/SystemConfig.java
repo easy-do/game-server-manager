@@ -31,28 +31,6 @@ import java.time.Duration;
 public class SystemConfig {
 
 
-    /**
-     * 实例化docker客户端
-     *
-     * @return com.github.dockerjava.api.DockerClient
-     * @author laoyu
-     * @date 2023/3/26
-     */
-    @Bean
-    public DockerClient dockerClient(){
-        DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
-//                .createDefaultConfigBuilder().build();
-        .createDefaultConfigBuilder().withDockerHost("tcp://192.168.123.88:2375").build();
-        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
-                .dockerHost(dockerClientConfig.getDockerHost())
-                .sslConfig(dockerClientConfig.getSSLConfig())
-                .maxConnections(100)
-                .connectionTimeout(Duration.ofSeconds(30))
-                .responseTimeout(Duration.ofSeconds(45))
-                .build();
-        return DockerClientBuilder.getInstance(dockerClientConfig).withDockerHttpClient(httpClient)
-                .build();
-    }
 
 //    /**
 //     * 实例化websocket客户端
