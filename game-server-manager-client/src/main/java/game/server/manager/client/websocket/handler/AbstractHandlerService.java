@@ -1,6 +1,6 @@
 package game.server.manager.client.websocket.handler;
 
-import game.server.manager.common.mode.socket.ServerMessage;
+import game.server.manager.client.model.socket.ServerMessage;
 
 public interface AbstractHandlerService {
 

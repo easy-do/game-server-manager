@@ -1,8 +1,8 @@
 package game.server.manager.client.websocket.handler;
 
+import game.server.manager.client.contants.MessageTypeConstants;
+import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.websocket.SessionMessageCache;
-import game.server.manager.common.constant.MessageTypeConstants;
-import game.server.manager.common.mode.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -2,12 +2,12 @@ package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
+import game.server.manager.client.contants.MessageTypeConstants;
+import game.server.manager.client.model.socket.RenameContainerData;
+import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.client.service.DockerContainerService;
-import game.server.manager.common.constant.MessageTypeConstants;
-import game.server.manager.common.enums.ClientSocketTypeEnum;
-import game.server.manager.common.mode.socket.RenameContainerData;
-import game.server.manager.common.mode.socket.ServerMessage;
+import game.server.manager.client.contants.ClientSocketTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

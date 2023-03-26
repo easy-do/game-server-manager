@@ -3,7 +3,7 @@ package game.server.manager.client.service;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.Version;
-import game.server.manager.docker.service.DockerBaseService;
+import game.server.manager.client.service.base.DockerBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
