@@ -1,6 +1,6 @@
 package game.server.manager.client.model;
 
-import com.alibaba.fastjson2.JSONObject;
+import cn.hutool.json.JSONObject;
 import lombok.Data;
 
 import java.io.Serial;

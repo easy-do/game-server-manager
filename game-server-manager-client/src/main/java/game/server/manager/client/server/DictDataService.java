@@ -1,6 +1,6 @@
 package game.server.manager.client.server;
 
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSONUtil;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.contants.PathConstants;
 import game.server.manager.client.model.SysDictDataVo;
@@ -25,7 +25,7 @@ public class DictDataService {
         String path = PathConstants.GET_SINGLE_DICT_DATA.replace("{dictCode}",dictCode).replace("{dictDataKey}",dictDataKey);
         String resultStr = HttpRequestUtil.get(HttpModel.builder().host(systemUtils.getManagerUrl()).path(path).build());
         R<String> result = HttpRequestUtil.unPackage(resultStr);
-        SysDictDataVo sysDictDataVo = JSON.parseObject(result.getData(),SysDictDataVo.class);
+        SysDictDataVo sysDictDataVo = JSONUtil.toBean(result.getData(),SysDictDataVo.class);
         return sysDictDataVo.getDictValue();
     }
 }

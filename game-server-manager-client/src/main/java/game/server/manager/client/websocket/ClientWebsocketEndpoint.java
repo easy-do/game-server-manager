@@ -2,7 +2,7 @@ package game.server.manager.client.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSONUtil;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.socket.ClientMessage;
@@ -10,7 +10,6 @@ import game.server.manager.client.model.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -48,18 +47,18 @@ public class ClientWebsocketEndpoint {
                 ClientMessage connectMessage = ClientMessage.builder()
                         .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(systemUtils.getClientId())
                         .build();
-                send(JSON.toJSONString(connectMessage));
+                send(JSONUtil.toJsonStr(connectMessage));
             }
 
             @Override
             public void onMessage(String message) {
                 log.info("server message,{}",message);
-                ServerMessage serverMessage = JSON.parseObject(message, ServerMessage.class);
+                ServerMessage serverMessage = JSONUtil.toBean(message, ServerMessage.class);
                 if(!isLock(serverMessage)){
                     handlerService.handler(serverMessage);
                 }else {
                     log.warn("message lock.");
-                    this.send(JSON.toJSONString(ClientMessage.builder().clientId(systemUtils.getClientId()).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
+                    this.send(JSONUtil.toJsonStr(ClientMessage.builder().clientId(systemUtils.getClientId()).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
                 }
             }
 

@@ -1,7 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSONUtil;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
@@ -32,10 +32,10 @@ public class CreateContainerHandlerService implements AbstractHandlerService {
         log.info("createContainer info ==> {}",serverMessage);
         String messageId = serverMessage.getMessageId();
         String jsonData = serverMessage.getData();
-        CreateContainerDto createContainerDto = JSON.parseObject(jsonData, CreateContainerDto.class);
+        CreateContainerDto createContainerDto = JSONUtil.toBean(jsonData, CreateContainerDto.class);
         try {
             CreateContainerResponse res = dockerContainerService.createContainer(createContainerDto);
-            syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, JSON.toJSONString(res));
+            syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, JSONUtil.toJsonStr(res));
         }catch (Exception e) {
             syncServer.sendFailMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, ExceptionUtil.getMessage(e));
         }

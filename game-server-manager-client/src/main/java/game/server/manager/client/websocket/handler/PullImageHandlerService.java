@@ -1,6 +1,6 @@
 package game.server.manager.client.websocket.handler;
 
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSONUtil;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.model.socket.ServerPullImageMessage;
@@ -26,7 +26,7 @@ public class PullImageHandlerService implements AbstractHandlerService {
     public Void handler(ServerMessage serverMessage) {
         log.info("OnMessageHandler pull ==> {}",serverMessage);
         String jsonData = serverMessage.getData();
-        ServerPullImageMessage pullImageMessage = JSON.parseObject(jsonData, ServerPullImageMessage.class);
+        ServerPullImageMessage pullImageMessage = JSONUtil.toBean(jsonData, ServerPullImageMessage.class);
         dockerImageService.pullImage(serverMessage.getMessageId(),pullImageMessage.getRepository());
         return null;
     }

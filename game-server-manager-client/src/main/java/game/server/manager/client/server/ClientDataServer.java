@@ -2,7 +2,7 @@ package game.server.manager.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.IoUtil;
-import com.alibaba.fastjson2.JSONObject;
+import cn.hutool.json.JSONObject;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.model.ClientData;
 import game.server.manager.client.model.SystemInfo;

@@ -3,8 +3,8 @@ package game.server.manager.client.service.base;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrBuilder;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerCmd;
@@ -204,7 +204,7 @@ public class DockerContainerBaseService {
         createContainerCmd.withHostConfig(hostConfig);
         //暴露容器端口
         withExposedPorts(createContainerCmd, createContainerDto);
-        log.info("Docker createContainer {}", JSON.toJSONString(createContainerDto));
+        log.info("Docker createContainer {}", JSONUtil.toJsonStr(createContainerDto));
         return createContainerCmd.exec();
     }
 

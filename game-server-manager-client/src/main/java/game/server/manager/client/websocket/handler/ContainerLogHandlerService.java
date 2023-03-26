@@ -1,6 +1,6 @@
 package game.server.manager.client.websocket.handler;
 
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSONUtil;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.socket.ServerContainerLogMessage;
 import game.server.manager.client.model.socket.ServerMessage;
@@ -28,7 +28,7 @@ public class ContainerLogHandlerService implements AbstractHandlerService {
     public Void handler(ServerMessage serverMessage) {
         log.info("OnMessageHandler containerLog ==> {}",serverMessage);
         String jsonData = serverMessage.getData();
-        ServerContainerLogMessage containerLogMessage = JSON.parseObject(jsonData, ServerContainerLogMessage.class);
+        ServerContainerLogMessage containerLogMessage = JSONUtil.toBean(jsonData, ServerContainerLogMessage.class);
         dockerContainerService.logContainer(serverMessage.getMessageId(),containerLogMessage.getContainerId());
         return null;
     }
