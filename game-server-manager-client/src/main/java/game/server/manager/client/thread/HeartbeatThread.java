@@ -1,6 +1,6 @@
 package game.server.manager.client.thread;
 
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSONUtil;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.ClientData;
 import game.server.manager.client.server.ClientDataServer;
@@ -29,6 +29,6 @@ public class HeartbeatThread {
     @Scheduled(fixedDelay = 1000 * 30)
     public void HeartbeatCheck() {
         ClientData clientData = clientDataServer.getClientData();
-        syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, JSON.toJSONString(clientData));
+        syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, JSONUtil.toJsonStr(clientData));
     }
 }

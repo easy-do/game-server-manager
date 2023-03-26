@@ -1,7 +1,7 @@
 package game.server.manager.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSONUtil;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.socket.ClientMessage;
 import game.server.manager.client.websocket.ClientWebsocketEndpoint;
@@ -36,7 +36,7 @@ public class SyncServer {
                 .data(message)
                 .success(true)
                 .build();
-        sendMessage(JSON.toJSONString(clientMessage));
+        sendMessage(JSONUtil.toJsonStr(clientMessage));
     }
     public void sendFailMessage(ClientSocketTypeEnum type, String messageId, String message){
         ClientMessage clientMessage = ClientMessage.builder()
@@ -46,7 +46,7 @@ public class SyncServer {
                 .data(message)
                 .success(false)
                 .build();
-        sendMessage(JSON.toJSONString(clientMessage));
+        sendMessage(JSONUtil.toJsonStr(clientMessage));
     }
 
     public void sendMessage(ClientSocketTypeEnum type, String message){
@@ -57,11 +57,11 @@ public class SyncServer {
                 .data(message)
                 .build();
         if(ClientWebsocketEndpoint.CLIENT.isOpen()){
-            sendMessage(JSON.toJSONString(clientMessage));
+            sendMessage(JSONUtil.toJsonStr(clientMessage));
             }else {
                     log.error("连接断开,尝试重连。");
             ClientWebsocketEndpoint.CLIENT.reconnect();
-            ClientWebsocketEndpoint.CLIENT.send(JSON.toJSONString(clientMessage));
+            ClientWebsocketEndpoint.CLIENT.send(JSONUtil.toJsonStr(clientMessage));
             }
     }
 

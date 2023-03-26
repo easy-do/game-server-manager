@@ -1,7 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSONUtil;
 import com.github.dockerjava.api.model.Version;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
@@ -34,7 +34,7 @@ public class DockerVersionHandlerService implements AbstractHandlerService {
         String messageId = serverMessage.getMessageId();
         try {
             Version version = dockerService.version();
-            syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, JSON.toJSONString(version));
+            syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, JSONUtil.toJsonStr(version));
         }catch (Exception e) {
             syncServer.sendFailMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, ExceptionUtil.getMessage(e));
         }
