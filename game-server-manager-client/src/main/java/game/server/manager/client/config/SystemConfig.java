@@ -30,30 +30,47 @@ import java.time.Duration;
 @Configuration(proxyBeanMethods = false)
 public class SystemConfig {
 
-//    @Bean
-//    public DockerClient dockerClient(){
-//        DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
-////                .createDefaultConfigBuilder().build();
-//        .createDefaultConfigBuilder().withDockerHost("tcp://192.168.123.88:2375").build();
-//        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
-//                .dockerHost(dockerClientConfig.getDockerHost())
-//                .sslConfig(dockerClientConfig.getSSLConfig())
-//                .maxConnections(100)
-//                .connectionTimeout(Duration.ofSeconds(30))
-//                .responseTimeout(Duration.ofSeconds(45))
-//                .build();
-//        return DockerClientBuilder.getInstance(dockerClientConfig).withDockerHttpClient(httpClient)
-//                .build();
-//    }
 
+    /**
+     * 实例化docker客户端
+     *
+     * @return com.github.dockerjava.api.DockerClient
+     * @author laoyu
+     * @date 2023/3/26
+     */
     @Bean
-    public ClientWebsocketEndpoint clientWebsocketEndpoint(SystemUtils systemUtils, WebSocketClientHandlerService webSocketClientHandlerService) throws URISyntaxException {
-        URI serverSocketUrI = new URI(systemUtils.getServerSocketUrl());
-        ClientWebsocketEndpoint clientWebsocketEndpoint = new ClientWebsocketEndpoint(serverSocketUrI);
-        clientWebsocketEndpoint.setSystemUtils(systemUtils);
-        clientWebsocketEndpoint.setHandlerService(webSocketClientHandlerService);
-        return clientWebsocketEndpoint;
+    public DockerClient dockerClient(){
+        DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
+//                .createDefaultConfigBuilder().build();
+        .createDefaultConfigBuilder().withDockerHost("tcp://192.168.123.88:2375").build();
+        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+                .dockerHost(dockerClientConfig.getDockerHost())
+                .sslConfig(dockerClientConfig.getSSLConfig())
+                .maxConnections(100)
+                .connectionTimeout(Duration.ofSeconds(30))
+                .responseTimeout(Duration.ofSeconds(45))
+                .build();
+        return DockerClientBuilder.getInstance(dockerClientConfig).withDockerHttpClient(httpClient)
+                .build();
     }
+
+//    /**
+//     * 实例化websocket客户端
+//     *
+//     * @param systemUtils systemUtils
+//     * @param webSocketClientHandlerService webSocketClientHandlerService
+//     * @return game.server.manager.client.websocket.ClientWebsocketEndpoint
+//     * @author laoyu
+//     * @date 2023/3/26
+//     */
+//    @Bean
+//    public ClientWebsocketEndpoint clientWebsocketEndpoint(SystemUtils systemUtils, WebSocketClientHandlerService webSocketClientHandlerService) throws URISyntaxException {
+//        URI serverSocketUrI = new URI(systemUtils.getServerSocketUrl());
+//        ClientWebsocketEndpoint clientWebsocketEndpoint = new ClientWebsocketEndpoint(serverSocketUrI);
+//        clientWebsocketEndpoint.setSystemUtils(systemUtils);
+//        clientWebsocketEndpoint.setHandlerService(webSocketClientHandlerService);
+//        return clientWebsocketEndpoint;
+//    }
 
 
 }
