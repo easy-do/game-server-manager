@@ -2,15 +2,10 @@ package game.server.manager.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.alibaba.fastjson2.JSON;
+import game.server.manager.client.contants.ClientSocketTypeEnum;
+import game.server.manager.client.model.socket.ClientMessage;
 import game.server.manager.client.websocket.ClientWebsocketEndpoint;
-import game.server.manager.common.constant.PathConstants;
-import game.server.manager.common.enums.ClientSocketTypeEnum;
-import game.server.manager.common.mode.SyncData;
 import game.server.manager.client.config.SystemUtils;
-import game.server.manager.common.mode.socket.ClientMessage;
-import game.server.manager.common.result.R;
-import game.server.manager.common.utils.http.HttpModel;
-import game.server.manager.common.utils.http.HttpRequestUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +31,6 @@ public class SyncServer {
     @Autowired
     private ClientWebsocketEndpoint client;
 
-
-
-    public R<String> sync(SyncData syncData) {
-        String resultStr = HttpRequestUtil.post(
-                HttpModel.builder()
-                        .host(systemUtils.getManagerUrl())
-                        .path(PathConstants.SYNC)
-                        .body(JSON.toJSONString(syncData)).build());
-        return HttpRequestUtil.unPackage(resultStr);
-    }
 
     public void sendOkMessage(ClientSocketTypeEnum type, String messageId, String message){
         ClientMessage clientMessage = ClientMessage.builder()

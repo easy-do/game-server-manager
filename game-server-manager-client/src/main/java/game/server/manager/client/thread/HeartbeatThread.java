@@ -1,11 +1,10 @@
 package game.server.manager.client.thread;
 
 import com.alibaba.fastjson2.JSON;
-import game.server.manager.client.config.SystemUtils;
+import game.server.manager.client.contants.ClientSocketTypeEnum;
+import game.server.manager.client.model.ClientData;
 import game.server.manager.client.server.ClientDataServer;
 import game.server.manager.client.server.SyncServer;
-import game.server.manager.common.enums.ClientSocketTypeEnum;
-import game.server.manager.common.mode.ClientData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

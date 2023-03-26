@@ -3,10 +3,11 @@ package game.server.manager.client.websocket;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
+import game.server.manager.client.config.SystemUtils;
+import game.server.manager.client.contants.ClientSocketTypeEnum;
+import game.server.manager.client.model.socket.ClientMessage;
+import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.websocket.handler.AbstractHandlerService;
-import game.server.manager.common.enums.ClientSocketTypeEnum;
-import game.server.manager.common.mode.socket.ClientMessage;
-import game.server.manager.common.mode.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,6 +26,7 @@ import java.util.Objects;
  * @date 2022/11/21
  */
 @Slf4j
+@Component
 public class ClientWebsocketEndpoint extends WebSocketClient {
 
     private static volatile boolean messageLock;
@@ -39,10 +42,17 @@ public class ClientWebsocketEndpoint extends WebSocketClient {
         this.handlerContainer = handlerContainer;
     }
 
-    public ClientWebsocketEndpoint(URI serverUri, String clientId) {
-        super(serverUri);
+//    public ClientWebsocketEndpoint(URI serverUri, String clientId) {
+//        super(serverUri);
+//        log.info("init client connect");
+//        this.clientId = clientId;
+//        connect();
+//    }
+
+    public ClientWebsocketEndpoint(SystemUtils systemUtils) throws URISyntaxException {
+        super(new URI(systemUtils.getServerSocketUrl()));
         log.info("init client connect");
-        this.clientId = clientId;
+        this.clientId = systemUtils.getClientId();
         connect();
     }
 

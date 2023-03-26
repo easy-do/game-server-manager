@@ -2,11 +2,11 @@ package game.server.manager.client.server;
 
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.client.config.SystemUtils;
-import game.server.manager.common.constant.PathConstants;
-import game.server.manager.common.result.R;
-import game.server.manager.common.utils.http.HttpModel;
-import game.server.manager.common.utils.http.HttpRequestUtil;
-import game.server.manager.common.vo.SysDictDataVo;
+import game.server.manager.client.contants.PathConstants;
+import game.server.manager.client.model.SysDictDataVo;
+import game.server.manager.client.result.R;
+import game.server.manager.client.utils.http.HttpModel;
+import game.server.manager.client.utils.http.HttpRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
