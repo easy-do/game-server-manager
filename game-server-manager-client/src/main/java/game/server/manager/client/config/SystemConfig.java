@@ -30,21 +30,21 @@ import java.time.Duration;
 @Configuration(proxyBeanMethods = false)
 public class SystemConfig {
 
-    @Bean
-    public DockerClient dockerClient(){
-        DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
-//                .createDefaultConfigBuilder().build();
-        .createDefaultConfigBuilder().withDockerHost("tcp://192.168.123.88:2375").build();
-        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
-                .dockerHost(dockerClientConfig.getDockerHost())
-                .sslConfig(dockerClientConfig.getSSLConfig())
-                .maxConnections(100)
-                .connectionTimeout(Duration.ofSeconds(30))
-                .responseTimeout(Duration.ofSeconds(45))
-                .build();
-        return DockerClientBuilder.getInstance(dockerClientConfig).withDockerHttpClient(httpClient)
-                .build();
-    }
+//    @Bean
+//    public DockerClient dockerClient(){
+//        DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
+////                .createDefaultConfigBuilder().build();
+//        .createDefaultConfigBuilder().withDockerHost("tcp://192.168.123.88:2375").build();
+//        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+//                .dockerHost(dockerClientConfig.getDockerHost())
+//                .sslConfig(dockerClientConfig.getSSLConfig())
+//                .maxConnections(100)
+//                .connectionTimeout(Duration.ofSeconds(30))
+//                .responseTimeout(Duration.ofSeconds(45))
+//                .build();
+//        return DockerClientBuilder.getInstance(dockerClientConfig).withDockerHttpClient(httpClient)
+//                .build();
+//    }
 
     @Bean
     public ClientWebsocketEndpoint clientWebsocketEndpoint(SystemUtils systemUtils, WebSocketClientHandlerService webSocketClientHandlerService) throws URISyntaxException {
