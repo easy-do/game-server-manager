@@ -32,18 +32,9 @@ public class ClientWebsocketEndpoint {
 
     public static WebSocketClient CLIENT;
 
-
     private WebSocketClientHandlerService handlerService;
 
     private SystemUtils systemUtils;
-
-//    public void setHandlerService(WebSocketClientHandlerService handlerService) {
-//        this.handlerService = handlerService;
-//    }
-//
-//    public void setSystemUtils(SystemUtils systemUtils) {
-//        this.systemUtils = systemUtils;
-//    }
 
     public ClientWebsocketEndpoint(SystemUtils systemUtils,WebSocketClientHandlerService handlerService) throws URISyntaxException {
         log.info("init client connect");
