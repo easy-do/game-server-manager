@@ -1,9 +1,9 @@
 package game.server.manager.client.service;
 
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.Version;
 import game.server.manager.client.service.base.DockerBaseService;
+import game.server.manager.client.utils.DockerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,9 +19,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class DockerService {
 
-    @Autowired(required = false)
-    private DockerClient dockerClient;
-
     @Autowired
     private DockerBaseService dockerBaseService;
 
@@ -34,17 +31,17 @@ public class DockerService {
      */
     public Void ping() {
         log.info("Docker ping");
-        return dockerBaseService.ping(dockerClient);
+        return dockerBaseService.ping(DockerUtils.creteDockerClient());
     }
 
     public Info info() {
         log.info("Docker info");
-        return dockerBaseService.info(dockerClient);
+        return dockerBaseService.info(DockerUtils.creteDockerClient());
     }
 
     public Version version() {
         log.info("Docker info");
-        return dockerBaseService.version(dockerClient);
+        return dockerBaseService.version(DockerUtils.creteDockerClient());
     }
 
 }

@@ -2,7 +2,6 @@ package game.server.manager.client.service;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.Image;
@@ -10,6 +9,7 @@ import com.github.dockerjava.api.model.PullResponseItem;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.client.service.base.DockerImageBaseService;
+import game.server.manager.client.utils.DockerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,10 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class DockerImageService {
 
-
-    @Autowired(required = false)
-    private DockerClient dockerClient;
-
     @Autowired
     private DockerImageBaseService dockerImageBaseService;
 
@@ -47,7 +43,7 @@ public class DockerImageService {
      */
     public List<Image> listImages() {
         log.info("Docker listImages");
-        return dockerImageBaseService.listImages(dockerClient);
+        return dockerImageBaseService.listImages(DockerUtils.creteDockerClient());
     }
 
 
@@ -61,7 +57,7 @@ public class DockerImageService {
      */
     public void pullImage(String messageId, String repository) {
         log.info("Docker pullImage {}", repository);
-        PullImageCmd pullImageCmd = dockerClient.pullImageCmd(repository);
+        PullImageCmd pullImageCmd = DockerUtils.creteDockerClient().pullImageCmd(repository);
         ConcurrentHashMap<String,String> messageCache = new ConcurrentHashMap<>();
         PullImageResultCallback callback = pullImageCmd.exec(new PullImageResultCallback() {
             @Override
@@ -103,7 +99,7 @@ public class DockerImageService {
      */
     public String pullImage(String repository) throws InterruptedException {
         log.info("Docker pullImage {}", repository);
-        return dockerImageBaseService.pullImage(dockerClient,repository);
+        return dockerImageBaseService.pullImage(DockerUtils.creteDockerClient(),repository);
     }
 
 
@@ -117,7 +113,7 @@ public class DockerImageService {
      */
     public Object removeImage(String imageId) {
         log.info("Docker removeImage {}", imageId);
-        return dockerImageBaseService.removeImage(dockerClient,imageId);
+        return dockerImageBaseService.removeImage(DockerUtils.creteDockerClient(),imageId);
     }
 
 }

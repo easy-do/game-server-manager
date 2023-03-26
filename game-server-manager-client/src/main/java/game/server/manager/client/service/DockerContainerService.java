@@ -10,6 +10,7 @@ import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.CreateContainerDto;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.client.service.base.DockerContainerBaseService;
+import game.server.manager.client.utils.DockerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,6 @@ import java.util.List;
 public class DockerContainerService {
 
 
-    @Autowired(required = false)
-    private DockerClient dockerClient;
 
     @Autowired
     private DockerContainerBaseService dockerContainerBaseService;
@@ -46,7 +45,7 @@ public class DockerContainerService {
      */
     public List<Container> containerList() {
         log.info("Docker containerList");
-        return dockerContainerBaseService.containerList(dockerClient);
+        return dockerContainerBaseService.containerList(DockerUtils.creteDockerClient());
     }
 
 
@@ -60,7 +59,7 @@ public class DockerContainerService {
      */
     public Void startContainer(String containerId) {
         log.info("Docker startContainer {}", containerId);
-        return dockerContainerBaseService.startContainer(dockerClient,containerId);
+        return dockerContainerBaseService.startContainer(DockerUtils.creteDockerClient(),containerId);
     }
 
     /**
@@ -73,7 +72,7 @@ public class DockerContainerService {
      */
     public Void restartContainer(String containerId) {
         log.info("Docker restartContainer {}", containerId);
-        return dockerContainerBaseService.restartContainer(dockerClient,containerId);
+        return dockerContainerBaseService.restartContainer(DockerUtils.creteDockerClient(),containerId);
     }
 
     /**
@@ -86,7 +85,7 @@ public class DockerContainerService {
      */
     public Void stopContainer(String containerId) {
         log.info("Docker stopContainer {}", containerId);
-        return dockerContainerBaseService.stopContainer(dockerClient,containerId);
+        return dockerContainerBaseService.stopContainer(DockerUtils.creteDockerClient(),containerId);
     }
 
     /**
@@ -100,7 +99,7 @@ public class DockerContainerService {
      */
     public Void renameContainer(String containerId, String name) {
         log.info("Docker renameContainer {},{}", containerId, name);
-        return dockerContainerBaseService.renameContainer(dockerClient,containerId,name);
+        return dockerContainerBaseService.renameContainer(DockerUtils.creteDockerClient(),containerId,name);
 
     }
 
@@ -114,7 +113,7 @@ public class DockerContainerService {
      */
     public Void removeContainer(String containerId) {
         log.info("Docker removeContainer {}", containerId);
-        return dockerContainerBaseService.removeContainer(dockerClient,containerId);
+        return dockerContainerBaseService.removeContainer(DockerUtils.creteDockerClient(),containerId);
     }
 
     /**
@@ -126,7 +125,7 @@ public class DockerContainerService {
      * @date 2022/11/20
      */
     public String logContainer(String containerId) throws InterruptedException {
-        return dockerContainerBaseService.logContainer(dockerClient,containerId);
+        return dockerContainerBaseService.logContainer(DockerUtils.creteDockerClient(),containerId);
     }
 
 
@@ -140,7 +139,7 @@ public class DockerContainerService {
      */
     public void logContainer(String messageId, String containerId) {
         log.info("Docker logContainer {}", containerId);
-
+        DockerClient dockerClient = DockerUtils.creteDockerClient();
         LogContainerCmd logContainerCmd = dockerClient.logContainerCmd(containerId);
         logContainerCmd.withStdOut(true).withStdErr(true).withTail(1000);
 
@@ -172,6 +171,6 @@ public class DockerContainerService {
      * @date 2022/11/19
      */
     public CreateContainerResponse createContainer(CreateContainerDto createContainerDto) {
-       return dockerContainerBaseService.createContainer(dockerClient,createContainerDto);
+       return dockerContainerBaseService.createContainer(DockerUtils.creteDockerClient(),createContainerDto);
     }
 }
