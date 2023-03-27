@@ -23,7 +23,7 @@
       "pattern":"\\Qcn/hutool/extra/spring/SpringUtil.class\\E"
     }, 
     {
-      "pattern":"\\Qcom/sun/jna/win32-x86-64/jnidispatch.dll\\E"
+      "pattern":"\\Qcom/sun/jna/linux-x86-64/libjnidispatch.so\\E"
     }, 
     {
       "pattern":"\\Qgame/server/manager/client/\\E"
@@ -537,9 +537,18 @@
     }, 
     {
       "pattern":"\\Qoshi.architecture.properties\\E"
-    }, 
+    },
+    {
+      "pattern":"\\Qoshi.linux.filename.properties\\E"
+    },
+    {
+      "pattern":"\\Qoshi.macos.versions.properties\\E"
+    },
     {
       "pattern":"\\Qoshi.properties\\E"
+    },
+    {
+      "pattern":"\\Qoshi.vmmacaddr.properties\\E"
     }
   ]},
   "bundles":[
