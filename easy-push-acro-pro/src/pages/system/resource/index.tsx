@@ -181,6 +181,7 @@ function SearchTable() {
       </PermissionWrapper>
       <Spin tip='loading Data...' loading={loading}>
       <Table
+        rowKey={'id'}
         columns={columns}
         data={data}
       />
