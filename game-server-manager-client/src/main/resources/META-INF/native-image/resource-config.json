@@ -122,6 +122,9 @@
       "pattern":"\\Qgame/server/manager/client/websocket/handler/StopContainerHandlerService.class\\E"
     }, 
     {
+      "pattern":"\\Qip.xdb\\E"
+    }, 
+    {
       "pattern":"\\Qmozilla/public-suffix-list.txt\\E"
     }, 
     {
@@ -537,21 +540,9 @@
     }, 
     {
       "pattern":"\\Qoshi.architecture.properties\\E"
-    },
-    {
-      "pattern":"\\Qoshi.linux.filename.properties\\E"
-    },
-    {
-      "pattern":"\\Qoshi.macos.versions.properties\\E"
-    },
+    }, 
     {
       "pattern":"\\Qoshi.properties\\E"
-    },
-    {
-      "pattern":"\\Qoshi.vmmacaddr.properties\\E"
-    },
-    {
-      "pattern":"\\Qip.xdb\\E"
     }
   ]},
   "bundles":[
