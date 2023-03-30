@@ -551,7 +551,7 @@
       "pattern":"\\Qoshi.vmmacaddr.properties\\E"
     },
     {
-      "pattern":"\\Qip.txb\\E"
+      "pattern":"\\Qip.xdb\\E"
     }
   ]},
   "bundles":[
