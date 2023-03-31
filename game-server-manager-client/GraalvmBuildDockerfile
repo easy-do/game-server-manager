@@ -7,7 +7,7 @@ WORKDIR /build
 
 RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && mvn --version && native-image --version
 
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && mvn -Pnative native:compile -DskipTests
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && mvn -Pnative clean native:compile -DskipTests
 
 # We use a Docker multi-stage build here in order to only take the compiled native Spring Boot App from the first build container
 FROM oraclelinux:9-slim
