@@ -2,11 +2,10 @@ package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.json.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.Version;
 import game.server.manager.common.enums.DockerModelEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 
@@ -104,9 +103,9 @@ public class DockerDetailsServiceImpl extends BaseServiceImpl<DockerDetails, Doc
         DockerDetailsVo vo = DockerDetailsMapstruct.INSTANCE.entityToVo(getOne(wrapper));
         if(Objects.nonNull(vo)){
             try{
-                Info info = dockerBasicService.info(id.toString());
+                JSON info = dockerBasicService.info(id.toString());
                 vo.setInfo(info);
-                Version version = dockerBasicService.version(id.toString());
+                JSON version = dockerBasicService.version(id.toString());
                 vo.setVersion(version);
             }catch (Exception e) {
                 log.warn("获取docker详情失败:{}",e.getMessage());

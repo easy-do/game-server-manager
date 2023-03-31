@@ -26,8 +26,7 @@ public class DockerUtils {
             return dockerClient;
         }
         DockerClientConfig dockerClientConfig = DefaultDockerClientConfig
-//                .createDefaultConfigBuilder().build();
-                .createDefaultConfigBuilder().withDockerHost("tcp://192.168.123.88:2375").build();
+                .createDefaultConfigBuilder().build();
         DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
                 .dockerHost(dockerClientConfig.getDockerHost())
                 .sslConfig(dockerClientConfig.getSSLConfig())

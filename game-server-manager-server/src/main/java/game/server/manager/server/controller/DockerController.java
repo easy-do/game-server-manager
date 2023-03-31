@@ -1,7 +1,8 @@
 package game.server.manager.server.controller;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.dockerjava.api.model.Info;
+import cn.hutool.json.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
 import game.server.manager.server.service.DockerBasicService;
@@ -49,7 +50,7 @@ public class DockerController {
      * @date 2022/11/19
      */
     @GetMapping("/info")
-    public R<Info> info(@RequestParam("dockerId") String dockerId){
+    public R<JSON> info(@RequestParam("dockerId") String dockerId) throws JsonProcessingException {
             return DataResult.ok(DockerBasicService.info(dockerId));
     }
 }

@@ -1,11 +1,11 @@
 package game.server.manager.server.vo;
 
 import java.time.LocalDateTime;
+
+import cn.hutool.json.JSON;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.hutool.core.date.DatePattern;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -60,8 +60,8 @@ public class DockerDetailsVo implements Serializable {
     /** 更新时间 */
     private LocalDateTime updateTime;
     /** docker实时信息 */
-    private Info info;
+    private JSON info;
     /** version详细信息 */
-    private Version version;
+    private JSON version;
 
 }
