@@ -1,16 +1,15 @@
 package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.Version;
 import game.server.manager.common.enums.ClientModelEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.result.DataResult;
-import game.server.manager.common.result.R;
 import game.server.manager.docker.service.DockerBaseService;
 import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerBasicService;
@@ -69,7 +68,7 @@ public class DockerBasicServiceImpl implements DockerBasicService {
     }
 
     @Override
-    public Info info(String dockerId) {
+    public JSON info(String dockerId) throws JsonProcessingException {
         DockerDetails dockerDetails = getDetails(dockerId);
         if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
@@ -80,19 +79,20 @@ public class DockerBasicServiceImpl implements DockerBasicService {
                 throw ExceptionFactory.bizException("获取客户端消息失败");
             }
             if(clientMessage.isSuccess()){
-                return JSON.parseObject(clientMessage.getData(),Info.class);
+
+                return JSONUtil.parse(clientMessage.getData());
             }
             throw ExceptionFactory.bizException(clientMessage.getData());
         }
         if(dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())){
             DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
-            return dockerBaseService.info(dockerClient);
+            return JSONUtil.parse(dockerBaseService.info(dockerClient));
         }
         return null;
     }
 
     @Override
-    public Version version(String id) {
+    public JSON version(String id) {
         DockerDetails dockerDetails = getDetails(id);
         if(dockerDetails.getDockerModel().equals(ClientModelEnum.SOCKET.getType())){
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
@@ -103,13 +103,13 @@ public class DockerBasicServiceImpl implements DockerBasicService {
                 throw ExceptionFactory.bizException("获取客户端消息失败.");
             }
             if(clientMessage.isSuccess()){
-                return JSON.parseObject(clientMessage.getData(),Version.class);
+                return JSONUtil.parse(clientMessage.getData());
             }
             throw ExceptionFactory.bizException(clientMessage.getData());
         }
         if(dockerDetails.getDockerModel().equals(ClientModelEnum.HTTP.getType())){
             DockerClient dockerClient = DockerUtils.createDockerClient(dockerDetails);
-            return dockerBaseService.version(dockerClient);
+            return JSONUtil.parse(dockerBaseService.version(dockerClient));
         }
         return null;
     }

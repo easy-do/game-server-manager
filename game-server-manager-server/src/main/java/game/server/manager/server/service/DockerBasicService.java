@@ -1,7 +1,7 @@
 package game.server.manager.server.service;
 
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.Version;
+import cn.hutool.json.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * @author laoyu
@@ -30,7 +30,7 @@ public interface DockerBasicService {
      * @author laoyu
      * @date 2022/11/19
      */
-    Info info(String dockerId);
+    JSON info(String dockerId) throws JsonProcessingException;
 
     /**
      * Version
@@ -40,5 +40,5 @@ public interface DockerBasicService {
      * @author laoyu
      * @date 2022/11/27
      */
-    Version version(String id);
+    JSON version(String id);
 }
