@@ -1,5 +1,6 @@
 package game.server.manager.client.websocket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.websocket.handler.AbstractHandlerService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class WebSocketClientHandlerService {
         this.handlerContainer = handlerContainer;
     }
 
-    public void handler(ServerMessage serverMessage){
+    public void handler(ServerMessage serverMessage) {
         AbstractHandlerService handlerService = handlerContainer.get(serverMessage.getType());
         if(Objects.isNull(handlerService)){
             log.warn("{} handler not found",serverMessage.getType());

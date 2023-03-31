@@ -1,6 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
-import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.model.socket.ServerPullImageMessage;
@@ -26,7 +27,13 @@ public class PullImageHandlerService implements AbstractHandlerService {
     public Void handler(ServerMessage serverMessage) {
         log.info("OnMessageHandler pull ==> {}",serverMessage);
         String jsonData = serverMessage.getData();
-        ServerPullImageMessage pullImageMessage = JSONUtil.toBean(jsonData, ServerPullImageMessage.class);
+        ObjectMapper mapper = new ObjectMapper();
+        ServerPullImageMessage pullImageMessage = null;
+        try {
+            pullImageMessage = mapper.readValue(jsonData, ServerPullImageMessage.class);
+        } catch (JsonProcessingException e) {
+            log.error("序列化异常:{}",e.getMessage());
+        }
         dockerImageService.pullImage(serverMessage.getMessageId(),pullImageMessage.getRepository());
         return null;
     }

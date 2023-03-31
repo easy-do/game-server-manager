@@ -1,6 +1,8 @@
 package game.server.manager.client.thread;
 
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.ClientData;
 import game.server.manager.client.server.ClientDataServer;
@@ -29,6 +31,11 @@ public class HeartbeatThread {
     @Scheduled(fixedDelay = 1000 * 30)
     public void HeartbeatCheck() {
         ClientData clientData = clientDataServer.getClientData();
-        syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, JSONUtil.toJsonStr(clientData));
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, mapper.writeValueAsString(clientData));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
