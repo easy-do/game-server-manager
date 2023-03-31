@@ -1,13 +1,12 @@
 package game.server.manager.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.socket.ClientMessage;
 import game.server.manager.client.websocket.ClientWebsocketEndpoint;
-import game.server.manager.client.config.SystemUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +69,13 @@ public class SyncServer {
                 .data(message)
                 .build();
         if(ClientWebsocketEndpoint.CLIENT.isOpen()){
-            sendMessage(JSONUtil.toJsonStr(clientMessage));
-            }else {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                sendMessage(mapper.writeValueAsString(clientMessage));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }else {
                     log.error("连接断开,尝试重连。");
             ClientWebsocketEndpoint.CLIENT.reconnect();
             ObjectMapper mapper = new ObjectMapper();

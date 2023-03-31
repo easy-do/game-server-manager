@@ -81,6 +81,7 @@ const i18n = {
     'searchTable.columns.exited': 'exited',
     'searchTable.columns.running': 'running',
     'searchTable.columns.runTime': 'runTime',
+    'searchTable.columns.created': 'created',
     
   },
   'zh-CN': {
@@ -165,6 +166,7 @@ const i18n = {
     'searchTable.columns.exited': '停止',
     'searchTable.columns.running': '启动',
     'searchTable.columns.runTime': '运行时长',
+    'searchTable.columns.created': '创建',
     
     
     

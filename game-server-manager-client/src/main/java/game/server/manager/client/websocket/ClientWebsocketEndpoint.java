@@ -2,7 +2,6 @@ package game.server.manager.client.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.config.SystemUtils;
@@ -47,7 +46,12 @@ public class ClientWebsocketEndpoint {
                 ClientMessage connectMessage = ClientMessage.builder()
                         .type(ClientSocketTypeEnum.HEARTBEAT.getType()).clientId(systemUtils.getClientId())
                         .build();
-                send(JSONUtil.toJsonStr(connectMessage));
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    send(mapper.writeValueAsString(connectMessage));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             @Override
