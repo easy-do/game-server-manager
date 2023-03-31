@@ -1,6 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
-import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.socket.ServerContainerLogMessage;
 import game.server.manager.client.model.socket.ServerMessage;
@@ -28,7 +29,13 @@ public class ContainerLogHandlerService implements AbstractHandlerService {
     public Void handler(ServerMessage serverMessage) {
         log.info("OnMessageHandler containerLog ==> {}",serverMessage);
         String jsonData = serverMessage.getData();
-        ServerContainerLogMessage containerLogMessage = JSONUtil.toBean(jsonData, ServerContainerLogMessage.class);
+        ObjectMapper mapper = new ObjectMapper();
+        ServerContainerLogMessage containerLogMessage = null;
+        try {
+            containerLogMessage = mapper.readValue(jsonData, ServerContainerLogMessage.class);
+        } catch (JsonProcessingException e) {
+            log.error("序列化异常:{}",e.getMessage());
+        }
         dockerContainerService.logContainer(serverMessage.getMessageId(),containerLogMessage.getContainerId());
         return null;
     }

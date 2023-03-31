@@ -2,7 +2,10 @@ package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.contants.MessageTypeConstants;
+import game.server.manager.client.model.CreateContainerDto;
 import game.server.manager.client.model.socket.RenameContainerData;
 import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.server.SyncServer;
@@ -34,7 +37,9 @@ public class RenameContainerHandlerService implements AbstractHandlerService {
         String messageId = serverMessage.getMessageId();
         try {
             String data = serverMessage.getData();
-            RenameContainerData renameContainerData = JSONUtil.toBean(data, RenameContainerData.class);
+            RenameContainerData renameContainerData = null;
+            ObjectMapper mapper = new ObjectMapper();
+            renameContainerData = mapper.readValue(data, RenameContainerData.class);
             dockerContainerService.renameContainer(renameContainerData.getContainerId(),renameContainerData.getName());
             syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, "success");
         }catch (Exception e) {

@@ -1,6 +1,7 @@
 package game.server.manager.client.server;
 
-import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.contants.PathConstants;
 import game.server.manager.client.model.SysDictDataVo;
@@ -25,7 +26,13 @@ public class DictDataService {
         String path = PathConstants.GET_SINGLE_DICT_DATA.replace("{dictCode}",dictCode).replace("{dictDataKey}",dictDataKey);
         String resultStr = HttpRequestUtil.get(HttpModel.builder().host(systemUtils.getManagerUrl()).path(path).build());
         R<String> result = HttpRequestUtil.unPackage(resultStr);
-        SysDictDataVo sysDictDataVo = JSONUtil.toBean(result.getData(),SysDictDataVo.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        SysDictDataVo sysDictDataVo = null;
+        try {
+            sysDictDataVo = objectMapper.readValue(result.getData(), SysDictDataVo.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         return sysDictDataVo.getDictValue();
     }
 }

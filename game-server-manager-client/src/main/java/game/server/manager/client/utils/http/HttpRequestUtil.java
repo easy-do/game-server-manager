@@ -4,7 +4,8 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.net.url.UrlQuery;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
-import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.result.R;
 
 import java.nio.charset.StandardCharsets;
@@ -67,7 +68,13 @@ public class HttpRequestUtil {
 
 
     public static R<String> unPackage(String resultStr){
-        R<String> r = JSONUtil.toBean(resultStr,R.class);
+        ObjectMapper mapper = new ObjectMapper();
+        R<String> r = null;
+        try {
+            r = mapper.readValue(resultStr, R.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         if(!r.isSuccess()){
             throw new RuntimeException(r.getErrorMessage());
         }

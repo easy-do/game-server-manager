@@ -2,6 +2,8 @@ package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
@@ -32,7 +34,13 @@ public class CreateContainerHandlerService implements AbstractHandlerService {
         log.info("createContainer info ==> {}",serverMessage);
         String messageId = serverMessage.getMessageId();
         String jsonData = serverMessage.getData();
-        CreateContainerDto createContainerDto = JSONUtil.toBean(jsonData, CreateContainerDto.class);
+        CreateContainerDto createContainerDto = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            createContainerDto = mapper.readValue(jsonData, CreateContainerDto.class);
+        } catch (JsonProcessingException e) {
+            log.error("序列化异常:{}",e.getMessage());
+        }
         try {
             CreateContainerResponse res = dockerContainerService.createContainer(createContainerDto);
             syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, JSONUtil.toJsonStr(res));

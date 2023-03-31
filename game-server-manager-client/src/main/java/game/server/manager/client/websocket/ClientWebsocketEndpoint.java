@@ -3,6 +3,8 @@ package game.server.manager.client.websocket;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.socket.ClientMessage;
@@ -51,13 +53,20 @@ public class ClientWebsocketEndpoint {
             @Override
             public void onMessage(String message) {
                 log.info("server message,{}",message);
-                ServerMessage serverMessage = JSONUtil.toBean(message, ServerMessage.class);
-                if(!isLock(serverMessage)){
-                    handlerService.handler(serverMessage);
-                }else {
-                    log.warn("message lock.");
-                    this.send(JSONUtil.toJsonStr(ClientMessage.builder().clientId(systemUtils.getClientId()).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
+                ObjectMapper mapper = new ObjectMapper();
+                ServerMessage serverMessage = null;
+                try {
+                    serverMessage = mapper.readValue(message, ServerMessage.class);
+                    if(!isLock(serverMessage)){
+                        handlerService.handler(serverMessage);
+                    }else {
+                        log.warn("message lock.");
+                        this.send(mapper.writeValueAsString(ClientMessage.builder().clientId(systemUtils.getClientId()).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
+                    }
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
                 }
+
             }
 
             @Override

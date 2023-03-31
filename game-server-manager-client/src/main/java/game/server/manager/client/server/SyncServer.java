@@ -2,6 +2,8 @@ package game.server.manager.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.socket.ClientMessage;
 import game.server.manager.client.websocket.ClientWebsocketEndpoint;
@@ -36,7 +38,13 @@ public class SyncServer {
                 .data(message)
                 .success(true)
                 .build();
-        sendMessage(JSONUtil.toJsonStr(clientMessage));
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            sendMessage(mapper.writeValueAsString(clientMessage));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void sendFailMessage(ClientSocketTypeEnum type, String messageId, String message){
         ClientMessage clientMessage = ClientMessage.builder()
@@ -46,7 +54,12 @@ public class SyncServer {
                 .data(message)
                 .success(false)
                 .build();
-        sendMessage(JSONUtil.toJsonStr(clientMessage));
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            sendMessage(mapper.writeValueAsString(clientMessage));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void sendMessage(ClientSocketTypeEnum type, String message){
@@ -61,8 +74,13 @@ public class SyncServer {
             }else {
                     log.error("连接断开,尝试重连。");
             ClientWebsocketEndpoint.CLIENT.reconnect();
-            ClientWebsocketEndpoint.CLIENT.send(JSONUtil.toJsonStr(clientMessage));
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                ClientWebsocketEndpoint.CLIENT.send(mapper.writeValueAsString(clientMessage));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
             }
+        }
     }
 
     public void sendMessage(String message){
