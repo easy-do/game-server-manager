@@ -15,7 +15,7 @@ FROM oraclelinux:9-slim
 MAINTAINER SHANHY
 
 # Add Spring Boot Native app spring-boot-graal to Container
-COPY --from=0 "/build/target/client" client
+COPY --from=0 "/build/target/game-server-manager-client" client
 
 
 # Fire up our Spring Boot Native app by default
