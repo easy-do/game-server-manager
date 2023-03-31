@@ -1,7 +1,6 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.Container;
 import game.server.manager.client.contants.ClientSocketTypeEnum;

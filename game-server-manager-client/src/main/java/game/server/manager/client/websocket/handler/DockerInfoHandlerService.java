@@ -1,7 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.Info;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
@@ -34,7 +34,8 @@ public class DockerInfoHandlerService implements AbstractHandlerService {
         String messageId = serverMessage.getMessageId();
         try {
             Info info = dockerService.info();
-            syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, JSONUtil.toJsonStr(info));
+            ObjectMapper mapper = new ObjectMapper();
+            syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, mapper.writeValueAsString(info));
         }catch (Exception e) {
             syncServer.sendFailMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, ExceptionUtil.getMessage(e));
         }

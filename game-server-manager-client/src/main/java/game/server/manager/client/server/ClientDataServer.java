@@ -7,7 +7,6 @@ import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.model.ClientData;
 import game.server.manager.client.model.SystemInfo;
 import game.server.manager.client.utils.IpRegionSearchUtil;
-import game.server.manager.client.utils.IpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

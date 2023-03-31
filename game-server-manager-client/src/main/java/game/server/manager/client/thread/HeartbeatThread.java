@@ -1,6 +1,5 @@
 package game.server.manager.client.thread;
 
-import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.server.manager.client.contants.ClientSocketTypeEnum;

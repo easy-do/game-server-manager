@@ -189,7 +189,7 @@ export function getImageListColumns(
     // },
     {
       title: t['searchTable.columns.Digests'],
-      dataIndex: 'RepoDigests[0]',
+      dataIndex: 'RepoTags[0]',
       ellipsis:true,
       render: (_, record) => (
         <Typography.Paragraph copyable>
@@ -210,7 +210,7 @@ export function getImageListColumns(
       dataIndex: 'Created',
       ellipsis:true,
       render: (_, record) => (
-        moment(record).format("YYYY/MM/DD HH:mm:ss")
+        moment(record.created).format("YYYY/MM/DD HH:mm:ss")
       ),
     },
     {
@@ -310,16 +310,16 @@ export function getContainerListColumns(
       </Typography.Paragraph>
       ),
     },
-    {
-      title: t['searchTable.columns.NetworkMode'],
-      dataIndex: 'HostConfig.NetworkMode',
-      ellipsis:true,
-      render: (_, record) => (
-        <Typography.Paragraph>
-        {record.HostConfig.NetworkMode}
-      </Typography.Paragraph>
-      ),
-    },
+    // {
+    //   title: t['searchTable.columns.NetworkMode'],
+    //   dataIndex: 'HostConfig.NetworkMode',
+    //   ellipsis:true,
+    //   render: (_, record) => (
+    //     <Typography.Paragraph>
+    //     {record.HostConfig.NetworkMode}
+    //   </Typography.Paragraph>
+    //   ),
+    // },
     {
       title: t['searchTable.columns.operations'],
       dataIndex: 'operations',
