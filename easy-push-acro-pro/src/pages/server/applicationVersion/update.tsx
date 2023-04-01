@@ -1,14 +1,17 @@
-import { DatePicker, Form, FormInstance, Input, Modal, Select, Spin, Notification, Button, Space, Typography, Divider } from '@arco-design/web-react';
+import { Form, FormInstance, Input, Modal,  Spin, Notification, Button,  Typography,  Table } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { updateRequest, infoRequest } from '@/api/applicationVersion';
 import { GlobalContext } from '@/context';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import React from 'react';
-import { IconDelete } from '@arco-design/web-react/icon';
+import { IconDelete, IconEdit, IconPlus } from '@arco-design/web-react/icon';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
+import EditSubappPage from './editSuappPage';
 
 function UpdatePage({ id, visible, setVisible, successCallBack }) {
+  
+  const t = useLocale(locale);
 
   const formRef = useRef<FormInstance>();
 
@@ -24,6 +27,8 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
         const { success, data } = res.data;
         if (success) {
           data.confData = JSON.parse(data.confData)
+          setSubapps(data.confData)
+          setEditSubappDtata(data.confData[0])
           formRef.current.setFieldsValue(data);
           setLoading(false)
         }
@@ -31,16 +36,80 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
     }
   }
 
+  const [subApps, setSubapps] = useState<any>();
+
+  const addSubApps = (record) =>{
+      setSubapps(
+        subApps.concat({
+          key: record.key+1,
+          name: '子应用'+(record.key+1),
+          image: 'hell-word',
+          version:'0.0.1',
+          networkMode:'bridge',
+        })
+      );
+  }
+
+  const removeSubApps = (record) =>{
+    setSubapps(subApps.filter((item) => item.key !== record.key));
+}
+
+const [editSubappDtata,setEditSubappDtata] = useState();
+const [isEditSubappDtata,setIsEditSubappDtata] = useState(false);
+const editSubapps = (record) => {
+  setEditSubappDtata(record);
+  setIsEditSubappDtata(true);
+}
+
+const editSubappsCallback = (record) => {
+    subApps[record.key-1] = record;
+    setSubapps(subApps.concat([]));
+}
+
+  const suAppColumns = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+      ellipsis: true,
+    },
+    {
+      title: '版本',
+      dataIndex: 'version',
+      ellipsis: true,
+    },
+    {
+      title: '镜像',
+      dataIndex: 'image',
+      ellipsis: true,
+    },
+    {
+      title: t['searchTable.columns.operations'],
+      dataIndex: 'operations',
+      headerCellStyle: { paddingLeft: '15px' },
+      render: (_, record) => (
+        <div>
+          <Button icon={<IconEdit />} onClick={()=>editSubapps(record)} type='dashed'/>
+          <Button
+            icon={<IconDelete />}
+            disabled={record.key == 1}
+            onClick={()=>removeSubApps(record)}
+            status='danger'
+          />
+          <Button icon={<IconPlus />} disabled={record.key != subApps.length}  type='dashed' onClick={() => addSubApps(record)} />
+        </div>
+      ),
+    },
+  ];
+
   useEffect(() => {
     fetchData();
   }, [id,visible]);
 
-  const t = useLocale(locale);
 
   //提交修改
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
-      updateRequest({...values,confData:JSON.stringify(values.confData)}).then((res) => {
+      updateRequest({...values,confData:JSON.stringify(subApps)}).then((res) => {
         const { success, msg} = res.data
         if(success){
           Notification.success({ content: msg, duration: 300 })
@@ -65,15 +134,6 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
       focusLock={true}
       maskClosable={false}
     >
-      <Form
-        style={{ width: '95%', marginTop: '6px' }}
-        labelCol={{ span: lang === 'en-US' ? 7 : 6 }}
-        wrapperCol={{ span: lang === 'en-US' ? 17 : 18 }}
-        ref={formRef}
-        labelAlign="left"
-      >
-
-      </Form>
       <Typography.Title heading={6}>
           {t['searchTable.columns.basicInfo']}
         </Typography.Title>
@@ -104,15 +164,6 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
           <Input placeholder={t['searchForm.version.placeholder']} allowClear />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.image']}
-          field="confData.image"
-          rules={[
-            { required: true, message: t['searchTable.rules.image.required'] },
-          ]}
-        >
-          <Input placeholder={t['searchForm.image.placeholder']} />
-        </Form.Item>
-        <Form.Item
           label={t['searchTable.columns.description']}
           field="description"
         >
@@ -120,77 +171,17 @@ function UpdatePage({ id, visible, setVisible, successCallBack }) {
         </Form.Item>
 
         <Typography.Title heading={6}>
-          {t['searchTable.columns.EnvInfo']}
-        </Typography.Title>
-        <Form.List field='confData.envs'>
-          {(fields, { add, remove, move }) => {
-            return (
-              <div>
-                {fields.map((item, index) => {
-                  return (
-                    <div key={item.key}>
-                      <Form.Item label={t['searchTable.columns.EnvInfo'] + (index+1)}>
-                        <Space style={{ width: '100%', justifyContent: 'space-between' }} split={<Divider type='vertical' />} align='center' size='large'>
-                          <Form.Item
-                            label={t['searchTable.columns.envName']}
-                            field={item.field + '.envName'}
-                            rules={[{ required: true, message: t['searchTable.rules.envName.required'] }]}
-                          >
-                            <Input />
-                          </Form.Item>
-
-                          <Form.Item
-                            label={t['searchTable.columns.envKey']}
-                            field={item.field + '.envKey'}
-                            rules={[{ required: true, message: t['searchTable.rules.envKey.required'] }]}
-                          >
-                            <Input />
-                          </Form.Item>
-                          <Form.Item
-                            label={t['searchTable.columns.envValue']}
-                            field={item.field + '.envValue'}
-                            rules={[{ required: true, message: t['searchTable.rules.envValue.required'] }]}
-                          >
-                            <Input />
-                          </Form.Item>
-                          <Form.Item
-                            label={t['searchTable.columns.envDescription']}
-                            initialValue={t['searchTable.columns.envDescription']}
-                            field={item.field + '.description'}
-                            rules={[{ required: true, message: t['searchTable.rules.envDescription.required'] }]}
-                          >
-                            <Input />
-                          </Form.Item>
-                          <Button
-                            icon={<IconDelete />}
-                            shape='circle'
-                            status='danger'
-                            onClick={() => remove(index)}
-                          >
-                          </Button>
-                        </Space>
-                      </Form.Item>
-                    </div>
-                  );
-                })}
-                <Form.Item >
-                  <Button
-                    type='dashed'
-                    // style={{ width: '100%' }}
-                    onClick={() => {
-                      add();
-                    }}
-                  >
-                    {t['searchTable.columns.addEnv']}
-                  </Button>
-                </Form.Item>
-              </div>
-            );
-          }}
-        </Form.List>
-      
+        {t['searchTable.columns.subApp']}
+      </Typography.Title>
       </Spin>
       </Form>
+      <Table
+        rowKey="idnex"
+        loading={false}
+        data={subApps}
+        columns={suAppColumns}
+        pagination={false} />
+       <EditSubappPage subApp={editSubappDtata} visible={isEditSubappDtata} setVisible={setIsEditSubappDtata} editSubappsCallback={editSubappsCallback} /> 
     </Modal>
   );
 }

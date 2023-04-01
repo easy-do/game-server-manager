@@ -1,5 +1,8 @@
 package game.server.manager.server.service.impl;
 
+import cn.hutool.core.lang.UUID;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.alicp.jetcache.anno.CacheInvalidate;
 import com.alicp.jetcache.anno.CacheRefresh;
@@ -9,10 +12,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import game.server.manager.common.enums.AuditStatusEnum;
 import game.server.manager.common.enums.ScopeEnum;
+import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
+import game.server.manager.common.mode.socket.ApplicationVersionConfig;
 import game.server.manager.common.result.R;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.docker.model.CreateContainerDto;
@@ -25,7 +32,9 @@ import game.server.manager.server.service.ApplicationVersionService;
 import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.DockerContainerService;
 import game.server.manager.server.service.DockerDetailsService;
+import game.server.manager.server.util.SessionUtils;
 import game.server.manager.server.vo.DockerDetailsVo;
+import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.server.dto.ApplicationDto;
 import game.server.manager.server.entity.Application;
@@ -38,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import javax.websocket.Session;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -45,12 +55,12 @@ import java.util.Objects;
 
 /**
  * 应用信息Service层
- * 
+ *
  * @author yuzhanfeng
  * @date 2023-03-18 00:48:08
  */
 @Service
-public class ApplicationServiceImpl extends BaseServiceImpl<Application,ApplicationQo, ApplicationVo, ApplicationDto, ApplicationMapper> implements ApplicationService {
+public class ApplicationServiceImpl extends BaseServiceImpl<Application, ApplicationQo, ApplicationVo, ApplicationDto, ApplicationMapper> implements ApplicationService {
 
 
     @Autowired
@@ -66,7 +76,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
 
     @Override
     public void listSelect(LambdaQueryWrapper<Application> wrapper) {
-        wrapper.select(Application::getId,Application::getApplicationName,Application::getStatus,Application::getAuthor);
+        wrapper.select(Application::getId, Application::getApplicationName, Application::getStatus, Application::getAuthor);
     }
 
     @Override
@@ -89,9 +99,9 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
     }
 
 
-     /**
+    /**
      * 分页条件查询应用信息列表
-     * 
+     *
      * @param mpBaseQo 查询条件封装
      * @return 应用信息
      */
@@ -99,8 +109,8 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
     public IPage<ApplicationVo> page(ApplicationQo mpBaseQo) {
         mpBaseQo.initInstance(Application.class);
         LambdaQueryWrapper<Application> wrapper = mpBaseQo.getWrapper().lambda();
-        if(!isAdmin()){
-            wrapper.eq(Application::getCreateBy,getUserId());
+        if (!isAdmin()) {
+            wrapper.eq(Application::getCreateBy, getUserId());
         }
         return page(mpBaseQo.getPage(), wrapper).convert(ApplicationMapstruct.INSTANCE::entityToVo);
     }
@@ -108,7 +118,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
 
     /**
      * 查询应用信息
-     * 
+     *
      * @param id id
      * @return 应用信息
      */
@@ -118,11 +128,9 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
     }
 
 
-
-
     /**
      * 新增应用信息
-     * 
+     *
      * @param applicationDto 数据传输对象
      * @return 结果
      */
@@ -138,7 +146,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
 
     /**
      * 修改应用信息
-     * 
+     *
      * @param applicationDto 数据传输对象
      * @return 结果
      */
@@ -147,10 +155,10 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
     public boolean edit(ApplicationDto applicationDto) {
         Application entity = ApplicationMapstruct.INSTANCE.dtoToEntity(applicationDto);
         Application oldData = getById(applicationDto.getId());
-        if(Objects.isNull(oldData)){
+        if (Objects.isNull(oldData)) {
             throw ExceptionFactory.baseException("应用不存在");
         }
-        if(!isAdmin() && oldData.getCreateBy() != getUserId()){
+        if (!isAdmin() && oldData.getCreateBy() != getUserId()) {
             throw ExceptionFactory.baseException("无权操作");
         }
         entity.setUpdateBy(getUserId());
@@ -160,17 +168,17 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
 
     /**
      * 批量删除应用信息
-     * 
+     *
      * @param id 需要删除的应用信息ID
      * @return 结果
      */
     @Override
     public boolean delete(Serializable id) {
         Application oldData = getById(id);
-        if(Objects.isNull(oldData)){
+        if (Objects.isNull(oldData)) {
             throw ExceptionFactory.baseException("应用不存在");
         }
-        if(!isAdmin() && oldData.getCreateBy() != getUserId()){
+        if (!isAdmin() && oldData.getCreateBy() != getUserId()) {
             throw ExceptionFactory.baseException("无权操作");
         }
         return removeById(id);
@@ -191,27 +199,27 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application,Applicat
     public Object install(InstallApplicationDto installApplicationDto) {
         Long applicationId = installApplicationDto.getApplicationId();
         Application application = getById(applicationId);
-        if(Objects.isNull(application)){
+        if (Objects.isNull(application)) {
             throw ExceptionFactory.baseException("应用不存在");
         }
         ApplicationVersion version = applicationVersionService.getById(installApplicationDto.getVersion());
-        if(Objects.isNull(version)){
+        if (Objects.isNull(version)) {
             throw ExceptionFactory.baseException("应用版本不存在");
         }
         String clientId = installApplicationDto.getClientId();
         ClientInfo client = clientInfoService.getById(clientId);
-        if(Objects.isNull(client)){
+        if (Objects.isNull(client)) {
             throw ExceptionFactory.baseException("客户端不存在");
         }
-        DockerDetailsVo dockerDetailsVo = dockerDetailsService.getByClientId(client.getId());
-        if(Objects.nonNull(dockerDetailsVo)) {
-            VersionConfData versionConfData = JSONObject.parseObject(version.getConfData(), VersionConfData.class);
-            CreateContainerDto createContainerDto = CreateContainerDto.builder()
-                    .image(versionConfData.getImage())
-                    .build();
-            CreateContainerResponse res = dockerContainerService.createContainer(dockerDetailsVo.getId(), createContainerDto);
-            return dockerContainerService.startContainer(dockerDetailsVo.getId(), res.getId());
+        Session clientSession = SocketSessionCache.getClientByClientId(client.getId());
+        if(Objects.isNull(clientSession)){
+            throw ExceptionFactory.baseException("客户端未连接");
         }
-        return null;
+        //转换参数
+        version.setConfData(installApplicationDto.getConfigData());
+        String messageId = UUID.fastUUID().toString();
+        SessionUtils.sendSimpleServerMessage(clientSession, messageId, JSONUtil.toJsonStr(version), ServerMessageTypeEnum.INSTALL_APPLICATION);
+
+        return "安装命令已下发";
     }
 }

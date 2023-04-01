@@ -19,6 +19,8 @@ public enum ClientSocketTypeEnum {
 
     NO_SYNC_RESULT(MessageTypeConstants.NO_SYNC_RESULT,"业务数据返回结束"),
 
+    INSTALL_APPLICATION_RESULT(MessageTypeConstants.INSTALL_APPLICATION_RESULT,"业务数据返回结束"),
+
     SYNC(MessageTypeConstants.SYNC,"同步");
 
     private final String type;

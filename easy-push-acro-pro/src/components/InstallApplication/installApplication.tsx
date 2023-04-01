@@ -32,67 +32,191 @@ function InsallApplicationPage({
 
   const [loading, setLoading] = useState(false);
 
-  const [envs, setEnvs] = useState([]);
+  const [configs, setConfigs] = useState([]);
 
   const [options, setOptions] = useState([]);
 
   const onchageVersion = (value) => {
     setLoading(true);
-        const values = value.split('--');
-        infoRequest(values[0]).then((res) => {
-            const { success, data } = res.data;
-            if (success) {
-              const env = JSON.parse(data.confData).envs;
-              const envsCache = []
-                env.map((item) => {
-                    envsCache.push(
-                      <Form.Item
-                        label={item.envName}
-                        initialValue={item.envValue}
-                        field={'env.'+item.envKey}
-                      >
-                        <Input />
-                      </Form.Item>
-                    );
-                });
-                setEnvs(envsCache);
-                setLoading(false);
-            }
+    const values = value.split('--');
+    infoRequest(values[0]).then((res) => {
+      const { success, data } = res.data;
+      if (success) {
+        const confData = JSON.parse(data.confData);
+
+        const configsCache = [];
+
+        confData.map((config) => {
+          const envsCache = [];
+          const portBindsCache = [];
+          const env = config.confData.envs;
+          env.map((item, index) => {
+            envsCache.push(
+              <Form.Item field={'configData[' + (config.key-1) + '].envs[' + index + ']'}>
+                <Form.Item
+                  label={item.envName}
+                  field={'configData[' + (config.key-1) + '].envs[' + index + '].'+item.envKey}
+                  initialValue={item.envValue}
+                >
+                  <Input />
+                </Form.Item>
+              </Form.Item>
+            );
           });
+          const portBinds = config.confData.portBinds;
+
+          portBinds.map((item, index) => {
+            portBindsCache.push(
+              <Form.Item field={'portBinds[' + index + ']'}>
+                <Form.Item
+                  field={'configData[' + (config.key-1) + '].portBinds[' + index + '].containerPort'}
+                  initialValue={item.containerPort}
+                  hidden
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'configData[' + (config.key-1) + '].portBinds[' + index + '].protocol'}
+                  initialValue={item.protocol}
+                  hidden
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'configData[' + (config.key-1) + '].portBinds[' + index + '].description'}
+                  initialValue={item.description}
+                  hidden
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label={item.description}
+                  field={'configData[' + (config.key-1) + '].portBinds[' + index + '].localPort'}
+                  initialValue={item.localPort}
+                >
+                  <Input />
+                </Form.Item>
+              </Form.Item>
+            );
+          });
+          configsCache.push(
+            <Form.Item field={'configData[' + (config.key-1) + ']'}>
+              <Typography.Title heading={6}>
+                {config.name + t['searchTable.columns.appConfig']}
+              </Typography.Title>
+              <Form.Item
+          field={'configData[' + (config.key-1) + '].key'}
+          hidden
+          initialValue={(config.key-1)}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].name'}
+          hidden
+          initialValue={config.name}
+        >
+          <Input  />
+        </Form.Item>
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].version'}
+          hidden
+          initialValue={config.version}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].image'}
+          hidden
+          initialValue={config.image}
+        >
+          <Input/>
+        </Form.Item> 
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].attachStdin'}
+          hidden
+          initialValue={config.attachStdin}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].stdinOpen'}
+          hidden
+          initialValue={config.stdinOpen}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].tty'}
+          hidden
+          initialValue={config.tty}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].labels'}
+          hidden
+          initialValue={config.labels}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].cmd'}
+          hidden
+          initialValue={config.cmd}
+        >
+         <Input />
+        </Form.Item>
+        <Form.Item
+          field={'configData[' + (config.key-1) + '].networkMode'}
+          hidden
+          initialValue={config.networkMode}
+        >
+          <Input />
+        </Form.Item>
+              <Form.Item field={'configData[' + (config.key-1) + '].envs'}>{envsCache}</Form.Item>
+              <Form.Item field={'configData[' + (config.key-1) + '].portBinds'}>{portBindsCache}</Form.Item>
+            </Form.Item>
+          );
+        });
+        console.log(configsCache);
+        setConfigs(configsCache);
+        setLoading(false);
+      }
+    });
   };
 
   //加载数据
   function fetchData() {
-      setOptions([])
-      setEnvs([])
+    setOptions([]);
+    setConfigs([]);
     if (applicationId !== undefined && visible) {
-        if(!checkLogin()){
-            Notification.success({
-                title:'',
-                content:'未登录,跳转至登录页面'
-            })
-            setTimeout(() => {
-                window.location.href = "/login"
-            }, 1000);
-            return;
-          }else{
-              versionList(applicationId).then((res) => {
-                const { success, data } = res.data;
-                if (success) {
-                  const newOptions = [];
-                  data.map((item) => {
-                    newOptions.push({
-                      value: item.id + '--' + item.applicationName,
-                      label:
-                        item.applicationName + ':' + item.version,
-                      key: item.id,
-                    });
-                  });
-                  setOptions(newOptions);
-                }
-                setLoading(false);
+      if (!checkLogin()) {
+        Notification.success({
+          title: '',
+          content: '未登录,跳转至登录页面',
+        });
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1000);
+        return;
+      } else {
+        versionList(applicationId).then((res) => {
+          const { success, data } = res.data;
+          if (success) {
+            const newOptions = [];
+            data.map((item) => {
+              newOptions.push({
+                value: item.id + '--' + item.applicationName,
+                label: item.applicationName + ':' + item.version,
+                key: item.id,
               });
+            });
+            setOptions(newOptions);
           }
+          setLoading(false);
+        });
+      }
     }
   }
 
@@ -103,18 +227,21 @@ function InsallApplicationPage({
   //提交
   const handleSubmit = () => {
     formRef.current.validate().then((values: any) => {
-      installeRequest({ ...values, applicationId: applicationId, version:values.version.split('--')[0] }).then(
-        (res) => {
-          const { success, msg } = res.data;
-          if (success) {
-            formRef.current.clearFields();
-            setEnvs([]);
-            Notification.success(msg);
-            successCallBack();
-          }
-          setLoading(false);
+      installeRequest({
+        ...values,
+        applicationId: applicationId,
+        version: values.version.split('--')[0],
+        configData: JSON.stringify(values.configData)
+      }).then((res) => {
+        const { success, msg } = res.data;
+        if (success) {
+          formRef.current.clearFields();
+          setConfigs([]);
+          Notification.success(msg);
+          successCallBack();
         }
-      );
+        setLoading(false);
+      });
     });
   };
 
@@ -175,18 +302,8 @@ function InsallApplicationPage({
           />
         </Form.Item>
 
-        <Typography.Title heading={6}>
-          {t['searchTable.columns.EnvInfo']}
-        </Typography.Title>
         <Spin loading={loading} style={{ width: '100%' }}>
-        <Form.Item
-                    field={'env'}
-                >
-                    {
-                        envs
-                    }
-
-                </Form.Item>
+          {configs}
         </Spin>
       </Form>
     </Modal>
