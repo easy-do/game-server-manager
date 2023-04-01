@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
  * @Description 服务端心跳处理服务
  */
 @Slf4j
-@Service(MessageTypeConstants.HEARTBEAT)
-public class HeartbeatHandlerService implements AbstractHandlerService {
+@Service(MessageTypeConstants.ERROR)
+public class ServerErrorHandlerService implements AbstractHandlerService {
 
 
     @Override
     public Void handler(ServerMessage serverMessage) {
-        log.info("heartbeat success");
+        log.warn("server error {}", serverMessage);
         return null;
     }
 }

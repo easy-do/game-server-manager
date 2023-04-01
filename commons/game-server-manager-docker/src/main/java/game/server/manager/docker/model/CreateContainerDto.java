@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author laoyu
@@ -56,5 +57,10 @@ public class CreateContainerDto {
     private List<PortBindDto> portBinds;
 
     private List<LinkDto> links;
+
+    /** 命令 */
+    private String cmd;
+    /** 标签 */
+    private Map<String, String> labels;
 
 }

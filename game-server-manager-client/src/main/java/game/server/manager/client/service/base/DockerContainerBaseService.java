@@ -181,6 +181,14 @@ public class DockerContainerBaseService {
         if(CharSequenceUtil.isNotEmpty(createContainerDto.getName())){
             createContainerCmd.withName(createContainerDto.getName());
         }
+        //命令
+        if(CharSequenceUtil.isNotEmpty(createContainerDto.getCmd())){
+            createContainerCmd.withCmd(createContainerDto.getCmd().split(","));
+        }
+        //标签
+        if(Objects.nonNull(createContainerDto.getLabels())){
+            createContainerCmd.withLabels(createContainerDto.getLabels());
+        }
         //标准输出
         createContainerCmd.withAttachStdin(createContainerDto.getAttachStdin());
         //标准输入
@@ -218,7 +226,7 @@ public class DockerContainerBaseService {
         JSONObject env = createContainerDto.getEnv();
         if (Objects.nonNull(env)) {
             List<String> envs = new ArrayList<>();
-            env.forEach((key, value) -> envs.add(key + ":" + value));
+            env.forEach((key, value) -> envs.add(key + "=" + value));
             createContainerCmd.withEnv(envs);
         }
     }

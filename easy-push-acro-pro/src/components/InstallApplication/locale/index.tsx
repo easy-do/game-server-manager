@@ -8,6 +8,7 @@ const i18n = {
     'searchTable.rules.version.required': 'Version Can not be empty',
     'searchTable.columns.basicInfo': 'Basic info',
     'searchTable.columns.EnvInfo': 'Env info',
+    'searchTable.columns.appConfig': 'appliction config',
   },
   'zh-CN': {
     'searchTable.columns.client': '客户端',
@@ -18,6 +19,7 @@ const i18n = {
     'searchTable.rules.version.required': '版本不能为空',
     'searchTable.columns.basicInfo': '基础信息',
     'searchTable.columns.EnvInfo': '环境变量',
+    'searchTable.columns.appConfig': '应用配置',
   },
 };
 

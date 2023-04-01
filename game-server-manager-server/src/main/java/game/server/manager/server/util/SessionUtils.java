@@ -1,13 +1,12 @@
 package game.server.manager.server.util;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
-import game.server.manager.common.result.DataResult;
-import game.server.manager.common.result.R;
 import game.server.manager.server.websocket.SessionResultCache;
 import game.server.manager.server.websocket.SocketSessionCache;
 
@@ -215,7 +214,7 @@ public class SessionUtils {
                 .type(type.getType())
                 .sync(0)
                 .data(message).build();
-            sendMessage(session,JSON.toJSONString(serverMessage));
+            sendMessage(session, JSONUtil.toJsonStr(serverMessage));
     }
 
 }

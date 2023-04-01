@@ -1,6 +1,4 @@
-package game.server.manager.common.enums;
-
-import game.server.manager.common.constant.MessageTypeConstants;
+package game.server.manager.client.contants;
 
 /**
  * @author yuzhanfeng

@@ -1,8 +1,8 @@
 package game.server.manager.server.dto;
 
-import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 /**
  * @author laoyu
@@ -17,7 +17,7 @@ public class InstallApplicationDto {
 
     private Long version;
     private String clientId;
-    private JSONObject env;
+    private String configData;
     private Long applicationId;
 
 }

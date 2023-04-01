@@ -55,6 +55,10 @@ public class MessageTypeConstants {
 
     public static final String DEPLOY_APP = "deploy_app";
 
+    public static final String INSTALL_APPLICATION = "install_application";
+
+    public static final String INSTALL_APPLICATION_RESULT = "install_application_result";
+
     private MessageTypeConstants() {
     }
 
