@@ -23,10 +23,31 @@
       "pattern":"\\Qcn/hutool/extra/spring/SpringUtil.class\\E"
     }, 
     {
+      "pattern":"\\Qcom/fasterxml/jackson/core/ObjectCodec.class\\E"
+    }, 
+    {
+      "pattern":"\\Qcom/fasterxml/jackson/core/TreeCodec.class\\E"
+    }, 
+    {
+      "pattern":"\\Qcom/fasterxml/jackson/core/Versioned.class\\E"
+    }, 
+    {
+      "pattern":"\\Qcom/fasterxml/jackson/databind/ObjectMapper$DefaultTypeResolverBuilder.class\\E"
+    }, 
+    {
+      "pattern":"\\Qcom/fasterxml/jackson/databind/ObjectMapper$DefaultTyping.class\\E"
+    }, 
+    {
+      "pattern":"\\Qcom/fasterxml/jackson/databind/ObjectMapper.class\\E"
+    }, 
+    {
       "pattern":"\\Qcom/sun/jna/linux-x86-64/libjnidispatch.so\\E"
     }, 
     {
       "pattern":"\\Qgame/server/manager/client/\\E"
+    }, 
+    {
+      "pattern":"\\Qgame/server/manager/client/config/JacksonObjectMapper.class\\E"
     }, 
     {
       "pattern":"\\Qgame/server/manager/client/config/SystemUtils.class\\E"
@@ -92,6 +113,9 @@
       "pattern":"\\Qgame/server/manager/client/websocket/handler/HeartbeatHandlerService.class\\E"
     }, 
     {
+      "pattern":"\\Qgame/server/manager/client/websocket/handler/InstallApplicationHandlerService.class\\E"
+    }, 
+    {
       "pattern":"\\Qgame/server/manager/client/websocket/handler/ListContainerHandlerService.class\\E"
     }, 
     {
@@ -114,6 +138,9 @@
     }, 
     {
       "pattern":"\\Qgame/server/manager/client/websocket/handler/RestartContainerHandlerService.class\\E"
+    }, 
+    {
+      "pattern":"\\Qgame/server/manager/client/websocket/handler/ServerErrorHandlerService.class\\E"
     }, 
     {
       "pattern":"\\Qgame/server/manager/client/websocket/handler/StartContainerHandlerService.class\\E"
