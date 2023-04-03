@@ -50,55 +50,61 @@ function InsallApplicationPage({
           const envsCache = [];
           const portBindsCache = [];
           const env = config.confData.envs;
-          env.map((item, index) => {
-            envsCache.push(
-              <Form.Item field={'configData[' + (config.key-1) + '].envs[' + index + ']'}>
-                <Form.Item
-                  label={item.envName}
-                  field={'configData[' + (config.key-1) + '].envs[' + index + '].'+item.envKey}
-                  initialValue={item.envValue}
-                >
-                  <Input />
+          if(env){
+            env.map((item, index) => {
+              envsCache.push(
+                <Form.Item field={'configData[' + (config.key-1) + '].envs[' + index + ']'}>
+                  <Form.Item
+                    label={item.envName}
+                    field={'configData[' + (config.key-1) + '].envs[' + index + '].'+item.envKey}
+                    initialValue={item.envValue}
+                  >
+                    <Input />
+                  </Form.Item>
                 </Form.Item>
-              </Form.Item>
-            );
-          });
+              );
+            });
+          }
+
           const portBinds = config.confData.portBinds;
 
-          portBinds.map((item, index) => {
-            portBindsCache.push(
-              <Form.Item field={'portBinds[' + index + ']'}>
-                <Form.Item
-                  field={'configData[' + (config.key-1) + '].portBinds[' + index + '].containerPort'}
-                  initialValue={item.containerPort}
-                  hidden
-                >
-                  <Input />
+          if(portBinds){
+            portBinds.map((item, index) => {
+              portBindsCache.push(
+                <Form.Item field={'portBinds[' + index + ']'}>
+                  <Form.Item
+                    field={'configData[' + (config.key-1) + '].portBinds[' + index + '].containerPort'}
+                    initialValue={item.containerPort}
+                    hidden
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    field={'configData[' + (config.key-1) + '].portBinds[' + index + '].protocol'}
+                    initialValue={item.protocol}
+                    hidden
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    field={'configData[' + (config.key-1) + '].portBinds[' + index + '].description'}
+                    initialValue={item.description}
+                    hidden
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={item.description}
+                    field={'configData[' + (config.key-1) + '].portBinds[' + index + '].localPort'}
+                    initialValue={item.localPort}
+                  >
+                    <Input />
+                  </Form.Item>
                 </Form.Item>
-                <Form.Item
-                  field={'configData[' + (config.key-1) + '].portBinds[' + index + '].protocol'}
-                  initialValue={item.protocol}
-                  hidden
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  field={'configData[' + (config.key-1) + '].portBinds[' + index + '].description'}
-                  initialValue={item.description}
-                  hidden
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label={item.description}
-                  field={'configData[' + (config.key-1) + '].portBinds[' + index + '].localPort'}
-                  initialValue={item.localPort}
-                >
-                  <Input />
-                </Form.Item>
-              </Form.Item>
-            );
-          });
+              );
+            });
+          }
+
           configsCache.push(
             <Form.Item field={'configData[' + (config.key-1) + ']'}>
               <Typography.Title heading={6}>

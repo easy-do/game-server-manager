@@ -124,7 +124,24 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"cn.hutool.core.getter.BasicTypeGetter",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"cn.hutool.core.getter.OptBasicTypeGetter",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"cn.hutool.core.getter.OptNullBasicTypeFromObjectGetter",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"cn.hutool.core.getter.OptNullBasicTypeGetter",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"cn.hutool.core.map.MapWrapper",
+  "allDeclaredFields":true,
   "queryAllDeclaredMethods":true
 },
 {
@@ -151,7 +168,9 @@
 },
 {
   "name":"cn.hutool.json.JSONObject",
-  "queryAllDeclaredMethods":true
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"com.fasterxml.jackson.annotation.JacksonAnnotation",
@@ -159,6 +178,10 @@
 },
 {
   "name":"com.fasterxml.jackson.annotation.JsonFormat",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.fasterxml.jackson.annotation.JsonProperty",
   "queryAllDeclaredMethods":true
 },
 {
@@ -171,7 +194,8 @@
   "methods":[
     {"name":"getJsonFactory","parameterTypes":[] },
     {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.ResolvedType"] },
-    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","java.lang.Class"] }
+    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","java.lang.Class"] },
+    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.TypeReference"] }
   ]
 },
 {
@@ -195,23 +219,243 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "methods":[
+    {"name":"acceptJsonFormatVisitor","parameterTypes":["com.fasterxml.jackson.databind.JavaType","com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper"] },
+    {"name":"acceptJsonFormatVisitor","parameterTypes":["java.lang.Class","com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper"] },
+    {"name":"activateDefaultTyping","parameterTypes":["com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator"] },
+    {"name":"activateDefaultTyping","parameterTypes":["com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator","com.fasterxml.jackson.databind.ObjectMapper$DefaultTyping"] },
+    {"name":"activateDefaultTyping","parameterTypes":["com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator","com.fasterxml.jackson.databind.ObjectMapper$DefaultTyping","com.fasterxml.jackson.annotation.JsonTypeInfo$As"] },
+    {"name":"activateDefaultTypingAsProperty","parameterTypes":["com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator","com.fasterxml.jackson.databind.ObjectMapper$DefaultTyping","java.lang.String"] },
+    {"name":"addHandler","parameterTypes":["com.fasterxml.jackson.databind.deser.DeserializationProblemHandler"] },
+    {"name":"addMixIn","parameterTypes":["java.lang.Class","java.lang.Class"] },
+    {"name":"addMixInAnnotations","parameterTypes":["java.lang.Class","java.lang.Class"] },
+    {"name":"canDeserialize","parameterTypes":["com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"canDeserialize","parameterTypes":["com.fasterxml.jackson.databind.JavaType","java.util.concurrent.atomic.AtomicReference"] },
+    {"name":"canSerialize","parameterTypes":["java.lang.Class"] },
+    {"name":"canSerialize","parameterTypes":["java.lang.Class","java.util.concurrent.atomic.AtomicReference"] },
+    {"name":"clearProblemHandlers","parameterTypes":[] },
+    {"name":"coercionConfigDefaults","parameterTypes":[] },
+    {"name":"coercionConfigFor","parameterTypes":["com.fasterxml.jackson.databind.type.LogicalType"] },
+    {"name":"coercionConfigFor","parameterTypes":["java.lang.Class"] },
+    {"name":"configOverride","parameterTypes":["java.lang.Class"] },
+    {"name":"configure","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator$Feature","boolean"] },
+    {"name":"configure","parameterTypes":["com.fasterxml.jackson.core.JsonParser$Feature","boolean"] },
+    {"name":"configure","parameterTypes":["com.fasterxml.jackson.databind.DeserializationFeature","boolean"] },
+    {"name":"configure","parameterTypes":["com.fasterxml.jackson.databind.MapperFeature","boolean"] },
+    {"name":"configure","parameterTypes":["com.fasterxml.jackson.databind.SerializationFeature","boolean"] },
+    {"name":"configure","parameterTypes":["com.fasterxml.jackson.databind.cfg.DatatypeFeature","boolean"] },
+    {"name":"constructType","parameterTypes":["com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"constructType","parameterTypes":["java.lang.reflect.Type"] },
+    {"name":"convertValue","parameterTypes":["java.lang.Object","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"convertValue","parameterTypes":["java.lang.Object","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"convertValue","parameterTypes":["java.lang.Object","java.lang.Class"] },
+    {"name":"copy","parameterTypes":[] },
+    {"name":"copyWith","parameterTypes":["com.fasterxml.jackson.core.JsonFactory"] },
     {"name":"createArrayNode","parameterTypes":[] },
+    {"name":"createGenerator","parameterTypes":["java.io.DataOutput"] },
+    {"name":"createGenerator","parameterTypes":["java.io.File","com.fasterxml.jackson.core.JsonEncoding"] },
+    {"name":"createGenerator","parameterTypes":["java.io.OutputStream"] },
+    {"name":"createGenerator","parameterTypes":["java.io.OutputStream","com.fasterxml.jackson.core.JsonEncoding"] },
+    {"name":"createGenerator","parameterTypes":["java.io.Writer"] },
+    {"name":"createNonBlockingByteArrayParser","parameterTypes":[] },
     {"name":"createObjectNode","parameterTypes":[] },
+    {"name":"createParser","parameterTypes":["java.io.DataInput"] },
+    {"name":"createParser","parameterTypes":["java.io.File"] },
+    {"name":"createParser","parameterTypes":["java.io.InputStream"] },
+    {"name":"createParser","parameterTypes":["java.io.Reader"] },
+    {"name":"createParser","parameterTypes":["java.lang.String"] },
+    {"name":"createParser","parameterTypes":["java.net.URL"] },
+    {"name":"createParser","parameterTypes":["byte[]"] },
+    {"name":"createParser","parameterTypes":["byte[]","int","int"] },
+    {"name":"createParser","parameterTypes":["char[]"] },
+    {"name":"createParser","parameterTypes":["char[]","int","int"] },
+    {"name":"deactivateDefaultTyping","parameterTypes":[] },
+    {"name":"disable","parameterTypes":["com.fasterxml.jackson.databind.DeserializationFeature"] },
+    {"name":"disable","parameterTypes":["com.fasterxml.jackson.databind.DeserializationFeature","com.fasterxml.jackson.databind.DeserializationFeature[]"] },
+    {"name":"disable","parameterTypes":["com.fasterxml.jackson.databind.SerializationFeature"] },
+    {"name":"disable","parameterTypes":["com.fasterxml.jackson.databind.SerializationFeature","com.fasterxml.jackson.databind.SerializationFeature[]"] },
+    {"name":"disable","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator$Feature[]"] },
+    {"name":"disable","parameterTypes":["com.fasterxml.jackson.core.JsonParser$Feature[]"] },
+    {"name":"disable","parameterTypes":["com.fasterxml.jackson.databind.MapperFeature[]"] },
+    {"name":"disableDefaultTyping","parameterTypes":[] },
+    {"name":"enable","parameterTypes":["com.fasterxml.jackson.databind.DeserializationFeature"] },
+    {"name":"enable","parameterTypes":["com.fasterxml.jackson.databind.DeserializationFeature","com.fasterxml.jackson.databind.DeserializationFeature[]"] },
+    {"name":"enable","parameterTypes":["com.fasterxml.jackson.databind.SerializationFeature"] },
+    {"name":"enable","parameterTypes":["com.fasterxml.jackson.databind.SerializationFeature","com.fasterxml.jackson.databind.SerializationFeature[]"] },
+    {"name":"enable","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator$Feature[]"] },
+    {"name":"enable","parameterTypes":["com.fasterxml.jackson.core.JsonParser$Feature[]"] },
+    {"name":"enable","parameterTypes":["com.fasterxml.jackson.databind.MapperFeature[]"] },
+    {"name":"enableDefaultTyping","parameterTypes":[] },
+    {"name":"enableDefaultTyping","parameterTypes":["com.fasterxml.jackson.databind.ObjectMapper$DefaultTyping"] },
+    {"name":"enableDefaultTyping","parameterTypes":["com.fasterxml.jackson.databind.ObjectMapper$DefaultTyping","com.fasterxml.jackson.annotation.JsonTypeInfo$As"] },
+    {"name":"enableDefaultTypingAsProperty","parameterTypes":["com.fasterxml.jackson.databind.ObjectMapper$DefaultTyping","java.lang.String"] },
+    {"name":"findAndRegisterModules","parameterTypes":[] },
+    {"name":"findMixInClassFor","parameterTypes":["java.lang.Class"] },
+    {"name":"findModules","parameterTypes":[] },
+    {"name":"findModules","parameterTypes":["java.lang.ClassLoader"] },
+    {"name":"generateJsonSchema","parameterTypes":["java.lang.Class"] },
+    {"name":"getDateFormat","parameterTypes":[] },
+    {"name":"getDeserializationConfig","parameterTypes":[] },
+    {"name":"getDeserializationContext","parameterTypes":[] },
     {"name":"getFactory","parameterTypes":[] },
+    {"name":"getInjectableValues","parameterTypes":[] },
+    {"name":"getNodeFactory","parameterTypes":[] },
+    {"name":"getPolymorphicTypeValidator","parameterTypes":[] },
+    {"name":"getPropertyNamingStrategy","parameterTypes":[] },
+    {"name":"getRegisteredModuleIds","parameterTypes":[] },
+    {"name":"getSerializationConfig","parameterTypes":[] },
+    {"name":"getSerializerFactory","parameterTypes":[] },
+    {"name":"getSerializerProvider","parameterTypes":[] },
+    {"name":"getSerializerProviderInstance","parameterTypes":[] },
+    {"name":"getSubtypeResolver","parameterTypes":[] },
+    {"name":"getTypeFactory","parameterTypes":[] },
+    {"name":"getVisibilityChecker","parameterTypes":[] },
+    {"name":"isEnabled","parameterTypes":["com.fasterxml.jackson.core.JsonFactory$Feature"] },
+    {"name":"isEnabled","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator$Feature"] },
+    {"name":"isEnabled","parameterTypes":["com.fasterxml.jackson.core.JsonParser$Feature"] },
+    {"name":"isEnabled","parameterTypes":["com.fasterxml.jackson.core.StreamReadFeature"] },
+    {"name":"isEnabled","parameterTypes":["com.fasterxml.jackson.core.StreamWriteFeature"] },
+    {"name":"isEnabled","parameterTypes":["com.fasterxml.jackson.databind.DeserializationFeature"] },
+    {"name":"isEnabled","parameterTypes":["com.fasterxml.jackson.databind.MapperFeature"] },
+    {"name":"isEnabled","parameterTypes":["com.fasterxml.jackson.databind.SerializationFeature"] },
     {"name":"missingNode","parameterTypes":[] },
+    {"name":"mixInCount","parameterTypes":[] },
     {"name":"nullNode","parameterTypes":[] },
     {"name":"readTree","parameterTypes":["com.fasterxml.jackson.core.JsonParser"] },
+    {"name":"readTree","parameterTypes":["java.io.File"] },
+    {"name":"readTree","parameterTypes":["java.io.InputStream"] },
+    {"name":"readTree","parameterTypes":["java.io.Reader"] },
+    {"name":"readTree","parameterTypes":["java.lang.String"] },
+    {"name":"readTree","parameterTypes":["java.net.URL"] },
+    {"name":"readTree","parameterTypes":["byte[]"] },
+    {"name":"readTree","parameterTypes":["byte[]","int","int"] },
     {"name":"readValue","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.ResolvedType"] },
     {"name":"readValue","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValue","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.databind.JavaType"] },
     {"name":"readValue","parameterTypes":["com.fasterxml.jackson.core.JsonParser","java.lang.Class"] },
+    {"name":"readValue","parameterTypes":["java.io.DataInput","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readValue","parameterTypes":["java.io.DataInput","java.lang.Class"] },
+    {"name":"readValue","parameterTypes":["java.io.File","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValue","parameterTypes":["java.io.File","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readValue","parameterTypes":["java.io.File","java.lang.Class"] },
+    {"name":"readValue","parameterTypes":["java.io.InputStream","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValue","parameterTypes":["java.io.InputStream","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readValue","parameterTypes":["java.io.InputStream","java.lang.Class"] },
+    {"name":"readValue","parameterTypes":["java.io.Reader","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValue","parameterTypes":["java.io.Reader","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readValue","parameterTypes":["java.io.Reader","java.lang.Class"] },
+    {"name":"readValue","parameterTypes":["java.lang.String","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValue","parameterTypes":["java.lang.String","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readValue","parameterTypes":["java.lang.String","java.lang.Class"] },
+    {"name":"readValue","parameterTypes":["java.net.URL","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValue","parameterTypes":["java.net.URL","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readValue","parameterTypes":["java.net.URL","java.lang.Class"] },
+    {"name":"readValue","parameterTypes":["byte[]","int","int","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValue","parameterTypes":["byte[]","int","int","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readValue","parameterTypes":["byte[]","int","int","java.lang.Class"] },
+    {"name":"readValue","parameterTypes":["byte[]","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValue","parameterTypes":["byte[]","com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readValue","parameterTypes":["byte[]","java.lang.Class"] },
     {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.ResolvedType"] },
     {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.databind.JavaType"] },
     {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","java.lang.Class"] },
+    {"name":"reader","parameterTypes":[] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.core.Base64Variant"] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.core.FormatSchema"] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.databind.DeserializationFeature"] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.databind.DeserializationFeature","com.fasterxml.jackson.databind.DeserializationFeature[]"] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.databind.InjectableValues"] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.databind.cfg.ContextAttributes"] },
+    {"name":"reader","parameterTypes":["com.fasterxml.jackson.databind.node.JsonNodeFactory"] },
+    {"name":"reader","parameterTypes":["java.lang.Class"] },
+    {"name":"readerFor","parameterTypes":["com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"readerFor","parameterTypes":["com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"readerFor","parameterTypes":["java.lang.Class"] },
+    {"name":"readerForArrayOf","parameterTypes":["java.lang.Class"] },
+    {"name":"readerForListOf","parameterTypes":["java.lang.Class"] },
+    {"name":"readerForMapOf","parameterTypes":["java.lang.Class"] },
+    {"name":"readerForUpdating","parameterTypes":["java.lang.Object"] },
+    {"name":"readerWithView","parameterTypes":["java.lang.Class"] },
+    {"name":"registerModule","parameterTypes":["com.fasterxml.jackson.databind.Module"] },
+    {"name":"registerModules","parameterTypes":["java.lang.Iterable"] },
+    {"name":"registerModules","parameterTypes":["com.fasterxml.jackson.databind.Module[]"] },
+    {"name":"registerSubtypes","parameterTypes":["java.util.Collection"] },
+    {"name":"registerSubtypes","parameterTypes":["com.fasterxml.jackson.databind.jsontype.NamedType[]"] },
+    {"name":"registerSubtypes","parameterTypes":["java.lang.Class[]"] },
+    {"name":"setAccessorNaming","parameterTypes":["com.fasterxml.jackson.databind.introspect.AccessorNamingStrategy$Provider"] },
+    {"name":"setAnnotationIntrospector","parameterTypes":["com.fasterxml.jackson.databind.AnnotationIntrospector"] },
+    {"name":"setAnnotationIntrospectors","parameterTypes":["com.fasterxml.jackson.databind.AnnotationIntrospector","com.fasterxml.jackson.databind.AnnotationIntrospector"] },
+    {"name":"setBase64Variant","parameterTypes":["com.fasterxml.jackson.core.Base64Variant"] },
+    {"name":"setConfig","parameterTypes":["com.fasterxml.jackson.databind.DeserializationConfig"] },
+    {"name":"setConfig","parameterTypes":["com.fasterxml.jackson.databind.SerializationConfig"] },
+    {"name":"setConstructorDetector","parameterTypes":["com.fasterxml.jackson.databind.cfg.ConstructorDetector"] },
+    {"name":"setDateFormat","parameterTypes":["java.text.DateFormat"] },
+    {"name":"setDefaultAttributes","parameterTypes":["com.fasterxml.jackson.databind.cfg.ContextAttributes"] },
+    {"name":"setDefaultLeniency","parameterTypes":["java.lang.Boolean"] },
+    {"name":"setDefaultMergeable","parameterTypes":["java.lang.Boolean"] },
+    {"name":"setDefaultPrettyPrinter","parameterTypes":["com.fasterxml.jackson.core.PrettyPrinter"] },
+    {"name":"setDefaultPropertyInclusion","parameterTypes":["com.fasterxml.jackson.annotation.JsonInclude$Include"] },
+    {"name":"setDefaultPropertyInclusion","parameterTypes":["com.fasterxml.jackson.annotation.JsonInclude$Value"] },
+    {"name":"setDefaultSetterInfo","parameterTypes":["com.fasterxml.jackson.annotation.JsonSetter$Value"] },
+    {"name":"setDefaultTyping","parameterTypes":["com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder"] },
+    {"name":"setDefaultVisibility","parameterTypes":["com.fasterxml.jackson.annotation.JsonAutoDetect$Value"] },
+    {"name":"setFilterProvider","parameterTypes":["com.fasterxml.jackson.databind.ser.FilterProvider"] },
+    {"name":"setFilters","parameterTypes":["com.fasterxml.jackson.databind.ser.FilterProvider"] },
+    {"name":"setHandlerInstantiator","parameterTypes":["com.fasterxml.jackson.databind.cfg.HandlerInstantiator"] },
+    {"name":"setInjectableValues","parameterTypes":["com.fasterxml.jackson.databind.InjectableValues"] },
+    {"name":"setLocale","parameterTypes":["java.util.Locale"] },
+    {"name":"setMixInAnnotations","parameterTypes":["java.util.Map"] },
+    {"name":"setMixInResolver","parameterTypes":["com.fasterxml.jackson.databind.introspect.ClassIntrospector$MixInResolver"] },
+    {"name":"setMixIns","parameterTypes":["java.util.Map"] },
+    {"name":"setNodeFactory","parameterTypes":["com.fasterxml.jackson.databind.node.JsonNodeFactory"] },
+    {"name":"setPolymorphicTypeValidator","parameterTypes":["com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator"] },
+    {"name":"setPropertyInclusion","parameterTypes":["com.fasterxml.jackson.annotation.JsonInclude$Value"] },
+    {"name":"setPropertyNamingStrategy","parameterTypes":["com.fasterxml.jackson.databind.PropertyNamingStrategy"] },
+    {"name":"setSerializationInclusion","parameterTypes":["com.fasterxml.jackson.annotation.JsonInclude$Include"] },
+    {"name":"setSerializerFactory","parameterTypes":["com.fasterxml.jackson.databind.ser.SerializerFactory"] },
+    {"name":"setSerializerProvider","parameterTypes":["com.fasterxml.jackson.databind.ser.DefaultSerializerProvider"] },
+    {"name":"setSubtypeResolver","parameterTypes":["com.fasterxml.jackson.databind.jsontype.SubtypeResolver"] },
+    {"name":"setTimeZone","parameterTypes":["java.util.TimeZone"] },
+    {"name":"setTypeFactory","parameterTypes":["com.fasterxml.jackson.databind.type.TypeFactory"] },
+    {"name":"setVisibility","parameterTypes":["com.fasterxml.jackson.annotation.PropertyAccessor","com.fasterxml.jackson.annotation.JsonAutoDetect$Visibility"] },
+    {"name":"setVisibility","parameterTypes":["com.fasterxml.jackson.databind.introspect.VisibilityChecker"] },
+    {"name":"setVisibilityChecker","parameterTypes":["com.fasterxml.jackson.databind.introspect.VisibilityChecker"] },
+    {"name":"tokenStreamFactory","parameterTypes":[] },
     {"name":"treeAsTokens","parameterTypes":["com.fasterxml.jackson.core.TreeNode"] },
+    {"name":"treeToValue","parameterTypes":["com.fasterxml.jackson.core.TreeNode","com.fasterxml.jackson.databind.JavaType"] },
     {"name":"treeToValue","parameterTypes":["com.fasterxml.jackson.core.TreeNode","java.lang.Class"] },
+    {"name":"updateValue","parameterTypes":["java.lang.Object","java.lang.Object"] },
+    {"name":"valueToTree","parameterTypes":["java.lang.Object"] },
     {"name":"version","parameterTypes":[] },
     {"name":"writeTree","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator","com.fasterxml.jackson.core.TreeNode"] },
-    {"name":"writeValue","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator","java.lang.Object"] }
+    {"name":"writeTree","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator","com.fasterxml.jackson.databind.JsonNode"] },
+    {"name":"writeValue","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator","java.lang.Object"] },
+    {"name":"writeValue","parameterTypes":["java.io.DataOutput","java.lang.Object"] },
+    {"name":"writeValue","parameterTypes":["java.io.File","java.lang.Object"] },
+    {"name":"writeValue","parameterTypes":["java.io.OutputStream","java.lang.Object"] },
+    {"name":"writeValue","parameterTypes":["java.io.Writer","java.lang.Object"] },
+    {"name":"writeValueAsBytes","parameterTypes":["java.lang.Object"] },
+    {"name":"writeValueAsString","parameterTypes":["java.lang.Object"] },
+    {"name":"writer","parameterTypes":[] },
+    {"name":"writer","parameterTypes":["com.fasterxml.jackson.core.Base64Variant"] },
+    {"name":"writer","parameterTypes":["com.fasterxml.jackson.core.FormatSchema"] },
+    {"name":"writer","parameterTypes":["com.fasterxml.jackson.core.PrettyPrinter"] },
+    {"name":"writer","parameterTypes":["com.fasterxml.jackson.core.io.CharacterEscapes"] },
+    {"name":"writer","parameterTypes":["com.fasterxml.jackson.databind.SerializationFeature"] },
+    {"name":"writer","parameterTypes":["com.fasterxml.jackson.databind.SerializationFeature","com.fasterxml.jackson.databind.SerializationFeature[]"] },
+    {"name":"writer","parameterTypes":["com.fasterxml.jackson.databind.cfg.ContextAttributes"] },
+    {"name":"writer","parameterTypes":["com.fasterxml.jackson.databind.ser.FilterProvider"] },
+    {"name":"writer","parameterTypes":["java.text.DateFormat"] },
+    {"name":"writerFor","parameterTypes":["com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"writerFor","parameterTypes":["com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"writerFor","parameterTypes":["java.lang.Class"] },
+    {"name":"writerWithDefaultPrettyPrinter","parameterTypes":[] },
+    {"name":"writerWithType","parameterTypes":["com.fasterxml.jackson.core.type.TypeReference"] },
+    {"name":"writerWithType","parameterTypes":["com.fasterxml.jackson.databind.JavaType"] },
+    {"name":"writerWithType","parameterTypes":["java.lang.Class"] },
+    {"name":"writerWithView","parameterTypes":["java.lang.Class"] }
   ]
 },
 {
@@ -776,6 +1020,34 @@
   "queryAllDeclaredConstructors":true
 },
 {
+  "name":"com.github.dockerjava.core.DefaultInvocationBuilder"
+},
+{
+  "name":"com.github.dockerjava.httpclient5.ApacheDockerHttpClient"
+},
+{
+  "name":"com.github.dockerjava.httpclient5.ApacheDockerHttpClientImpl"
+},
+{
+  "name":"com.github.dockerjava.httpclient5.ApacheDockerHttpClientImpl$2"
+},
+{
+  "name":"com.github.dockerjava.transport.DomainSocket",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.github.dockerjava.transport.LinuxDomainSocket",
+  "allPublicFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.github.dockerjava.transport.LinuxDomainSocket$SockaddrUn",
+  "allDeclaredFields":true
+},
+{
+  "name":"com.github.dockerjava.transport.UnixSocket"
+},
+{
   "name":"com.google.gson.Gson",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true
@@ -830,6 +1102,16 @@
   "methods":[{"name":"callback","parameterTypes":["java.lang.Object[]"] }]
 },
 {
+  "name":"com.sun.jna.Structure$FFIType",
+  "allDeclaredFields":true,
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.jna.Structure$FFIType$size_t",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -857,6 +1139,13 @@
   ]
 },
 {
+  "name":"game.server.manager.client.config.JacksonObjectMapper",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"game.server.manager.client.config.SystemUtils",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -868,6 +1157,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"getClientId","parameterTypes":[] },
     {"name":"getEnv","parameterTypes":[] },
@@ -897,6 +1187,18 @@
     {"name":"getStdinOpen","parameterTypes":[] },
     {"name":"getTty","parameterTypes":[] },
     {"name":"setImage","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.PortBindDto",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] },
+    {"name":"setContainerPort","parameterTypes":["int"] },
+    {"name":"setLocalPort","parameterTypes":["java.lang.String"] },
+    {"name":"setProtocol","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -944,6 +1246,54 @@
   "methods":[
     {"name":"<init>","parameterTypes":[] },
     {"name":"setContainerId","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.socket.ApplicationVersion",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] },
+    {"name":"setApplicationId","parameterTypes":["java.lang.Long"] },
+    {"name":"setApplicationName","parameterTypes":["java.lang.String"] },
+    {"name":"setConfData","parameterTypes":["java.lang.String"] },
+    {"name":"setDescription","parameterTypes":["java.lang.String"] },
+    {"name":"setHeat","parameterTypes":["java.lang.Long"] },
+    {"name":"setId","parameterTypes":["java.lang.Long"] },
+    {"name":"setStatus","parameterTypes":["java.lang.Integer"] },
+    {"name":"setVersion","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.socket.ApplicationVersionConfig",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] },
+    {"name":"setAttachStdin","parameterTypes":["java.lang.Boolean"] },
+    {"name":"setImage","parameterTypes":["java.lang.String"] },
+    {"name":"setKey","parameterTypes":["java.lang.Integer"] },
+    {"name":"setName","parameterTypes":["java.lang.String"] },
+    {"name":"setNetworkMode","parameterTypes":["java.lang.String"] },
+    {"name":"setPortBinds","parameterTypes":["java.util.List"] },
+    {"name":"setStdinOpen","parameterTypes":["java.lang.Boolean"] },
+    {"name":"setTty","parameterTypes":["java.lang.Boolean"] },
+    {"name":"setVersion","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.socket.ClientMessage",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getClientId","parameterTypes":[] },
+    {"name":"getData","parameterTypes":[] },
+    {"name":"getMessageId","parameterTypes":[] },
+    {"name":"getType","parameterTypes":[] },
+    {"name":"isSuccess","parameterTypes":[] }
   ]
 },
 {
@@ -1123,6 +1473,16 @@
   ]
 },
 {
+  "name":"game.server.manager.client.websocket.handler.InstallApplicationHandlerService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] },
+    {"name":"handler","parameterTypes":["game.server.manager.client.model.socket.ServerMessage"] }
+  ]
+},
+{
   "name":"game.server.manager.client.websocket.handler.ListContainerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -1194,6 +1554,16 @@
 },
 {
   "name":"game.server.manager.client.websocket.handler.RestartContainerHandlerService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] },
+    {"name":"handler","parameterTypes":["game.server.manager.client.model.socket.ServerMessage"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.websocket.handler.ServerErrorHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1342,7 +1712,8 @@
 },
 {
   "name":"java.lang.Cloneable",
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"java.lang.Iterable",
@@ -1374,6 +1745,9 @@
 {
   "name":"java.lang.String",
   "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.lang.Thread"
 },
 {
   "name":"java.lang.Throwable",
@@ -1418,6 +1792,10 @@
 {
   "name":"java.lang.reflect.GenericDeclaration",
   "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.reflect.Method",
+  "methods":[{"name":"isVarArgs","parameterTypes":[] }]
 },
 {
   "name":"java.lang.reflect.ParameterizedType",
@@ -1521,7 +1899,8 @@
 },
 {
   "name":"java.util.Map",
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"java.util.PropertyPermission"
@@ -1655,6 +2034,42 @@
 {
   "name":"org.apache.coyote.http11.Http11NioProtocol",
   "queryAllPublicMethods":true
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.CloseableHttpClient"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.ConnectExec"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.ContentCompressionExec"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.ExecChainElement"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.ExecChainElement$1"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.HttpRequestRetryExec"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.InternalExecRuntime"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.InternalHttpClient"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.ProtocolExec"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.classic.RedirectExec"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.io.DefaultHttpClientConnectionOperator"
+},
+{
+  "name":"org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager"
 },
 {
   "name":"org.apache.logging.log4j.spi.ExtendedLogger"
@@ -4549,6 +4964,10 @@
 },
 {
   "name":"sun.security.provider.NativePRNG",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.NativePRNG$NonBlocking",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
