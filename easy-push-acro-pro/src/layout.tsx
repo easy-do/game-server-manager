@@ -171,12 +171,17 @@ function PageLayout() {
 
   // 点击菜单的回调
   function onClickMenuItem(key) {
+
+    const currentRoute = flattenRoutes.find((r) => r.key === key);
+
     //如果路径是网址应该跳转
-    if(key.substring(0, 7) === "http://"||key.substring(0, 8) === "https://"){
-      window.open(key);
+
+    if(currentRoute.url.substring(0, 7) === "http://"|| currentRoute.url.substring(0, 8) === "https://"){
+      window.open(currentRoute.url);
       return
     }
-    const currentRoute = flattenRoutes.find((r) => r.key === key);
+
+    
     const component = currentRoute.component;
     const preload = component.preload();
     NProgress.start();
