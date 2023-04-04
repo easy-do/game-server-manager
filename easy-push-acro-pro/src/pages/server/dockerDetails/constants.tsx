@@ -193,7 +193,7 @@ export function getImageListColumns(
       ellipsis:true,
       render: (_, record) => (
         <Typography.Paragraph copyable>
-        {record.RepoTags[0]}
+        {record.RepoTags}
       </Typography.Paragraph>
       ),
     },

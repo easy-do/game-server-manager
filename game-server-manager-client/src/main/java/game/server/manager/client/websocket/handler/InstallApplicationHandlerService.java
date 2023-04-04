@@ -1,6 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.json.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -10,6 +11,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.CreateContainerDto;
+import game.server.manager.client.model.PortBindDto;
 import game.server.manager.client.model.socket.ApplicationVersion;
 import game.server.manager.client.model.socket.ApplicationVersionConfig;
 import game.server.manager.client.model.socket.ServerMessage;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -65,7 +68,14 @@ public class InstallApplicationHandlerService implements AbstractHandlerService 
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create container:" + image);
                 CreateContainerDto createDto = CreateContainerDto.builder().build();
                 BeanUtils.copyProperties(config,createDto);
-                createDto.setEnv(config.getEnvs().get(0));
+                List<JSONObject> envs = config.getEnvs();
+                if(Objects.nonNull(envs) && !envs.isEmpty()){
+                    createDto.setEnv(envs.get(0));
+                }
+                List<PortBindDto> portBinds = config.getPortBinds();
+                if(Objects.nonNull(portBinds) && !portBinds.isEmpty()){
+                    createDto.setPortBinds(portBinds);
+                }
                 createDto.setPortBinds(config.getPortBinds());
                 CreateContainerResponse res = dockerContainerService.createContainer(createDto);
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create container:" + image + "success");
