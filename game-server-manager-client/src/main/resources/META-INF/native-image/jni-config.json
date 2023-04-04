@@ -26,10 +26,6 @@
   "name":"com.sun.jna.JNIEnv"
 },
 {
-  "name":"com.sun.jna.LastErrorException",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
-},
-{
   "name":"com.sun.jna.Native",
   "methods":[
     {"name":"dispose","parameterTypes":[] }, 
@@ -161,10 +157,6 @@
 {
   "name":"java.lang.Object",
   "methods":[{"name":"toString","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.SecurityManager",
-  "fields":[{"name":"initialized"}]
 },
 {
   "name":"java.lang.Short",
