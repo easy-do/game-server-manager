@@ -1,7 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.socket.RenameContainerData;
@@ -28,6 +28,9 @@ public class RenameContainerHandlerService implements AbstractHandlerService {
     @Autowired
     private DockerContainerService dockerContainerService;
 
+    @Autowired
+    private JacksonObjectMapper mapper;
+
     @Override
     public Void handler(ServerMessage serverMessage) {
         log.info("OnMessageHandler removeContainer ==> {}",serverMessage);
@@ -35,7 +38,6 @@ public class RenameContainerHandlerService implements AbstractHandlerService {
         try {
             String data = serverMessage.getData();
             RenameContainerData renameContainerData = null;
-            ObjectMapper mapper = new ObjectMapper();
             renameContainerData = mapper.readValue(data, RenameContainerData.class);
             dockerContainerService.renameContainer(renameContainerData.getContainerId(),renameContainerData.getName());
             syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, "success");

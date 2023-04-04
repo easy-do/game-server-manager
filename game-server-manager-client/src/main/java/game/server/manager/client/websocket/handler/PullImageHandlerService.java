@@ -1,7 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.model.socket.ServerPullImageMessage;
@@ -23,11 +23,13 @@ public class PullImageHandlerService implements AbstractHandlerService {
     @Autowired
     private DockerImageService dockerImageService;
 
+    @Autowired
+    private JacksonObjectMapper mapper;
+
     @Override
     public Void handler(ServerMessage serverMessage) {
         log.info("OnMessageHandler pull ==> {}",serverMessage);
         String jsonData = serverMessage.getData();
-        ObjectMapper mapper = new ObjectMapper();
         ServerPullImageMessage pullImageMessage = null;
         try {
             pullImageMessage = mapper.readValue(jsonData, ServerPullImageMessage.class);

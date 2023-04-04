@@ -2,7 +2,7 @@ package game.server.manager.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.socket.ClientMessage;
@@ -29,6 +29,9 @@ public class SyncServer {
     @Autowired
     private ClientDataServer clientDataServer;
 
+    @Autowired
+    private JacksonObjectMapper mapper;
+
     public void sendOkMessage(ClientSocketTypeEnum type, String messageId, String message){
         ClientMessage clientMessage = ClientMessage.builder()
                 .clientId(systemUtils.getClientId())
@@ -38,7 +41,6 @@ public class SyncServer {
                 .success(true)
                 .build();
 
-        ObjectMapper mapper = new ObjectMapper();
         try {
             sendMessage(mapper.writeValueAsString(clientMessage));
         } catch (JsonProcessingException e) {
@@ -53,7 +55,6 @@ public class SyncServer {
                 .data(message)
                 .success(false)
                 .build();
-        ObjectMapper mapper = new ObjectMapper();
         try {
             sendMessage(mapper.writeValueAsString(clientMessage));
         } catch (JsonProcessingException e) {
@@ -69,7 +70,6 @@ public class SyncServer {
                 .data(message)
                 .build();
         if(ClientWebsocketEndpoint.CLIENT.isOpen()){
-            ObjectMapper mapper = new ObjectMapper();
             try {
                 sendMessage(mapper.writeValueAsString(clientMessage));
             } catch (JsonProcessingException e) {
@@ -78,7 +78,6 @@ public class SyncServer {
         }else {
                     log.error("连接断开,尝试重连。");
             ClientWebsocketEndpoint.CLIENT.reconnect();
-            ObjectMapper mapper = new ObjectMapper();
             try {
                 ClientWebsocketEndpoint.CLIENT.send(mapper.writeValueAsString(clientMessage));
             } catch (JsonProcessingException e) {
