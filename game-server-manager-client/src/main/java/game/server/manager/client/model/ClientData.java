@@ -1,10 +1,10 @@
 package game.server.manager.client.model;
 
-import cn.hutool.json.JSONObject;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 
 /**
@@ -46,7 +46,7 @@ public class ClientData implements Serializable {
     /**
      * 环境变量
      */
-    private JSONObject env;
+    private Map<String, String> env;
 
     /**
      * 系统信息

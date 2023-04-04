@@ -1,7 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.socket.ServerContainerLogMessage;
 import game.server.manager.client.model.socket.ServerMessage;
@@ -25,11 +25,13 @@ public class ContainerLogHandlerService implements AbstractHandlerService {
     @Autowired
     private DockerContainerService dockerContainerService;
 
+    @Autowired
+    private JacksonObjectMapper mapper;
+
     @Override
     public Void handler(ServerMessage serverMessage) {
         log.info("OnMessageHandler containerLog ==> {}",serverMessage);
         String jsonData = serverMessage.getData();
-        ObjectMapper mapper = new ObjectMapper();
         ServerContainerLogMessage containerLogMessage = null;
         try {
             containerLogMessage = mapper.readValue(jsonData, ServerContainerLogMessage.class);
