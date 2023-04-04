@@ -65,7 +65,7 @@ public class SysNoticeController extends BaseController<SysNoticeService,SysNoti
     /**
      * 新增通知公告
      */
-    @SaCheckPermission("system:uc:notice:add")
+    @SaCheckPermission("notice:add")
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "通知公告", description = "添加通知公告", actionType = "添加")
     @Override
@@ -76,7 +76,7 @@ public class SysNoticeController extends BaseController<SysNoticeService,SysNoti
     /**
      * 修改通知公告
      */
-    @SaCheckPermission("system:uc:notice:update")
+    @SaCheckPermission("notice:update")
     @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "通知公告", description = "编辑通知公告: ?1", expressions = {"#p1.id"},actionType = "编辑")
     @Override
@@ -87,7 +87,7 @@ public class SysNoticeController extends BaseController<SysNoticeService,SysNoti
     /**
      * 删除通知公告
      */
-    @SaCheckPermission("system:uc:notice:remove")
+    @SaCheckPermission("notice:remove")
 	@GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "通知公告", description = "删除通知公告: ?1", expressions = {"#p1"}, actionType = "删除")
     @Override
