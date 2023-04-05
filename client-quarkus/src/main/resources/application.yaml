@@ -1,0 +1,57 @@
+quarkus:
+  package:
+    uber-jar: true
+#  http:
+#    cors:
+#      ~: true  # 当有子键时，~用来指代没有前缀的部分 cors=true cors: true
+#      origins: '*'
+#      methods: '*'
+#      headers: '*'
+    # Quarkus开启ssl 使用证书
+    # 1.src/main/resources
+    # 2. 生成整数 keytool -genkey -keyalg RSA -alias selfsigned\-keystore keystore.jks -storepass changeit\-validity 360 -keysize 2048
+    #开启ssl端口
+#    ssl-port: 84431
+#    ssl:
+#      ##keystore路径和类型 src/main/resources下相对路径
+#      certificate:
+#        key-store-file-type: jks
+#        key-store-file: keystore.jks
+#      ##打开keystore的密码
+#      certificate.key-store-password: changeit
+
+#  #日志配置
+#  log:
+#    # 日志输出到文件
+#    file:
+#      path: logs
+#      enable: true
+#      level: ALL
+#      # 设置打印日志级别
+#    level: ALL
+#    category:
+#      # 限制特定包日志打印的最小级别
+#      "org.acme.quickstart.level": WARNING
+
+#    # gelf发送日志配置 需要引入gelf依赖
+#    handler:
+#      gelf:
+#        enabled: true
+#        host: xxx ##线上Logstash对外地址
+#        include-log-message-parameters: false
+#        port: 12201
+#    # 开启syslog
+
+#    syslog:
+#      enable: true
+#      endpoint: localhost:514
+#      protocol: tcp
+#      app-name: quarkus
+#      hostname: quarkus-host
+
+#自定义配置
+greeting:
+  message: Hello World
+  messages: "Hello World,1,2,3,4,5,6,7"
+
+
