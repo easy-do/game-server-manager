@@ -36,7 +36,6 @@
         <module>commons/game-server-manager-docker</module>
         <module>commons/game-server-manager-docker-client-api</module>
         <module>game-server-manager-oss</module>
-        <module>game-server-manager-client</module>
         <module>game-server-manager-gateway</module>
         <module>game-server-manager-uc</module>
         <module>game-server-manager-server</module>
