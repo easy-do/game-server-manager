@@ -2,7 +2,6 @@ package game.server.manager.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.json.JSONObject;
 import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.model.ClientData;
 import game.server.manager.client.model.SystemInfo;
@@ -51,8 +50,7 @@ public class ClientDataServer {
         }
     }
 
-    public JSONObject getEnv() {
-        Map<String, String> env = System.getenv();
-        return new JSONObject(env);
+    public Map<String, String> getEnv() {
+        return System.getenv();
     }
 }

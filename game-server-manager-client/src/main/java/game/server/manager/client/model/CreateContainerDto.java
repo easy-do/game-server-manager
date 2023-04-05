@@ -1,6 +1,5 @@
 package game.server.manager.client.model;
 
-import cn.hutool.json.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +24,7 @@ public class CreateContainerDto {
 
     private String name;
 
-    private JSONObject env;
+    private Map<String,String> env;
 
     /**
      * 标准输出

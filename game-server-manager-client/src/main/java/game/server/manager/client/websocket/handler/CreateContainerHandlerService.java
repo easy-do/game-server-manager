@@ -2,8 +2,8 @@ package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.CreateContainerDto;
@@ -28,13 +28,15 @@ public class CreateContainerHandlerService implements AbstractHandlerService {
     @Autowired
     private DockerContainerService dockerContainerService;
 
+    @Autowired
+    private JacksonObjectMapper mapper;
+
     @Override
     public Void handler(ServerMessage serverMessage) {
         log.info("createContainer info ==> {}",serverMessage);
         String messageId = serverMessage.getMessageId();
         String jsonData = serverMessage.getData();
         CreateContainerDto createContainerDto = null;
-        ObjectMapper mapper = new ObjectMapper();
         try {
             createContainerDto = mapper.readValue(jsonData, CreateContainerDto.class);
         } catch (JsonProcessingException e) {

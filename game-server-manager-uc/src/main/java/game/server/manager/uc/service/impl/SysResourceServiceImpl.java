@@ -162,7 +162,9 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
             throw new BizException("不能选择自己作为父节点");
         }
         SysResource oldResource = checkResource(sysResourceDto.getId());
-        checkResourceCode(sysResourceDto.getId(), sysResourceDto.getResourceCode());
+        if(!CharSequenceUtil.equals(sysResourceDto.getResourceCode(),oldResource.getResourceCode())){
+            checkResourceCode(sysResourceDto.getId(), sysResourceDto.getResourceCode());
+        }
         SysResource entity = SysResourceMapstruct.INSTANCE.dtoToEntity(sysResourceDto);
         boolean isUpdateParent = !Objects.equals(oldResource.getParentId(), sysResourceDto.getParentId());
         if (isUpdateParent) {
