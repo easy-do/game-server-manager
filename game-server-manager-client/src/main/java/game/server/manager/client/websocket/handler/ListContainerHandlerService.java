@@ -1,8 +1,8 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.Container;
+import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
 import game.server.manager.client.model.socket.ServerMessage;
@@ -30,13 +30,15 @@ public class ListContainerHandlerService implements AbstractHandlerService {
     @Autowired
     private DockerContainerService dockerContainerService;
 
+    @Autowired
+    private JacksonObjectMapper mapper;
+
     @Override
     public Void handler(ServerMessage serverMessage) {
         log.info("OnMessageHandler containerList ==> {}",serverMessage);
         String messageId = serverMessage.getMessageId();
         try {
             List<Container> list = dockerContainerService.containerList();
-            ObjectMapper mapper = new ObjectMapper();
             syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, mapper.writeValueAsString(list));
         }catch (Exception e) {
             syncServer.sendFailMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, ExceptionUtil.getMessage(e));

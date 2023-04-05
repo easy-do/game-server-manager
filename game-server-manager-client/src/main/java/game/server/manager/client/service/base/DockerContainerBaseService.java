@@ -3,9 +3,7 @@ package game.server.manager.client.service.base;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrBuilder;
-import cn.hutool.json.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerCmd;
@@ -24,15 +22,18 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.PortBinding;
+import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.model.BindDto;
 import game.server.manager.client.model.CreateContainerDto;
 import game.server.manager.client.model.LinkDto;
 import game.server.manager.client.model.PortBindDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -45,6 +46,9 @@ import java.util.Objects;
 @Component
 public class DockerContainerBaseService {
 
+
+    @Autowired
+    private JacksonObjectMapper mapper;
 
     /**
      * 容器列表
@@ -213,7 +217,6 @@ public class DockerContainerBaseService {
         createContainerCmd.withHostConfig(hostConfig);
         //暴露容器端口
         withExposedPorts(createContainerCmd, createContainerDto);
-        ObjectMapper mapper = new ObjectMapper();
         try {
             log.info("Docker createContainer {}", mapper.writeValueAsString(createContainerDto));
         } catch (JsonProcessingException e) {
@@ -223,7 +226,7 @@ public class DockerContainerBaseService {
     }
 
     private void withEnvs(CreateContainerCmd createContainerCmd, CreateContainerDto createContainerDto) {
-        JSONObject env = createContainerDto.getEnv();
+        Map<String, String> env = createContainerDto.getEnv();
         if (Objects.nonNull(env)) {
             List<String> envs = new ArrayList<>();
             env.forEach((key, value) -> envs.add(key + "=" + value));

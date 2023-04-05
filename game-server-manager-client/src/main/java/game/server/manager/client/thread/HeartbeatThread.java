@@ -1,7 +1,7 @@
 package game.server.manager.client.thread;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.model.ClientData;
 import game.server.manager.client.server.ClientDataServer;
@@ -27,10 +27,12 @@ public class HeartbeatThread {
     @Autowired
     private SyncServer syncServer;
 
+    @Autowired
+    private JacksonObjectMapper mapper;
+
     @Scheduled(fixedDelay = 1000 * 30)
     public void HeartbeatCheck() {
         ClientData clientData = clientDataServer.getClientData();
-        ObjectMapper mapper = new ObjectMapper();
         try {
             syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, mapper.writeValueAsString(clientData));
         } catch (JsonProcessingException e) {

@@ -1,10 +1,6 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.json.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -24,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -68,7 +65,7 @@ public class InstallApplicationHandlerService implements AbstractHandlerService 
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create container:" + image);
                 CreateContainerDto createDto = CreateContainerDto.builder().build();
                 BeanUtils.copyProperties(config,createDto);
-                List<JSONObject> envs = config.getEnvs();
+                List<Map<String, String>> envs = config.getEnvs();
                 if(Objects.nonNull(envs) && !envs.isEmpty()){
                     createDto.setEnv(envs.get(0));
                 }
@@ -86,9 +83,9 @@ public class InstallApplicationHandlerService implements AbstractHandlerService 
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "install sub application success");
             }
             syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "install application end");
-            syncServer.sendOkMessage(ClientSocketTypeEnum.NO_SYNC_RESULT,messageId, "success");
+            syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "success");
         }catch (Exception e) {
-            syncServer.sendFailMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, ExceptionUtil.getMessage(e));
+            syncServer.sendFailMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "install error:"+ExceptionUtil.getMessage(e));
         }
         return null;
     }

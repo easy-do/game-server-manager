@@ -148,7 +148,9 @@ public class ScriptDataServiceImpl extends BaseServiceImpl<ScriptData, MpBaseQo<
         //如果不是更新脚本内容、只是编辑脚本基本信息则自动生成一次新的脚本上半部分
         if (!updateScriptFile) {
             List<AppEnvInfoDto> envList = scriptDataDto.getScriptEnv();
-            scriptEnvDataService.saveOrUpdateScriptEnvList(scriptDataDto.getId(), envList);
+            if (Objects.nonNull(envList) && !envList.isEmpty()) {
+                scriptEnvDataService.saveOrUpdateScriptEnvList(scriptDataDto.getId(), envList);
+            }
             if(CharSequenceUtil.isEmpty(scriptDataDto.getScriptFile())){
                 //旧的脚本内容
                 String scriptFile = dbScriptData.getScriptFile();

@@ -1,12 +1,12 @@
 package game.server.manager.client.model.socket;
 
-import cn.hutool.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import game.server.manager.client.model.PortBindDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author laoyu
@@ -37,7 +37,7 @@ public class ApplicationVersionConfig {
     @JsonProperty("networkMode")
     private String networkMode;
     @JsonProperty("envs")
-    private List<JSONObject> envs;
+    private List<Map<String,String>> envs;
     @JsonProperty("portBinds")
     private List<PortBindDto> portBinds;
 }
