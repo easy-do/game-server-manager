@@ -79,6 +79,7 @@ const i18n = {
     'searchTable.columns.localPort': 'local Port',
     'searchTable.columns.protocol': 'protocol',
     'searchTable.columns.networkMode': 'network Mode',
+    'searchTable.columns.privileged': 'privileged',
     'searchTable.columns.addPort': 'add Port',
     'searchTable.columns.attachStdin': 'attachStdin',
     'searchTable.columns.stdinOpen': 'stdinOpen',
@@ -87,7 +88,12 @@ const i18n = {
     'searchTable.columns.labels': 'labels',  
     'searchForm.labels.placeholder': 'labels, xxx=xxx', 
     'searchForm.cmd.placeholder': 'cmd', 
-    'searchForm.columns.order': 'order', 
+    'searchForm.columns.order': 'order',     
+    'searchTable.columns.binds': 'bind Path',
+    'searchTable.columns.addBinds': 'add Path Bind',
+    'searchTable.columns.containerPath': 'container Path',
+    'searchTable.columns.localPath': 'local Path',
+    'searchTable.columns.editable': 'Editable',
     
   },
   'zh-CN': {
@@ -170,7 +176,7 @@ const i18n = {
     'searchTable.columns.localPort': '宿主机端口',
     'searchTable.columns.protocol': '网络协议',
     'searchTable.columns.networkMode': '网络模式',
-    'searchTable.columns.privileged': '网络模式',
+    'searchTable.columns.privileged': '特权模式',
     'searchTable.columns.attachStdin': '标准输出',
     'searchTable.columns.stdinOpen': '标准输入',
     'searchTable.columns.tty': '开启终端',    
@@ -179,6 +185,11 @@ const i18n = {
     'searchForm.labels.placeholder': '标签 一行一个, xxx=xxx', 
     'searchForm.cmd.placeholder': '命令 一行一个', 
     'searchForm.columns.order': '排序', 
+    'searchTable.columns.binds': '路径绑定',
+    'searchTable.columns.addBinds': '添加路径绑定',
+    'searchTable.columns.containerPath': '容器路径',
+    'searchTable.columns.localPath': '宿主机路径',
+    'searchTable.columns.editable': '可编辑',
     
   },
 };

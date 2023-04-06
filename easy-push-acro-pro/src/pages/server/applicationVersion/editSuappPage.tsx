@@ -20,15 +20,15 @@ import { IconDelete } from '@arco-design/web-react/icon';
 import Textarea from '@arco-design/web-react/es/Input/textarea';
 
 
-function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
-  
+function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
+
   const formRef1 = useRef<FormInstance>();
 
   const { lang } = useContext(GlobalContext);
 
   const t = useLocale(locale);
 
-  const [networkMode,setNetworkMode] = useState('bridge');
+  const [networkMode, setNetworkMode] = useState('bridge');
 
   const networkModeOnchage = (value) => {
     setNetworkMode(value);
@@ -42,7 +42,7 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
   }
 
   useEffect(() => {
-    if(formRef1.current){
+    if (formRef1.current) {
       console.info(subApp);
       formRef1.current.clearFields();
       formRef1.current.setFieldsValue(subApp);
@@ -51,7 +51,7 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
 
   return (
     <Modal
-      style={{ width: '90%', minHeight: '70%' }}
+      style={{ width: '100%', minHeight: '70%' }}
       visible={visible}
       onOk={() => {
         handleSubmit();
@@ -69,8 +69,8 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
       <Form
         ref={formRef1}
         style={{ width: '95%', marginTop: '6px' }}
-        labelCol={{ span: lang === 'en-US' ? 7 : 6 }}
-        wrapperCol={{ span: lang === 'en-US' ? 17 : 18 }}
+        labelCol={{ span: lang === 'en-US' ? 6 : 5 }}
+        wrapperCol={{ span: lang === 'en-US' ? 18 : 19 }}
         labelAlign="left"
         initialValues={subApp}
       >
@@ -106,27 +106,34 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
           ]}
         >
           <Input placeholder={t['searchForm.image.placeholder']} allowClear />
-        </Form.Item> 
+        </Form.Item>
         <Form.Item
           label={t['searchTable.columns.attachStdin']}
           field="attachStdin"
           initialValue={true}
         >
-          <Checkbox defaultChecked/>
+          <Checkbox defaultChecked />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.stdinOpen']}
           field="stdinOpen"
           initialValue={true}
         >
-          <Checkbox defaultChecked/>
+          <Checkbox defaultChecked />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.tty']}
           field="tty"
           initialValue={true}
         >
-          <Checkbox defaultChecked/>
+          <Checkbox defaultChecked />
+        </Form.Item>
+        <Form.Item
+          label={t['searchTable.columns.privileged']}
+          field="privileged"
+          initialValue={true}
+        >
+          <Checkbox />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.labels']}
@@ -149,18 +156,18 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
           ]}
         >
           <Select
-          defaultValue={'bridge'}
-           onChange={networkModeOnchage}
-           options={[
-            {label:'host',value:'host'},
-            {label:'none',value:'none'},
-            {label:'bridge',value:'bridge'},
-          ]}
+            defaultValue={'bridge'}
+            onChange={networkModeOnchage}
+            options={[
+              { label: 'host', value: 'host' },
+              { label: 'none', value: 'none' },
+              { label: 'bridge', value: 'bridge' },
+            ]}
           />
         </Form.Item>
         <Typography.Title heading={6}>
-        {t['searchTable.columns.EnvInfo']}
-      </Typography.Title>
+          {t['searchTable.columns.EnvInfo']}
+        </Typography.Title>
         <Form.List field="confData.envs" >
           {(fields, { add, remove, move }) => {
             return (
@@ -177,7 +184,7 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
                             justifyContent: 'space-between',
                           }}
                           split={<Divider type="vertical" />}
-                          align="center"
+                          align="baseline"
                           size="large"
                         >
                           <Form.Item
@@ -220,29 +227,21 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
                             <Input />
                           </Form.Item>
                           <Form.Item
-                            label={t['searchTable.columns.envDescription']}
-                            initialValue={
-                              t['searchTable.columns.envDescription']
-                            }
-                            field={item.field + '.description'}
-                            rules={[
-                              {
-                                required: true,
-                                message:
-                                  t[
-                                    'searchTable.rules.envDescription.required'
-                                  ],
-                              },
-                            ]}
+                            label={t['searchTable.columns.editable']}
+                            field={item.field + '.editable'}
+                            initialValue={true}
                           >
-                            <Input />
+                            <Checkbox defaultChecked />
                           </Form.Item>
-                          <Button
-                            icon={<IconDelete />}
-                            shape="circle"
-                            status="danger"
-                            onClick={() => remove(index)}
-                          ></Button>
+                          <Form.Item >
+                            <Button
+                              icon={<IconDelete />}
+                              shape="circle"
+                              status="danger"
+                              onClick={() => remove(index)}
+                            ></Button>
+                          </Form.Item>
+
                         </Space>
                       </Form.Item>
                     </div>
@@ -264,9 +263,10 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
           }}
         </Form.List>
         {
-          networkMode !== 'bridge'?null:<><Typography.Title heading={6}>
+          networkMode !== 'bridge' ? null : <><Typography.Title heading={6}>
             {t['searchTable.columns.port']}
-          </Typography.Title><Form.List field="confData.portBinds">
+          </Typography.Title>
+            <Form.List field="confData.portBinds">
               {(fields, { add, remove, move }) => {
                 return (
                   <div>
@@ -283,9 +283,9 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
                               }}
                               split={<Divider type="vertical" />}
                               align="center"
-                              size="large"
+                              size="small"
                             >
-                           <Form.Item
+                              <Form.Item
                                 label={t['searchTable.columns.envDescription']}
                                 initialValue={t['searchTable.columns.envDescription']}
                                 field={item.field + '.description'}
@@ -308,7 +308,7 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
                                   },
                                 ]}
                               >
-                                <Input />
+                                <Input type={'number'} max={65535} min={80} />
                               </Form.Item>
 
                               <Form.Item
@@ -321,11 +321,10 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
                                   },
                                 ]}
                               >
-                                <Input />
+                                <Input type={'number'} max={65535} min={80} />
                               </Form.Item>
                               <Form.Item
                                 label={t['searchTable.columns.protocol']}
-                                style={{ width: '100px' }}
                                 field={item.field + '.protocol'}
                                 initialValue={'tcp'}
                                 rules={[
@@ -342,12 +341,23 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
                                     { label: 'udp', value: 'udp' }
                                   ]} />
                               </Form.Item>
-                              <Button
-                                icon={<IconDelete />}
-                                shape="circle"
-                                status="danger"
-                                onClick={() => remove(index)}
-                              ></Button>
+                              <Form.Item
+                                label={t['searchTable.columns.editable']}
+                                field={item.field + '.editable'}
+                                initialValue={true}
+                              >
+                                <Checkbox defaultChecked />
+                              </Form.Item>
+                              <Form.Item
+                              >
+                                <Button
+                                  icon={<IconDelete />}
+                                  shape="circle"
+                                  status="danger"
+                                  onClick={() => remove(index)}
+                                ></Button>
+                              </Form.Item>
+
                             </Space>
                           </Form.Item>
                         </div>
@@ -359,17 +369,112 @@ function EditSubappPage ({ subApp, visible, setVisible, editSubappsCallback }) {
                         // style={{ width: '100%' }}
                         onClick={() => {
                           add();
-                        } }
+                        }}
                       >
                         {t['searchTable.columns.addPort']}
                       </Button>
                     </Form.Item>
                   </div>
                 );
-              } }
+              }}
             </Form.List></>
         }
-      
+        <Typography.Title heading={6}>
+          {t['searchTable.columns.binds']}
+        </Typography.Title>
+        <Form.List field="confData.binds">
+          {(fields, { add, remove, move }) => {
+            return (
+              <div>
+                {fields.map((item, index) => {
+                  return (
+                    <div key={item.key}>
+                      <Form.Item
+                        label={t['searchTable.columns.binds'] + (index + 1)}
+                      >
+                        <Space
+                          style={{
+                            width: '100%',
+                            justifyContent: 'space-between',
+                          }}
+                          split={<Divider type="vertical" />}
+                          align="baseline"
+                          size="large"
+                        >
+                          <Form.Item
+                            label={t['searchTable.columns.envDescription']}
+                            initialValue={t['searchTable.columns.envDescription']}
+                            field={item.field + '.description'}
+                            rules={[
+                              {
+                                required: true,
+                                message: t['searchTable.rules.envDescription.required'],
+                              },
+                            ]}
+                          >
+                            <Input />
+                          </Form.Item>
+                          <Form.Item
+                            label={t['searchTable.columns.containerPath']}
+                            field={item.field + '.containerPath'}
+                            rules={[
+                              {
+                                required: true,
+                                message: t['searchTable.rules.containerPath.required'],
+                              },
+                            ]}
+                          >
+                            <Input />
+                          </Form.Item>
+
+                          <Form.Item
+                            label={t['searchTable.columns.localPath']}
+                            field={item.field + '.localPort'}
+                            rules={[
+                              {
+                                required: true,
+                                message: t['searchTable.rules.localPath.required'],
+                              },
+                            ]}
+                          >
+                            <Input />
+                          </Form.Item>
+                          <Form.Item
+                            label={t['searchTable.columns.editable']}
+                            field={item.field + '.editable'}
+                            initialValue={true}
+                          >
+                            <Checkbox defaultChecked />
+                          </Form.Item>
+                          <Form.Item>
+                            <Button
+                              icon={<IconDelete />}
+                              shape="circle"
+                              status="danger"
+                              onClick={() => remove(index)}
+                            ></Button>
+                          </Form.Item>
+
+                        </Space>
+                      </Form.Item>
+                    </div>
+                  );
+                })}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    // style={{ width: '100%' }}
+                    onClick={() => {
+                      add();
+                    }}
+                  >
+                    {t['searchTable.columns.addBinds']}
+                  </Button>
+                </Form.Item>
+              </div>
+            );
+          }}
+        </Form.List>
       </Form>
     </Modal>
   );

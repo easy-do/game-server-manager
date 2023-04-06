@@ -7,7 +7,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import React from 'react';
 import { IconDelete, IconEdit, IconPlus } from '@arco-design/web-react/icon';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
-import EditSubappPage from './editSuappPage';
+import EditSubappPage from './editSuAppPage';
 
 function UpdatePage({ id, visible, setVisible, successCallBack }) {
   
