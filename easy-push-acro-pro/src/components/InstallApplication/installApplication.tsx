@@ -49,6 +49,7 @@ function InsallApplicationPage({
         confData.map((config) => {
           const envsCache = [];
           const portBindsCache = [];
+          const bindsCache = [];
           const env = config.confData.envs;
           if(env){
             env.map((item, index) => {
@@ -97,6 +98,38 @@ function InsallApplicationPage({
                     label={item.description}
                     field={'configData[' + (config.key-1) + '].portBinds[' + index + '].localPort'}
                     initialValue={item.localPort}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Form.Item>
+              );
+            });
+          }
+
+          const binds = config.confData.binds;
+
+          if(binds){
+            binds.map((item, index) => {
+              bindsCache.push(
+                <Form.Item field={'binds[' + index + ']'}>
+                  <Form.Item
+                    field={'configData[' + (config.key-1) + '].binds[' + index + '].containerPath'}
+                    initialValue={item.containerPath}
+                    hidden
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    field={'configData[' + (config.key-1) + '].binds[' + index + '].description'}
+                    initialValue={item.description}
+                    hidden
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={item.description}
+                    field={'configData[' + (config.key-1) + '].binds[' + index + '].localPath'}
+                    initialValue={item.localPath}
                   >
                     <Input />
                   </Form.Item>
@@ -160,6 +193,13 @@ function InsallApplicationPage({
           <Input />
         </Form.Item>
         <Form.Item
+          field={'configData[' + (config.key-1) + '].privileged'}
+          hidden
+          initialValue={config.privileged}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
           field={'configData[' + (config.key-1) + '].labels'}
           hidden
           initialValue={config.labels}
@@ -182,6 +222,7 @@ function InsallApplicationPage({
         </Form.Item>
               <Form.Item field={'configData[' + (config.key-1) + '].envs'}>{envsCache}</Form.Item>
               <Form.Item field={'configData[' + (config.key-1) + '].portBinds'}>{portBindsCache}</Form.Item>
+              <Form.Item field={'configData[' + (config.key-1) + '].binds'}>{bindsCache}</Form.Item>
             </Form.Item>
           );
         });
