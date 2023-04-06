@@ -15,7 +15,7 @@ import { addRequest } from '@/api/applicationVersion';
 import { GlobalContext } from '@/context';
 import { IconDelete, IconEdit, IconPlus } from '@arco-design/web-react/icon';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
-import EditSubappPage from './editSuappPage';
+import EditSubappPage from './editSuAppPage';
 
 function AddPage({ applicationId, visible, setVisible, successCallBack }) {
   const formRef = useRef<FormInstance>();

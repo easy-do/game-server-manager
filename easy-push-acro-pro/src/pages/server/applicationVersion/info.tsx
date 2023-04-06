@@ -23,10 +23,7 @@ function InfoPage(props: { id: number; visible; setVisible }) {
     status: null,
     description: null,
     heat: null,
-    confData: {
-      envs: [],
-      image: '',
-    },
+    confData: null,
     createTime: null,
     updateTime: null,
     createBy: null,
@@ -109,16 +106,6 @@ function InfoPage(props: { id: number; visible; setVisible }) {
       ),
     },
     {
-      label: t['searchTable.columns.image'],
-      value: loading ? (
-        <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
-      ) : infoData ? (
-        infoData.confData.image
-      ) : (
-        ''
-      ),
-    },
-    {
       label: t['searchTable.columns.status'],
       value: loading ? (
         <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />
@@ -184,15 +171,15 @@ function InfoPage(props: { id: number; visible; setVisible }) {
         style={{ marginBottom: 20 }}
         labelStyle={{ paddingRight: 36 }}
       />
-      <Typography.Title heading={6}>
+      {/* <Typography.Title heading={6}>
         {t['searchTable.columns.EnvInfo']}
-      </Typography.Title>
-      <Table
+      </Typography.Title> */}
+      {/* <Table
         rowKey="key"
         columns={tablecolumns}
         data={infoData.confData.envs}
         pagination={false}
-      />
+      /> */}
       <Typography.Title heading={6}>
         {t['searchTable.columns.description']}
       </Typography.Title>
