@@ -18,6 +18,9 @@
   "name":"[Lcom.fasterxml.jackson.databind.ser.Serializers;"
 },
 {
+  "name":"[Lcom.github.dockerjava.api.model.Bind;"
+},
+{
   "name":"[Lcom.github.dockerjava.api.model.Capability;"
 },
 {
@@ -37,9 +40,6 @@
 },
 {
   "name":"[Lcom.github.dockerjava.api.model.PortBinding;"
-},
-{
-  "name":"[Lcom.github.dockerjava.api.model.Bind;"
 },
 {
   "name":"[Lcom.github.dockerjava.api.model.Ulimit;"
@@ -495,6 +495,13 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"com.github.dockerjava.api.model.Binds",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"toPrimitive","parameterTypes":[] }]
+},
+{
   "name":"com.github.dockerjava.api.model.ClusterInfo",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -704,25 +711,6 @@
   ]
 },
 {
-  "name":"com.github.dockerjava.api.model.Image",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[
-    {"name":"<init>","parameterTypes":[] }, 
-    {"name":"getContainers","parameterTypes":[] }, 
-    {"name":"getCreated","parameterTypes":[] }, 
-    {"name":"getId","parameterTypes":[] }, 
-    {"name":"getLabels","parameterTypes":[] }, 
-    {"name":"getParentId","parameterTypes":[] }, 
-    {"name":"getRepoDigests","parameterTypes":[] }, 
-    {"name":"getRepoTags","parameterTypes":[] }, 
-    {"name":"getSharedSize","parameterTypes":[] }, 
-    {"name":"getSize","parameterTypes":[] }, 
-    {"name":"getVirtualSize","parameterTypes":[] }
-  ]
-},
-{
   "name":"com.github.dockerjava.api.model.Info",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -882,8 +870,7 @@
   "name":"com.github.dockerjava.api.model.ResponseItem$ProgressDetail",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"com.github.dockerjava.api.model.SwarmCAConfig",
@@ -1096,6 +1083,19 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"game.server.manager.client.model.BindDto",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"getContainerPath","parameterTypes":[] }, 
+    {"name":"getLocalPath","parameterTypes":[] }, 
+    {"name":"setContainerPath","parameterTypes":["java.lang.String"] }, 
+    {"name":"setLocalPath","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
   "name":"game.server.manager.client.model.ClientData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -1130,10 +1130,13 @@
     {"name":"getStdinOpen","parameterTypes":[] }, 
     {"name":"getTty","parameterTypes":[] }, 
     {"name":"setAttachStdin","parameterTypes":["java.lang.Boolean"] }, 
+    {"name":"setBinds","parameterTypes":["java.util.List"] }, 
+    {"name":"setCmd","parameterTypes":["java.lang.String"] }, 
     {"name":"setImage","parameterTypes":["java.lang.String"] }, 
     {"name":"setName","parameterTypes":["java.lang.String"] }, 
     {"name":"setNetworkMode","parameterTypes":["java.lang.String"] }, 
     {"name":"setPortBinds","parameterTypes":["java.util.List"] }, 
+    {"name":"setPrivileged","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setStdinOpen","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setTty","parameterTypes":["java.lang.Boolean"] }
   ]
@@ -1151,19 +1154,6 @@
     {"name":"setContainerPort","parameterTypes":["int"] }, 
     {"name":"setLocalPort","parameterTypes":["java.lang.String"] }, 
     {"name":"setProtocol","parameterTypes":["java.lang.String"] }
-  ]
-},
-{
-  "name":"game.server.manager.client.model.BindDto",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[
-    {"name":"<init>","parameterTypes":[] },
-    {"name":"getContainerPath","parameterTypes":[] },
-    {"name":"getLocalPath","parameterTypes":[] },
-    {"name":"setContainerPath","parameterTypes":["java.lang.String"] },
-    {"name":"setLocalPath","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -1203,19 +1193,25 @@
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
     {"name":"getAttachStdin","parameterTypes":[] }, 
+    {"name":"getBinds","parameterTypes":[] }, 
+    {"name":"getCmd","parameterTypes":[] }, 
     {"name":"getImage","parameterTypes":[] }, 
     {"name":"getName","parameterTypes":[] }, 
     {"name":"getNetworkMode","parameterTypes":[] }, 
     {"name":"getPortBinds","parameterTypes":[] }, 
+    {"name":"getPrivileged","parameterTypes":[] }, 
     {"name":"getStdinOpen","parameterTypes":[] }, 
     {"name":"getTty","parameterTypes":[] }, 
     {"name":"setAttachStdin","parameterTypes":["java.lang.Boolean"] }, 
+    {"name":"setBinds","parameterTypes":["java.util.List"] }, 
+    {"name":"setCmd","parameterTypes":["java.lang.String"] }, 
     {"name":"setEnvs","parameterTypes":["java.util.List"] }, 
     {"name":"setImage","parameterTypes":["java.lang.String"] }, 
     {"name":"setKey","parameterTypes":["java.lang.Integer"] }, 
     {"name":"setName","parameterTypes":["java.lang.String"] }, 
     {"name":"setNetworkMode","parameterTypes":["java.lang.String"] }, 
     {"name":"setPortBinds","parameterTypes":["java.util.List"] }, 
+    {"name":"setPrivileged","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setStdinOpen","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setTty","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setVersion","parameterTypes":["java.lang.String"] }
@@ -1232,16 +1228,6 @@
     {"name":"getMessageId","parameterTypes":[] }, 
     {"name":"getType","parameterTypes":[] }, 
     {"name":"isSuccess","parameterTypes":[] }
-  ]
-},
-{
-  "name":"game.server.manager.client.model.socket.ServerContainerLogMessage",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[
-    {"name":"<init>","parameterTypes":[] }, 
-    {"name":"setContainerId","parameterTypes":["java.lang.String"] }
   ]
 },
 {
