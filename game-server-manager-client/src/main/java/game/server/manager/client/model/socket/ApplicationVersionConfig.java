@@ -1,6 +1,7 @@
 package game.server.manager.client.model.socket;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import game.server.manager.client.model.BindDto;
 import game.server.manager.client.model.PortBindDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,8 @@ public class ApplicationVersionConfig {
     private Boolean attachStdin;
     @JsonProperty("stdinOpen")
     private Boolean stdinOpen;
+    @JsonProperty("privileged")
+    private Boolean privileged;
     @JsonProperty("tty")
     private Boolean tty;
     @JsonProperty("networkMode")
@@ -40,4 +43,6 @@ public class ApplicationVersionConfig {
     private List<Map<String,String>> envs;
     @JsonProperty("portBinds")
     private List<PortBindDto> portBinds;
+    @JsonProperty("binds")
+    private List<BindDto> binds;
 }

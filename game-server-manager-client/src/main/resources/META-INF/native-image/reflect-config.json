@@ -39,6 +39,9 @@
   "name":"[Lcom.github.dockerjava.api.model.PortBinding;"
 },
 {
+  "name":"[Lcom.github.dockerjava.api.model.Bind;"
+},
+{
   "name":"[Lcom.github.dockerjava.api.model.Ulimit;"
 },
 {
@@ -1148,6 +1151,19 @@
     {"name":"setContainerPort","parameterTypes":["int"] }, 
     {"name":"setLocalPort","parameterTypes":["java.lang.String"] }, 
     {"name":"setProtocol","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.BindDto",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] },
+    {"name":"getContainerPath","parameterTypes":[] },
+    {"name":"getLocalPath","parameterTypes":[] },
+    {"name":"setContainerPath","parameterTypes":["java.lang.String"] },
+    {"name":"setLocalPath","parameterTypes":["java.lang.String"] }
   ]
 },
 {

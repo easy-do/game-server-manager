@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import game.server.manager.client.contants.ClientSocketTypeEnum;
 import game.server.manager.client.contants.MessageTypeConstants;
+import game.server.manager.client.model.BindDto;
 import game.server.manager.client.model.CreateContainerDto;
 import game.server.manager.client.model.PortBindDto;
 import game.server.manager.client.model.socket.ApplicationVersion;
@@ -63,17 +64,7 @@ public class InstallApplicationHandlerService implements AbstractHandlerService 
                 String pullLog = dockerImageService.pullImage(image);
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, pullLog);
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create container:" + image);
-                CreateContainerDto createDto = CreateContainerDto.builder().build();
-                BeanUtils.copyProperties(config,createDto);
-                List<Map<String, String>> envs = config.getEnvs();
-                if(Objects.nonNull(envs) && !envs.isEmpty()){
-                    createDto.setEnv(envs.get(0));
-                }
-                List<PortBindDto> portBinds = config.getPortBinds();
-                if(Objects.nonNull(portBinds) && !portBinds.isEmpty()){
-                    createDto.setPortBinds(portBinds);
-                }
-                createDto.setPortBinds(config.getPortBinds());
+                CreateContainerDto createDto = getCreateContainerDto(config);
                 CreateContainerResponse res = dockerContainerService.createContainer(createDto);
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create container:" + image + "success");
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "start container:" + image);
@@ -88,5 +79,23 @@ public class InstallApplicationHandlerService implements AbstractHandlerService 
             syncServer.sendFailMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "install error:"+ExceptionUtil.getMessage(e));
         }
         return null;
+    }
+
+    private static CreateContainerDto getCreateContainerDto(ApplicationVersionConfig config) {
+        CreateContainerDto createDto = CreateContainerDto.builder().build();
+        BeanUtils.copyProperties(config,createDto);
+        List<Map<String, String>> envs = config.getEnvs();
+        if(Objects.nonNull(envs) && !envs.isEmpty()){
+            createDto.setEnv(envs.get(0));
+        }
+        List<PortBindDto> portBinds = config.getPortBinds();
+        if(Objects.nonNull(portBinds) && !portBinds.isEmpty()){
+            createDto.setPortBinds(portBinds);
+        }
+        List<BindDto> binds = config.getBinds();
+        if(Objects.nonNull(portBinds) && !portBinds.isEmpty()){
+            createDto.setBinds(binds);
+        }
+        return createDto;
     }
 }
