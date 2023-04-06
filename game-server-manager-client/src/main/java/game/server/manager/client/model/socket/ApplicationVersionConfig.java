@@ -29,6 +29,8 @@ public class ApplicationVersionConfig {
     private String version;
     @JsonProperty("image")
     private String image;
+    @JsonProperty("cmd")
+    private String cmd;
     @JsonProperty("attachStdin")
     private Boolean attachStdin;
     @JsonProperty("stdinOpen")

@@ -429,7 +429,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
 
                           <Form.Item
                             label={t['searchTable.columns.localPath']}
-                            field={item.field + '.localPort'}
+                            field={item.field + '.localPath'}
                             rules={[
                               {
                                 required: true,
