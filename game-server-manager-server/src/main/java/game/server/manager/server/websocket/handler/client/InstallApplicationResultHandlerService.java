@@ -21,7 +21,6 @@ public class InstallApplicationResultHandlerService implements AbstractHandlerSe
         ClientMessage clientMessage = clientHandlerData.getClientMessage();
         String messageId = clientMessage.getMessageId();
         SessionResultCache.saveMessageById(messageId,clientMessage);
-        log.warn("{}",clientHandlerData);
         return null;
     }
 }
