@@ -59,6 +59,7 @@ function InsallApplicationPage({
                     label={item.envName}
                     field={'configData[' + (config.key-1) + '].envs[' + index + '].'+item.envKey}
                     initialValue={item.envValue}
+                    disabled={!item.editable}
                   >
                     <Input />
                   </Form.Item>
@@ -98,8 +99,9 @@ function InsallApplicationPage({
                     label={item.description}
                     field={'configData[' + (config.key-1) + '].portBinds[' + index + '].localPort'}
                     initialValue={item.localPort}
+                    disabled={!item.editable}
                   >
-                    <Input />
+                    <Input type={'number'} max={65535} min={80} />
                   </Form.Item>
                 </Form.Item>
               );
@@ -130,6 +132,7 @@ function InsallApplicationPage({
                     label={item.description}
                     field={'configData[' + (config.key-1) + '].binds[' + index + '].localPath'}
                     initialValue={item.localPath}
+                    disabled={!item.editable}
                   >
                     <Input />
                   </Form.Item>
