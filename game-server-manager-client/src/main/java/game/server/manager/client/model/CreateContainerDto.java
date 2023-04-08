@@ -60,13 +60,13 @@ public class CreateContainerDto {
     private List<PortBindDto> portBinds;
 
     /**连接*/
-    private List<LinkDto> links;
+    private String links;
 
     /** 命令 */
     private String cmd;
 
     /** 标签 */
-    private Map<String, String> labels;
+    private String labels;
 
     /** CPU限制 */
     private Long nanoCPUs;

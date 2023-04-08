@@ -216,7 +216,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application, Applica
             throw ExceptionFactory.baseException("客户端未连接");
         }
         //转换参数
-        version.setConfData(installApplicationDto.getConfigData());
+        version.setConfData(installApplicationDto.getConfData());
         String messageId = UUID.fastUUID().toString();
         SessionUtils.sendSimpleServerMessage(clientSession, messageId, JSONUtil.toJsonStr(version), ServerMessageTypeEnum.INSTALL_APPLICATION);
 

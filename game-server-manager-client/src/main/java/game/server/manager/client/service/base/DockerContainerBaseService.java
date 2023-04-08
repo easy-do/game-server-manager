@@ -23,6 +23,7 @@ import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.RestartPolicy;
+import com.google.common.collect.Maps;
 import game.server.manager.client.config.JacksonObjectMapper;
 import game.server.manager.client.model.BindDto;
 import game.server.manager.client.model.CreateContainerDto;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -192,7 +194,17 @@ public class DockerContainerBaseService {
         }
         //标签
         if(Objects.nonNull(createContainerDto.getLabels())){
-            createContainerCmd.withLabels(createContainerDto.getLabels());
+            List<String> lableList = CharSequenceUtil.split(createContainerDto.getLabels(), ",");
+            Map<String,String> labelMap = Maps.newHashMapWithExpectedSize(lableList.size());
+            lableList.forEach(labelStr->{
+                List<String> label = CharSequenceUtil.split(labelStr, "=");
+                if(label.size() == 2){
+                    labelMap.put(label.get(0),label.get(1));
+                }
+            });
+            if(!labelMap.isEmpty()){
+                createContainerCmd.withLabels(labelMap);
+            }
         }
         //标准输出
         createContainerCmd.withAttachStdin(createContainerDto.getAttachStdin());
@@ -210,15 +222,15 @@ public class DockerContainerBaseService {
         }
         //内存限制
         if(Objects.nonNull(createContainerDto.getMemory())){
-            hostConfig.withMemory(createContainerDto.getMemory());
+            hostConfig.withMemory(createContainerDto.getMemory() * 1024 * 1024);
         }
         //共享内存限制
         if(Objects.nonNull(createContainerDto.getShmSize())){
-            hostConfig.withShmSize(createContainerDto.getShmSize());
+            hostConfig.withShmSize(createContainerDto.getShmSize() * 1024 * 1024);
         }
         //交换内存限制
         if(Objects.nonNull(createContainerDto.getMemorySwap())){
-            hostConfig.withMemorySwap(createContainerDto.getMemorySwap());
+            hostConfig.withMemorySwap(createContainerDto.getMemorySwap() * 1024 * 1024);
         }
         //重启策略
         if(CharSequenceUtil.isNotEmpty(createContainerDto.getRestartPolicy())){
@@ -289,11 +301,12 @@ public class DockerContainerBaseService {
     }
 
     private void withLinks(HostConfig hostConfig, CreateContainerDto createContainerDto) {
-        List<LinkDto> linkList = createContainerDto.getLinks();
-        if (Objects.nonNull(linkList) && !linkList.isEmpty()) {
-            List<Link> links = new ArrayList<>();
-            linkList.forEach(linkDto -> links.add(Link.parse(linkDto.getName() + ":" + linkDto.getAlis())));
-            hostConfig.withLinks(links);
+        String link = createContainerDto.getLinks();
+        if (Objects.nonNull(link) && !link.isEmpty()) {
+            List<String> links = CharSequenceUtil.split(link, ",");
+            ArrayList<Link> withLinks = new ArrayList<>();
+            links.forEach(linkStr -> withLinks.add(Link.parse(linkStr)));
+            hostConfig.withLinks(withLinks);
         }
     }
 }

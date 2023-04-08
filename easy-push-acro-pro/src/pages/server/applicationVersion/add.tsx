@@ -8,6 +8,9 @@ import {
   Button,
   Typography,
   Table,
+  Space,
+  Divider,
+  Checkbox,
 } from '@arco-design/web-react';
 import locale from './locale';
 import useLocale from '@/utils/useLocale';
@@ -63,19 +66,25 @@ const editSubappsCallback = (record) => {
     setSubapps(subApps.concat([]));
 }
 
+const [createNetworks, setCreateNetworks] = useState(false);
+
+const createNetworksOnchage = (value) => {
+  setCreateNetworks(value);
+};
+
   const suAppColumns = [
     {
-      title: '名称',
+      title: t['searchTable.columns.name'],
       dataIndex: 'name',
       ellipsis: true,
     },
     {
-      title: '版本',
+      title: t['searchTable.columns.version'],
       dataIndex: 'version',
       ellipsis: true,
     },
     {
-      title: '镜像',
+      title: t['searchTable.columns.image'],
       dataIndex: 'image',
       ellipsis: true,
     },
@@ -100,10 +109,12 @@ const editSubappsCallback = (record) => {
 
   const handleSubmit = () => {
     formRef.current.validate().then((values) => {
+      const confData = values.confData;
+      confData.subApps = subApps;
       addRequest({
         ...values,
         applicationId: applicationId,
-        confData: JSON.stringify(subApps),
+        confData: JSON.stringify(confData),
       }).then((res) => {
         const { success, msg } = res.data;
         if (success) {
@@ -154,10 +165,98 @@ const editSubappsCallback = (record) => {
           label={t['searchTable.columns.description']}
           field="description"
         >
-          {/* <TextArea placeholder={t['searchForm.description.placeholder']} /> */}
           <MarkdownEditor />
         </Form.Item>
+        <Form.Item
+            label={t['searchTable.columns.createNetworks']}
+            field="confData.createNetworks"
+            initialValue={false}
+          >
+            <Checkbox onChange={createNetworksOnchage} />
+          </Form.Item>
+          {!createNetworks ? null : (
+            <Form.List field="confData.networks">
+              {(fields, { add, remove, move }) => {
+                return (
+                  <div>
+                    {fields.map((item, index) => {
+                      return (
+                        <div key={item.key}>
+                          <Form.Item
+                            label={
+                              t['searchTable.columns.networks'] + (index + 1)
+                            }
+                          >
+                            <Space
+                              style={{
+                                width: '100%',
+                                justifyContent: 'space-between',
+                              }}
+                              split={<Divider type="vertical" />}
+                              align="baseline"
+                              size="large"
+                            >
+                              <Form.Item
+                                label={t['searchTable.columns.networkName']}
+                                field={item.field + '.name'}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message:
+                                      t['searchTable.rules.name.required'],
+                                  },
+                                ]}
+                              >
+                                <Input />
+                              </Form.Item>
 
+                              <Form.Item
+                                label={t['searchTable.columns.subNet']}
+                                field={item.field + '.ipam.Config[0].Subnet'}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message:
+                                      t['searchTable.rules.subNet.required'],
+                                  },
+                                ]}
+                              >
+                                <Input />
+                              </Form.Item>
+                              <Form.Item
+                                label={t['searchTable.columns.gateway']}
+                                field={item.field + '.ipam.config[0].gateway'}
+                              >
+                                <Input />
+                              </Form.Item>
+                              <Form.Item>
+                                <Button
+                                  icon={<IconDelete />}
+                                  shape="circle"
+                                  status="danger"
+                                  onClick={() => remove(index)}
+                                ></Button>
+                              </Form.Item>
+                            </Space>
+                          </Form.Item>
+                        </div>
+                      );
+                    })}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => {
+                          add();
+                        }}
+                      >
+                        {t['searchTable.columns.addNetwork']}
+                      </Button>
+                    </Form.Item>
+                  </div>
+                );
+              }}
+            </Form.List>
+          )}
       </Form>
       <Typography.Title heading={6}>
         {t['searchTable.columns.subApp']}
