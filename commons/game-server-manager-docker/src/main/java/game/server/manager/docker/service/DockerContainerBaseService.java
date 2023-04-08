@@ -4,7 +4,6 @@ package game.server.manager.docker.service;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrBuilder;
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerCmd;
@@ -23,6 +22,7 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.RestartPolicy;
 import game.server.manager.docker.model.BindDto;
 import game.server.manager.docker.model.CreateContainerDto;
 import game.server.manager.docker.model.LinkDto;
@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -198,12 +199,38 @@ public class DockerContainerBaseService {
         withEnvs(createContainerCmd, createContainerDto);
         //主机设置----------------------------------------------------
         HostConfig hostConfig = HostConfig.newHostConfig();
+        //CPU限制
+        if(Objects.nonNull(createContainerDto.getNanoCPUs())){
+            hostConfig.withNanoCPUs(createContainerDto.getNanoCPUs());
+        }
+        //内存限制
+        if(Objects.nonNull(createContainerDto.getMemory())){
+            hostConfig.withMemory(createContainerDto.getMemory());
+        }
+        //共享内存限制
+        if(Objects.nonNull(createContainerDto.getShmSize())){
+            hostConfig.withShmSize(createContainerDto.getShmSize());
+        }
+        //交换内存限制
+        if(Objects.nonNull(createContainerDto.getMemorySwap())){
+            hostConfig.withMemorySwap(createContainerDto.getMemorySwap());
+        }
+        //重启策略
+        if(CharSequenceUtil.isNotEmpty(createContainerDto.getRestartPolicy())){
+            hostConfig.withRestartPolicy(RestartPolicy.parse(createContainerDto.getRestartPolicy()));
+        }
         //网络模式
         hostConfig.withNetworkMode(createContainerDto.getNetworkMode());
         //绑定目录
         withBinds(hostConfig, createContainerDto);
-        //绑定端口
-        withPortBindings(hostConfig, createContainerDto);
+        //端口设置
+        if(createContainerDto.getPublishAllPorts()){
+            //暴露所有端口
+            hostConfig.withPublishAllPorts(true);
+        }else {
+            //暴露指定端口
+            withPortBindings(hostConfig, createContainerDto);
+        }
         //是否特权模式
         hostConfig.withPrivileged(createContainerDto.getPrivileged());
         //连接容器 可使用别名连接容器内部服务
@@ -217,7 +244,7 @@ public class DockerContainerBaseService {
     }
 
     private void withEnvs(CreateContainerCmd createContainerCmd, CreateContainerDto createContainerDto) {
-        JSONObject env = createContainerDto.getEnv();
+        Map<String, String> env = createContainerDto.getEnv();
         if (Objects.nonNull(env)) {
             List<String> envs = new ArrayList<>();
             env.forEach((key, value) -> envs.add(key + "=" + value));

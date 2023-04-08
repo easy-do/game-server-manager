@@ -53,13 +53,33 @@ public class CreateContainerDto {
 
     private List<BindDto> binds;
 
+    /** 暴露所有端口 */
+    private Boolean publishAllPorts;
+
+    /** 暴露端口 */
     private List<PortBindDto> portBinds;
 
+    /**连接*/
     private List<LinkDto> links;
 
     /** 命令 */
     private String cmd;
+
     /** 标签 */
     private Map<String, String> labels;
 
+    /** CPU限制 */
+    private Long nanoCPUs;
+
+    /** 内存限制 */
+    private Long memory;
+
+    /** 共享内存限制 */
+    private Long shmSize;
+
+    /** 交换内存限制 */
+    private Long memorySwap;
+
+    /** 重启策略 */
+    private String restartPolicy;
 }
