@@ -20,7 +20,7 @@ public class InstallApplicationResultHandlerService implements AbstractHandlerSe
     public Void handler(ClientHandlerData clientHandlerData) {
         ClientMessage clientMessage = clientHandlerData.getClientMessage();
         String messageId = clientMessage.getMessageId();
-        SessionResultCache.saveMessageById(messageId,clientMessage);
+
         return null;
     }
 }

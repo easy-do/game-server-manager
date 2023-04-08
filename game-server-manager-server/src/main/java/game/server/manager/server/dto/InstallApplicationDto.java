@@ -17,7 +17,7 @@ public class InstallApplicationDto {
 
     private Long version;
     private String clientId;
-    private String configData;
+    private String confData;
     private Long applicationId;
 
 }

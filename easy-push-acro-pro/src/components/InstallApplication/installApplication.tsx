@@ -43,21 +43,34 @@ function InsallApplicationPage({
       const { success, data } = res.data;
       if (success) {
         const confData = JSON.parse(data.confData);
-
         const configsCache = [];
-
-        confData.map((config) => {
+        confData.subApps.map((subApp) => {
           const envsCache = [];
           const portBindsCache = [];
           const bindsCache = [];
-          const env = config.confData.envs;
-          if(env){
+          const env = subApp.envs;
+          if (env) {
             env.map((item, index) => {
               envsCache.push(
-                <Form.Item field={'configData[' + (config.key-1) + '].envs[' + index + ']'}>
+                <Form.Item
+                  field={
+                    'confData.subApps[' +
+                    (subApp.key - 1) +
+                    '].envs[' +
+                    index +
+                    ']'
+                  }
+                >
                   <Form.Item
                     label={item.envName}
-                    field={'configData[' + (config.key-1) + '].envs[' + index + '].'+item.envKey}
+                    field={
+                      'confData.subApps[' +
+                      (subApp.key - 1) +
+                      '].envs[' +
+                      index +
+                      '].' +
+                      item.envKey
+                    }
                     initialValue={item.envValue}
                     disabled={!item.editable}
                   >
@@ -68,28 +81,46 @@ function InsallApplicationPage({
             });
           }
 
-          const portBinds = config.confData.portBinds;
+          const portBinds = subApp.portBinds;
 
-          if(portBinds){
+          if (portBinds) {
             portBinds.map((item, index) => {
               portBindsCache.push(
                 <Form.Item field={'portBinds[' + index + ']'}>
                   <Form.Item
-                    field={'configData[' + (config.key-1) + '].portBinds[' + index + '].containerPort'}
+                    field={
+                      'confData.subApps[' +
+                      (subApp.key - 1) +
+                      '].portBinds[' +
+                      index +
+                      '].containerPort'
+                    }
                     initialValue={item.containerPort}
                     hidden
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
-                    field={'configData[' + (config.key-1) + '].portBinds[' + index + '].protocol'}
+                    field={
+                      'confData.subApps[' +
+                      (subApp.key - 1) +
+                      '].portBinds[' +
+                      index +
+                      '].protocol'
+                    }
                     initialValue={item.protocol}
                     hidden
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
-                    field={'configData[' + (config.key-1) + '].portBinds[' + index + '].description'}
+                    field={
+                      'confData.subApps[' +
+                      (subApp.key - 1) +
+                      '].portBinds[' +
+                      index +
+                      '].description'
+                    }
                     initialValue={item.description}
                     hidden
                   >
@@ -97,7 +128,13 @@ function InsallApplicationPage({
                   </Form.Item>
                   <Form.Item
                     label={item.description}
-                    field={'configData[' + (config.key-1) + '].portBinds[' + index + '].localPort'}
+                    field={
+                      'confData.subApps[' +
+                      (subApp.key - 1) +
+                      '].portBinds[' +
+                      index +
+                      '].localPort'
+                    }
                     initialValue={item.localPort}
                     disabled={!item.editable}
                   >
@@ -108,21 +145,33 @@ function InsallApplicationPage({
             });
           }
 
-          const binds = config.confData.binds;
+          const binds = subApp.binds;
 
-          if(binds){
+          if (binds) {
             binds.map((item, index) => {
               bindsCache.push(
                 <Form.Item field={'binds[' + index + ']'}>
                   <Form.Item
-                    field={'configData[' + (config.key-1) + '].binds[' + index + '].containerPath'}
+                    field={
+                      'confData.subApps[' +
+                      (subApp.key - 1) +
+                      '].binds[' +
+                      index +
+                      '].containerPath'
+                    }
                     initialValue={item.containerPath}
                     hidden
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
-                    field={'configData[' + (config.key-1) + '].binds[' + index + '].description'}
+                    field={
+                      'confData.subApps[' +
+                      (subApp.key - 1) +
+                      '].binds[' +
+                      index +
+                      '].description'
+                    }
                     initialValue={item.description}
                     hidden
                   >
@@ -130,7 +179,13 @@ function InsallApplicationPage({
                   </Form.Item>
                   <Form.Item
                     label={item.description}
-                    field={'configData[' + (config.key-1) + '].binds[' + index + '].localPath'}
+                    field={
+                      'confData.subApps[' +
+                      (subApp.key - 1) +
+                      '].binds[' +
+                      index +
+                      '].localPath'
+                    }
                     initialValue={item.localPath}
                     disabled={!item.editable}
                   >
@@ -142,97 +197,177 @@ function InsallApplicationPage({
           }
 
           configsCache.push(
-            <Form.Item field={'configData[' + (config.key-1) + ']'}>
-              <Typography.Title heading={6}>
-                {config.name + t['searchTable.columns.appConfig']}
-              </Typography.Title>
+            <Form.Item field={'confData'}>
               <Form.Item
-          field={'configData[' + (config.key-1) + '].key'}
-          hidden
-          initialValue={(config.key-1)}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].name'}
-          hidden
-          initialValue={config.name}
-        >
-          <Input  />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].version'}
-          hidden
-          initialValue={config.version}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].image'}
-          hidden
-          initialValue={config.image}
-        >
-          <Input/>
-        </Form.Item> 
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].attachStdin'}
-          hidden
-          initialValue={config.attachStdin}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].stdinOpen'}
-          hidden
-          initialValue={config.stdinOpen}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].tty'}
-          hidden
-          initialValue={config.tty}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].privileged'}
-          hidden
-          initialValue={config.privileged}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].labels'}
-          hidden
-          initialValue={config.labels}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].cmd'}
-          hidden
-          initialValue={config.cmd}
-        >
-         <Input />
-        </Form.Item>
-        <Form.Item
-          field={'configData[' + (config.key-1) + '].networkMode'}
-          hidden
-          initialValue={config.networkMode}
-        >
-          <Input />
-        </Form.Item>
-              <Form.Item field={'configData[' + (config.key-1) + '].envs'}>{envsCache}</Form.Item>
-              <Form.Item field={'configData[' + (config.key-1) + '].portBinds'}>{portBindsCache}</Form.Item>
-              <Form.Item field={'configData[' + (config.key-1) + '].binds'}>{bindsCache}</Form.Item>
+                field="confData.createNetworks"
+                initialValue={confData.createNetworks}
+                hidden
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                field="confData.networks"
+                initialValue={confData.networks}
+                hidden
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item field={'confData.subApps[' + (subApp.key - 1) + ']'}>
+                <Typography.Title heading={6}>
+                  {subApp.name + t['searchTable.columns.appConfig']}
+                </Typography.Title>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].key'}
+                  hidden
+                  initialValue={subApp.key - 1}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].name'}
+                  hidden
+                  initialValue={subApp.name}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].version'}
+                  hidden
+                  initialValue={subApp.version}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].image'}
+                  hidden
+                  initialValue={subApp.image}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={
+                    'confData.subApps[' + (subApp.key - 1) + '].attachStdin'
+                  }
+                  hidden
+                  initialValue={subApp.attachStdin}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].stdinOpen'}
+                  hidden
+                  initialValue={subApp.stdinOpen}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].tty'}
+                  hidden
+                  initialValue={subApp.tty}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={
+                    'confData.subApps[' + (subApp.key - 1) + '].privileged'
+                  }
+                  hidden
+                  initialValue={subApp.privileged}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].labels'}
+                  hidden
+                  initialValue={subApp.labels}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].cmd'}
+                  hidden
+                  initialValue={subApp.cmd}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={
+                    'confData.subApps[' + (subApp.key - 1) + '].networkMode'
+                  }
+                  hidden
+                  initialValue={subApp.networkMode}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].links'}
+                  hidden
+                  initialValue={subApp.links}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={
+                    'confData.subApps[' + (subApp.key - 1) + '].publishAllPorts'
+                  }
+                  hidden
+                  initialValue={subApp.publishAllPorts}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].nanoCPUs'}
+                  hidden
+                  initialValue={subApp.nanoCPUs}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].memory'}
+                  hidden
+                  initialValue={subApp.memory}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].shmSize'}
+                  hidden
+                  initialValue={subApp.shmSize}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={
+                    'confData.subApps[' + (subApp.key - 1) + '].memorySwap'
+                  }
+                  hidden
+                  initialValue={subApp.memorySwap}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].envs'}
+                >
+                  {envsCache}
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].portBinds'}
+                >
+                  {portBindsCache}
+                </Form.Item>
+                <Form.Item
+                  field={'confData.subApps[' + (subApp.key - 1) + '].binds'}
+                >
+                  {bindsCache}
+                </Form.Item>
+              </Form.Item>
             </Form.Item>
           );
         });
         console.log(configsCache);
         setConfigs(configsCache);
-        setLoading(false);
       }
+      setLoading(false);
     });
   };
 
@@ -281,7 +416,7 @@ function InsallApplicationPage({
         ...values,
         applicationId: applicationId,
         version: values.version.split('--')[0],
-        configData: JSON.stringify(values.configData)
+        confData: JSON.stringify(values.confData),
       }).then((res) => {
         const { success, msg } = res.data;
         if (success) {
@@ -351,10 +486,7 @@ function InsallApplicationPage({
             request={() => clientList()}
           />
         </Form.Item>
-
-        <Spin loading={loading} style={{ width: '100%' }}>
-          {configs}
-        </Spin>
+        {configs}
       </Form>
     </Modal>
   );

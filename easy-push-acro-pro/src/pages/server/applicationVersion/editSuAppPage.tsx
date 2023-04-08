@@ -19,9 +19,7 @@ import locale from './locale';
 import { IconDelete } from '@arco-design/web-react/icon';
 import Textarea from '@arco-design/web-react/es/Input/textarea';
 
-
 function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
-
   const formRef1 = useRef<FormInstance>();
 
   const { lang } = useContext(GlobalContext);
@@ -29,10 +27,15 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
   const t = useLocale(locale);
 
   const [networkMode, setNetworkMode] = useState('bridge');
+  const [publishAllPorts, setPublishAllPorts] = useState(false);
 
   const networkModeOnchage = (value) => {
     setNetworkMode(value);
-  }
+  };
+
+  const publishAllPortsOnchage = (value) => {
+    setPublishAllPorts(value);
+  };
 
   function handleSubmit() {
     formRef1.current.validate().then((values) => {
@@ -74,10 +77,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
         labelAlign="left"
         initialValues={subApp}
       >
-        <Form.Item
-          field="key"
-          hidden
-        >
+        <Form.Item field="key" hidden>
           <Input />
         </Form.Item>
         <Form.Item
@@ -93,7 +93,10 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
           label={t['searchTable.columns.version']}
           field="version"
           rules={[
-            { required: true, message: t['searchTable.rules.version.required'] },
+            {
+              required: true,
+              message: t['searchTable.rules.version.required'],
+            },
           ]}
         >
           <Input placeholder={t['searchForm.version.placeholder']} allowClear />
@@ -110,54 +113,90 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
         <Form.Item
           label={t['searchTable.columns.attachStdin']}
           field="attachStdin"
-          initialValue={true}
         >
-          <Checkbox defaultChecked />
+          <Checkbox checked={subApp ? subApp.attachStdin : false} />
         </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.stdinOpen']}
-          field="stdinOpen"
-          initialValue={true}
-        >
-          <Checkbox defaultChecked />
+        <Form.Item label={t['searchTable.columns.stdinOpen']} field="stdinOpen">
+          <Checkbox checked={subApp ? subApp.stdinOpen : false} />
         </Form.Item>
-        <Form.Item
-          label={t['searchTable.columns.tty']}
-          field="tty"
-          initialValue={true}
-        >
-          <Checkbox defaultChecked />
+        <Form.Item label={t['searchTable.columns.tty']} field="tty">
+          <Checkbox checked={subApp ? subApp.tty : false} />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.privileged']}
           field="privileged"
-          initialValue={true}
         >
-          <Checkbox />
+          <Checkbox checked={subApp ? subApp.privileged : false} />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.labels']}
-          field="labels"
+          label={t['searchTable.columns.publishAllPorts']}
+          field="publishAllPorts"
         >
-          <Textarea placeholder={t['searchForm.labels.placeholder']} allowClear />
+          <Checkbox
+            checked={subApp ? subApp.publishAllPorts : false}
+            onChange={publishAllPortsOnchage}
+          />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.nanoCPUs']} field="nanoCPUs">
+          <Input
+            type="number"
+            placeholder={t['searchForm.nanoCPUs.placeholder']}
+            allowClear
+          />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.memory']} field="memory">
+          <Input
+            type="number"
+            placeholder={t['searchForm.memory.placeholder']}
+            allowClear
+          />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.shmSize']} field="shmSize">
+          <Input
+            type="number"
+            placeholder={t['searchForm.shmSize.placeholder']}
+            allowClear
+          />
         </Form.Item>
         <Form.Item
-          label={t['searchTable.columns.cmd']}
-          field="cmd"
+          label={t['searchTable.columns.memorySwap']}
+          field="memorySwap"
         >
+          <Input
+            type="number"
+            placeholder={t['searchForm.memorySwap.placeholder']}
+            allowClear
+          />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.cmd']} field="cmd">
           <Textarea placeholder={t['searchForm.cmd.placeholder']} allowClear />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.labels']} field="labels">
+          <Textarea
+            placeholder={t['searchForm.labels.placeholder']}
+            allowClear
+          />
+        </Form.Item>
+        <Form.Item label={t['searchTable.columns.links']} field="links">
+          <Textarea
+            placeholder={t['searchForm.links.placeholder']}
+            allowClear
+          />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.networkMode']}
           field="networkMode"
-          // initialValue={'bridge'}
           rules={[
-            { required: true, message: t['searchTable.rules.networkMode.required'] },
+            {
+              required: true,
+              message: t['searchTable.rules.networkMode.required'],
+            },
           ]}
         >
           <Select
             defaultValue={'bridge'}
             onChange={networkModeOnchage}
+            allowCreate
             options={[
               { label: 'host', value: 'host' },
               { label: 'none', value: 'none' },
@@ -165,10 +204,32 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
             ]}
           />
         </Form.Item>
+        <Form.Item
+          label={t['searchTable.columns.restartPolicy']}
+          field="restartPolicy"
+          initialValue={'no'}
+          rules={[
+            {
+              required: true,
+              message: t['searchTable.rules.restartPolicy.required'],
+            },
+          ]}
+        >
+          <Select
+            defaultValue={'no'}
+            allowCreate
+            options={[
+              { label: 'no', value: 'no' },
+              { label: 'always', value: 'always' },
+              { label: 'unless-stopped', value: 'unless-stopped' },
+              { label: 'on-failure', value: 'on-failure' },
+            ]}
+          />
+        </Form.Item>
         <Typography.Title heading={6}>
           {t['searchTable.columns.EnvInfo']}
         </Typography.Title>
-        <Form.List field="confData.envs" >
+        <Form.List field="confData.envs">
           {(fields, { add, remove, move }) => {
             return (
               <div>
@@ -233,7 +294,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                           >
                             <Checkbox defaultChecked />
                           </Form.Item>
-                          <Form.Item >
+                          <Form.Item>
                             <Button
                               icon={<IconDelete />}
                               shape="circle"
@@ -241,7 +302,6 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                               onClick={() => remove(index)}
                             ></Button>
                           </Form.Item>
-
                         </Space>
                       </Form.Item>
                     </div>
@@ -262,10 +322,11 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
             );
           }}
         </Form.List>
-        {
-          networkMode !== 'bridge' ? null : <><Typography.Title heading={6}>
-            {t['searchTable.columns.port']}
-          </Typography.Title>
+        {networkMode == 'none' ? null : (
+          <>
+            <Typography.Title heading={6}>
+              {t['searchTable.columns.port']}
+            </Typography.Title>
             <Form.List field="confData.portBinds">
               {(fields, { add, remove, move }) => {
                 return (
@@ -287,12 +348,17 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                             >
                               <Form.Item
                                 label={t['searchTable.columns.envDescription']}
-                                initialValue={t['searchTable.columns.envDescription']}
+                                initialValue={
+                                  t['searchTable.columns.envDescription']
+                                }
                                 field={item.field + '.description'}
                                 rules={[
                                   {
                                     required: true,
-                                    message: t['searchTable.rules.envDescription.required'],
+                                    message:
+                                      t[
+                                        'searchTable.rules.envDescription.required'
+                                      ],
                                   },
                                 ]}
                               >
@@ -304,7 +370,10 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                                 rules={[
                                   {
                                     required: true,
-                                    message: t['searchTable.rules.containerPort.required'],
+                                    message:
+                                      t[
+                                        'searchTable.rules.containerPort.required'
+                                      ],
                                   },
                                 ]}
                               >
@@ -317,7 +386,8 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                                 rules={[
                                   {
                                     required: true,
-                                    message: t['searchTable.rules.localPort.required'],
+                                    message:
+                                      t['searchTable.rules.localPort.required'],
                                   },
                                 ]}
                               >
@@ -330,7 +400,8 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                                 rules={[
                                   {
                                     required: true,
-                                    message: t['searchTable.rules.envValue.required'],
+                                    message:
+                                      t['searchTable.rules.envValue.required'],
                                   },
                                 ]}
                               >
@@ -338,8 +409,9 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                                   defaultValue={'tcp'}
                                   options={[
                                     { label: 'tcp', value: 'tcp' },
-                                    { label: 'udp', value: 'udp' }
-                                  ]} />
+                                    { label: 'udp', value: 'udp' },
+                                  ]}
+                                />
                               </Form.Item>
                               <Form.Item
                                 label={t['searchTable.columns.editable']}
@@ -348,8 +420,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                               >
                                 <Checkbox defaultChecked />
                               </Form.Item>
-                              <Form.Item
-                              >
+                              <Form.Item>
                                 <Button
                                   icon={<IconDelete />}
                                   shape="circle"
@@ -357,7 +428,6 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                                   onClick={() => remove(index)}
                                 ></Button>
                               </Form.Item>
-
                             </Space>
                           </Form.Item>
                         </div>
@@ -377,8 +447,9 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                   </div>
                 );
               }}
-            </Form.List></>
-        }
+            </Form.List>
+          </>
+        )}
         <Typography.Title heading={6}>
           {t['searchTable.columns.binds']}
         </Typography.Title>
@@ -403,12 +474,17 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                         >
                           <Form.Item
                             label={t['searchTable.columns.envDescription']}
-                            initialValue={t['searchTable.columns.envDescription']}
+                            initialValue={
+                              t['searchTable.columns.envDescription']
+                            }
                             field={item.field + '.description'}
                             rules={[
                               {
                                 required: true,
-                                message: t['searchTable.rules.envDescription.required'],
+                                message:
+                                  t[
+                                    'searchTable.rules.envDescription.required'
+                                  ],
                               },
                             ]}
                           >
@@ -420,7 +496,8 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                             rules={[
                               {
                                 required: true,
-                                message: t['searchTable.rules.containerPath.required'],
+                                message:
+                                  t['searchTable.rules.containerPath.required'],
                               },
                             ]}
                           >
@@ -433,7 +510,8 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                             rules={[
                               {
                                 required: true,
-                                message: t['searchTable.rules.localPath.required'],
+                                message:
+                                  t['searchTable.rules.localPath.required'],
                               },
                             ]}
                           >
@@ -454,7 +532,6 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                               onClick={() => remove(index)}
                             ></Button>
                           </Form.Item>
-
                         </Space>
                       </Form.Item>
                     </div>
@@ -481,4 +558,3 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
 }
 
 export default EditSubappPage;
-
