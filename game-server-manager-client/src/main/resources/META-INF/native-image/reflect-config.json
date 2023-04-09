@@ -935,7 +935,8 @@
   "name":"com.github.dockerjava.api.model.ResponseItem$ProgressDetail",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.github.dockerjava.api.model.SwarmCAConfig",
@@ -1332,14 +1333,18 @@
     {"name":"setAttachStdin","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setBinds","parameterTypes":["java.util.List"] }, 
     {"name":"setCmd","parameterTypes":["java.lang.String"] }, 
-    {"name":"setEnvs","parameterTypes":["java.util.List"] }, 
+    {"name":"setEnvs","parameterTypes":["java.util.List"] },
     {"name":"setImage","parameterTypes":["java.lang.String"] }, 
     {"name":"setKey","parameterTypes":["java.lang.Integer"] }, 
+    {"name":"setMemory","parameterTypes":["java.lang.Long"] }, 
+    {"name":"setMemorySwap","parameterTypes":["java.lang.Long"] }, 
     {"name":"setName","parameterTypes":["java.lang.String"] }, 
+    {"name":"setNanoCPUs","parameterTypes":["java.lang.Long"] }, 
     {"name":"setNetworkMode","parameterTypes":["java.lang.String"] }, 
     {"name":"setPortBinds","parameterTypes":["java.util.List"] }, 
     {"name":"setPrivileged","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setPublishAllPorts","parameterTypes":["java.lang.Boolean"] }, 
+    {"name":"setShmSize","parameterTypes":["java.lang.Long"] }, 
     {"name":"setStdinOpen","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setTty","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setVersion","parameterTypes":["java.lang.String"] }
@@ -2178,9 +2183,6 @@
 },
 {
   "name":"org.java_websocket.client.WebSocketClient"
-},
-{
-  "name":"org.java_websocket.drafts.Draft_6455"
 },
 {
   "name":"org.slf4j.Logger"
