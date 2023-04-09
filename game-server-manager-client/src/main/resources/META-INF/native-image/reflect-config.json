@@ -18,9 +18,6 @@
   "name":"[Lcom.fasterxml.jackson.databind.ser.Serializers;"
 },
 {
-  "name":"[Lcom.github.dockerjava.api.model.Bind;"
-},
-{
   "name":"[Lcom.github.dockerjava.api.model.Capability;"
 },
 {
@@ -37,9 +34,6 @@
 },
 {
   "name":"[Lcom.github.dockerjava.api.model.LxcConf;"
-},
-{
-  "name":"[Lcom.github.dockerjava.api.model.PortBinding;"
 },
 {
   "name":"[Lcom.github.dockerjava.api.model.Ulimit;"
@@ -487,6 +481,20 @@
   ]
 },
 {
+  "name":"com.github.dockerjava.api.command.CreateNetworkCmd",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.github.dockerjava.api.command.CreateNetworkResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setId","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
   "name":"com.github.dockerjava.api.command.DockerCmd",
   "queryAllDeclaredMethods":true
 },
@@ -711,6 +719,25 @@
   ]
 },
 {
+  "name":"com.github.dockerjava.api.model.Image",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"getContainers","parameterTypes":[] }, 
+    {"name":"getCreated","parameterTypes":[] }, 
+    {"name":"getId","parameterTypes":[] }, 
+    {"name":"getLabels","parameterTypes":[] }, 
+    {"name":"getParentId","parameterTypes":[] }, 
+    {"name":"getRepoDigests","parameterTypes":[] }, 
+    {"name":"getRepoTags","parameterTypes":[] }, 
+    {"name":"getSharedSize","parameterTypes":[] }, 
+    {"name":"getSize","parameterTypes":[] }, 
+    {"name":"getVirtualSize","parameterTypes":[] }
+  ]
+},
+{
   "name":"com.github.dockerjava.api.model.Info",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -821,6 +848,44 @@
   "methods":[
     {"name":"forValue","parameterTypes":["java.lang.String"] }, 
     {"name":"getValue","parameterTypes":[] }
+  ]
+},
+{
+  "name":"com.github.dockerjava.api.model.Network",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.github.dockerjava.api.model.Network$ContainerNetworkConfig",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"com.github.dockerjava.api.model.Network$Ipam",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"getConfig","parameterTypes":[] }, 
+    {"name":"getDriver","parameterTypes":[] }, 
+    {"name":"getOptions","parameterTypes":[] }
+  ]
+},
+{
+  "name":"com.github.dockerjava.api.model.Network$Ipam$Config",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"getGateway","parameterTypes":[] }, 
+    {"name":"getIpRange","parameterTypes":[] }, 
+    {"name":"getNetworkID","parameterTypes":[] }, 
+    {"name":"getSubnet","parameterTypes":[] }
   ]
 },
 {
@@ -988,6 +1053,23 @@
   "queryAllDeclaredConstructors":true
 },
 {
+  "name":"com.github.dockerjava.core.command.CreateNetworkCmdImpl",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getAttachable","parameterTypes":[] }, 
+    {"name":"getCheckDuplicate","parameterTypes":[] }, 
+    {"name":"getDriver","parameterTypes":[] }, 
+    {"name":"getEnableIPv6","parameterTypes":[] }, 
+    {"name":"getInternal","parameterTypes":[] }, 
+    {"name":"getIpam","parameterTypes":[] }, 
+    {"name":"getLabels","parameterTypes":[] }, 
+    {"name":"getName","parameterTypes":[] }, 
+    {"name":"getOptions","parameterTypes":[] }
+  ]
+},
+{
   "name":"com.google.gson.Gson",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true
@@ -1123,22 +1205,47 @@
     {"name":"getImage","parameterTypes":[] }, 
     {"name":"getLabels","parameterTypes":[] }, 
     {"name":"getLinks","parameterTypes":[] }, 
+    {"name":"getMemory","parameterTypes":[] }, 
+    {"name":"getMemorySwap","parameterTypes":[] }, 
     {"name":"getName","parameterTypes":[] }, 
+    {"name":"getNanoCPUs","parameterTypes":[] }, 
     {"name":"getNetworkMode","parameterTypes":[] }, 
     {"name":"getPortBinds","parameterTypes":[] }, 
     {"name":"getPrivileged","parameterTypes":[] }, 
+    {"name":"getPublishAllPorts","parameterTypes":[] }, 
+    {"name":"getRestartPolicy","parameterTypes":[] }, 
+    {"name":"getShmSize","parameterTypes":[] }, 
     {"name":"getStdinOpen","parameterTypes":[] }, 
     {"name":"getTty","parameterTypes":[] }, 
     {"name":"setAttachStdin","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setBinds","parameterTypes":["java.util.List"] }, 
     {"name":"setCmd","parameterTypes":["java.lang.String"] }, 
     {"name":"setImage","parameterTypes":["java.lang.String"] }, 
+    {"name":"setLabels","parameterTypes":["java.lang.String"] }, 
+    {"name":"setLinks","parameterTypes":["java.lang.String"] }, 
+    {"name":"setMemory","parameterTypes":["java.lang.Long"] }, 
+    {"name":"setMemorySwap","parameterTypes":["java.lang.Long"] }, 
     {"name":"setName","parameterTypes":["java.lang.String"] }, 
+    {"name":"setNanoCPUs","parameterTypes":["java.lang.Long"] }, 
     {"name":"setNetworkMode","parameterTypes":["java.lang.String"] }, 
     {"name":"setPortBinds","parameterTypes":["java.util.List"] }, 
     {"name":"setPrivileged","parameterTypes":["java.lang.Boolean"] }, 
+    {"name":"setPublishAllPorts","parameterTypes":["java.lang.Boolean"] }, 
+    {"name":"setRestartPolicy","parameterTypes":["java.lang.String"] }, 
+    {"name":"setShmSize","parameterTypes":["java.lang.Long"] }, 
     {"name":"setStdinOpen","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setTty","parameterTypes":["java.lang.Boolean"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.CreateNetworkDto",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setIpam","parameterTypes":["com.github.dockerjava.api.model.Network$Ipam"] }, 
+    {"name":"setName","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -1188,6 +1295,18 @@
   "name":"game.server.manager.client.model.socket.ApplicationVersionConfig",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setCreateNetworks","parameterTypes":["java.lang.Boolean"] }, 
+    {"name":"setNetworks","parameterTypes":["java.util.List"] }, 
+    {"name":"setSubApps","parameterTypes":["java.util.List"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.socket.ApplicationVersionConfig$SubApps",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
@@ -1196,10 +1315,18 @@
     {"name":"getBinds","parameterTypes":[] }, 
     {"name":"getCmd","parameterTypes":[] }, 
     {"name":"getImage","parameterTypes":[] }, 
+    {"name":"getLabels","parameterTypes":[] }, 
+    {"name":"getLinks","parameterTypes":[] }, 
+    {"name":"getMemory","parameterTypes":[] }, 
+    {"name":"getMemorySwap","parameterTypes":[] }, 
     {"name":"getName","parameterTypes":[] }, 
+    {"name":"getNanoCPUs","parameterTypes":[] }, 
     {"name":"getNetworkMode","parameterTypes":[] }, 
     {"name":"getPortBinds","parameterTypes":[] }, 
     {"name":"getPrivileged","parameterTypes":[] }, 
+    {"name":"getPublishAllPorts","parameterTypes":[] }, 
+    {"name":"getRestartPolicy","parameterTypes":[] }, 
+    {"name":"getShmSize","parameterTypes":[] }, 
     {"name":"getStdinOpen","parameterTypes":[] }, 
     {"name":"getTty","parameterTypes":[] }, 
     {"name":"setAttachStdin","parameterTypes":["java.lang.Boolean"] }, 
@@ -1212,6 +1339,7 @@
     {"name":"setNetworkMode","parameterTypes":["java.lang.String"] }, 
     {"name":"setPortBinds","parameterTypes":["java.util.List"] }, 
     {"name":"setPrivileged","parameterTypes":["java.lang.Boolean"] }, 
+    {"name":"setPublishAllPorts","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setStdinOpen","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setTty","parameterTypes":["java.lang.Boolean"] }, 
     {"name":"setVersion","parameterTypes":["java.lang.String"] }
@@ -1228,6 +1356,37 @@
     {"name":"getMessageId","parameterTypes":[] }, 
     {"name":"getType","parameterTypes":[] }, 
     {"name":"isSuccess","parameterTypes":[] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.socket.InstallLogResultData",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getMessage","parameterTypes":[] }, 
+    {"name":"getStatus","parameterTypes":[] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.socket.RenameContainerData",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setContainerId","parameterTypes":["java.lang.String"] }, 
+    {"name":"setName","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"game.server.manager.client.model.socket.ServerContainerLogMessage",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setContainerId","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -1289,6 +1448,13 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"game.server.manager.client.service.DockerNetworkService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"game.server.manager.client.service.DockerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -1317,6 +1483,13 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"game.server.manager.client.service.base.DockerNetworksBaseService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"game.server.manager.client.thread.HeartbeatThread",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -1332,6 +1505,9 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["game.server.manager.client.config.SystemUtils","game.server.manager.client.websocket.WebSocketClientHandlerService"] }]
+},
+{
+  "name":"game.server.manager.client.websocket.ClientWebsocketEndpoint$1"
 },
 {
   "name":"game.server.manager.client.websocket.WebSocketClientHandlerService",
@@ -1673,6 +1849,9 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"java.lang.Thread"
+},
+{
   "name":"java.lang.Throwable",
   "methods":[{"name":"addSuppressed","parameterTypes":["java.lang.Throwable"] }]
 },
@@ -1711,6 +1890,9 @@
 {
   "name":"java.lang.reflect.GenericDeclaration",
   "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.reflect.Method"
 },
 {
   "name":"java.lang.reflect.ParameterizedType",
@@ -1821,12 +2003,27 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"java.util.concurrent.Executors$RunnableAdapter"
+},
+{
+  "name":"java.util.concurrent.FutureTask"
+},
+{
   "name":"java.util.concurrent.ScheduledExecutorService"
+},
+{
+  "name":"java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask"
 },
 {
   "name":"java.util.concurrent.ThreadFactory",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true
+},
+{
+  "name":"java.util.concurrent.ThreadPoolExecutor"
+},
+{
+  "name":"java.util.concurrent.ThreadPoolExecutor$Worker"
 },
 {
   "name":"java.util.logging.LogManager"
@@ -1848,6 +2045,12 @@
 },
 {
   "name":"javax.sql.DataSource"
+},
+{
+  "name":"jdk.internal.reflect.DelegatingMethodAccessorImpl"
+},
+{
+  "name":"jdk.internal.reflect.NativeMethodAccessorImpl"
 },
 {
   "name":"org.apache.catalina.core.ApplicationContextFacade",
@@ -1969,6 +2172,15 @@
 {
   "name":"org.graalvm.nativeimage.ImageInfo",
   "methods":[{"name":"inImageCode","parameterTypes":[] }]
+},
+{
+  "name":"org.java_websocket.WebSocketImpl"
+},
+{
+  "name":"org.java_websocket.client.WebSocketClient"
+},
+{
+  "name":"org.java_websocket.drafts.Draft_6455"
 },
 {
   "name":"org.slf4j.Logger"
@@ -4083,6 +4295,12 @@
 {
   "name":"org.springframework.scheduling.config.ScheduledTaskHolder",
   "queryAllPublicMethods":true
+},
+{
+  "name":"org.springframework.scheduling.support.DelegatingErrorHandlingRunnable"
+},
+{
+  "name":"org.springframework.scheduling.support.ScheduledMethodRunnable"
 },
 {
   "name":"org.springframework.stereotype.Component",

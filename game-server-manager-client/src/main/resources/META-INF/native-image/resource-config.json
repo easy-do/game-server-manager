@@ -71,6 +71,9 @@
       "pattern":"\\Qgame/server/manager/client/service/DockerImageService.class\\E"
     }, 
     {
+      "pattern":"\\Qgame/server/manager/client/service/DockerNetworkService.class\\E"
+    }, 
+    {
       "pattern":"\\Qgame/server/manager/client/service/DockerService.class\\E"
     }, 
     {
@@ -81,6 +84,9 @@
     }, 
     {
       "pattern":"\\Qgame/server/manager/client/service/base/DockerImageBaseService.class\\E"
+    }, 
+    {
+      "pattern":"\\Qgame/server/manager/client/service/base/DockerNetworksBaseService.class\\E"
     }, 
     {
       "pattern":"\\Qgame/server/manager/client/thread/HeartbeatThread.class\\E"
