@@ -291,10 +291,10 @@ public class DockerContainerBaseService {
                 String localPath = bindDto.getLocalPath();
                 if(type.equals("docker")){
                     //容器模式
-                    boolean isHost = FileUtil.exist("/host");
+                    boolean isHost = FileUtil.isDirectory("/host");
                     if(isHost){
                         //存在宿主机映射目录 并且文件夹不存在
-                        if(!FileUtil.exist("/host"+localPath)){
+                        if(!FileUtil.isDirectory("/host"+localPath)){
                             RuntimeUtil.execForStr("chroot /host mkdir "+localPath);
                             RuntimeUtil.execForStr("chroot /host chmod -R 777 "+localPath);
                         }
@@ -302,7 +302,7 @@ public class DockerContainerBaseService {
                 }else {
                     //宿主机模式
                     if (Platform.isMac() || Platform.isLinux()){
-                        if(!FileUtil.exist(localPath)){
+                        if(!FileUtil.isDirectory(localPath)){
                             RuntimeUtil.execForStr("mkdir "+localPath);
                             RuntimeUtil.execForStr("chmod -R 777 "+localPath);
                         }
