@@ -1,8 +1,11 @@
 package game.server.manager.client.service.base;
 
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrBuilder;
+import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.system.oshi.OshiUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
@@ -24,7 +27,9 @@ import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.google.common.collect.Maps;
+import com.sun.jna.Platform;
 import game.server.manager.client.config.JacksonObjectMapper;
+import game.server.manager.client.config.SystemUtils;
 import game.server.manager.client.model.BindDto;
 import game.server.manager.client.model.CreateContainerDto;
 import game.server.manager.client.model.LinkDto;
@@ -52,6 +57,9 @@ public class DockerContainerBaseService {
 
     @Autowired
     private JacksonObjectMapper mapper;
+
+    @Autowired
+    private SystemUtils systemUtils;
 
     /**
      * 容器列表
@@ -275,9 +283,33 @@ public class DockerContainerBaseService {
 
     private void withBinds(HostConfig hostConfig, CreateContainerDto createContainerDto) {
         List<BindDto> bindDtoList = createContainerDto.getBinds();
+
+        String type = systemUtils.getClientType();
         if (Objects.nonNull(bindDtoList) && !bindDtoList.isEmpty()) {
             List<Bind> binds = new ArrayList<>();
-            bindDtoList.forEach(bindDto -> binds.add(Bind.parse(bindDto.getLocalPath() + ":" + bindDto.getContainerPath())));
+            bindDtoList.forEach(bindDto -> {
+                String localPath = bindDto.getLocalPath();
+                if(type.equals("docker")){
+                    //容器模式
+                    boolean isHost = FileUtil.exist("/host");
+                    if(isHost){
+                        //存在宿主机映射目录 并且文件夹不存在
+                        if(!FileUtil.exist("/host"+localPath)){
+                            RuntimeUtil.execForStr("chroot /host mkdir "+localPath);
+                            RuntimeUtil.execForStr("chroot /host chmod -R 777 "+localPath);
+                        }
+                    }
+                }else {
+                    //宿主机模式
+                    if (Platform.isMac() || Platform.isLinux()){
+                        if(!FileUtil.exist(localPath)){
+                            RuntimeUtil.execForStr("mkdir "+localPath);
+                            RuntimeUtil.execForStr("chmod -R 777 "+localPath);
+                        }
+                    }
+                }
+                binds.add(Bind.parse(bindDto.getLocalPath() + ":" + bindDto.getContainerPath()));
+            });
             hostConfig.withBinds(binds);
         }
     }

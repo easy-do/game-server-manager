@@ -85,6 +85,7 @@ function InsallApplicationPage({
 
           if (portBinds) {
             portBinds.map((item, index) => {
+              console.log(item)
               portBindsCache.push(
                 <Form.Item field={'portBinds[' + index + ']'}>
                   <Form.Item
@@ -136,7 +137,7 @@ function InsallApplicationPage({
                       '].localPort'
                     }
                     initialValue={item.localPort}
-                    disabled={!item.editable}
+                    hidden={!item.editable}
                   >
                     <Input type={'number'} max={65535} min={80} />
                   </Form.Item>

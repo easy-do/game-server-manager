@@ -267,11 +267,8 @@ public class DockerContainerServiceImpl implements DockerContainerService {
             DockerClient dockerClient = DockerUtils.createDockerClient(docker);
             try {
                 String data = dockerContainerBaseService.logContainer(dockerClient, socketContainerLogData.getContainerId());
-                List<String> datas = CharSequenceUtil.split(data, "\r\n");
-                if(datas.size() == 1){
-                    datas = CharSequenceUtil.split(data, "\n");
-                }
-                for (String str: datas) {
+                List<String> stringList = CharSequenceUtil.split(data, "\n");
+                for (String str: stringList) {
                     SessionUtils.sendOkServerMessage(browserSession,browserSession.getId(),str);
                 }
                 SessionUtils.sendSimpleServerMessage(browserSession,browserSession.getId(),"获取完毕",ServerMessageTypeEnum.SYNC_RESULT_END);

@@ -32,7 +32,7 @@ public class ContainerLogHandlerService implements AbstractHandlerService<Browse
         String jsonData = browserMessage.getData();
         BrowserContainerLogData pullData = JSON.parseObject(jsonData, BrowserContainerLogData.class);
         SocketSessionCache.saveBrowserSession(pullData.getDockerId(), session);
-        SessionUtils.sendOkServerMessage(session,session.getId(),"等待客户端响应,这需要一点时间....");
+        SessionUtils.sendOkServerMessage(session,session.getId(),"waiting client message...");
         dockerContainerService.socketContainerLog(SocketContainerLogData.builder()
                 .dockerId(pullData.getDockerId())
                 .containerId(pullData.getContainerId()).build(), userInfo);
