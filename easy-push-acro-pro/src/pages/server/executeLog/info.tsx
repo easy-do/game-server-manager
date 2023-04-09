@@ -7,7 +7,7 @@ import LogCompennet from '@/components/LogCompenent/logCompennet';
 import { createWebSocket,closeWebSocket } from '@/utils/webSocket';
 
 
-function InfoPage(props: { id: number, deviceId: string, visible, setVisible }) {
+function INstallLogInfoPage(props: { id: number, deviceId: string, visible, setVisible }) {
 
   const t = useLocale(locale);
 
@@ -66,4 +66,4 @@ function InfoPage(props: { id: number, deviceId: string, visible, setVisible }) 
   );
 }
 
-export default InfoPage;
+export default INstallLogInfoPage;

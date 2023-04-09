@@ -11,7 +11,7 @@ import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.server.service.ExecScriptService;
 import game.server.manager.server.service.ExecuteLogService;
-import game.server.manager.common.vo.DeployLogResultVo;
+import game.server.manager.common.vo.LogResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.stream.MapRecord;
@@ -27,7 +27,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
  * @author laoyu
@@ -91,7 +90,7 @@ public class ExecScriptListenerMessage implements StreamListener<String, MapReco
             log.info("消费脚本任务超时{},{} ", message.getId(), message.getValue());
             //获取日志
             Long logId = Long.parseLong(execScriptParam.get().getExecuteLogId());
-            DeployLogResultVo logResultVo = deploymentLogServer.getDeploymentLog(logId);
+            LogResultVo logResultVo = deploymentLogServer.getDeploymentLog(logId);
             Collection<String> logs = logResultVo.getLogs();
             logs.add("执行超时,强制结束会话,脚本会继续在后台执行,弹不在记录后续日志。");
             ExecuteLog entity = ExecuteLog.builder().id(logId).executeState(AppStatusEnum.FAILED.getDesc())

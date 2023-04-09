@@ -10,12 +10,12 @@ import java.util.Collection;
 /**
  * @author laoyu
  * @version 1.0
- * @description 部署日志返回结果
+ * @description 日志返回结果
  * @date 2022/7/2
  */
 @Data
 @Builder
-public class DeployLogResultVo implements Serializable {
+public class LogResultVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

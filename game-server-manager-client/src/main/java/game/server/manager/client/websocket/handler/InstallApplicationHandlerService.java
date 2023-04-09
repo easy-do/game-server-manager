@@ -1,6 +1,7 @@
 package game.server.manager.client.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -13,6 +14,7 @@ import game.server.manager.client.model.CreateNetworkDto;
 import game.server.manager.client.model.PortBindDto;
 import game.server.manager.client.model.socket.ApplicationVersion;
 import game.server.manager.client.model.socket.ApplicationVersionConfig;
+import game.server.manager.client.model.socket.InstallLogResultData;
 import game.server.manager.client.model.socket.ServerMessage;
 import game.server.manager.client.server.SyncServer;
 import game.server.manager.client.service.DockerContainerService;
@@ -62,41 +64,64 @@ public class InstallApplicationHandlerService implements AbstractHandlerService 
             String configData = applicationVersion.getConfData();
             ApplicationVersionConfig applicationVersionConfig = objectMapper.readValue(configData, ApplicationVersionConfig.class);
             List<ApplicationVersionConfig.SubApps> subApps = applicationVersionConfig.getSubApps();
-            syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "start install application");
+            InstallLogResultData resultData = InstallLogResultData.builder().status(true).build();
+            resultData.setMessage("start install application");
+            syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
             if(Objects.nonNull(applicationVersionConfig.getCreateNetworks()) && applicationVersionConfig.getCreateNetworks()){
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "start create networks");
+                resultData.setMessage("start create networks");
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
                 List<CreateNetworkDto> dtoList = applicationVersionConfig.getNetworks();
                 List<Network> networkList = dockerNetworkService.networkList();
                 List<String> names = networkList.stream().map(Network::getName).toList();
                 for (CreateNetworkDto dto : dtoList){
                     if(!names.contains(dto.getName())){
-                        syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create networks "+dto.getName());
+                        resultData.setMessage("create networks "+dto.getName());
+                        syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
                         dockerNetworkService.createNetwork(dto);
                     }
                 }
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create networks success");
+                resultData.setMessage("create networks success");
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
             }
             for (ApplicationVersionConfig.SubApps subApp: subApps) {
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "install sub application" + subApp.getKey());
+                resultData.setMessage("install sub application" + subApp.getKey());
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
                 String image = subApp.getImage();
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "start pull image:" + image);
+                resultData.setMessage("start pull image:" + image);
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
                 String pullLog = dockerImageService.pullImage(image);
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, pullLog);
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create container:" + image);
+                resultData.setMessage(pullLog);
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
+                resultData.setMessage("create container:" + image);
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
                 CreateContainerDto createDto = getCreateContainerDto(subApp);
                 log.info("create container:{}",createDto);
                 CreateContainerResponse res = dockerContainerService.createContainer(createDto);
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "create container:" + image + "success");
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "start container:" + image);
+                resultData.setMessage("create container:" + image + " success");
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
+                resultData.setMessage("start container:" + image);
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
                 dockerContainerService.startContainer(res.getId());
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "start container:" + image+ "success");
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(res));
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "install sub application success");
+                resultData.setMessage("start container:" + image+ " success");
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
+                resultData.setMessage("start container result: "+ objectMapper.writeValueAsString(res));
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
+                resultData.setMessage("install sub application success");
+                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
             }
-            syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "install application end");
-            syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "success");
+            resultData.setMessage("install application end");
+            syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
+            resultData.setStatus(false);
+            resultData.setMessage("success");
+            syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
         }catch (Exception e) {
-            syncServer.sendFailMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, "install error:"+ExceptionUtil.getMessage(e));
+            InstallLogResultData resultData = InstallLogResultData.builder().status(false).build();
+            resultData.setMessage("install error:"+ExceptionUtil.getMessage(e));
+            try {
+                syncServer.sendFailMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         return null;
     }

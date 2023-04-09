@@ -7,7 +7,7 @@ import game.server.manager.redis.config.RedisUtils;
 import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.common.enums.AppStatusEnum;
 import game.server.manager.server.service.ExecuteLogService;
-import game.server.manager.common.vo.DeployLogResultVo;
+import game.server.manager.common.vo.LogResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,17 +42,17 @@ public class DeploymentLogServer {
         redisUtils.zAdd(PREFIX + logId , log, score);
     }
 
-    public DeployLogResultVo getDeploymentLog(Serializable logId) {
+    public LogResultVo getDeploymentLog(Serializable logId) {
         ExecuteLog executeLog = executeLogService.getById(logId);
         if(Objects.isNull(executeLog)){
-            return DeployLogResultVo.builder().isFinish(true).logs(List.of("日志不存在")).build();
+            return LogResultVo.builder().isFinish(true).logs(List.of("日志不存在")).build();
         }
         String state = executeLog.getExecuteState();
         //如果进行中则从缓存读取
         Collection<String> logs;
         if (state.equals(AppStatusEnum.STARTING.getDesc())) {
             logs = redisUtils.zRange(PREFIX + logId, 0, -1);
-            return DeployLogResultVo.builder().isFinish(false).logs(logs).build();
+            return LogResultVo.builder().isFinish(false).logs(logs).build();
         } else {
             //如果已经执行完成直接返回数据库的日志
             String log = executeLog.getLogData();
@@ -61,7 +61,7 @@ public class DeploymentLogServer {
             }else {
                 logs = Collections.emptyList();
             }
-            return DeployLogResultVo.builder().isFinish(true).logs(logs).build();
+            return LogResultVo.builder().isFinish(true).logs(logs).build();
         }
     }
 

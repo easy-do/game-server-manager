@@ -32,6 +32,8 @@ public class SystemConstant {
 
     public static final String TOKEN_USER_INFO = "userInfo";
 
+    public static final String APPLICATION_INSTALL_LOG = "application_install_log:";
+
     private SystemConstant() {
     }
 }

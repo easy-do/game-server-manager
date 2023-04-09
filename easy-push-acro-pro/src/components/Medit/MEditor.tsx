@@ -20,6 +20,7 @@ export interface MEditorProps{
   options? : {
     selectOnLineNumbers?: boolean,
     readonly?:boolean,
+    domReadOnly?:boolean,
   };
 
   callBack:(value:string)=>void

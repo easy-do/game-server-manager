@@ -1,39 +1,27 @@
 package game.server.manager.server.service.impl;
 
 import cn.hutool.core.lang.UUID;
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson2.JSONObject;
 import com.alicp.jetcache.anno.CacheInvalidate;
 import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.command.CreateContainerResponse;
+import game.server.manager.common.enums.ApplicationInstallLogStatusenum;
 import game.server.manager.common.enums.AuditStatusEnum;
-import game.server.manager.common.enums.ScopeEnum;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
-import game.server.manager.common.mode.socket.ApplicationVersionConfig;
-import game.server.manager.common.result.R;
 import game.server.manager.common.vo.UserInfoVo;
-import game.server.manager.docker.model.CreateContainerDto;
+import game.server.manager.server.dto.ApplicationInstallLogDto;
 import game.server.manager.server.dto.InstallApplicationDto;
-import game.server.manager.server.dto.VersionConfData;
 import game.server.manager.server.entity.ApplicationVersion;
 import game.server.manager.server.entity.ClientInfo;
-import game.server.manager.server.entity.DockerDetails;
+import game.server.manager.server.service.ApplicationInstallLogService;
 import game.server.manager.server.service.ApplicationVersionService;
 import game.server.manager.server.service.ClientInfoService;
-import game.server.manager.server.service.DockerContainerService;
-import game.server.manager.server.service.DockerDetailsService;
 import game.server.manager.server.util.SessionUtils;
-import game.server.manager.server.vo.DockerDetailsVo;
 import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.server.dto.ApplicationDto;
@@ -45,10 +33,12 @@ import game.server.manager.server.mapper.ApplicationMapper;
 import game.server.manager.server.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.websocket.Session;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,14 +55,12 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application, Applica
 
     @Autowired
     private ApplicationVersionService applicationVersionService;
+
     @Autowired
     private ClientInfoService clientInfoService;
 
     @Autowired
-    private DockerDetailsService dockerDetailsService;
-
-    @Autowired
-    private DockerContainerService dockerContainerService;
+    private ApplicationInstallLogService applicationInstallLogService;
 
     @Override
     public void listSelect(LambdaQueryWrapper<Application> wrapper) {
@@ -217,9 +205,19 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application, Applica
         }
         //转换参数
         version.setConfData(installApplicationDto.getConfData());
-        String messageId = UUID.fastUUID().toString();
+        String messageId = UUID.randomUUID().toString(true);
         SessionUtils.sendSimpleServerMessage(clientSession, messageId, JSONUtil.toJsonStr(version), ServerMessageTypeEnum.INSTALL_APPLICATION);
-
+        ApplicationInstallLogDto applicationInstallLogDto = ApplicationInstallLogDto.builder()
+                .id(messageId)
+                .applicationId(applicationId)
+                .applicationName(application.getApplicationName())
+                .clientId(client.getId())
+                .clientName(client.getClientName())
+                .version(version.getVersion())
+                .startTime(LocalDateTime.now())
+                .status(ApplicationInstallLogStatusenum.START.getStatus())
+                .build();
+        applicationInstallLogService.add(applicationInstallLogDto);
         return "安装命令已下发";
     }
 }
