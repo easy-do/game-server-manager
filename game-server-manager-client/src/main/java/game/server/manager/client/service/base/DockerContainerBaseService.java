@@ -241,7 +241,7 @@ public class DockerContainerBaseService {
         //绑定目录
         withBinds(hostConfig, createContainerDto);
         //端口设置
-        if(createContainerDto.getPublishAllPorts()){
+        if(Objects.nonNull(createContainerDto.getPublishAllPorts()) && createContainerDto.getPublishAllPorts()){
             //暴露所有端口
             hostConfig.withPublishAllPorts(true);
         }else {
