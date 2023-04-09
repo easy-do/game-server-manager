@@ -45,7 +45,7 @@ public class SystemUtils {
     @Value("${secret:}")
     private String secret;
 
-    @Value("${clientType:host}")
+    @Value("${client-type:host}")
     private String clientType;
 
     public void init(ClientInitData clientInitData){
