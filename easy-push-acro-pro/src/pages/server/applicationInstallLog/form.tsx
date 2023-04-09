@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import {
   Form,
   Input,
-  Select,
-  DatePicker,
   Button,
   Grid,
 } from '@arco-design/web-react';
@@ -12,12 +10,11 @@ import locale from './locale';
 import useLocale from '@/utils/useLocale';
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
-import { statusEnum } from './constants';
-import DictDataSelect from '@/components/DictCompenent/dictDataSelect';
+
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
-const TextArea = Input.TextArea;
+
 
 function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
