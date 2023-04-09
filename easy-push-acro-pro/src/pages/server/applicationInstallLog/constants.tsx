@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button, Typography, Badge, Popconfirm } from '@arco-design/web-react';
+import { Button, Popconfirm } from '@arco-design/web-react';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { dictLabelEnum, getDictList } from '@/utils/dictDataUtils';
 
-export const statusEnum = dictLabelEnum('status_select', 'string');
+
+export const statusEnum = ['下发','开始','完成','失败'];
 
 export interface DataInfoVo {
   id: string;
@@ -96,6 +96,9 @@ export function getColumns(
       title: t['searchTable.columns.status'],
       dataIndex: 'status',
       ellipsis: true,
+      render: (_, record) => (
+        statusEnum[record.status]
+      ),
     },
     {
       title: t['searchTable.columns.operations'],
