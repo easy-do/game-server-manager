@@ -6,11 +6,12 @@ import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.socket.BrowserExecScriptLogMessage;
+import game.server.manager.common.mode.socket.BrowserInstallLogMessage;
 import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.vo.LogResultVo;
 import game.server.manager.common.vo.UserInfoVo;
-import game.server.manager.server.application.DeploymentLogServer;
+import game.server.manager.server.service.ApplicationInstallLogService;
 import game.server.manager.server.util.SessionUtils;
 import game.server.manager.server.websocket.handler.AbstractHandlerService;
 import org.springframework.stereotype.Service;
@@ -25,23 +26,23 @@ import java.util.Objects;
  * @Date 2022/11/26 22:45
  * @Description 游览器部署日志socket消息处理服务
  */
-@Service(MessageTypeConstants.DEPLOY_LOG)
-public class DeployLogHandlerService implements AbstractHandlerService<BrowserHandlerData> {
+@Service(MessageTypeConstants.APPLICATION_INSTALL_LOG)
+public class ApplicationInstallLogHandlerService implements AbstractHandlerService<BrowserHandlerData> {
 
     @Resource
-    private DeploymentLogServer deploymentLogServer;
+    private ApplicationInstallLogService applicationInstallLogService;
 
     @Override
     public Void handler(BrowserHandlerData browserHandlerData) {
 
         BrowserMessage browserMessage = browserHandlerData.getBrowserMessage();
         String jsonData = browserMessage.getData();
-        BrowserExecScriptLogMessage browserExecScriptLogMessage = JSON.parseObject(jsonData, BrowserExecScriptLogMessage.class);
-        String logId = browserExecScriptLogMessage.getLogId();
+        BrowserInstallLogMessage browserInstallLogMessage = JSON.parseObject(jsonData, BrowserInstallLogMessage.class);
+        String logId = browserInstallLogMessage.getLogId();
         UserInfoVo userInfo = browserHandlerData.getUserInfo();
         Session session = browserHandlerData.getSession();
             if (!userInfo.isAdmin()) {
-                String deviceId = browserExecScriptLogMessage.getDeviceId();
+                String deviceId = browserInstallLogMessage.getDeviceId();
                 if (Objects.isNull(deviceId)) {
                     SessionUtils.sendMessage(session, JSON.toJSONString(LogResultVo.builder().isFinish(false).logs(List.of("设备不存在,断开连接")).build()));
                     SessionUtils.close(session);
@@ -55,7 +56,7 @@ public class DeployLogHandlerService implements AbstractHandlerService<BrowserHa
             } else {
                 LogResultVo logResult;
                 do {
-                    logResult = deploymentLogServer.getDeploymentLog(logId);
+                    logResult = applicationInstallLogService.getLog(logId);
                     ServerMessage serverMessage = ServerMessage.builder()
                             .type(ServerMessageTypeEnum.SUCCESS.getType())
                             .data(String.join("",logResult.getLogs()))

@@ -59,6 +59,8 @@ public class MessageTypeConstants {
 
     public static final String INSTALL_APPLICATION_RESULT = "install_application_result";
 
+    public static final String APPLICATION_INSTALL_LOG = "application_install_log";
+
     private MessageTypeConstants() {
     }
 
