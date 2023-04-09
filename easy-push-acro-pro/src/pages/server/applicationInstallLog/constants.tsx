@@ -53,7 +53,7 @@ export function searchConfig() {
 
 //默认排序字段
 export function getDefaultOrders() {
-  return [{ column: 'createTime', asc: false }];
+  return [{ column: 'startTime', asc: false }];
 }
 
 //表单展示字段
