@@ -12,5 +12,6 @@ manager-url: ${MANAGER_URL:https://manager.easydo.plus/client}
 server-socket-url: ${SERVER_SOCKET_URL:wss://manager.easydo.plus/server/wss/client}
 client-id: ${CLIENT_ID:no}
 app-id: ${APP_ID:no}
-client_version: ${CLIENT_VERSION:no}
+client-version: ${CLIENT_VERSION:no}
+client-type: ${CLIENT_TYPE:host}
 

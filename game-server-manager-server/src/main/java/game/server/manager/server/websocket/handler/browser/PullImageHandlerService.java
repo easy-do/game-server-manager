@@ -30,7 +30,7 @@ public class PullImageHandlerService implements AbstractHandlerService<BrowserHa
         String jsonData = browserMessage.getData();
         BrowserPulImageMessage pullData = JSON.parseObject(jsonData, BrowserPulImageMessage.class);
         SocketSessionCache.saveBrowserSession(pullData.getDockerId(), session);
-        SessionUtils.sendOkServerMessage(session,session.getId(),"等待客户端响应,这需要一点时间....");
+        SessionUtils.sendOkServerMessage(session,session.getId(),"waiting client message...");
         dockerImageService.socketPullImage(SocketPullImageData.builder()
                 .dockerId(pullData.getDockerId())
                 .repository(pullData.getRepository()).build(), userInfo);

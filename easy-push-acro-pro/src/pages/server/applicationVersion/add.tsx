@@ -171,6 +171,7 @@ const createNetworksOnchage = (value) => {
             label={t['searchTable.columns.createNetworks']}
             field="confData.createNetworks"
             initialValue={false}
+            triggerPropName='checked'
           >
             <Checkbox onChange={createNetworksOnchage} />
           </Form.Item>

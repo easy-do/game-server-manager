@@ -27,15 +27,13 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
   const t = useLocale(locale);
 
   const [networkMode, setNetworkMode] = useState('bridge');
-  const [publishAllPorts, setPublishAllPorts] = useState(false);
+
 
   const networkModeOnchage = (value) => {
     setNetworkMode(value);
   };
 
-  const publishAllPortsOnchage = (value) => {
-    setPublishAllPorts(value);
-  };
+
 
   function handleSubmit() {
     formRef1.current.validate().then((values) => {
@@ -113,29 +111,35 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
         <Form.Item
           label={t['searchTable.columns.attachStdin']}
           field="attachStdin"
+          triggerPropName='checked'
         >
-          <Checkbox checked={subApp ? subApp.attachStdin : false} />
+          <Checkbox />
         </Form.Item>
-        <Form.Item label={t['searchTable.columns.stdinOpen']} field="stdinOpen">
-          <Checkbox checked={subApp ? subApp.stdinOpen : false} />
+        <Form.Item label={t['searchTable.columns.stdinOpen']}
+         field="stdinOpen"
+         triggerPropName='checked'
+         >
+          <Checkbox />
         </Form.Item>
-        <Form.Item label={t['searchTable.columns.tty']} field="tty">
-          <Checkbox checked={subApp ? subApp.tty : false} />
+        <Form.Item label={t['searchTable.columns.tty']} 
+        field="tty"
+        triggerPropName='checked'
+        >
+          <Checkbox />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.privileged']}
           field="privileged"
+          triggerPropName='checked'
         >
-          <Checkbox checked={subApp ? subApp.privileged : false} />
+          <Checkbox />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.publishAllPorts']}
           field="publishAllPorts"
+          triggerPropName='checked'
         >
-          <Checkbox
-            checked={subApp ? subApp.publishAllPorts : false}
-            onChange={publishAllPortsOnchage}
-          />
+          <Checkbox />
         </Form.Item>
         <Form.Item label={t['searchTable.columns.nanoCPUs']} field="nanoCPUs">
           <Input
@@ -229,7 +233,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
         <Typography.Title heading={6}>
           {t['searchTable.columns.EnvInfo']}
         </Typography.Title>
-        <Form.List field="confData.envs">
+        <Form.List field="envs">
           {(fields, { add, remove, move }) => {
             return (
               <div>
@@ -290,9 +294,9 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                           <Form.Item
                             label={t['searchTable.columns.editable']}
                             field={item.field + '.editable'}
-                            initialValue={true}
+                            triggerPropName='checked'
                           >
-                            <Checkbox defaultChecked />
+                            <Checkbox />
                           </Form.Item>
                           <Form.Item>
                             <Button
@@ -327,7 +331,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
             <Typography.Title heading={6}>
               {t['searchTable.columns.port']}
             </Typography.Title>
-            <Form.List field="confData.portBinds">
+            <Form.List field="portBinds">
               {(fields, { add, remove, move }) => {
                 return (
                   <div>
@@ -348,9 +352,8 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                             >
                               <Form.Item
                                 label={t['searchTable.columns.envDescription']}
-                                initialValue={
-                                  t['searchTable.columns.envDescription']
-                                }
+                                initialValue={(subApp && subApp.portBinds && subApp.portBinds[index] && subApp.portBinds[index].description)?subApp.portBinds[index].description:t['searchTable.columns.port'] + (index + 1)}
+
                                 field={item.field + '.description'}
                                 rules={[
                                   {
@@ -362,7 +365,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                                   },
                                 ]}
                               >
-                                <Input />
+                                <Input  defaultValue={(subApp && subApp.portBinds && subApp.portBinds[index] && subApp.portBinds[index].description)?subApp.portBinds[index].description:t['searchTable.columns.port'] + (index + 1)}/>
                               </Form.Item>
                               <Form.Item
                                 label={t['searchTable.columns.containerPort']}
@@ -396,7 +399,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                               <Form.Item
                                 label={t['searchTable.columns.protocol']}
                                 field={item.field + '.protocol'}
-                                initialValue={'tcp'}
+                                initialValue={(subApp && subApp.portBinds && subApp.portBinds[index] && subApp.portBinds[index].protocol)?subApp.portBinds[index].protocol:'tcp'}
                                 rules={[
                                   {
                                     required: true,
@@ -406,7 +409,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                                 ]}
                               >
                                 <Select
-                                  defaultValue={'tcp'}
+                                  defaultValue={(subApp && subApp.portBinds && subApp.portBinds[index] && subApp.portBinds[index].protocol)?subApp.portBinds[index].protocol:'tcp'}
                                   options={[
                                     { label: 'tcp', value: 'tcp' },
                                     { label: 'udp', value: 'udp' },
@@ -416,9 +419,9 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                               <Form.Item
                                 label={t['searchTable.columns.editable']}
                                 field={item.field + '.editable'}
-                                initialValue={true}
+                                triggerPropName='checked'
                               >
-                                <Checkbox defaultChecked />
+                                <Checkbox />
                               </Form.Item>
                               <Form.Item>
                                 <Button
@@ -453,7 +456,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
         <Typography.Title heading={6}>
           {t['searchTable.columns.binds']}
         </Typography.Title>
-        <Form.List field="confData.binds">
+        <Form.List field="binds">
           {(fields, { add, remove, move }) => {
             return (
               <div>
@@ -474,9 +477,8 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                         >
                           <Form.Item
                             label={t['searchTable.columns.envDescription']}
-                            initialValue={
-                              t['searchTable.columns.envDescription']
-                            }
+                            initialValue={(subApp && subApp.binds && subApp.binds[index] && subApp.binds[index].description)?subApp.binds[index].description:t['searchTable.columns.binds'] + (index + 1)}
+                            
                             field={item.field + '.description'}
                             rules={[
                               {
@@ -488,7 +490,7 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                               },
                             ]}
                           >
-                            <Input />
+                          <Input  defaultValue={(subApp && subApp.binds && subApp.binds[index] && subApp.binds[index].description)?subApp.binds[index].description:t['searchTable.columns.binds'] + (index + 1)}/>
                           </Form.Item>
                           <Form.Item
                             label={t['searchTable.columns.containerPath']}
@@ -520,9 +522,9 @@ function EditSubappPage({ subApp, visible, setVisible, editSubappsCallback }) {
                           <Form.Item
                             label={t['searchTable.columns.editable']}
                             field={item.field + '.editable'}
-                            initialValue={true}
+                            triggerPropName='checked'
                           >
-                            <Checkbox defaultChecked />
+                            <Checkbox />
                           </Form.Item>
                           <Form.Item>
                             <Button

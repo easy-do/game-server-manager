@@ -39,11 +39,14 @@ public class SystemUtils {
     @Value("${app-id:0}")
     private String appId;
 
-    @Value("${client_version:0}")
+    @Value("${client-version:0}")
     private String version;
 
     @Value("${secret:}")
     private String secret;
+
+    @Value("${clientType:host}")
+    private String clientType;
 
     public void init(ClientInitData clientInitData){
         String publicKey = clientInitData.getPublicKey();
@@ -76,5 +79,7 @@ public class SystemUtils {
     public String getPort() {
         return environment.getProperty("local.server.port");
     }
+
+
 
 }
