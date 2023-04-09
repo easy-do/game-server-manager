@@ -137,7 +137,7 @@ function InsallApplicationPage({
                       '].localPort'
                     }
                     initialValue={item.localPort}
-                    hidden={!item.editable}
+                    disabled={!item.editable}
                   >
                     <Input type={'number'} max={65535} min={80} />
                   </Form.Item>

@@ -80,7 +80,6 @@ public class ApplicationInstallLogServiceImpl extends BaseServiceImpl<Applicatio
         if (!isAdmin()) {
             wrapper.eq(ApplicationInstallLog::getCreateBy, getUserId());
         }
-        wrapper.orderByDesc(ApplicationInstallLog::getCreateTime);
         return page(mpBaseQo.getPage(), wrapper).convert(ApplicationInstallLogMapstruct.INSTANCE::entityToVo);
     }
 
