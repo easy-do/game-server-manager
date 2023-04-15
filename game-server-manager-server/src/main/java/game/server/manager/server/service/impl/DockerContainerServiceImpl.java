@@ -257,11 +257,12 @@ public class DockerContainerServiceImpl implements DockerContainerService {
                 SessionUtils.close(browserSession);
                 return;
             }
-            SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(), clientSession.getId());
+            String messageId = UUID.randomUUID().toString(true);
+            SocketSessionCache.saveBrowserSIdAndClientMessageId(browserSession.getId(), messageId);
             ServerContainerLogMessage serverContainerLogMessage = ServerContainerLogMessage.builder()
                     .containerId(socketContainerLogData.getContainerId())
                     .build();
-            SessionUtils.sendSyncServerMessage(clientSession, browserSession.getId(), JSON.toJSONString(serverContainerLogMessage), ServerMessageTypeEnum.CONTAINER_LOG);
+            SessionUtils.sendSyncServerMessage(clientSession, messageId, JSON.toJSONString(serverContainerLogMessage), ServerMessageTypeEnum.CONTAINER_LOG);
         }
         if (docker.getDockerModel().equals(ClientModelEnum.HTTP.getType())) {
             DockerClient dockerClient = DockerUtils.createDockerClient(docker);
@@ -279,7 +280,7 @@ public class DockerContainerServiceImpl implements DockerContainerService {
         }
     }
 
-    private <T> T sendMessageAndUnPackage(Session clientSession, String messageId, ServerMessage serverMessage) {
+    private String sendMessageAndUnPackage(Session clientSession, String messageId, ServerMessage serverMessage) {
         return SessionUtils.sendMessageAndGetResultMessage(clientSession, messageId, serverMessage);
     }
 

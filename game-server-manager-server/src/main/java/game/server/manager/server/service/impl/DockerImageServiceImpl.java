@@ -143,11 +143,12 @@ public class DockerImageServiceImpl implements DockerImageService {
             SessionUtils.close(browserSession);
             return;
         }
-            SocketSessionCache.saveBrowserSIdAndClientSId(browserSession.getId(),clientSession.getId());
+            String messageId = UUID.randomUUID().toString(true);
+            SocketSessionCache.saveBrowserSIdAndClientMessageId(browserSession.getId(),messageId);
             ServerPullImageMessage pullImageMessage = ServerPullImageMessage.builder()
                     .repository(socketPullImageData.getRepository())
                     .build();
-            SessionUtils.sendSyncServerMessage(clientSession,browserSession.getId(),JSON.toJSONString(pullImageMessage),ServerMessageTypeEnum.PULL_IMAGE);
+            SessionUtils.sendSyncServerMessage(clientSession,messageId,JSON.toJSONString(pullImageMessage),ServerMessageTypeEnum.PULL_IMAGE);
     }
 
 

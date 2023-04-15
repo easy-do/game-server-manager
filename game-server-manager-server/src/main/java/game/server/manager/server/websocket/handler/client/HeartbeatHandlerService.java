@@ -28,7 +28,7 @@ public class HeartbeatHandlerService implements AbstractHandlerService<ClientHan
 
     @Override
     public Void handler(ClientHandlerData clientHandlerData) {
-        ClientMessage<String> clientMessage = clientHandlerData.getClientMessage();
+        ClientMessage clientMessage = clientHandlerData.getClientMessage();
         Session session = clientHandlerData.getSession();
         SocketSessionCache.saveSession(session);
         SocketSessionCache.saveClientIdAndSid(clientMessage.getClientId(),session.getId());

@@ -27,20 +27,21 @@ public class SocketSessionCache {
     public static final Map<String, String> CLIENT_ID_CLIENT_SID_CACHE = new ConcurrentHashMap<>();
 
     /**
-     * sessionId对应客户端ID
+     * sessionId对应客户端消息ID
      */
     public static final Map<String, String> CLIENT_SID_CLIENT_ID_CACHE = new ConcurrentHashMap<>();
 
+
     /**
-     * 客户端session与游览器session关联关系
+     * 客户端消息id与游览器session关联关系
      */
-    public static final Map<String,String> CLIENT_SID_BROWSER_SID_CACHE = new ConcurrentHashMap<>();
+    public static final Map<String,String> CLIENT_MSG_ID_BROWSER_SID_CACHE = new ConcurrentHashMap<>();
 
 
     /**
-     * 游览器session与客户端session关联关系
+     * 游览器session与客户端messageId关联关系
      */
-    public static final Map<String,String> BROWSER_SID_CLIENT_SID_CACHE = new ConcurrentHashMap<>();
+    public static final Map<String,String> BROWSER_SID_CLIENT_MSG_ID_CACHE = new ConcurrentHashMap<>();
 
     /**
      * docker与游览器关联关系
@@ -82,7 +83,6 @@ public class SocketSessionCache {
      *
      * @param clientId clientId
      * @param clientSessionId clientSessionId
-     * @return void
      * @author laoyu
      * @date 2022/11/24
      */
@@ -92,30 +92,18 @@ public class SocketSessionCache {
     }
 
     /**
-     * 保存游览器session和客户端session的关联关系
+     * 保存游览器session和客户端消息id的关联关系
      *
      * @param browserSessionId browserSessionId
-     * @param clientSessionId clientSessionId
+     * @param clientMessageId clientMessageId
      * @author laoyu
      * @date 2022/11/24
      */
-    public static void saveBrowserSIdAndClientSId(String browserSessionId, String clientSessionId){
-        CLIENT_SID_BROWSER_SID_CACHE.put(clientSessionId, browserSessionId);
-        BROWSER_SID_CLIENT_SID_CACHE.put(browserSessionId, clientSessionId);
+    public static void saveBrowserSIdAndClientMessageId(String browserSessionId, String clientMessageId){
+        CLIENT_MSG_ID_BROWSER_SID_CACHE.put(clientMessageId, browserSessionId);
+        BROWSER_SID_CLIENT_MSG_ID_CACHE.put(browserSessionId, clientMessageId);
     }
 
-
-    /**
-     * 根据sessionId获得游览器session
-     *
-     * @param browserSessionId browserSessionId
-     * @return javax.websocket.Session
-     * @author laoyu
-     * @date 2022/11/24
-     */
-    public static Session getBrowserBySessionId(String browserSessionId){
-            return SESSION_CACHE.get(browserSessionId);
-    }
 
     /**
      * 根据客户端id获取客户端session
@@ -133,16 +121,17 @@ public class SocketSessionCache {
         return null;
     }
 
+
     /**
-     * 根据客户端sessionId获取游览器sessionId
+     * 根据客户端messageId获取游览器sessionId
      *
-     * @param clientSessionId clientSessionId
+     * @param clientMessageId clientMessageId
      * @return javax.websocket.Session
      * @author laoyu
      * @date 2022/11/24
      */
-    public static Session getBrowserSessionByClientSessionId(String clientSessionId){
-        String browserId = CLIENT_SID_BROWSER_SID_CACHE.get(clientSessionId);
+    public static Session getBrowserSessionByMessageId(String clientMessageId){
+        String browserId = CLIENT_MSG_ID_BROWSER_SID_CACHE.get(clientMessageId);
         if (Objects.nonNull(browserId)) {
             return SESSION_CACHE.get(browserId);
         }
@@ -165,21 +154,6 @@ public class SocketSessionCache {
         return null;
     }
 
-    /**
-     * 根据游览器sessionId获取客户端session
-     *
-     * @param browserSessionId browserSessionId
-     * @return javax.websocket.Session
-     * @author laoyu
-     * @date 2022/11/24
-     */
-    public static Session getClientSessionByBrowserSessionId(String browserSessionId){
-        String clientId = CLIENT_SID_BROWSER_SID_CACHE.get(browserSessionId);
-        if (Objects.nonNull(clientId)) {
-            return SESSION_CACHE.get(clientId);
-        }
-        return null;
-    }
 
     /**
      * 删除游览器session相关的缓存
@@ -189,13 +163,22 @@ public class SocketSessionCache {
      * @date 2022/11/24
      */
     public static void removeBrowserBySessionId(String browserSessionId){
+        //删除游览器session缓存
         SESSION_CACHE.remove(browserSessionId);
-        BROWSER_SID_CLIENT_SID_CACHE.remove(browserSessionId);
+        String clientMessageId = BROWSER_SID_CLIENT_MSG_ID_CACHE.get(browserSessionId);
+        if(Objects.nonNull(clientMessageId)){
+            //删除客户端消息与游览器关联缓存
+            CLIENT_MSG_ID_BROWSER_SID_CACHE.remove(clientMessageId);
+        }
+        //删除游览器与客户端消息关联缓存
+        BROWSER_SID_CLIENT_MSG_ID_CACHE.remove(browserSessionId);
         String dockerId = BROWSER_SID_DOCKER_ID_CACHE.get(browserSessionId);
         if(Objects.nonNull(dockerId)){
+            //删除docker和游览器session关联关系
             DOCKER_ID_BROWSER_SID_CACHE.remove(dockerId);
-            BROWSER_SID_DOCKER_ID_CACHE.remove(browserSessionId);
         }
+        //删除游览器session和docker关联关系
+        BROWSER_SID_DOCKER_ID_CACHE.remove(browserSessionId);
     }
 
     /**
@@ -207,12 +190,11 @@ public class SocketSessionCache {
      */
     public static void removeClientBySessionId(String clientSessionId){
         SESSION_CACHE.remove(clientSessionId);
-        CLIENT_SID_BROWSER_SID_CACHE.remove(clientSessionId);
         String clientId = CLIENT_SID_CLIENT_ID_CACHE.get(clientSessionId);
         if(Objects.nonNull(clientId)){
-            CLIENT_SID_CLIENT_ID_CACHE.remove(clientSessionId);
             CLIENT_ID_CLIENT_SID_CACHE.remove(clientId);
         }
+        CLIENT_SID_CLIENT_ID_CACHE.remove(clientSessionId);
 
     }
 

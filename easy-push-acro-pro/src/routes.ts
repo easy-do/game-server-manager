@@ -68,6 +68,13 @@ export const staticRoutes: IRoute[] = [
     status:1,
     children:[]
   },
+  {
+    name: '应用版本详情页',
+    key: '',
+    url: '/server/applicationVersionDetails',
+    status:1,
+    children:[]
+  },
 ];
 
 export const defaultRoute = "dashboard/workplace"

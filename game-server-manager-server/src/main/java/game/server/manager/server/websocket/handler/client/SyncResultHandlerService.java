@@ -23,15 +23,14 @@ public class SyncResultHandlerService implements AbstractHandlerService<ClientHa
 
     @Override
     public Void handler(ClientHandlerData clientHandlerData) {
-        ClientMessage<String> clientMessage = clientHandlerData.getClientMessage();
+        ClientMessage clientMessage = clientHandlerData.getClientMessage();
         Session session = clientHandlerData.getSession();
         //寻找游览器session
-        Session browserSession = SocketSessionCache.getBrowserSessionByClientSessionId(session.getId());
+        Session browserSession = SocketSessionCache.getBrowserSessionByMessageId(clientMessage.getMessageId());
         //向游览器转发消息
         if (Objects.nonNull(browserSession)) {
             SessionUtils.sendOkServerMessage(browserSession,browserSession.getId(),clientMessage.getData());
         } else {
-            SessionUtils.sendSimpleServerMessage(session,clientMessage.getMessageId(),"",ServerMessageTypeEnum.CANCEL_SYNC);
             log.info("【websocket消息】游览器会话不存在或已结束,放弃消息转发。{}", session.getId());
         }
         return null;

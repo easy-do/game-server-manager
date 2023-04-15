@@ -9,8 +9,6 @@ public class MessageTypeConstants {
 
     public static final String HEARTBEAT = "heartbeat";
 
-    public static final String LOCK = "lock";
-
     public static final String ERROR = "error";
 
     public static final String NO_SYNC_RESULT = "no_sync_result";
@@ -18,10 +16,6 @@ public class MessageTypeConstants {
     public static final String SYNC_RESULT = "sync_result";
 
     public static final String SYNC_RESULT_END = "sync_result_end";
-
-    public static final String SYNC = "sync";
-
-    public static final String CONNECT_SUCCESS = "connect_success";
 
     public static final String SUCCESS = "success";
 
@@ -51,7 +45,6 @@ public class MessageTypeConstants {
     public static final String CONTAINER_LOG = "container_log";
 
     public static final String CREATE_CONTAINER = "createContainer";
-    public static final String CANCEL_SYNC = "cancel_sync";
 
     public static final String DEPLOY_APP = "deploy_app";
 
