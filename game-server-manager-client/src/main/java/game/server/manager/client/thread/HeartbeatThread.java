@@ -34,7 +34,7 @@ public class HeartbeatThread {
     public void HeartbeatCheck() {
         ClientData clientData = clientDataServer.getClientData();
         try {
-            syncServer.sendMessage(ClientSocketTypeEnum.HEARTBEAT, mapper.writeValueAsString(clientData));
+            syncServer.sendOkMessage(ClientSocketTypeEnum.HEARTBEAT, clientData.getClientId(), mapper.writeValueAsString(clientData));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

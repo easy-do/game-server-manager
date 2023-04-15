@@ -22,10 +22,9 @@ public class SyncResultEndHandlerService implements AbstractHandlerService<Clien
 
     @Override
     public Void handler(ClientHandlerData clientHandlerData) {
-        ClientMessage<String> clientMessage = clientHandlerData.getClientMessage();
-        Session session = clientHandlerData.getSession();
+        ClientMessage clientMessage = clientHandlerData.getClientMessage();
         //寻找游览器session
-        Session browserSession = SocketSessionCache.getBrowserSessionByClientSessionId(session.getId());
+        Session browserSession = SocketSessionCache.getBrowserSessionByMessageId(clientMessage.getMessageId());
         //向游览器转发消息
         assert browserSession != null;
         SessionUtils.sendSimpleServerMessage(browserSession,browserSession.getId(),clientMessage.getData(),ServerMessageTypeEnum.SYNC_RESULT_END);

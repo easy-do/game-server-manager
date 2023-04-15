@@ -53,7 +53,7 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.PING_DOCKER,clientSession);
-            ClientMessage<String> clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 3000);
+            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 3000);
             if(Objects.isNull(clientMessage)){
                 return DataResult.fail("获取客户端消息超时.");
             }
@@ -74,7 +74,7 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_INFO,clientSession);
-            ClientMessage<String> clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
+            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
             if(Objects.isNull(clientMessage)){
                 throw ExceptionFactory.bizException("获取客户端消息失败");
             }
@@ -98,7 +98,7 @@ public class DockerBasicServiceImpl implements DockerBasicService {
             Session clientSession = SessionUtils.getClientSession(dockerDetails.getClientId());
             String messageId = UUID.fastUUID().toString(true);
             SessionUtils.sendSimpleNoSyncMessage(messageId,ServerMessageTypeEnum.DOCKER_VERSION,clientSession);
-            ClientMessage<String> clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
+            ClientMessage clientMessage = SessionUtils.timeoutGetClientMessage(messageId, 1000);
             if(Objects.isNull(clientMessage)){
                 throw ExceptionFactory.bizException("获取客户端消息失败.");
             }

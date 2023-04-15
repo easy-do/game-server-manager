@@ -22,11 +22,11 @@ public class SessionResultCache {
     public static final TimedCache<String, ClientMessage> MESSAGE_CACHE = CacheUtil.newTimedCache(10000);
 
     static {
-        //启动定时任务，每1秒清理一次过期条目
-        MESSAGE_CACHE.schedulePrune(1000);
+        //启动定时任务，每10秒清理一次过期条目
+        MESSAGE_CACHE.schedulePrune(10000);
     }
 
-   public static <T> ClientMessage<T> getResultByMessageId(String messageId){
+   public static ClientMessage getResultByMessageId(String messageId){
       return MESSAGE_CACHE.get(messageId,false);
    }
 

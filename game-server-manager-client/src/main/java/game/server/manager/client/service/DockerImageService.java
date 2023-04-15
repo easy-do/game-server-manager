@@ -68,7 +68,7 @@ public class DockerImageService {
                     String firstCache = messageCache.get("first");
                     if(Objects.isNull(firstCache) || !CharSequenceUtil.equals(status,firstCache)){
                         assert status != null;
-                        syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT,status);
+                        syncServer.sendOkMessage(ClientSocketTypeEnum.SYNC_RESULT, messageId, status);
                         messageCache.put("first",status);
                     }
                 }catch (Exception e) {
@@ -79,13 +79,10 @@ public class DockerImageService {
         });
         try {
             callback.awaitCompletion();
-            syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END,"success");
+            syncServer.sendOkMessage(ClientSocketTypeEnum.SYNC_RESULT_END, messageId,"success");
         } catch ( InterruptedException interruptedException) {
             log.error("执行pull镜像线程异常，{}", ExceptionUtil.getMessage(interruptedException));
-            syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END,"客户端执行pull镜像线程异常："+ExceptionUtil.getMessage(interruptedException));
-        }finally {
-            //释放锁
-            syncServer.unLock(messageId);
+            syncServer.sendOkMessage(ClientSocketTypeEnum.SYNC_RESULT_END, messageId,"客户端执行pull镜像线程异常："+ExceptionUtil.getMessage(interruptedException));
         }
     }
 

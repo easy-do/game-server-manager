@@ -61,16 +61,10 @@ public class ClientWebsocketEndpoint {
                 ServerMessage serverMessage = null;
                 try {
                     serverMessage = mapper.readValue(message, ServerMessage.class);
-                    if(!isLock(serverMessage)){
-                        handlerService.handler(serverMessage);
-                    }else {
-                        log.warn("message lock.");
-                        this.send(mapper.writeValueAsString(ClientMessage.builder().clientId(systemUtils.getClientId()).type(ClientSocketTypeEnum.LOCK.getType()).data("当前同步通信消息被占用,请等待上一个操作释放资源。").build()));
-                    }
+                    handlerService.handler(serverMessage);
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
-
             }
 
             @Override
@@ -86,61 +80,5 @@ public class ClientWebsocketEndpoint {
         CLIENT.connect();
     }
 
-    /**
-     * 是否被某个消息锁定
-     *
-     * @param serverMessage serverMessage
-     * @return boolean
-     * @author laoyu
-     * @date 2022/11/22
-     */
-    private static synchronized boolean isLock(ServerMessage serverMessage){
-        //不是需要同步传输的消息
-        if(!serverMessage.isSync()){
-            return false;
-        }
-        //已经锁定了，但是被当前消息锁定的，可以继续响应
-        if(messageLock && CharSequenceUtil.equals(serverMessage.getMessageId(),lockMessageId)){
-            return false;
-        }
-        //没有锁定，但是为同步传输消息则加锁。
-        messageLock = true;
-        lockMessageId = serverMessage.getMessageId();
-        return false;
-    }
-
-    /**
-     * 锁定消息
-     *
-     * @param messageId messageId
-     * @return boolean
-     * @author laoyu
-     * @date 2022/11/22
-     */
-    public static synchronized boolean lock(String messageId){
-        if(!messageLock){
-            messageLock = true;
-            lockMessageId = messageId;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 解锁消息
-     *
-     * @param messageId messageId
-     * @return boolean
-     * @author laoyu
-     * @date 2022/11/22
-     */
-    public static synchronized boolean unLock(String messageId){
-        if(messageLock && CharSequenceUtil.equals(lockMessageId,messageId)){
-            messageLock = false;
-            lockMessageId = "";
-            return true;
-        }
-        return false;
-    }
 
 }

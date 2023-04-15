@@ -83,10 +83,10 @@ public class SessionUtils {
      * @author laoyu
      * @date 2022/11/27
      */
-    public static <T> ClientMessage<T> timeoutGetClientMessage(String messageId,long timeoutMs){
+    public static  ClientMessage timeoutGetClientMessage(String messageId,long timeoutMs){
         long timeoutExpiredMs = System.currentTimeMillis() + timeoutMs;
         while (true) {
-            ClientMessage<T> message = SessionResultCache.getResultByMessageId(messageId);
+            ClientMessage message = SessionResultCache.getResultByMessageId(messageId);
             if(Objects.nonNull(message)){
                 SessionResultCache.removeMessageById(messageId);
                 return message;
@@ -111,7 +111,7 @@ public class SessionUtils {
      */
     public static <T> List<T> sendMessageAndGetListResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
         sendMessage(clientSession, JSON.toJSONString(serverMessage));
-        ClientMessage<String> clientMessage = timeoutGetClientMessage(messageId, 3000);
+        ClientMessage clientMessage = timeoutGetClientMessage(messageId, 3000);
         if(Objects.isNull(clientMessage)){
             throw ExceptionFactory.bizException("获取客户端消息失败");
         }
@@ -131,9 +131,9 @@ public class SessionUtils {
      * @author laoyu
      * @date 2022/11/27
      */
-    public static <T> T sendMessageAndGetResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
+    public static String sendMessageAndGetResultMessage(Session clientSession, String messageId, ServerMessage serverMessage) {
         sendMessage(clientSession, JSON.toJSONString(serverMessage));
-        ClientMessage<T> clientMessage = timeoutGetClientMessage(messageId, 3000);
+        ClientMessage clientMessage = timeoutGetClientMessage(messageId, 3000);
         if(Objects.isNull(clientMessage)){
             throw ExceptionFactory.bizException("获取客户端消息超时.");
         }

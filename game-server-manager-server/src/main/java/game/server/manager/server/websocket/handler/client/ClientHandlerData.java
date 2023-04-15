@@ -21,6 +21,6 @@ public class ClientHandlerData {
 
     private Session session;
 
-    private ClientMessage<String> clientMessage;
+    private ClientMessage clientMessage;
 
 }

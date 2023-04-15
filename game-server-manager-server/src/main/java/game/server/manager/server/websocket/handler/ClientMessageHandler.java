@@ -1,6 +1,7 @@
 package game.server.manager.server.websocket.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.common.mode.socket.ClientMessage;
@@ -24,10 +25,11 @@ public class ClientMessageHandler {
     @Autowired
     private Map<String, AbstractHandlerService<ClientHandlerData>> handlerServiceContainer;
 
+
     public void handle(String message, Session session) {
-        ClientMessage<String> clientMessage;
+        ClientMessage clientMessage;
         try{
-            clientMessage = JSON.parseObject(message, ClientMessage.class);
+            clientMessage = JSONUtil.toBean(message, ClientMessage.class);
         }catch (Exception exception){
             throw ExceptionFactory.bizException(ExceptionUtil.getMessage(exception));
         }

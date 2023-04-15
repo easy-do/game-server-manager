@@ -148,18 +148,15 @@ public class DockerContainerService {
         ResultCallback.Adapter<Frame> callback = dockerContainerBaseService.logContainer(dockerClient, containerId, new ResultCallback.Adapter<>() {
             @Override
             public void onNext(Frame frame) {
-                syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT, new String(frame.getPayload()));
+                syncServer.sendOkMessage(ClientSocketTypeEnum.SYNC_RESULT, messageId, new String(frame.getPayload()));
             }
         });
         try {
             callback.awaitCompletion();
-            syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END, "success");
+            syncServer.sendOkMessage(ClientSocketTypeEnum.SYNC_RESULT_END, messageId,"success");
         } catch (InterruptedException interruptedException) {
             log.error("执行查看镜像日志线程异常，{}", ExceptionUtil.getMessage(interruptedException));
-            syncServer.sendMessage(ClientSocketTypeEnum.SYNC_RESULT_END, "客户端执行查看镜像日志线程异常：" + ExceptionUtil.getMessage(interruptedException));
-        } finally {
-            //释放锁
-            syncServer.unLock(messageId);
+            syncServer.sendOkMessage(ClientSocketTypeEnum.SYNC_RESULT_END,messageId, "客户端执行查看镜像日志线程异常：" + ExceptionUtil.getMessage(interruptedException));
         }
     }
 

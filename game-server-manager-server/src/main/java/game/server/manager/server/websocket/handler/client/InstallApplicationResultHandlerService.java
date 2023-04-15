@@ -40,7 +40,7 @@ public class InstallApplicationResultHandlerService implements AbstractHandlerSe
 
     @Override
     public Void handler(ClientHandlerData clientHandlerData) {
-        ClientMessage<String> clientMessage = clientHandlerData.getClientMessage();
+        ClientMessage clientMessage = clientHandlerData.getClientMessage();
         String messageId = clientMessage.getMessageId();
         String data = clientMessage.getData();
         InstallLogResultData result = JSONUtil.toBean(data, InstallLogResultData.class);

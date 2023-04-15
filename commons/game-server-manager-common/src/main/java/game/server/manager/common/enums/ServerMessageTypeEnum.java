@@ -11,15 +11,12 @@ public enum ServerMessageTypeEnum {
     /**/
     HEARTBEAT(MessageTypeConstants.HEARTBEAT,"心跳"),
 
-    CONNECT_SUCCESS(MessageTypeConstants.CONNECT_SUCCESS,"连接成功"),
 
     SUCCESS(MessageTypeConstants.SUCCESS,"服务器异常"),
 
     ERROR(MessageTypeConstants.ERROR,"服务器异常"),
 
     SYNC_RESULT_END(MessageTypeConstants.SYNC_RESULT_END,"同步等待数据执行完成"),
-
-    CANCEL_SYNC(MessageTypeConstants.CANCEL_SYNC,"取消当前同步请求"),
 
     PING_DOCKER(MessageTypeConstants.PING_DOCKER,"删除镜像"),
 
