@@ -7,10 +7,9 @@ import {
   List,
   Skeleton,
   Avatar,
-  Pagination,
 } from '@arco-design/web-react';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import { IconDown, IconLoading, IconPlus } from '@arco-design/web-react/icon';
+import { IconPlus } from '@arco-design/web-react/icon';
 import useLocale from '@/utils/useLocale';
 import locale from '../discussion/locale';
 import styles from '../discussion/style/index.module.less';
@@ -25,7 +24,7 @@ function DiscussionList() {
 
 
   function viewInfo(id) {
-    window.open('/server/discussion/discussionInfo/'+id)
+    window.open('/server/discussionInfo?id='+id)
   }
 
     //新增

@@ -16,11 +16,9 @@ import changeTheme from './utils/changeTheme';
 import useStorage from './utils/useStorage';
 import { userResource } from './api/resource';
 import { IRoute, staticRoutes } from './routes';
-import DiscussionInfo from './pages/server/discussion/discussionInfo';
 import { XtermPage } from './components/XtermCompenent/xtermPage';
 import { getDictDataMap } from './api/dictData';
 import { getUserInfo } from './api/oauth';
-import ApplicationVersionDetailsPage from './pages/server/applicationVersionDetails/idnex';
 
 
 const store = createStore(rootReducer);
@@ -126,8 +124,6 @@ function Index() {
             <Switch>
               <Route path="/login" component={Login} />
               <Route path="/xterm" component={XtermPage} />
-              <Route path="/server/discussion/discussionInfo/:id" component={DiscussionInfo} />
-              <Route path="/server/applicationVersionDetails/:id" component={ApplicationVersionDetailsPage} />
               <Route path="/" component={PageLayout} />
             </Switch>
           </GlobalContext.Provider>

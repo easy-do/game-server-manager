@@ -102,7 +102,6 @@ public class ApplicationVersionController extends BaseController<ApplicationVers
     /**
      * 获取应用的所有版本列表
      */
-    @SaCheckLogin
     @GetMapping("/versionList/{applicationId}")
     public R<List<ApplicationVersionVo>> versionList(@PathVariable("applicationId")Long applicationId) {
         return DataResult.ok(baseService.versionList(applicationId));
