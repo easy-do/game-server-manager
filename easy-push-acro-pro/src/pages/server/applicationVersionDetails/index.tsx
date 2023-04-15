@@ -50,7 +50,7 @@ function ApplicationVersionDetailsPage() {
   const [jumpLogPageModal, setJumpLogPageModal] = useState(false);
 
   const jumpLogPage = ()=>{
-    window.location.href="/server/aolicationInstallLog"
+    window.location.href="/server/applicationInstallLog"
   }
 
 
