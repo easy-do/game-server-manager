@@ -24,6 +24,7 @@ const i18n = {
     'searchTable.columns.operations.update': 'Edit',
     'searchTable.columns.operations.remove': 'Remove',
     'searchTable.columns.operations.remove.confirm': 'Are you sure you want to delete?',
+    'searchTable.columns.operations.install': 'Install',
     'searchTable.operations.add': 'New',
     'searchForm.all.placeholder': 'all',
     'searchForm.id.placeholder': 'Please enter the id',
@@ -108,6 +109,8 @@ const i18n = {
     'searchTable.columns.gateway': 'gateway',
     'searchTable.columns.links': 'links',
     'searchForm.links.placeholder': 'containerName:alis,containerName1:alis1', 
+    'jumpLogContent': 'Do you want to jump to the log page?', 
+    
     
   },
   'zh-CN': {
@@ -135,6 +138,7 @@ const i18n = {
     'searchTable.columns.operations.update': '修改',
     'searchTable.columns.operations.remove': '删除',
     'searchTable.columns.operations.remove.confirm': '确定要删除吗?', 
+    'searchTable.columns.operations.install': '安装',
     'searchTable.operations.add': '新建',
     'searchForm.all.placeholder': '全部',
     'searchForm.id.placeholder': '请输入编号',
@@ -164,7 +168,7 @@ const i18n = {
     'searchTable.rules.createBy.required': '创建人不能为空',
     'searchTable.rules.updateBy.required': '更新人不能为空',
     'searchTable.rules.delFlag.required': '删除标记不能为空',
-    'searchTable.columns.basicInfo': '基础信息',
+    'searchTable.columns.basicInfo': '基本信息',
     'searchTable.columns.EnvInfo': '环境变量',
     'searchTable.columns.image': '镜像',
     'searchTable.columns.envName': '变量名',
@@ -218,6 +222,7 @@ const i18n = {
     'searchTable.columns.networkName': '网络名称',
     'searchTable.columns.subNet': '子网',
     'searchTable.columns.gateway': '网关',
+    'jumpLogContent': '是否跳转至日志页面?', 
     
   },
 };

@@ -40,7 +40,7 @@ export const staticRoutes: IRoute[] = [
     children:[
       {
         name: '首页',
-        key: '',
+        key: 'workplace',
         url: 'dashboard/workplace',
         status:0,
         children: [],
@@ -49,29 +49,29 @@ export const staticRoutes: IRoute[] = [
   },
   {
     name: '登录成功',
-    key: '',
+    key: 'loginSuccess',
     url: 'loginSuccess',
     status:1,
     children:[]
   },
   {
     name: '登录失败',
-    key: '',
+    key: 'loginError',
     url: 'loginError',
     status:1,
     children:[]
   },
   {
-    name: '讨论详情页',
-    key: '',
-    url: '/server/discussion/discussionInfo',
+    name: '讨论交流详情页',
+    key: 'discussionInfo',
+    url: 'server/discussionInfo',
     status:1,
     children:[]
   },
   {
     name: '应用版本详情页',
-    key: '',
-    url: '/server/applicationVersionDetails',
+    key: 'applicationVersionDetails',
+    url: 'server/applicationVersionDetails',
     status:1,
     children:[]
   },

@@ -15,7 +15,6 @@ import {
 } from '../appScript/constants';
 import { page } from '@/api/appStore';
 import CardInfo from './card-info';
-import InsallApplicationPage from '@/components/InstallApplication/installApplication';
 
 
 const { Row, Col } = Grid;
@@ -65,18 +64,13 @@ function SearchTable() {
     });
   }
 
-  const [installApplicationId, setInstallApplicationId] = useState();
-  const [isInstallApplication, setIsInstallApplication] = useState(false);
+
 
   //安装应用
   function installApplication(id) {
-    setInstallApplicationId(id);
-    setIsInstallApplication(true);
+    window.location.href = '/server/applicationVersionDetails?id='+id;
   }
-  function installApplicationSuccess() {
-    setIsInstallApplication(false);
-    fetchData();
-  }
+
 
   //构建卡片列表、绑定操作回调
   const cardList = data.map((item, index) => {
@@ -86,7 +80,7 @@ function SearchTable() {
   })
 
   return (
-    <><Card>
+    <Card>
       <div className={styles.container}>
         {<Row gutter={24} className={styles['card-content']}>
           {cardList}
@@ -105,13 +99,6 @@ function SearchTable() {
           pageSize: pageSize,
         })} />
     </Card>
-    <InsallApplicationPage
-        applicationId={installApplicationId}
-        visible={isInstallApplication}
-        setVisible={setIsInstallApplication}
-        successCallBack={installApplicationSuccess} />
-      </>
-      
   );
 }
 

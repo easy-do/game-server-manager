@@ -61,8 +61,6 @@ public class ApplicationController extends BaseController<ApplicationService,App
     /**
      * 获取应用信息详细信息
      */
-    @SaCheckPermission("application:info")
-    @GetMapping("/info/{id}")
     @Override
     public R<ApplicationVo> info(@PathVariable("id")Long id) {
         return super.info(id);

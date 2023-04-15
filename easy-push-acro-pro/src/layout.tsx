@@ -65,6 +65,7 @@ function getFlattenRoutes(routes) {
       );
       if (route.key && (!route.children || !visibleChildren.length)) {
         try {
+          console.log(route.url)
           route.component = lazyload(() => import(`./pages/${route.url}`));
           res.push(route);
         } catch (e) {

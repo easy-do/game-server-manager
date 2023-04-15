@@ -2,6 +2,7 @@ import { list as clientList } from '@/api/clientInfo';
 import { GlobalContext } from '@/context';
 import useLocale from '@/utils/useLocale';
 import {
+  Drawer,
   Form,
   FormInstance,
   Input,
@@ -23,6 +24,7 @@ function InsallApplicationPage({
   visible,
   setVisible,
   successCallBack,
+  version,
 }) {
   const t = useLocale(locale);
 
@@ -34,12 +36,11 @@ function InsallApplicationPage({
 
   const [configs, setConfigs] = useState([]);
 
-  const [options, setOptions] = useState([]);
 
   const onchageVersion = (value) => {
     setLoading(true);
-    const values = value.split('--');
-    infoRequest(values[0]).then((res) => {
+    console.log(value);
+    infoRequest(value).then((res) => {
       const { success, data } = res.data;
       if (success) {
         const confData = JSON.parse(data.confData);
@@ -374,7 +375,6 @@ function InsallApplicationPage({
 
   //加载数据
   function fetchData() {
-    setOptions([]);
     setConfigs([]);
     if (applicationId !== undefined && visible) {
       if (!checkLogin()) {
@@ -387,28 +387,18 @@ function InsallApplicationPage({
         }, 1000);
         return;
       } else {
-        versionList(applicationId).then((res) => {
-          const { success, data } = res.data;
-          if (success) {
-            const newOptions = [];
-            data.map((item) => {
-              newOptions.push({
-                value: item.id + '--' + item.applicationName,
-                label: item.applicationName + ':' + item.version,
-                key: item.id,
-              });
-            });
-            setOptions(newOptions);
-          }
-          setLoading(false);
-        });
+        onchageVersion(version)
       }
     }
   }
 
   useEffect(() => {
-    fetchData();
-  }, [visible, applicationId]);
+    console.log(visible);
+    console.log(applicationId);
+    if(visible){
+      fetchData();
+    }
+  }, [visible]);
 
   //提交
   const handleSubmit = () => {
@@ -416,7 +406,6 @@ function InsallApplicationPage({
       installeRequest({
         ...values,
         applicationId: applicationId,
-        version: values.version.split('--')[0],
         confData: JSON.stringify(values.confData),
       }).then((res) => {
         const { success, msg } = res.data;
@@ -432,7 +421,8 @@ function InsallApplicationPage({
   };
 
   return (
-    <Modal
+    <Drawer
+      width={'30%'}
       title={t['searchTable.operations.add']}
       visible={visible}
       onOk={() => {
@@ -456,19 +446,10 @@ function InsallApplicationPage({
         <Form.Item
           label={t['searchTable.columns.version']}
           field="version"
-          rules={[
-            {
-              required: true,
-              message: t['searchTable.rules.version.required'],
-            },
-          ]}
+          hidden
+          initialValue={version}
         >
-          <Select
-            showSearch
-            placeholder={t['searchForm.version.placeholder']}
-            options={options}
-            onChange={onchageVersion}
-          />
+          <Input/>
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.client']}
@@ -489,7 +470,7 @@ function InsallApplicationPage({
         </Form.Item>
         {configs}
       </Form>
-    </Modal>
+    </Drawer>
   );
 }
 

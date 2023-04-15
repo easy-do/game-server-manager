@@ -29,7 +29,7 @@ function SearchTable() {
   const tableCallback = async (record, type) => {
     //查看
     if (type === 'view') {
-      window.open('/server/discussion/discussionInfo/'+record.id)
+      window.open('/server/discussionInfo?id='+record.id)
     }
 
     //编辑

@@ -7,7 +7,7 @@ import { page } from '@/api/commentDetails';
 
 
 export interface CommentPageProps{
-  id:number;
+  id:string;
   visible:boolean;
 
 }
