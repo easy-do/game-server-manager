@@ -104,7 +104,7 @@ public class ApplicationController extends BaseController<ApplicationService,App
      */
     @SaCheckLogin
     @PostMapping("/install")
-    public R<Object> install(@RequestBody InstallApplicationDto installApplicationDto) {
+    public R<Boolean> install(@RequestBody InstallApplicationDto installApplicationDto) {
         return DataResult.ok(baseService.install(installApplicationDto));
     }
 }

@@ -35,5 +35,5 @@ public interface ApplicationService extends BaseService<Application, Application
      * @author laoyu
      * @date 2023/3/19
      */
-    Object install(InstallApplicationDto installApplicationDto);
+    boolean install(InstallApplicationDto installApplicationDto);
 }

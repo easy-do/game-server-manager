@@ -184,7 +184,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application, Applica
     }
 
     @Override
-    public Object install(InstallApplicationDto installApplicationDto) {
+    public boolean install(InstallApplicationDto installApplicationDto) {
         Long applicationId = installApplicationDto.getApplicationId();
         Application application = getById(applicationId);
         if (Objects.isNull(application)) {
@@ -218,6 +218,8 @@ public class ApplicationServiceImpl extends BaseServiceImpl<Application, Applica
                 .status(ApplicationInstallLogStatusenum.START.getStatus())
                 .build();
         applicationInstallLogService.add(applicationInstallLogDto);
-        return "安装命令已下发";
+        //添加热度
+        baseMapper.addHeat(applicationId);
+        return true;
     }
 }

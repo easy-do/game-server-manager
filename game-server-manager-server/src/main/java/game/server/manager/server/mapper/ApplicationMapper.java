@@ -12,5 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ApplicationMapper extends BaseMapper<Application> {
-    
+
+    void addHeat(Long applicationId);
 }
