@@ -2,6 +2,8 @@ import { list as clientList } from '@/api/clientInfo';
 import { GlobalContext } from '@/context';
 import useLocale from '@/utils/useLocale';
 import {
+  Button,
+  Divider,
   Drawer,
   Form,
   FormInstance,
@@ -9,6 +11,7 @@ import {
   Modal,
   Notification,
   Select,
+  Space,
   Spin,
   Typography,
 } from '@arco-design/web-react';
@@ -18,6 +21,7 @@ import RequestSelect from '../RequestSelect/RequestSelect';
 import { installeRequest } from '@/api/application';
 import { infoRequest, versionList } from '@/api/applicationVersion';
 import checkLogin from '@/utils/checkLogin';
+import { IconDelete } from '@arco-design/web-react/icon';
 
 function InsallApplicationPage({
   applicationId,
@@ -36,7 +40,6 @@ function InsallApplicationPage({
 
   const [configs, setConfigs] = useState([]);
 
-
   const onchageVersion = (value) => {
     setLoading(true);
     console.log(value);
@@ -46,157 +49,9 @@ function InsallApplicationPage({
         const confData = JSON.parse(data.confData);
         const configsCache = [];
         confData.subApps.map((subApp) => {
-          const envsCache = [];
-          const portBindsCache = [];
-          const bindsCache = [];
-          const env = subApp.envs;
-          if (env) {
-            env.map((item, index) => {
-              envsCache.push(
-                <Form.Item
-                  field={
-                    'confData.subApps[' +
-                    (subApp.key - 1) +
-                    '].envs[' +
-                    index +
-                    ']'
-                  }
-                >
-                  <Form.Item
-                    label={item.envName}
-                    field={
-                      'confData.subApps[' +
-                      (subApp.key - 1) +
-                      '].envs[' +
-                      index +
-                      '].' +
-                      item.envKey
-                    }
-                    initialValue={item.envValue}
-                    disabled={!item.editable}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Form.Item>
-              );
-            });
-          }
-
+          const envs = subApp.envs;
           const portBinds = subApp.portBinds;
-
-          if (portBinds) {
-            portBinds.map((item, index) => {
-              console.log(item)
-              portBindsCache.push(
-                <Form.Item field={'portBinds[' + index + ']'}>
-                  <Form.Item
-                    field={
-                      'confData.subApps[' +
-                      (subApp.key - 1) +
-                      '].portBinds[' +
-                      index +
-                      '].containerPort'
-                    }
-                    initialValue={item.containerPort}
-                    hidden
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    field={
-                      'confData.subApps[' +
-                      (subApp.key - 1) +
-                      '].portBinds[' +
-                      index +
-                      '].protocol'
-                    }
-                    initialValue={item.protocol}
-                    hidden
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    field={
-                      'confData.subApps[' +
-                      (subApp.key - 1) +
-                      '].portBinds[' +
-                      index +
-                      '].description'
-                    }
-                    initialValue={item.description}
-                    hidden
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={item.description}
-                    field={
-                      'confData.subApps[' +
-                      (subApp.key - 1) +
-                      '].portBinds[' +
-                      index +
-                      '].localPort'
-                    }
-                    initialValue={item.localPort}
-                    disabled={!item.editable}
-                  >
-                    <Input type={'number'} max={65535} min={80} />
-                  </Form.Item>
-                </Form.Item>
-              );
-            });
-          }
-
           const binds = subApp.binds;
-
-          if (binds) {
-            binds.map((item, index) => {
-              bindsCache.push(
-                <Form.Item field={'binds[' + index + ']'}>
-                  <Form.Item
-                    field={
-                      'confData.subApps[' +
-                      (subApp.key - 1) +
-                      '].binds[' +
-                      index +
-                      '].containerPath'
-                    }
-                    initialValue={item.containerPath}
-                    hidden
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    field={
-                      'confData.subApps[' +
-                      (subApp.key - 1) +
-                      '].binds[' +
-                      index +
-                      '].description'
-                    }
-                    initialValue={item.description}
-                    hidden
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={item.description}
-                    field={
-                      'confData.subApps[' +
-                      (subApp.key - 1) +
-                      '].binds[' +
-                      index +
-                      '].localPath'
-                    }
-                    initialValue={item.localPath}
-                    disabled={!item.editable}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Form.Item>
-              );
-            });
-          }
 
           configsCache.push(
             <Form.Item field={'confData'}>
@@ -347,21 +202,317 @@ function InsallApplicationPage({
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item
+                <Typography.Title heading={6}>
+                  {t['searchTable.columns.EnvInfo']}
+                </Typography.Title>
+                <Form.List
                   field={'confData.subApps[' + (subApp.key - 1) + '].envs'}
+                  initialValue={envs}
                 >
-                  {envsCache}
-                </Form.Item>
-                <Form.Item
+                  {(fields, { add, remove, move }) => {
+                    return (
+                      <div>
+                        {fields.map((item, index) => {
+                          return (
+                            <div key={item.key}>
+                              <Form.Item
+                                label={
+                                  envs && envs.length > index
+                                    ? envs[index].envName
+                                    : t['searchTable.columns.EnvInfo'] +
+                                      (index + 1)
+                                }
+                              >
+                                <Space
+                                  style={{
+                                    width: '100%',
+                                    justifyContent: 'space-between',
+                                  }}
+                                  split={<Divider type="vertical" />}
+                                  align="baseline"
+                                  size="large"
+                                >
+                                  <Form.Item
+                                    label={t['searchTable.columns.envKey']}
+                                    field={item.field + '.envKey'}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message:
+                                          t[
+                                            'searchTable.rules.envKey.required'
+                                          ],
+                                      },
+                                    ]}
+                                    disabled={
+                                      envs && envs.length > index
+                                        ? envs[index].editable
+                                        : false
+                                    }
+                                  >
+                                    <Input />
+                                  </Form.Item>
+                                  <Form.Item
+                                    label={t['searchTable.columns.envValue']}
+                                    field={item.field + '.envValue'}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message:
+                                          t[
+                                            'searchTable.rules.envValue.required'
+                                          ],
+                                      },
+                                    ]}
+                                  >
+                                    <Input />
+                                  </Form.Item>
+                                  <Form.Item>
+                                    <Button
+                                      icon={<IconDelete />}
+                                      disabled={
+                                        envs && envs.length > index
+                                          ? envs[index].editable
+                                          : false
+                                      }
+                                      shape="circle"
+                                      status="danger"
+                                      onClick={() => remove(index)}
+                                    ></Button>
+                                  </Form.Item>
+                                </Space>
+                              </Form.Item>
+                            </div>
+                          );
+                        })}
+                        <Form.Item>
+                          <Button
+                            type="dashed"
+                            onClick={() => {
+                              add();
+                            }}
+                          >
+                            {t['searchTable.columns.addEnv']}
+                          </Button>
+                        </Form.Item>
+                      </div>
+                    );
+                  }}
+                </Form.List>
+                <Divider orientation="left"></Divider>
+                <Typography.Title heading={6}>
+                  {t['searchTable.columns.port']}
+                </Typography.Title>
+                <Form.List
+                  initialValue={portBinds}
                   field={'confData.subApps[' + (subApp.key - 1) + '].portBinds'}
                 >
-                  {portBindsCache}
-                </Form.Item>
-                <Form.Item
+                  {(fields, { add, remove, move }) => {
+                    return (
+                      <div>
+                        {fields.map((item, index) => {
+                          return (
+                            <div key={item.key}>
+                              <Form.Item
+                                label={
+                                  portBinds && portBinds.length > index
+                                    ? portBinds[index].description
+                                    : t['searchTable.columns.port'] +
+                                      (index + 1)
+                                }
+                              >
+                                <Space
+                                  style={{
+                                    width: '100%',
+                                    justifyContent: 'space-between',
+                                  }}
+                                  split={<Divider type="vertical" />}
+                                  align="center"
+                                  size="small"
+                                >
+                                  <Form.Item
+                                    label={
+                                      t['searchTable.columns.containerPort']
+                                    }
+                                    field={item.field + '.containerPort'}
+                                    disabled={
+                                      portBinds && portBinds.length > index
+                                        ? portBinds[index].editable
+                                        : false
+                                    }
+                                  >
+                                    <Input />
+                                  </Form.Item>
+
+                                  <Form.Item
+                                    label={t['searchTable.columns.localPort']}
+                                    field={item.field + '.localPort'}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message:
+                                          t[
+                                            'searchTable.rules.localPort.required'
+                                          ],
+                                      },
+                                    ]}
+                                  >
+                                    <Input
+                                      type={'number'}
+                                      max={65535}
+                                      min={80}
+                                    />
+                                  </Form.Item>
+                                  <Form.Item
+                                    label={t['searchTable.columns.protocol']}
+                                    field={item.field + '.protocol'}
+                                    disabled={
+                                      portBinds && portBinds.length > index
+                                        ? portBinds[index].editable
+                                        : false
+                                    }
+                                  >
+                                    <Select
+                                      options={[
+                                        { label: 'tcp', value: 'tcp' },
+                                        { label: 'udp', value: 'udp' },
+                                      ]}
+                                    />
+                                  </Form.Item>
+                                  <Form.Item>
+                                    <Button
+                                      icon={<IconDelete />}
+                                      disabled={
+                                        portBinds && portBinds.length > index
+                                          ? portBinds[index].editable
+                                          : false
+                                      }
+                                      shape="circle"
+                                      status="danger"
+                                      onClick={() => remove(index)}
+                                    ></Button>
+                                  </Form.Item>
+                                </Space>
+                              </Form.Item>
+                            </div>
+                          );
+                        })}
+                        <Form.Item>
+                          <Button
+                            type="dashed"
+                            onClick={() => {
+                              add();
+                            }}
+                          >
+                            {t['searchTable.columns.addPort']}
+                          </Button>
+                        </Form.Item>
+                      </div>
+                    );
+                  }}
+                </Form.List>
+                <Divider orientation="left"></Divider>
+                <Typography.Title heading={6}>
+                  {t['searchTable.columns.binds']}
+                </Typography.Title>
+                <Form.List
                   field={'confData.subApps[' + (subApp.key - 1) + '].binds'}
+                  initialValue={binds}
                 >
-                  {bindsCache}
-                </Form.Item>
+                  {(fields, { add, remove, move }) => {
+                    return (
+                      <div>
+                        {fields.map((item, index) => {
+                          return (
+                            <div key={item.key}>
+                              <Form.Item
+                                label={
+                                  binds && binds.length > index
+                                    ? binds[index].description
+                                    : t['searchTable.columns.binds'] +
+                                      (index + 1)
+                                }
+                              >
+                                <Space
+                                  style={{
+                                    width: '100%',
+                                    justifyContent: 'space-between',
+                                  }}
+                                  split={<Divider type="vertical" />}
+                                  align="baseline"
+                                  size="large"
+                                >
+                                  <Form.Item
+                                    label={
+                                      t['searchTable.columns.containerPath']
+                                    }
+                                    disabled={
+                                      binds && binds.length > index
+                                        ? binds[index].editable
+                                        : false
+                                    }
+                                    field={item.field + '.containerPath'}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message:
+                                          t[
+                                            'searchTable.rules.containerPath.required'
+                                          ],
+                                      },
+                                    ]}
+                                  >
+                                    <Input />
+                                  </Form.Item>
+
+                                  <Form.Item
+                                    label={t['searchTable.columns.localPath']}
+                                    field={item.field + '.localPath'}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message:
+                                          t[
+                                            'searchTable.rules.localPath.required'
+                                          ],
+                                      },
+                                    ]}
+                                  >
+                                    <Input />
+                                  </Form.Item>
+                                  <Form.Item>
+                                    <Button
+                                      disabled={
+                                        binds && binds.length > index
+                                          ? binds[index].editable
+                                          : false
+                                      }
+                                      icon={<IconDelete />}
+                                      shape="circle"
+                                      status="danger"
+                                      onClick={() => remove(index)}
+                                    ></Button>
+                                  </Form.Item>
+                                </Space>
+                              </Form.Item>
+                            </div>
+                          );
+                        })}
+                        <Form.Item>
+                          <Button
+                            type="dashed"
+                            onClick={() => {
+                              add();
+                            }}
+                          >
+                            {t['searchTable.columns.addBinds']}
+                          </Button>
+                        </Form.Item>
+                      </div>
+                    );
+                  }}
+                </Form.List>
+                <Divider orientation="left"></Divider>
               </Form.Item>
             </Form.Item>
           );
@@ -387,7 +538,7 @@ function InsallApplicationPage({
         }, 1000);
         return;
       } else {
-        onchageVersion(version)
+        onchageVersion(version);
       }
     }
   }
@@ -395,7 +546,7 @@ function InsallApplicationPage({
   useEffect(() => {
     console.log(visible);
     console.log(applicationId);
-    if(visible){
+    if (visible) {
       fetchData();
     }
   }, [visible]);
@@ -403,6 +554,11 @@ function InsallApplicationPage({
   //提交
   const handleSubmit = () => {
     formRef.current.validate().then((values: any) => {
+      console.log('data', {
+        ...values,
+        applicationId: applicationId,
+        confData: JSON.stringify(values.confData),
+      });
       installeRequest({
         ...values,
         applicationId: applicationId,
@@ -422,7 +578,7 @@ function InsallApplicationPage({
 
   return (
     <Drawer
-      width={'30%'}
+      width={'50%'}
       title={t['searchTable.operations.add']}
       visible={visible}
       onOk={() => {
@@ -449,7 +605,7 @@ function InsallApplicationPage({
           hidden
           initialValue={version}
         >
-          <Input/>
+          <Input />
         </Form.Item>
         <Form.Item
           label={t['searchTable.columns.client']}
