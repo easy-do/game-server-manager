@@ -246,7 +246,7 @@ function InsallApplicationPage({
                                     ]}
                                     disabled={
                                       envs && envs.length > index
-                                        ? envs[index].editable
+                                        ? !envs[index].editable
                                         : false
                                     }
                                   >
@@ -272,7 +272,7 @@ function InsallApplicationPage({
                                       icon={<IconDelete />}
                                       disabled={
                                         envs && envs.length > index
-                                          ? envs[index].editable
+                                          ? !envs[index].editable
                                           : false
                                       }
                                       shape="circle"
@@ -337,7 +337,7 @@ function InsallApplicationPage({
                                     field={item.field + '.containerPort'}
                                     disabled={
                                       portBinds && portBinds.length > index
-                                        ? portBinds[index].editable
+                                        ? !portBinds[index].editable
                                         : false
                                     }
                                   >
@@ -368,7 +368,7 @@ function InsallApplicationPage({
                                     field={item.field + '.protocol'}
                                     disabled={
                                       portBinds && portBinds.length > index
-                                        ? portBinds[index].editable
+                                        ? !portBinds[index].editable
                                         : false
                                     }
                                   >
@@ -384,7 +384,7 @@ function InsallApplicationPage({
                                       icon={<IconDelete />}
                                       disabled={
                                         portBinds && portBinds.length > index
-                                          ? portBinds[index].editable
+                                          ? !portBinds[index].editable
                                           : false
                                       }
                                       shape="circle"
@@ -448,7 +448,7 @@ function InsallApplicationPage({
                                     }
                                     disabled={
                                       binds && binds.length > index
-                                        ? binds[index].editable
+                                        ? !binds[index].editable
                                         : false
                                     }
                                     field={item.field + '.containerPath'}
@@ -484,7 +484,7 @@ function InsallApplicationPage({
                                     <Button
                                       disabled={
                                         binds && binds.length > index
-                                          ? binds[index].editable
+                                          ? !binds[index].editable
                                           : false
                                       }
                                       icon={<IconDelete />}
