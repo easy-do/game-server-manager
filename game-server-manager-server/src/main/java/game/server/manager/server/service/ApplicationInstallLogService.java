@@ -7,6 +7,8 @@ import game.server.manager.server.qo.ApplicationInstallLogQo;
 import game.server.manager.server.vo.ApplicationInstallLogVo;
 import game.server.manager.server.entity.ApplicationInstallLog;
 
+import java.util.List;
+
 
 /**
  * 应用安装日志Service接口
@@ -18,4 +20,6 @@ public interface ApplicationInstallLogService extends BaseService<ApplicationIns
 
 
     LogResultVo getLog(String logId);
+
+    List<ApplicationInstallLog> getNoFinishLog();
 }
