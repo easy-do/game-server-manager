@@ -98,16 +98,15 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
       }
     >
       <Spin tip="loading Data..." loading={loading}>
-        <Paragraph copyable={{ text: installCmd}} code>
-          <strong>宿主机安装(需要jdk-17环境)</strong>:
-          <br />
-          {installCmd}
-        </Paragraph>
-        {console.info(dockerInstall)}
         <Paragraph copyable={{ text: dockerInstall }} code>
         <strong>docker安装(暂不支持执行脚本)</strong>:
           <br />
           {dockerInstall}
+        </Paragraph>
+        <Paragraph copyable={{ text: installCmd}} code>
+          <strong>宿主机安装(可以跑脚本但不不推荐,需要jdk-17环境)</strong>:
+          <br />
+          {installCmd}
         </Paragraph>
       </Spin>
     </Modal>
