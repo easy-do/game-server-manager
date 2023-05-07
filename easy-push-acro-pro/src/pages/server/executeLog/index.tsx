@@ -120,6 +120,7 @@ function ExecuteLogSearchTable(props:{deviceId?:string,visible}) {
   function handleSearch(params) {
     setPatination({ ...pagination, current: 1 });
     setFormParams(params);
+    fetchData();
   }
 
   return (
