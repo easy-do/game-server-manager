@@ -157,4 +157,11 @@ public class ApplicationInstallLogServiceImpl extends BaseServiceImpl<Applicatio
             return LogResultVo.builder().isFinish(true).logs(logs).build();
         }
     }
+
+    @Override
+    public List<ApplicationInstallLog> getNoFinishLog() {
+        LambdaQueryWrapper<ApplicationInstallLog> wrapper = Wrappers.lambdaQuery();
+        wrapper.notIn(ApplicationInstallLog::getStatus,ApplicationInstallLogStatusenum.SUCCESS.getStatus(),ApplicationInstallLogStatusenum.FAILED.getStatus());
+        return list(wrapper);
+    }
 }
