@@ -186,6 +186,7 @@ function SearchTable() {
   function handleSearch(params) {
     setPatination({ ...pagination, current: 1 });
     setFormParams(params);
+    fetchData();
   }
 
   //构建卡片列表、绑定操作回调

@@ -91,6 +91,7 @@ function ImportTable({ visible, setVisible, importSuccess }) {
   function handleSearch(params) {
     setPatination({ ...pagination, current: 1 });
     setFormParams(params);
+    fetchData();
   }
 
   //确认导入表结构

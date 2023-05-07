@@ -189,6 +189,7 @@ function SearchTable() {
   function handleSearch(params) {
     setPatination({ ...pagination, current: 1 });
     setFormParams(params);
+    fetchData();
   }
 
   return (
