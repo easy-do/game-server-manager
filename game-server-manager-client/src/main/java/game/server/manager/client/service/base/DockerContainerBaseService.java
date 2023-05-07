@@ -248,12 +248,14 @@ public class DockerContainerBaseService {
         hostConfig.withNetworkMode(createContainerDto.getNetworkMode());
         //绑定目录
         withBinds(hostConfig, createContainerDto);
+        //暴露容器端口
+        withExposedPorts(createContainerCmd, createContainerDto);
         //端口设置
         if(Objects.nonNull(createContainerDto.getPublishAllPorts()) && createContainerDto.getPublishAllPorts()){
-            //暴露所有端口
+            //发布所有端口
             hostConfig.withPublishAllPorts(true);
         }else {
-            //暴露指定端口
+            //发布指定端口
             withPortBindings(hostConfig, createContainerDto);
         }
         //是否特权模式
@@ -262,8 +264,7 @@ public class DockerContainerBaseService {
         withLinks(hostConfig, createContainerDto);
         //应用主机配置
         createContainerCmd.withHostConfig(hostConfig);
-        //暴露容器端口
-        withExposedPorts(createContainerCmd, createContainerDto);
+
         try {
             log.info("Docker createContainer {}", mapper.writeValueAsString(createContainerDto));
         } catch (JsonProcessingException e) {
@@ -318,7 +319,7 @@ public class DockerContainerBaseService {
         List<PortBindDto> portBindDtoList = createContainerDto.getPortBinds();
         if (Objects.nonNull(portBindDtoList) && !portBindDtoList.isEmpty()) {
             List<PortBinding> binds = new ArrayList<>();
-            portBindDtoList.forEach(proPortBindDto -> binds.add(PortBinding.parse(proPortBindDto.getLocalPort() + ":" + proPortBindDto.getContainerPort())));
+            portBindDtoList.forEach(proPortBindDto -> binds.add(PortBinding.parse(proPortBindDto.getLocalPort() + ":" + proPortBindDto.getContainerPort()+ "/" + proPortBindDto.getProtocol())));
             hostConfig.withPortBindings(binds);
         }
     }
