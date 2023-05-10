@@ -1,4 +1,4 @@
-package game.server.manager.server.config;
+package game.server.manager.server.config.server;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

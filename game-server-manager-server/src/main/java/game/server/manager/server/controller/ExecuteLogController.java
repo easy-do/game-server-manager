@@ -8,7 +8,7 @@ import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.mybatis.plus.result.MpDataResult;
 import game.server.manager.mybatis.plus.result.MpResultUtil;
-import game.server.manager.server.qo.ExecuteLogQo;
+import game.server.manager.server.qo.server.ExecuteLogQo;
 import game.server.manager.server.service.ExecuteLogService;
 import game.server.manager.common.vo.ExecuteLogVo;
 import org.springframework.beans.factory.annotation.Autowired;

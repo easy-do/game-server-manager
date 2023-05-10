@@ -3,9 +3,9 @@ package game.server.manager.server.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import game.server.manager.server.dto.DockerDetailsDto;
-import game.server.manager.server.vo.DockerDetailsVo;
+import game.server.manager.server.vo.server.DockerDetailsVo;
 import game.server.manager.web.base.BaseController;
-import game.server.manager.server.qo.DockerDetailsQo;
+import game.server.manager.server.qo.server.DockerDetailsQo;
 import game.server.manager.server.service.DockerDetailsService;
 import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.log.SaveLog;

@@ -1,4 +1,4 @@
-package game.server.manager.server.vo;
+package game.server.manager.server.vo.server;
 
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;

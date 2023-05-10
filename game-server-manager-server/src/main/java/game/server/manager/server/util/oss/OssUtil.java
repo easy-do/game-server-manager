@@ -1,4 +1,4 @@
-package game.server.manager.server.util;
+package game.server.manager.server.util.oss;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import game.server.manager.server.config.oss.OssObject;

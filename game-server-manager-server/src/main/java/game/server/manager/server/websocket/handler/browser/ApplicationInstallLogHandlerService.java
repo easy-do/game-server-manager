@@ -5,14 +5,13 @@ import com.alibaba.fastjson2.JSON;
 import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.exception.ExceptionFactory;
-import game.server.manager.common.mode.socket.BrowserExecScriptLogMessage;
 import game.server.manager.common.mode.socket.BrowserInstallLogMessage;
 import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.vo.LogResultVo;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.server.service.ApplicationInstallLogService;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import game.server.manager.server.websocket.handler.AbstractHandlerService;
 import org.springframework.stereotype.Service;
 

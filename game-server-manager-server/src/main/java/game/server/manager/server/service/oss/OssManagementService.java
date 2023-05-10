@@ -2,8 +2,8 @@ package game.server.manager.server.service.oss;
 
 import game.server.manager.server.dto.OssManagementDto;
 import game.server.manager.server.entity.OssManagement;
-import game.server.manager.server.qo.OssManagementQo;
-import game.server.manager.server.vo.OssManagementVo;
+import game.server.manager.server.qo.oss.OssManagementQo;
+import game.server.manager.server.vo.oss.OssManagementVo;
 import game.server.manager.web.base.BaseService;
 
 

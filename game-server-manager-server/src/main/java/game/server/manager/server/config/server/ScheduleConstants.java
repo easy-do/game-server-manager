@@ -1,4 +1,4 @@
-package game.server.manager.server.config;
+package game.server.manager.server.config.server;
 
 /**
  * 任务调度通用常量

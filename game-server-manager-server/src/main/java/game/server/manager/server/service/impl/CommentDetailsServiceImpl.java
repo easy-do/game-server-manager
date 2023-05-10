@@ -17,7 +17,7 @@ import game.server.manager.server.entity.CommentDetails;
 import game.server.manager.server.entity.Discussion;
 import game.server.manager.server.mapper.CommentDetailsMapper;
 import game.server.manager.server.mapstruct.CommentDetailsMapstruct;
-import game.server.manager.server.qo.CommentDetailsQo;
+import game.server.manager.server.qo.server.CommentDetailsQo;
 import game.server.manager.server.service.CommentDetailsService;
 import game.server.manager.server.service.DiscussionService;
 import game.server.manager.web.base.BaseServiceImpl;

@@ -1,6 +1,6 @@
-package game.server.manager.server.util;
+package game.server.manager.server.util.server;
 
-import game.server.manager.server.config.ScheduleConstants;
+import game.server.manager.server.config.server.ScheduleConstants;
 import game.server.manager.server.entity.SysJob;
 import game.server.manager.common.exception.TaskException;
 import game.server.manager.server.job.util.QuartzDisallowConcurrentExecution;

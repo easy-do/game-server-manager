@@ -2,7 +2,7 @@ package game.server.manager.server.mapstruct;
 
 import game.server.manager.server.dto.DockerDetailsDto;
 import game.server.manager.server.entity.DockerDetails;
-import game.server.manager.server.vo.DockerDetailsVo;
+import game.server.manager.server.vo.server.DockerDetailsVo;
 import game.server.manager.mapstruct.BaseMapstruct;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

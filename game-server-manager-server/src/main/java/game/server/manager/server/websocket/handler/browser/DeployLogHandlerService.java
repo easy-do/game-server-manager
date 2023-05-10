@@ -11,7 +11,7 @@ import game.server.manager.common.mode.socket.ServerMessage;
 import game.server.manager.common.vo.LogResultVo;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.server.application.DeploymentLogServer;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import game.server.manager.server.websocket.handler.AbstractHandlerService;
 import org.springframework.stereotype.Service;
 

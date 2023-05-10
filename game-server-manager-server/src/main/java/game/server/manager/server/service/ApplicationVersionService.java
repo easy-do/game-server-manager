@@ -3,8 +3,8 @@ package game.server.manager.server.service;
 
 import game.server.manager.web.base.BaseService;
 import game.server.manager.server.dto.ApplicationVersionDto;
-import game.server.manager.server.qo.ApplicationVersionQo;
-import game.server.manager.server.vo.ApplicationVersionVo;
+import game.server.manager.server.qo.server.ApplicationVersionQo;
+import game.server.manager.server.vo.server.ApplicationVersionVo;
 import game.server.manager.server.entity.ApplicationVersion;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public interface ApplicationVersionService extends BaseService<ApplicationVersio
      * 获取应用版本列表
      *
      * @param applicationId applicationId
-     * @return java.util.List<game.server.manager.server.vo.ApplicationVersionVo>
+     * @return java.util.List<game.server.manager.server.vo.server.ApplicationVersionVo>
      * @author laoyu
      * @date 2023/3/19
      */

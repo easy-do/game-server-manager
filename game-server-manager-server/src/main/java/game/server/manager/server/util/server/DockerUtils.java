@@ -1,4 +1,4 @@
-package game.server.manager.server.util;
+package game.server.manager.server.util.server;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;

@@ -3,8 +3,8 @@ package game.server.manager.server.service;
 import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.web.base.BaseService;
 import game.server.manager.server.dto.DockerDetailsDto;
-import game.server.manager.server.qo.DockerDetailsQo;
-import game.server.manager.server.vo.DockerDetailsVo;
+import game.server.manager.server.qo.server.DockerDetailsQo;
+import game.server.manager.server.vo.server.DockerDetailsVo;
 
 
 /**
@@ -20,7 +20,7 @@ public interface DockerDetailsService extends BaseService<DockerDetails, DockerD
      * 根据客户端获取docker信息
      *
      * @param clientId clientId
-     * @return game.server.manager.server.vo.DockerDetailsVo
+     * @return game.server.manager.server.vo.server.DockerDetailsVo
      * @author laoyu
      * @date 2023/3/19
      */

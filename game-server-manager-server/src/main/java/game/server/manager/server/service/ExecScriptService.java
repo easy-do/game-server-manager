@@ -32,7 +32,7 @@ import game.server.manager.server.entity.ExecuteLog;
 import game.server.manager.server.entity.ScriptData;
 import game.server.manager.server.entity.ServerInfo;
 import game.server.manager.server.redis.ExecScriptListenerMessage;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
