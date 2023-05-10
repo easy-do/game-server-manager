@@ -3,7 +3,7 @@ package game.server.manager.server.mapstruct;
 import game.server.manager.mapstruct.BaseMapstruct;
 import game.server.manager.server.dto.OssManagementDto;
 import game.server.manager.server.entity.OssManagement;
-import game.server.manager.server.vo.OssManagementVo;
+import game.server.manager.server.vo.oss.OssManagementVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

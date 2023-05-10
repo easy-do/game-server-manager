@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import game.server.manager.common.exception.OssException;
 import game.server.manager.server.config.oss.OssObject;
 import game.server.manager.server.config.oss.local.config.LocalOssProperties;
-import game.server.manager.server.util.OssUtil;
+import game.server.manager.server.util.oss.OssUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;

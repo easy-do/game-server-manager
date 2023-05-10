@@ -3,7 +3,7 @@ package game.server.manager.server.job.util;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import game.server.manager.server.config.ScheduleConstants;
+import game.server.manager.server.config.server.ScheduleConstants;
 import game.server.manager.server.entity.SysJob;
 import game.server.manager.server.entity.SysJobLog;
 import game.server.manager.server.service.SysJobLogService;

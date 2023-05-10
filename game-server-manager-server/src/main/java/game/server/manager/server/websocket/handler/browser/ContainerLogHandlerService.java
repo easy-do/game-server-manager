@@ -5,7 +5,7 @@ import game.server.manager.common.constant.MessageTypeConstants;
 import game.server.manager.common.mode.socket.BrowserMessage;
 import game.server.manager.common.vo.UserInfoVo;
 import game.server.manager.server.service.DockerContainerService;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.server.websocket.handler.AbstractHandlerService;
 import org.springframework.stereotype.Service;

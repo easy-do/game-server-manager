@@ -38,7 +38,7 @@ import game.server.manager.server.service.ClientInfoService;
 import game.server.manager.server.service.ClientMessageService;
 import game.server.manager.server.service.ExecuteLogService;
 import game.server.manager.server.service.ServerInfoService;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.web.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

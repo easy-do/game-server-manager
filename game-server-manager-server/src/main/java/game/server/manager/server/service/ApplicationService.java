@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.server.dto.InstallApplicationDto;
 import game.server.manager.web.base.BaseService;
 import game.server.manager.server.dto.ApplicationDto;
-import game.server.manager.server.qo.ApplicationQo;
-import game.server.manager.server.vo.ApplicationVo;
+import game.server.manager.server.qo.server.ApplicationQo;
+import game.server.manager.server.vo.server.ApplicationVo;
 import game.server.manager.server.entity.Application;
 
 
@@ -21,7 +21,7 @@ public interface ApplicationService extends BaseService<Application, Application
      * 应用商店分页查询
      *
      * @param applicationQo applicationQo
-     * @return com.baomidou.mybatisplus.core.metadata.IPage<game.server.manager.server.vo.ApplicationVo>
+     * @return com.baomidou.mybatisplus.core.metadata.IPage<game.server.manager.server.vo.server.ApplicationVo>
      * @author laoyu
      * @date 2023/3/18
      */

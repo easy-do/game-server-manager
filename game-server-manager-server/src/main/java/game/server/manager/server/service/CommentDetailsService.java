@@ -1,7 +1,7 @@
 package game.server.manager.server.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import game.server.manager.server.qo.CommentDetailsQo;
+import game.server.manager.server.qo.server.CommentDetailsQo;
 import game.server.manager.web.base.BaseService;
 import game.server.manager.server.dto.CommentDetailsDto;
 import game.server.manager.server.entity.CommentDetails;

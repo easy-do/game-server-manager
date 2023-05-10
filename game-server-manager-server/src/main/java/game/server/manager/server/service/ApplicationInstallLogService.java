@@ -3,8 +3,8 @@ package game.server.manager.server.service;
 import game.server.manager.common.vo.LogResultVo;
 import game.server.manager.web.base.BaseService;
 import game.server.manager.server.dto.ApplicationInstallLogDto;
-import game.server.manager.server.qo.ApplicationInstallLogQo;
-import game.server.manager.server.vo.ApplicationInstallLogVo;
+import game.server.manager.server.qo.server.ApplicationInstallLogQo;
+import game.server.manager.server.vo.server.ApplicationInstallLogVo;
 import game.server.manager.server.entity.ApplicationInstallLog;
 
 import java.util.List;

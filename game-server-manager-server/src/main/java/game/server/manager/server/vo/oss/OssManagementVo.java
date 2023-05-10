@@ -1,4 +1,4 @@
-package game.server.manager.server.vo;
+package game.server.manager.server.vo.oss;
 
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;

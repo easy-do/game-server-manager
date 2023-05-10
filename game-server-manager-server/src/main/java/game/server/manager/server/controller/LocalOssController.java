@@ -6,7 +6,7 @@ import game.server.manager.common.result.OssResult;
 import game.server.manager.common.result.R;
 import game.server.manager.server.config.oss.OssObject;
 import game.server.manager.server.config.oss.local.LocalOssService;
-import game.server.manager.server.util.OssUtil;
+import game.server.manager.server.util.oss.OssUtil;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

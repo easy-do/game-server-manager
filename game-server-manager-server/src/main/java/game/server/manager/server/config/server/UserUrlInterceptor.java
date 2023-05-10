@@ -1,4 +1,4 @@
-package game.server.manager.server.config;
+package game.server.manager.server.config.server;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;

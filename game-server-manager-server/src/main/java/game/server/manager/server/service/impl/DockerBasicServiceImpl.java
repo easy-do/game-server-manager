@@ -14,8 +14,8 @@ import game.server.manager.docker.service.DockerBaseService;
 import game.server.manager.server.entity.DockerDetails;
 import game.server.manager.server.service.DockerBasicService;
 import game.server.manager.server.service.DockerDetailsService;
-import game.server.manager.server.util.DockerUtils;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.DockerUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

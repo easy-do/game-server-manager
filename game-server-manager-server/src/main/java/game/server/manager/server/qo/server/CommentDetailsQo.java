@@ -1,4 +1,4 @@
-package game.server.manager.server.qo;
+package game.server.manager.server.qo.server;
 
 import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import game.server.manager.server.entity.CommentDetails;

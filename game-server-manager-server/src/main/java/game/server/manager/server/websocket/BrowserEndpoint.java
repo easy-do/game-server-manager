@@ -1,7 +1,7 @@
 package game.server.manager.server.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import game.server.manager.server.websocket.handler.BrowserMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

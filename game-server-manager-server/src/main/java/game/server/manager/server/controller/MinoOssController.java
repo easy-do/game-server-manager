@@ -11,7 +11,7 @@ import game.server.manager.server.config.oss.OssObject;
 import game.server.manager.server.config.oss.minio.MinioOssStoreServer;
 import game.server.manager.server.entity.OssManagement;
 import game.server.manager.server.service.oss.OssManagementService;
-import game.server.manager.server.util.OssUtil;
+import game.server.manager.server.util.oss.OssUtil;
 import lombok.extern.java.Log;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;

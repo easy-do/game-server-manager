@@ -21,19 +21,18 @@ import game.server.manager.server.entity.ClientInfo;
 import game.server.manager.server.service.ApplicationInstallLogService;
 import game.server.manager.server.service.ApplicationVersionService;
 import game.server.manager.server.service.ClientInfoService;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.web.base.BaseServiceImpl;
 import game.server.manager.server.dto.ApplicationDto;
 import game.server.manager.server.entity.Application;
-import game.server.manager.server.qo.ApplicationQo;
-import game.server.manager.server.vo.ApplicationVo;
+import game.server.manager.server.qo.server.ApplicationQo;
+import game.server.manager.server.vo.server.ApplicationVo;
 import game.server.manager.server.mapstruct.ApplicationMapstruct;
 import game.server.manager.server.mapper.ApplicationMapper;
 import game.server.manager.server.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.websocket.Session;

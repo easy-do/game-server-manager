@@ -3,9 +3,9 @@ package game.server.manager.server.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import game.server.manager.web.base.BaseController;
-import game.server.manager.server.qo.ApplicationInstallLogQo;
+import game.server.manager.server.qo.server.ApplicationInstallLogQo;
 import game.server.manager.server.service.ApplicationInstallLogService;
-import game.server.manager.server.vo.ApplicationInstallLogVo;
+import game.server.manager.server.vo.server.ApplicationInstallLogVo;
 import game.server.manager.server.dto.ApplicationInstallLogDto;
 import  game.server.manager.server.entity.ApplicationInstallLog;
 import game.server.manager.log.SaveLog;

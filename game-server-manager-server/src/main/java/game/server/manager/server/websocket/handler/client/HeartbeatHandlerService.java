@@ -6,7 +6,7 @@ import game.server.manager.common.enums.ServerMessageTypeEnum;
 import game.server.manager.common.mode.ClientData;
 import game.server.manager.common.mode.socket.ClientMessage;
 import game.server.manager.server.service.ClientInfoService;
-import game.server.manager.server.util.SessionUtils;
+import game.server.manager.server.util.server.SessionUtils;
 import game.server.manager.server.websocket.SocketSessionCache;
 import game.server.manager.server.websocket.handler.AbstractHandlerService;
 import org.springframework.stereotype.Service;

@@ -1,16 +1,11 @@
 package game.server.manager.server.mapstruct;
 
 import game.server.manager.server.entity.ApplicationVersion;
-import game.server.manager.server.vo.ApplicationVersionVo;
+import game.server.manager.server.vo.server.ApplicationVersionVo;
 import game.server.manager.server.dto.ApplicationVersionDto;
 import game.server.manager.mapstruct.BaseMapstruct;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
-
-import java.io.Serializable;
-import java.util.List;
-
 
 
 /**

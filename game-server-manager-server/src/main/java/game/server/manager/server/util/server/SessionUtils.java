@@ -1,4 +1,4 @@
-package game.server.manager.server.util;
+package game.server.manager.server.util.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;

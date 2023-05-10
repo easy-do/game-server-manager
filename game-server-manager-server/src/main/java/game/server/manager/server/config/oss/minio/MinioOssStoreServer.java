@@ -7,7 +7,7 @@ import game.server.manager.common.result.OssResult;
 import game.server.manager.common.result.R;
 import game.server.manager.server.config.oss.OssObject;
 import game.server.manager.server.service.oss.AbstractOssService;
-import game.server.manager.server.util.OssUtil;
+import game.server.manager.server.util.oss.OssUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
