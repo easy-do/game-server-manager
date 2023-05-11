@@ -118,7 +118,7 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
      */
     @Override
     public List<GenTableColumn> selectDbTableColumnsByName(String dataSourceId, String tableName) {
-        String sql = "select column_name, (case when (is_nullable = 'no' && column_key != 'PRI') then '1' else null end) as is_required, (case when column_key = 'PRI' then '1' else '0' end) as is_pk, ordinal_position as sort, column_comment, (case when extra = 'auto_increment' then '1' else '0' end) as is_increment, column_type, column_default" +
+        String sql = "select column_name, (case when (is_nullable = 'no' && column_key != 'PRI') then '1' else null end) as is_required, (case when column_key = 'PRI' then '1' else '0' end) as is_pk, ordinal_position as sort, column_comment, (case when extra = 'auto_increment' then '1' else '0' end) as is_increment, column_type, column_default, character_maximum_length" +
                 " from information_schema.columns where table_schema = (select database()) and table_name = '" + tableName + "' order by ordinal_position";
         return jdbcDataSourceExecTool.query(dataSourceId, sql, GEN_TABLE_COLUMN_ROW_MAPPER_RESULT_SET_EXTRACTOR);
     }
@@ -132,7 +132,7 @@ public class DataSourceDbServiceImpl implements DataSourceDbService {
      */
     @Override
     public List<GenTableColumn> selectDbTableColumnsByName(String tableName) {
-        String sql = "select column_name, (case when (is_nullable = 'no' && column_key != 'PRI') then '1' else null end) as is_required, (case when column_key = 'PRI' then '1' else '0' end) as is_pk, ordinal_position as sort, column_comment, (case when extra = 'auto_increment' then '1' else '0' end) as is_increment, column_type, column_default" +
+        String sql = "select column_name, (case when (is_nullable = 'no' && column_key != 'PRI') then '1' else null end) as is_required, (case when column_key = 'PRI' then '1' else '0' end) as is_pk, ordinal_position as sort, column_comment, (case when extra = 'auto_increment' then '1' else '0' end) as is_increment, column_type, column_default, character_maximum_length" +
                 " from information_schema.columns where table_schema = (select database()) and table_name = '" + tableName + "' order by ordinal_position";
         return jdbcDataSourceExecTool.query("default", sql, GEN_TABLE_COLUMN_ROW_MAPPER_RESULT_SET_EXTRACTOR);
     }
