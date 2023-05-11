@@ -120,6 +120,11 @@ public class GenTableColumn {
      */
     private String defaultValue;
 
+    /**
+     * 最大长度
+     */
+    private String maximumLength;
+
     public static boolean isSuperColumn(String javaField) {
         return CharSequenceUtil.equalsAnyIgnoreCase(javaField,
                 // BaseEntity
@@ -146,10 +151,6 @@ public class GenTableColumn {
 
     public boolean isSuperColumn() {
         return isSuperColumn(this.javaField);
-    }
-
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
     }
 
 }

@@ -21,6 +21,7 @@ import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import UpdatePage from './update';
 import ImportTable from './importTable';
 import ViewCodePage from './viewCode';
+import GenDataBaseDoc from './genDataBaseDoc';
 
 const { Title } = Typography;
 
@@ -72,6 +73,18 @@ function SearchTable() {
     fetchData();
   }
 
+    //生成数据库文档
+    const [isGenDatabaseDoc, setIsGenDatabaseDoc] = useState(false);
+
+    function genDatabaseDoc() {
+      setIsGenDatabaseDoc(true);
+    }
+  
+    function genDatabaseDocSuccess() {
+      setIsGenDatabaseDoc(false);
+      fetchData();
+    }
+
   const [updateId, setUpdateId] = useState();
   const [isUpdateInfo, setisUpdateInfo] = useState(false);
 
@@ -88,11 +101,6 @@ function SearchTable() {
 
   function generateCode(id) {
     batchGenCode(id);
-    // .then((res)=>{
-    //   if(res.data.success){
-    //     Notification.success({ content: '成功', duration: 300 });
-    //   }
-    // })
   }
 
   function syncData(id) {
@@ -209,6 +217,13 @@ function SearchTable() {
             >
               {t['searchTable.operations.importTable']}
             </Button>
+            <Button
+              type="primary"
+              icon={<IconPlus />}
+              onClick={() => genDatabaseDoc()}
+            >
+              {t['searchTable.operations.genDatabaseDoc']}
+            </Button>
           </Space>
         </div>
       </PermissionWrapper>
@@ -230,6 +245,16 @@ function SearchTable() {
         visible={isImportTable}
         setVisible={setIsImportTable}
         importSuccess={importSuccess}
+      />
+       <ImportTable
+        visible={isImportTable}
+        setVisible={setIsImportTable}
+        importSuccess={importSuccess}
+      />
+      <GenDataBaseDoc
+        visible={isGenDatabaseDoc}
+        setVisible={setIsGenDatabaseDoc}
+        importSuccess={genDatabaseDocSuccess}
       />
       <ViewCodePage
         id={viewInfoId}

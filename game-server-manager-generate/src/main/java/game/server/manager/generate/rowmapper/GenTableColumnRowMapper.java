@@ -22,6 +22,7 @@ public class GenTableColumnRowMapper implements RowMapper<GenTableColumn> {
         genTableColumn.setIsIncrement(rs.getString("is_increment"));
         genTableColumn.setColumnType(rs.getString("column_type"));
         genTableColumn.setDefaultValue(rs.getString("column_default"));
+        genTableColumn.setMaximumLength(rs.getString("character_maximum_length"));
         return genTableColumn;
     }
 }

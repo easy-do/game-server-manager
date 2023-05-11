@@ -152,6 +152,32 @@ export function downLoadGet(str, type) {
   })
 }
 
+export function downLoadPost(str, param, type) {
+  var url = baseUrl + str
+  axios({
+    method: 'post',
+    url: url,
+    responseType: 'blob',
+    headers: {
+      "token": localStorage.getItem("token") ? localStorage.getItem("token") : ""
+    },
+    data: param
+  }).then(res => {
+    if(type == 'zip'){
+      resolveBlob(res, mimeMap.zip)
+    }
+    if(type == 'xlsx'){
+      resolveBlob(res, mimeMap.xlsx)
+    }
+    if(type == 'word'){
+      resolveBlob(res, mimeMap.word)
+    }
+    if(type == 'pdf'){
+      resolveBlob(res, mimeMap.pdf)
+    }
+  })
+}
+
 /**
  * 解析blob响应内容并下载
  * @param {*} res blob响应内容
