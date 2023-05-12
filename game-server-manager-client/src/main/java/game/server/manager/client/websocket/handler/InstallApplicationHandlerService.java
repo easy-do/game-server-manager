@@ -89,9 +89,7 @@ public class InstallApplicationHandlerService implements AbstractHandlerService 
                 String image = subApp.getImage();
                 resultData.setMessage("start pull image:" + image);
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
-                String pullLog = dockerImageService.pullImage(image);
-                resultData.setMessage(pullLog);
-                syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
+                dockerImageService.pullImage(messageId,image,resultData);
                 resultData.setMessage("create container:" + image);
                 syncServer.sendOkMessage(ClientSocketTypeEnum.INSTALL_APPLICATION_RESULT,messageId, objectMapper.writeValueAsString(resultData));
                 CreateContainerDto createDto = getCreateContainerDto(subApp);
