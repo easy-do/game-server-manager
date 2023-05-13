@@ -3,6 +3,7 @@ package game.server.manager.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import game.server.manager.auth.AuthorizationUtil;
 import game.server.manager.common.enums.AuditStatusEnum;
 import game.server.manager.common.exception.ExceptionFactory;
 import game.server.manager.server.entity.Application;
@@ -156,6 +157,11 @@ public class ApplicationVersionServiceImpl extends BaseServiceImpl<ApplicationVe
     public List<ApplicationVersionVo> versionList(Long applicationId) {
         LambdaQueryWrapper<ApplicationVersion> wrapper = getWrapper();
         wrapper.eq(ApplicationVersion::getApplicationId,applicationId);
+        if(AuthorizationUtil.isLogin()){
+            wrapper.eq(ApplicationVersion::getStatus,AuditStatusEnum.AUDIT_SUCCESS.getState()).or().eq(ApplicationVersion::getCreateBy,AuthorizationUtil.getUserId());
+        }else {
+            wrapper.eq(ApplicationVersion::getStatus,AuditStatusEnum.AUDIT_SUCCESS.getState());
+        }
         return ApplicationVersionMapstruct.INSTANCE.entityToVo(baseMapper.selectList(wrapper));
     }
 
