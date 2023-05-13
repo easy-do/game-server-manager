@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author laoyu
  * @version 1.0
- * @description TODO
+ * @description 应用版本配置
  * @date 2023/4/1
  */
 
