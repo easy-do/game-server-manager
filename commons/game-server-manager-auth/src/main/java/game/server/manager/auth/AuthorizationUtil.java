@@ -84,4 +84,8 @@ public class AuthorizationUtil {
             abstractAuthorizationCodeService.checkAuthorization(getUser(), authType);
         }
     }
+
+    public static boolean isLogin(){
+       return StpUtil.isLogin();
+    }
 }

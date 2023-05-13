@@ -33,7 +33,7 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
   function fetchData() {
     if (id !== undefined && visible) {
       setLoading(true);
-      setDockerInstall('docker run -dit -e CLIENT_ID='+id+' --privileged=true --pid=host -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker --name manager-client registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0')
+      setDockerInstall('docker push registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0 && docker run -dit -e CLIENT_ID='+id+' --privileged=true --restart=always --pid=host -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker --name manager-client registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0')
       getInstallCmd(id).then((res) => {
         const { success, data } = res.data;
         if (success) {
@@ -104,7 +104,7 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
           {dockerInstall}
         </Paragraph>
         <Paragraph copyable={{ text: installCmd}} code>
-          <strong>宿主机安装(可以跑脚本但不不推荐,需要jdk-17环境)</strong>:
+          <strong>宿主机安装(不推荐!!!,需要jdk-17环境,兼容性差,内存占用高)</strong>:
           <br />
           {installCmd}
         </Paragraph>
