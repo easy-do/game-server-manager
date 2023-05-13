@@ -6,6 +6,7 @@ import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import game.server.manager.auth.vo.SimpleUserInfoVo;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.common.vo.UserInfoVo;
@@ -36,7 +37,7 @@ public class AuthorizationUtil {
 
     public static SimpleUserInfoVo getSimpleUser(){
         StpUtil.checkLogin();
-        return (SimpleUserInfoVo) StpUtil.getExtra("userInfo");
+        return JSONUtil.toBean(StpUtil.getExtra("userInfo").toString(),SimpleUserInfoVo.class);
     }
 
     public UserInfoVo getUser(Object userId){

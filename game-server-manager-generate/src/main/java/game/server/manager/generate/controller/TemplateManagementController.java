@@ -1,5 +1,6 @@
 package game.server.manager.generate.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import game.server.manager.common.result.DataResult;
 import game.server.manager.common.result.R;
@@ -39,6 +40,7 @@ public class TemplateManagementController {
      * @return plus.easydo.starter.mybatis.plus.R.MPDataR
      * @author laoyu
      */
+    @SaCheckLogin
     @PostMapping("/page")
     public MpDataResult page(@RequestBody TemplateManagementQo qo) {
         IPage<TemplateManagementVo> page = templateManagementService.page(qo);
@@ -52,6 +54,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
+    @SaCheckLogin
     @PostMapping("/list")
     public R<List<TemplateManagementVo>> list(@RequestBody TemplateManagementQo qo) {
         return DataResult.ok(templateManagementService.list(qo));
@@ -65,6 +68,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
+    @SaCheckLogin
     @GetMapping(value = "/info/{id}")
     public R<Object> getInfo(@PathVariable("id") Long id) {
         return DataResult.ok(templateManagementService.selectById(id));
@@ -77,6 +81,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
+    @SaCheckLogin
     @PostMapping("/add")
     public R<Object> add(@RequestBody @Validated TemplateManagementDto dto) {
         return DataResult.ok(templateManagementService.insert(dto));
@@ -89,6 +94,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
+    @SaCheckLogin
     @PostMapping("/update")
     public R<Object> edit(@RequestBody @Validated TemplateManagementDto dto) {
         return templateManagementService.update(dto)?DataResult.ok():DataResult.fail();
@@ -101,6 +107,7 @@ public class TemplateManagementController {
      * @return plus.easydo.core.R.R
      * @author laoyu
      */
+    @SaCheckLogin
     @GetMapping("/remove/{id}")
     public R<Object> remove(@PathVariable Long id) {
         return DataResult.ok(templateManagementService.deleteById(id));
