@@ -33,7 +33,7 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
   function fetchData() {
     if (id !== undefined && visible) {
       setLoading(true);
-      setDockerInstall('docker push registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0 && docker run -dit -e CLIENT_ID='+id+' --privileged=true --restart=always --pid=host -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker --name manager-client registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0')
+      setDockerInstall('docker run -dit -e CLIENT_ID='+id+' --privileged=true --restart=always --pid=host -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker --name manager-client registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0')
       getInstallCmd(id).then((res) => {
         const { success, data } = res.data;
         if (success) {
@@ -98,14 +98,15 @@ function InstallClientPage({ id, visible, setVisible, successCallBack }) {
       }
     >
       <Spin tip="loading Data..." loading={loading}>
-        <Paragraph copyable={{ text: dockerInstall }} code>
         <strong>docker安装(暂不支持执行脚本)</strong>:
-          <br />
+        <Paragraph copyable={{ text: 'docker push registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0' }} code>
+          docker push registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:client-1.0.0
+        </Paragraph>
+        <Paragraph copyable={{ text: dockerInstall }} code>
           {dockerInstall}
         </Paragraph>
-        <Paragraph copyable={{ text: installCmd}} code>
           <strong>宿主机安装(不推荐!!!,需要jdk-17环境,兼容性差,内存占用高)</strong>:
-          <br />
+        <Paragraph copyable={{ text: installCmd}} code>
           {installCmd}
         </Paragraph>
       </Spin>
