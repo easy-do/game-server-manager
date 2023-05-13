@@ -158,7 +158,9 @@ public class ApplicationVersionServiceImpl extends BaseServiceImpl<ApplicationVe
         LambdaQueryWrapper<ApplicationVersion> wrapper = getWrapper();
         wrapper.eq(ApplicationVersion::getApplicationId,applicationId);
         if(AuthorizationUtil.isLogin()){
-            wrapper.eq(ApplicationVersion::getStatus,AuditStatusEnum.AUDIT_SUCCESS.getState()).or().eq(ApplicationVersion::getCreateBy,AuthorizationUtil.getUserId());
+            wrapper.and(wra->{
+                wra.eq(ApplicationVersion::getStatus,AuditStatusEnum.AUDIT_SUCCESS.getState()).or().eq(ApplicationVersion::getCreateBy,AuthorizationUtil.getUserId());
+            });
         }else {
             wrapper.eq(ApplicationVersion::getStatus,AuditStatusEnum.AUDIT_SUCCESS.getState());
         }
