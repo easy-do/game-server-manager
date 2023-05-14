@@ -25,10 +25,9 @@ public class TopDataController {
     @GetMapping("/home")
     public R<TopDataVo> topData(){
         long userCount = topDataServer.userCount();
-        long onlineUserCount = topDataServer.onlineUserCount();
         long deployCount = topDataServer.deployCount();
         long applicationCount = topDataServer.applicationCount();
-        TopDataVo topDataVo = TopDataVo.builder().userCount(userCount).onlineCount(onlineUserCount).deployCount(deployCount).applicationCount(applicationCount).build();
+        TopDataVo topDataVo = TopDataVo.builder().userCount(userCount).deployCount(deployCount).applicationCount(applicationCount).build();
         return DataResult.ok(topDataVo);
     }
 }

@@ -99,7 +99,7 @@ function Overview() {
             unit={t['workplace.pecs']}
           />
         </Col>
-        <Divider type="vertical" className={styles.divider} />
+        {/* <Divider type="vertical" className={styles.divider} />
         <Col flex={1}>
           <StatisticItem
             icon={<IconContent />}
@@ -108,7 +108,7 @@ function Overview() {
             loading={loading}
             unit={t['workplace.pecs']}
           />
-        </Col>
+        </Col> */}
         <Divider type="vertical" className={styles.divider} />
         <Col flex={1}>
           <StatisticItem

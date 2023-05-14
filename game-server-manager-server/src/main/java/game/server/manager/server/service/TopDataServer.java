@@ -1,5 +1,7 @@
 package game.server.manager.server.service;
 
+import cn.dev33.satoken.SaManager;
+import cn.dev33.satoken.stp.StpUtil;
 import game.server.manager.api.UserInfoApi;
 import game.server.manager.common.constant.SystemConstant;
 import game.server.manager.redis.config.RedisUtils;
@@ -39,10 +41,6 @@ public class TopDataServer {
         long newCount = userInfoService.count().getData();
         redisUtils.set(SystemConstant.COUNT_DATA_KEY_PREFIX + SystemConstant.USER_COUNT,newCount,5L, TimeUnit.MINUTES);
         return newCount;
-    }
-
-    public long onlineUserCount() {
-        return redisUtils.keys(SystemConstant.COUNT_DATA_KEY_PREFIX + SystemConstant.USER_INFO+"*").size();
     }
 
     public long deployCount() {
