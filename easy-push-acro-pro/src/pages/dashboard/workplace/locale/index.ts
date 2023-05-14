@@ -77,7 +77,7 @@ const i18n = {
     'workplace.react': 'React 组件库',
     'workplace.vue': 'Vue 组件库',
     'workplace.applicationCount': '应用数量',
-    'workplace.deployCount': '累积部署',
+    'workplace.deployCount': '执行脚本',
     'workplace.onlineCount': '在线用户',
     'workplace.userCount': '用户',
     'workplace.3': '活动',
