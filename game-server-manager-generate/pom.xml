@@ -91,9 +91,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>3.5.2</version>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.18.4</version>
         </dependency>
 
         <dependency>
@@ -155,19 +155,6 @@
                     <groupId>commons-io</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <!--logback输出JSON日志-->
-        <dependency>
-            <groupId>ch.qos.logback.contrib</groupId>
-            <artifactId>logback-json-classic</artifactId>
-            <version>0.1.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback.contrib</groupId>
-            <artifactId>logback-jackson</artifactId>
-            <version>0.1.5</version>
         </dependency>
 
     </dependencies>

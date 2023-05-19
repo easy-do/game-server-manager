@@ -50,31 +50,10 @@ spring:
     name: ${APPLICATION_NAME:game-server-manager-generate}
   # 数据源配置
   datasource:
-    dynamic:
-      primary: master #设置默认的数据源或者数据源组,默认值即为master
-      lazy: false #默认立即初始化数据源，true则支持在需要建立连接时再初始化数据源
-      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
-      datasource:
-        master:
-          url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:3306}/${DATABASE_NAME:game-manager}?characterEncoding=utf8&useSSL=false
-          username: ${MYSQL_USER:root}
-          password: ${MYSQL_PASS:root}
-  #        master:
-  #          url: jdbc:h2:file:./db/easy-do-gen;MODE=MySQL
-  #          username: ${MYSQL_USER:easy-do-gen}
-  #          password: ${MYSQL_PASS:easy-do-gen}
-  #          driver-class-name: org.h2.Driver
-  #  h2:
-  #    console:
-  #      settings:
-  #        web-allow-others: true
-  #      # 配置程序开启时就会启动h2 web consloe
-  #      enabled: true
-  #      #配置访问路径，YOUR_URL/h2-console访问h2 web
-  #      path: /h2-console
-  #  mybatis:
-  #    SensitiveEncryptEnabled: true
-  #redis 配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:3306}/${DATABASE_NAME:game-manager}?characterEncoding=utf8&useSSL=false
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:root}
   redis:
     host: ${REDIS_HOST:redis.server}
     password: ${REDIS_PASSWORD:n2H%yuXZFS}
