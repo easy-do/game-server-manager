@@ -29,7 +29,7 @@ spring:
           filters:
             - StripPrefix=1
         - id: gen
-          uri: http://localhost:30003
+          uri: http://localhost:30002
           predicates:
             - Path=/gen/**
           filters:
