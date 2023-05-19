@@ -33,19 +33,19 @@ spring:
           filters:
             - StripPrefix=1
         - id: gen
-          uri: http://game-server-manager-generate.server:8888/**
+          uri: http://game-server-manager-server.server:8888/**
           predicates:
             - Path=/gen/**
           filters:
             - StripPrefix=1
         - id: oss
-          uri: http://game-server-manager-oss.server:8888/**
+          uri: http://game-server-manager-server.server:8888/**
           predicates:
             - Path=/oss/**
           filters:
             - StripPrefix=1
         - id: log-audit
-          uri: http://game-server-manager-log-audit.server:8888/**
+          uri: http://game-server-manager-uc.server:8888/**
           predicates:
             - Path=/log-audit/**
           filters:
