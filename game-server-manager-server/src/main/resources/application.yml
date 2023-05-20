@@ -53,6 +53,10 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:9090}/${MYSQL_DATA_BASE:game-manager}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:root}
+  liquibase:
+    enabled: true
+    databaseChangeLogTable: "DATABASECHANGELOG_SERVER"
+    databaseChangeLogLockTable: "DATABASECHANGELOGLOCK_SERVER"
   #redis 配置
   redis:
     host: ${REDIS_HOST:redis.server}
