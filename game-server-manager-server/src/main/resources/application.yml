@@ -50,7 +50,7 @@ spring:
     name: ${APPLICATION_NAME:game-server-manager-server}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:9090}/${MYSQL_DATA_BASE:game-manager}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://${MYSQL_HOST:mysql.server}:${MYSQL_PORT:3306}/${MYSQL_DATA_BASE:game-manager}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:root}
   liquibase:

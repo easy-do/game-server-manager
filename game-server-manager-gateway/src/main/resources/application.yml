@@ -21,31 +21,31 @@ spring:
           enabled: true
       routes:
         - id: uc
-          uri: http://game-server-manager-uc.server:8888/**
+          uri: http://game-server-manager-uc:8888/**
           predicates:
             - Path=/uc/**
           filters:
             - StripPrefix=1
         - id: server
-          uri: http://game-server-manager-server.server:8888/**
+          uri: http://game-server-manager-server:8888/**
           predicates:
             - Path=/server/**
           filters:
             - StripPrefix=1
         - id: gen
-          uri: http://game-server-manager-server.server:8888/**
+          uri: http://game-server-manager-server:8888/**
           predicates:
             - Path=/gen/**
           filters:
             - StripPrefix=1
         - id: oss
-          uri: http://game-server-manager-server.server:8888/**
+          uri: http://game-server-manager-server:8888/**
           predicates:
             - Path=/oss/**
           filters:
             - StripPrefix=1
         - id: log-audit
-          uri: http://game-server-manager-uc.server:8888/**
+          uri: http://game-server-manager-uc:8888/**
           predicates:
             - Path=/log-audit/**
           filters:
