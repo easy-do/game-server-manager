@@ -11,11 +11,13 @@ github：https://github.com/easy-do/game-server-manager
 ### 功能简介
 
 ##### 主要技术
-     1.spring boot 2.x
-     2.客户端使用 spring boot3.x原生编译
-     3.mysql5.7+
-     4.docker api
-     5.redis
+     spring boot 2.x
+     客户端使用 spring boot3.x原生编译
+     第三方登录 JustAuth https://www.justauth.cn/
+     鉴权：Sa-Token 权限认证, 在线文档：http://sa-token.dev33.cn/
+     mysql5.7+
+     docker api
+     redis
      6....
    
 
@@ -77,6 +79,11 @@ docker run -dit --net=game-manager -p 8383:8080 --name game-server-manager-web r
 
 ```
 服务器地址:8383
+
+第三方登录需要自己注册相关平台使用环境变量替换授权配置，环境变量在uc模块的application.yml查看  使用组件: https://www.justauth.cn/guide/
+邮箱登录 admin@admin.com 密码 admin
+密钥 admin
+正式部署请及时修改信息
 
 ```
 
