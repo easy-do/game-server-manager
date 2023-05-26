@@ -4,20 +4,20 @@ metadata:
   annotations:
     deployment.kubernetes.io/revision: "15"
     field.cattle.io/creatorId: user-hz94g
-    field.cattle.io/publicEndpoints: '[{"port":30001,"protocol":"TCP","serviceName":"server:game-server-manager-uc-nodeport","allNodes":true}]'
+    field.cattle.io/publicEndpoints: '[{"port":30001,"protocol":"TCP","serviceName":"server:easy-do-plus-uc-nodeport","allNodes":true}]'
   creationTimestamp: null
   generation: 1
   labels:
     cattle.io/creator: norman
-    workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-uc
-  name: game-server-manager-uc
+    workload.user.cattle.io/workloadselector: deployment-server-easy-do-plus-uc
+  name: easy-do-plus-uc
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-uc
+      workload.user.cattle.io/workloadselector: deployment-server-easy-do-plus-uc
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -27,11 +27,11 @@ spec:
     metadata:
       annotations:
         cattle.io/timestamp: "2022-09-02T17:37:49Z"
-        field.cattle.io/ports: '[[{"containerPort":8888,"dnsName":"game-server-manager-uc-nodeport","kind":"NodePort","name":"8888tcp300011","protocol":"TCP","sourcePort":30001},{"containerPort":8888,"dnsName":"game-server-manager-uc-nodeport","kind":"NodePort","name":"8888tcp1","protocol":"TCP"}]]'
-        field.cattle.io/publicEndpoints: '[{"allNodes":true,"port":30001,"protocol":"TCP","serviceId":"server:game-server-manager-uc-nodeport"}]'
+        field.cattle.io/ports: '[[{"containerPort":8888,"dnsName":"easy-do-plus-uc-nodeport","kind":"NodePort","name":"8888tcp300011","protocol":"TCP","sourcePort":30001},{"containerPort":8888,"dnsName":"easy-do-plus-uc-nodeport","kind":"NodePort","name":"8888tcp1","protocol":"TCP"}]]'
+        field.cattle.io/publicEndpoints: '[{"allNodes":true,"port":30001,"protocol":"TCP","serviceId":"server:easy-do-plus-uc-nodeport"}]'
       creationTimestamp: null
       labels:
-        workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-uc
+        workload.user.cattle.io/workloadselector: deployment-server-easy-do-plus-uc
     spec:
       containers:
       - env:
@@ -70,7 +70,7 @@ spec:
             configMapKeyRef:
               key: REDIS_PORT
               name: redis
-        image: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:uc-1.0.0
+        image: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:uc-1.0.0
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
@@ -82,7 +82,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 10
-        name: game-server-manager-uc
+        name: easy-do-plus-uc
         ports:
         - containerPort: 8888
           name: 8888tcp300011

@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>game.server.manager</groupId>
-    <artifactId>game-server-manager</artifactId>
+    <groupId>plus.easydo.push</groupId>
+    <artifactId>easy-do-plus</artifactId>
     <version>1.0.0</version>
-    <name>game-server-manager</name>
+    <name>easy-do-plus</name>
 
     <packaging>pom</packaging>
 
@@ -23,21 +23,23 @@
 
 
     <modules>
-        <module>commons/game-server-manager-common</module>
-        <module>commons/game-server-manager-mapstruct</module>
-        <module>commons/game-server-manager-log</module>
-        <module>commons/game-server-manager-api</module>
-        <module>commons/game-server-manager-redis</module>
-        <module>commons/game-server-manager-auth</module>
-        <module>commons/game-server-manager-event</module>
-        <module>commons/game-server-manager-mybatis-plus</module>
-        <module>commons/game-server-manager-web</module>
-        <module>commons/game-server-manager-doc</module>
-        <module>commons/game-server-manager-docker</module>
-        <module>commons/game-server-manager-docker-client-api</module>
-        <module>game-server-manager-gateway</module>
-        <module>game-server-manager-uc</module>
-        <module>game-server-manager-server</module>
+        <module>commons/easy-do-plus-common</module>
+        <module>commons/easy-do-plus-mapstruct</module>
+        <module>commons/easy-do-plus-log</module>
+        <module>commons/easy-do-plus-api</module>
+        <module>commons/easy-do-plus-redis</module>
+        <module>commons/easy-do-plus-auth</module>
+        <module>commons/easy-do-plus-event</module>
+        <module>commons/easy-do-plus-dao</module>
+        <module>commons/easy-do-plus-web</module>
+        <module>commons/easy-do-plus-doc</module>
+        <module>commons/easy-do-plus-docker</module>
+        <module>commons/easy-do-plus-docker-client-api</module>
+        <module>easy-do-plus-gateway</module>
+        <module>user-center/easy-do-plus-uc-core</module>
+        <module>user-center/easy-do-plus-uc-api</module>
+        <module>user-center/easy-do-plus-uc</module>
+        <module>easy-do-plus-server</module>
     </modules>
 
     <dependencyManagement>

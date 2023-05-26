@@ -4,20 +4,20 @@ metadata:
   annotations:
     deployment.kubernetes.io/revision: "16"
     field.cattle.io/creatorId: user-hz94g
-    field.cattle.io/publicEndpoints: '[{"port":30003,"protocol":"TCP","serviceName":"server:game-server-manager-generate-nodeport","allNodes":true}]'
+    field.cattle.io/publicEndpoints: '[{"port":30003,"protocol":"TCP","serviceName":"server:easy-do-plus-generate-nodeport","allNodes":true}]'
   creationTimestamp: null
   generation: 1
   labels:
     cattle.io/creator: norman
-    workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-generate
-  name: game-server-manager-generate
+    workload.user.cattle.io/workloadselector: deployment-server-easy-do-plus-generate
+  name: easy-do-plus-generate
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-generate
+      workload.user.cattle.io/workloadselector: deployment-server-easy-do-plus-generate
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -27,10 +27,10 @@ spec:
     metadata:
       annotations:
         cattle.io/timestamp: "2022-09-02T17:43:23Z"
-        field.cattle.io/ports: '[[{"containerPort":8888,"dnsName":"game-server-manager-generate-nodeport","hostPort":0,"kind":"NodePort","name":"8888tcp300031","protocol":"TCP","sourcePort":30003},{"containerPort":8888,"dnsName":"game-server-manager-generate","hostPort":0,"kind":"ClusterIP","name":"8888tcp02","protocol":"TCP","sourcePort":0}]]'
+        field.cattle.io/ports: '[[{"containerPort":8888,"dnsName":"easy-do-plus-generate-nodeport","hostPort":0,"kind":"NodePort","name":"8888tcp300031","protocol":"TCP","sourcePort":30003},{"containerPort":8888,"dnsName":"easy-do-plus-generate","hostPort":0,"kind":"ClusterIP","name":"8888tcp02","protocol":"TCP","sourcePort":0}]]'
       creationTimestamp: null
       labels:
-        workload.user.cattle.io/workloadselector: deployment-server-game-server-manager-generate
+        workload.user.cattle.io/workloadselector: deployment-server-easy-do-plus-generate
     spec:
       containers:
       - env:
@@ -61,7 +61,7 @@ spec:
               key: MYSQL_PASS
               name: mysql
               optional: false
-        image: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:generate-1.0.0
+        image: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:generate-1.0.0
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
@@ -73,7 +73,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 10
-        name: game-server-manager-generate
+        name: easy-do-plus-generate
         ports:
         - containerPort: 8888
           name: 8888tcp300031

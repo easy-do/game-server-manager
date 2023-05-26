@@ -1,40 +1,60 @@
 import React from 'react';
 import { Button, Typography, Badge } from '@arco-design/web-react';
 import { dictLabelEnum } from '@/utils/dictDataUtils';
+import {
+  SearchType,
+  SelectColumnType,
+  buildSearchCondition,
+} from '@/utils/searchUtil';
 
 const { Text } = Typography;
 
-export const statusEnum = dictLabelEnum('status_select','string')
+export const statusEnum = dictLabelEnum('status_select', 'string');
 
-export interface UserInfoVo{
-  authorization: string,
-  avatarUrl: string,
-  createTime: string,
-  delFlag: number,
-  id: number,
-  lastLoginTime: string,
-  loginIp: string,
-  nickName: string,
-  email:string,
-  platform: string,
-  points: number,
-  secret: string,
-  state: number,
-  unionId: string,
-  updateBy: number,
-  updateTime: string,
+export interface UserInfoVo {
+  authorization: string;
+  avatarUrl: string;
+  createTime: string;
+  delFlag: number;
+  id: number;
+  lastLoginTime: string;
+  loginIp: string;
+  nickName: string;
+  email: string;
+  platform: string;
+  points: number;
+  secret: string;
+  state: number;
+  unionId: string;
+  updateBy: number;
+  updateTime: string;
 }
+
+//查询条件配置
+export const searchConfig = {
+  nickName: SearchType.LIKE,
+  createTime: SearchType.BETWEEN,
+};
 
 // 后台sql查询字段
-export function getSearChColumns(){
-   return ['id','nickName', 'platform', 'state', 'authorization', 'loginIp', 'lastLoginTime', 'createTime'];
-}
+export const selectColumns = {
+  columns: [
+    'id',
+    'nickName',
+    'platform',
+    'state',
+    'authorization',
+    'loginIp',
+    'lastLoginTime',
+    'createTime',
+  ],
+  type: SelectColumnType.onlySelect,
+};
 
 //默认排序字段
-export function getDefaultOrders(){
-  return [{column: 'createTime', asc: false}];
+export function getDefaultOrders() {
+  return [{ column: 'createTime', asc: false }];
 }
-
 
 //表单展示字段
 export function getColumns(
@@ -45,38 +65,38 @@ export function getColumns(
     {
       title: t['searchTable.columns.id'],
       dataIndex: 'id',
-      ellipsis:true,
+      ellipsis: true,
       sorter: true,
       render: (value) => <Text copyable>{value}</Text>,
     },
     {
       title: t['searchTable.columns.name'],
       dataIndex: 'nickName',
-      ellipsis:true,
+      ellipsis: true,
       sorter: true,
     },
     {
       title: t['searchTable.columns.platform'],
       dataIndex: 'platform',
-      ellipsis:true,
+      ellipsis: true,
       sorter: true,
     },
     {
       title: t['searchTable.columns.loginIp'],
       dataIndex: 'loginIp',
-      ellipsis:true,
+      ellipsis: true,
       sorter: true,
     },
     {
       title: t['searchTable.columns.lastLoginTime'],
       dataIndex: 'lastLoginTime',
-      ellipsis:true,
+      ellipsis: true,
       sorter: true,
     },
     {
       title: t['searchTable.columns.createTime'],
       dataIndex: 'createTime',
-      ellipsis:true,
+      ellipsis: true,
       sorter: true,
     },
     {
@@ -105,4 +125,3 @@ export function getColumns(
     },
   ];
 }
-
