@@ -4,7 +4,6 @@ import { dictLabelEnum } from '@/utils/dictDataUtils';
 import {
   SearchType,
   SelectColumnType,
-  buildSearchCondition,
 } from '@/utils/searchUtil';
 
 const { Text } = Typography;

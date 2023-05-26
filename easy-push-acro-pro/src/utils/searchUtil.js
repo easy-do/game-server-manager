@@ -88,10 +88,10 @@ IgnoreCase:'ic'
 export function buildSearchCondition (columnsConfig,searchConfig,orders,queryParam){
     const searchParam = new Map();
     if(columnsConfig){
-        if(columnsConfig.type == SelectColumnType.onlySelect){
+        if(columnsConfig.type === SelectColumnType.onlySelect){
             searchParam.set(SelectColumnType.onlySelect,columnsConfig.columns.join())
         }
-        if(columnsConfig.type == SelectColumnType.selectExcludeL){
+        if(columnsConfig.type === SelectColumnType.selectExcludeL){
             searchParam.set(SelectColumnType.selectExcludeL,columnsConfig.columns.join())
         }
     }

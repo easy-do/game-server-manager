@@ -2,14 +2,14 @@ INSERT INTO template_management (id, template_name, template_code, template_type
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import base.plus.easydo.web.BaseController;
+import game.server.manager.web.base.BaseController;
 import ${packageName}.qo.${ClassName}Qo;
 import ${packageName}.service.${ClassName}Service;
 import ${packageName}.vo.${ClassName}Vo;
 import ${packageName}.dto.${ClassName}Dto;
 import  ${packageName}.entity.${ClassName};
-import plus.easydo.log.SaveLog;
-import result.plus.easydo.dao.MpDataResult;
+import game.server.manager.log.SaveLog;
+import game.server.manager.mybatis.plus.result.MpDataResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import result.plus.easydo.common.R;
-import vaild.plus.easydo.common.Insert;
-import vaild.plus.easydo.common.Update;
+import game.server.manager.common.result.R;
+import game.server.manager.common.vaild.Insert;
+import game.server.manager.common.vaild.Update;
 
 import java.util.List;
 
@@ -118,8 +118,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import vaild.plus.easydo.common.Insert;
-import vaild.plus.easydo.common.Update;
+import game.server.manager.common.vaild.Insert;
+import game.server.manager.common.vaild.Update;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serial;
@@ -260,7 +260,7 @@ public interface ${ClassName}Mapper extends BaseMapper<${ClassName}> {
 ', 'java', 'private', '1.0.0', 'mapper.java.vm', 'main/java/#{packageName}/mapper/#{className}Mapper.java', NULL, '2022-09-04 15:18:47.000', '2022-09-19 22:26:26.000', 17, 17, '隔壁老于', 0);
 INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(6, 'qo.java', 'package ${packageName}.qo;
 
-import qo.plus.easydo.dao.MpBaseQo;
+import game.server.manager.mybatis.plus.qo.MpBaseQo;
 import ${packageName}.entity.${ClassName};
 #foreach ($import in $importList)
 import ${import};
@@ -289,7 +289,7 @@ public class ${ClassName}Qo extends MpBaseQo<${ClassName}> {
 INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(7, 'service.java', 'package ${packageName}.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import base.plus.easydo.web.BaseService;
+import game.server.manager.web.base.BaseService;
 import ${packageName}.dto.${ClassName}Dto;
 import ${packageName}.qo.${ClassName}Qo;
 import ${packageName}.vo.${ClassName}Vo;
@@ -312,7 +312,7 @@ INSERT INTO template_management (id, template_name, template_code, template_type
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import base.plus.easydo.web.BaseServiceImpl;
+import game.server.manager.web.base.BaseServiceImpl;
 import ${packageName}.dto.${ClassName}Dto;
 import ${packageName}.entity.${ClassName};
 import ${packageName}.qo.${ClassName}Qo;
@@ -667,6 +667,10 @@ import { Button, Typography, Badge, Popconfirm } from ''@arco-design/web-react''
 import { SearchTypeEnum } from ''@/utils/systemConstant'';
 import PermissionWrapper from ''@/components/PermissionWrapper'';
 import { dictLabelEnum, getDictList } from ''@/utils/dictDataUtils'';
+import {
+  SearchType,
+  SelectColumnType,
+} from ''@/utils/searchUtil'';
 
 export const statusEnum = dictLabelEnum(''status_select'',''string'')
 
@@ -677,19 +681,20 @@ export interface DataInfoVo{
 }
 
 // 后台sql查询字段
-export function getSearChColumns(){
-    return [
+export const selectColumns = {
+  columns: [
 #foreach ($column in $columns)
 #if($column.isList)
     ''${column.javaField}'',
 #end
 #end
-      ];
+  ],
+  type: SelectColumnType.onlySelect,
 }
 
+
 // 搜索配置
-export function searchConfig() {
-  return {
+export const searchConfig = {
 #foreach ($column in $columns)
 #if($column.isQuery == "1")
         ''${column.javaField}'': SearchTypeEnum.${column.queryType},
@@ -697,6 +702,7 @@ export function searchConfig() {
 #end
   }
 }
+
 
 //默认排序字段
 export function getDefaultOrders(){
@@ -778,7 +784,7 @@ export function getColumns(
   ];
 }
 
-', '通用', 'private', '1.0.0', 'constants.tsx.vm', 'constants.tsx', NULL, '2022-09-12 01:05:54.000', '2022-10-08 15:33:54.000', 17, 17, '隔壁老于', 0);
+', '通用', 'private', '1.0.0', 'constants.tsx.vm', 'constants.tsx', NULL, '2022-09-12 01:05:54.000', '2023-05-27 02:39:22.000', 17, 17, '隔壁老于', 0);
 INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(22, '搜索表单', 'import React, { useContext } from ''react'';
 import {
   Form,
@@ -927,7 +933,8 @@ import useLocale from ''@/utils/useLocale'';
 import SearchForm from ''./form'';
 import locale from ''./locale'';
 import styles from ''./style/index.module.less'';
-import { getColumns, getDefaultOrders, getSearChColumns, searchConfig } from ''./constants'';
+import { getColumns, getDefaultOrders, searchConfig, selectColumns } from ''./constants'';
+import { buildSearchCondition} from ''../../../utils/searchUtil''
 import { managerPage, removeRequest } from ''@/api/${businessName}'';
 import { SearchTypeEnum } from ''@/utils/systemConstant'';
 import { SorterResult } from ''@arco-design/web-react/es/Table/interface'';
@@ -1049,17 +1056,17 @@ function SearchTable() {
     orders,
   ]);
 
+
   // 获取数据
   function fetchData() {
     const { current, pageSize } = pagination;
+    const searchParam = buildSearchCondition(selectColumns,searchConfig,orders,formParams)
     setLoading(true);
     managerPage({
-      currentPage: current,
+      currentPage: current-1,
       pageSize,
-      searchParam: formParams,
-      orders: orders,
-      columns: getSearChColumns(),
-      searchConfig: searchConfig(),
+      ...searchParam
+
     }).then((res) => {
       setData(res.data.data);
       setPatination({
@@ -1156,7 +1163,7 @@ function SearchTable() {
 }
 
 export default SearchTable;
-', '通用', 'private', '1.0.0', 'index.tsx.vm', 'index.tsx', NULL, '2022-09-12 01:07:01.000', '2022-09-21 21:16:35.000', 17, 17, '隔壁老于', 0);
+', '通用', 'private', '1.0.0', 'index.tsx.vm', 'index.tsx', NULL, '2022-09-12 01:07:01.000', '2023-05-27 02:36:15.000', 17, 17, '隔壁老于', 0);
 INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(24, '详情页', 'import React, { useEffect, useState } from ''react'';
 import { Descriptions, Modal, Skeleton } from ''@arco-design/web-react'';
 import locale from ''./locale'';
@@ -1507,7 +1514,7 @@ INSERT INTO template_management (id, template_name, template_code, template_type
 import ${packageName}.entity.${ClassName};
 import ${packageName}.vo.${ClassName}Vo;
 import ${packageName}.dto.${ClassName}Dto;
-import plus.easydo.mapstruct.BaseMapstruct;
+import game.server.manager.mapstruct.BaseMapstruct;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -1528,6 +1535,319 @@ public interface ${ClassName}Mapstruct extends BaseMapstruct<${ClassName}, ${Cla
     ${ClassName}Mapstruct INSTANCE = Mappers.getMapper(${ClassName}Mapstruct.class);
 
 }', 'java', 'private', '1.0.0', 'Mapstruct.java.vm', 'main/java/#{packageName}/mapstruct/#{className}Mapstruct.java', NULL, '2022-09-19 22:05:46.000', '2022-09-19 22:09:10.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(31, '洋浦-控制层', 'package com.yunli.govaffair.controller;
+
+
+import com.yunli.govaffair.qo.${ClassName}Qo;
+import com.yunli.govaffair.service.${ClassName}Service;
+import com.yunli.govaffair.vo.${ClassName}ListVo;
+import com.yunli.govaffair.vo.${ClassName}Vo;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@Tag(name = "${functionName}")
+@RestController
+@RequestMapping("/api/${className}")
+public class ${ClassName}Controller extends BaseController<${ClassName}Qo, ${ClassName}Vo, ${ClassName}ListVo,${ClassName}Service>{
+
+}
+', 'java', 'private', '1.0.0', 'controller.java.vm', 'main/java/#{packageName}/controller/#{className}Controller.java', NULL, '2022-09-04 15:18:47.000', '2022-12-09 09:00:54.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(32, '洋浦-entity.java', 'package com.yunli.govaffair.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+/**
+ * ${functionName}
+ * @author yuzhanfeng
+ * @TableName card_type
+ * @date ${datetime}
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class ${ClassName} extends BaseEntity {
+
+    @Serial
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+#if(!$table.isSuperColumn($column.javaField))
+    /** $column.columnComment */
+#if($column.list)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if($column.isPk == 1)
+    @TableId(value = "${column.columnName}" , type = IdType.AUTO)
+#end
+#if($column.javaType == ''LocalDateTime'')
+    @JsonFormat(pattern = "yyyy-MM-dd")
+#end
+#end
+    private $column.javaType $column.javaField;
+
+#end
+#end
+}
+', 'java', 'private', '1.0.0', 'entity.java.vm', 'main/java/#{packageName}/entity/#{className}.java', NULL, '2022-09-04 15:18:47.000', '2022-12-09 09:04:07.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(34, '洋浦-mapper.java', 'package com.yunli.govaffair.mapper;
+
+import com.yunli.govaffair.entity.${ClassName};
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+* @author yuzhanfeng
+* @description ${functionName}的数据库操作Mapper
+* @createDate ${datatime}
+* @Entity com.yunli.govaffair.entity.${ClassName}
+*/
+@Mapper
+public interface ${ClassName}Mapper extends BaseMapper<${ClassName}> {
+
+}
+
+
+
+
+', 'java', 'private', '1.0.0', 'mapper.java.vm', 'main/java/#{packageName}/mapper/#{className}Mapper.java', NULL, '2022-09-04 15:18:47.000', '2022-12-09 09:05:29.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(35, '洋浦-qo.java', 'package com.yunli.govaffair.qo;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+/**
+ * @author yuzhanfeng
+ * @Date ${datetime}
+ * @Description ${functionName}查询参数封装
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@Schema(title = "${functionName}查询参数封装")
+public class ${ClassName}Qo extends PageQo {
+
+
+}
+
+', 'java', 'private', '1.0.0', 'qo.java.vm', 'main/java/#{packageName}/qo/#{className}Qo.java', NULL, '2022-09-04 15:18:47.000', '2022-12-09 09:06:31.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(36, '洋浦-service.java', 'package com.yunli.govaffair.service;
+
+
+import com.yunli.govaffair.qo.${ClassName}Qo;
+import com.yunli.govaffair.vo.${ClassName}ListVo;
+import com.yunli.govaffair.vo.${ClassName}Vo;
+
+/**
+* @author yuzhanfeng
+* @description ${functionName}Service
+* @createDate ${datetime}
+*/
+public interface ${ClassName}Service extends BaseService<${ClassName}Qo, ${ClassName}Vo, ${ClassName}ListVo> {
+
+
+}
+', 'java', 'private', '1.0.0', 'service.java.vm', 'main/java/#{packageName}/service/#{className}Service.java', NULL, '2022-09-04 15:18:47.000', '2022-12-09 09:02:18.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(37, '洋浦-serviceImpl.java', 'package com.yunli.govaffair.service.impl;
+
+import com.yunli.frame.common.exception.BusinessException;
+import com.yunli.govaffair.convert.${ClassName}Convert;
+import com.yunli.govaffair.entity.${ClassName};
+import com.yunli.govaffair.manager.${ClassName}Manager;
+import com.yunli.govaffair.mapper.${ClassName}Mapper;
+import com.yunli.govaffair.qo.${ClassName}Qo;
+import com.yunli.govaffair.service.${ClassName}Service;
+import com.yunli.govaffair.vo.${ClassName}ListVo;
+import com.yunli.govaffair.vo.${ClassName}Vo;
+import org.springframework.stereotype.Service;
+
+/**
+* @author yuzhanfeng
+* @description ${functionName}Service实现
+* @createDate ${datetime}
+*/
+@Service
+public class ${ClassName}ServiceImpl extends BaseServiceImpl<${ClassName},${ClassName}Qo, ${ClassName}Vo, ${ClassName}ListVo, ${ClassName}Convert, ${ClassName}Manager, ${ClassName}Mapper> implements ${ClassName}Service {
+
+}
+
+
+
+
+
+', 'java', 'private', '1.0.0', 'serviceImpl.java.vm', 'main/java/#{packageName}/service/impl/#{className}ServiceImpl.java', NULL, '2022-09-04 15:18:47.000', '2022-12-09 09:08:28.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(38, '洋浦-vo.java', 'package com.yunli.govaffair.vo;
+
+import com.yunli.frame.common.controller.validation.SaveGroup;
+import com.yunli.frame.common.controller.validation.UpdateGroup;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+
+/**
+ * ${functionName}
+ * @author yuzhanfeng
+ */
+@Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(title = "${functionName}对象")
+public class ${ClassName}Vo extends BaseVo{
+
+
+#foreach ($column in $columns)
+#if(!$table.isSuperColumn($column.javaField))
+    /** $column.columnComment */
+    @Schema(title = "$column.columnComment")
+#if($column.list)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if($parentheseIndex != -1)
+#elseif($column.javaType == ''LocalDateTime'')
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+#end
+#end
+    private $column.javaType $column.javaField;
+#end
+#end
+
+}
+', 'java', 'private', '1.0.0', 'vo.java.vm', 'main/java/#{packageName}/vo/#{className}Vo.java', NULL, '2022-09-04 15:18:47.000', '2022-12-12 09:13:59.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(39, '洋浦-convert', 'package com.yunli.govaffair.convert;
+
+import com.yunli.govaffair.entity.${ClassName};
+import com.yunli.govaffair.vo.${ClassName}ListVo;
+import com.yunli.govaffair.vo.${ClassName}Vo;
+import org.mapstruct.Mapper;
+
+/**
+ * @author ${author}
+ * @Date ${datetime}
+ * @Description ${functionName}
+ */
+@Mapper(componentModel = "spring")
+public interface ${ClassName}Convert extends BaseConvert<${ClassName}, ${ClassName}Vo, ${ClassName}ListVo> {
+}
+', 'java', 'public', '1.0.0', 'convert.java.vm', 'main/java/#{packageName}/convert/#{className}Convert.java', NULL, '2022-12-12 08:57:41.000', '2022-12-12 08:59:55.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(40, '洋浦-manager', 'package com.yunli.govaffair.manager;
+
+import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.yunli.govaffair.entity.${ClassName};
+import com.yunli.govaffair.mapper.${ClassName}Mapper;
+import com.yunli.govaffair.qo.${ClassName}Qo;
+import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+
+/**
+ * @author ${author}
+ * @Date ${datetime}
+ * @Description ${functionName}数据库相关操作
+ */
+@Component
+public class ${ClassName}Manager extends BaseManager<${ClassName}, ${ClassName}Qo, ${ClassName}Mapper>{
+
+    /**
+     * 构建分页查询条件
+     *
+     * @param wrapper wrapper
+     * @param qo qo
+     * @author ${author}
+     * @date ${datetime}
+     */
+    @Override
+    void buildPageQuery(LambdaQueryWrapper<${ClassName}> wrapper, ${ClassName}Qo qo) {
+
+    }
+
+    /**
+     * 指定分页查询的列
+     *
+     * @param wrapper wrapper
+     * @author ${author}
+     * @date ${datetime}
+     */
+    @Override
+    void pageSelectColumns(LambdaQueryWrapper<${ClassName}> wrapper) {
+    }
+}
+', 'java', 'public', '1.0.0', 'manager.java.vm', 'main/java/#{packageName}/manager/#{className}Manager.java', NULL, '2022-12-12 09:17:01.000', '2022-12-12 09:20:23.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(41, '洋浦-listvo', 'package com.yunli.govaffair.vo;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+
+
+/**
+ * ${functionName}
+ * @author yuzhanfeng
+ */
+@Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(title = "${functionName}对象")
+public class ${ClassName}ListVo extends BaseListVo{
+
+
+#foreach ($column in $columns)
+#if(!$table.isSuperColumn($column.javaField))
+    /** $column.columnComment */
+    @Schema(title = "$column.columnComment")
+#if($column.list)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if($parentheseIndex != -1)
+#elseif($column.javaType == ''LocalDateTime'')
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+#end
+#end
+    private $column.javaType $column.javaField;
+#end
+#end
+
+}
+', 'java', 'public', '1.0.0', 'listVo.java.vm', 'main/java/#{packageName}/vo/#{className}ListVo.java', NULL, '2023-01-06 16:47:01.000', '2023-01-06 17:07:17.000', 17, 17, '隔壁老于', 0);
 INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(42, '数据库文档1', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <?mso-application progid="Word.Document"?>
 <pkg:package xmlns:pkg="http://schemas.microsoft.com/office/2006/xmlPackage">
@@ -5187,3 +5507,202 @@ usecase $comment
 #end
 
 ', 'uml', 'public', '1.0.0', 'er.uml.vm', '#{tableName}.img', NULL, '2023-05-16 19:14:11.000', '2023-05-16 19:20:44.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(46, '控制层api', 'package ${packageName}.${moduleName}.api;
+
+
+import org.springframework.validation.annotation.Validated;
+import ${packageName}.${moduleName}.vo.${ClassName}Vo;
+import ${packageName}.${moduleName}.dto.${ClassName}Dto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import plus.easydo.common.result.MpDataResult;
+import plus.easydo.common.result.R;
+import ${packageName}.common.vaild.Insert;
+import ${packageName}.common.vaild.Update;
+
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * ${functionName}Api
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface ${ClassName}Api {
+
+    String apiPath = "/${businessName}";
+
+#if(${isQuery} == 1)
+    /**
+     * 获取所有${functionName}列表
+     */
+    @GetMapping(apiPath + "/list")
+    public R<List<${ClassName}Vo>> list(@RequestParam(required = false) Map<String, Object> queryParam);
+
+    /**
+     * 分页条件查询${functionName}列表
+     */
+    @PostMapping(apiPath + "/page")
+    public MpDataResult page(@RequestBody Map<String, Object> queryParam);
+
+
+    /**
+     * 获取${functionName}详细信息
+     */
+    @GetMapping(apiPath + "/info/{id}")
+    public R<${ClassName}Vo> info(@PathVariable("id")Long id);
+#end
+
+#if(${isInsert} == 1)
+    /**
+     * 新增${functionName}
+     */
+    @PostMapping(apiPath + "/add")
+    public R<Object> add(@RequestBody @Validated({Insert.class}) ${ClassName}Dto ${className}Dto);
+#end
+
+#if(${isUpdate} == 1)
+    /**
+     * 修改${functionName}
+     */
+    @PostMapping(apiPath + "/update")
+    public R<Object> update(@RequestBody @Validated({Update.class}) ${ClassName}Dto ${className}Dto);
+#end
+
+#if(${isRemove} == 1)
+    /**
+     * 删除${functionName}
+     */
+	@GetMapping(apiPath + "/remove/{id}")
+    public R<Object> remove(@PathVariable("id")Long id);
+#end
+}
+', 'java', 'public', '1.0.0', 'api.java.vm', 'main/java/#{packageName}/api/#{className}Api.java', NULL, '2023-05-27 01:38:36.000', '2023-05-27 02:18:26.000', 17, 17, '隔壁老于', 0);
+INSERT INTO template_management (id, template_name, template_code, template_type, template_scope, version, file_name, file_path, description, create_time, update_time, create_by, update_by, create_name, del_flag) VALUES(47, '极简控制层-new', 'package ${packageName}.${moduleName}.controller;
+
+
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.zhxu.bs.BeanSearcher;
+import cn.zhxu.bs.SearchResult;
+import lombok.RequiredArgsConstructor;
+import ${packageName}.common.result.DataResult;
+import  ${packageName}.dao.result.MpResultUtil;
+import ${packageName}.${moduleName}.api.${ClassName}Api;
+import ${packageName}.${moduleName}.service.${ClassName}Service;
+import ${packageName}.${moduleName}.vo.${ClassName}Vo;
+import ${packageName}.${moduleName}.dto.${ClassName}Dto;
+import ${packageName}.${moduleName}.entity.${ClassName};
+import ${packageName}.log.SaveLog;
+import ${packageName}.common.result.MpDataResult;
+import ${packageName}.${moduleName}.mapstruct.${ClassName}Mapstruct;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ${packageName}.common.result.R;
+import ${packageName}.common.vaild.Insert;
+import ${packageName}.common.vaild.Update;
+
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * ${functionName}Controller
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@RestController
+@RequestMapping(${ClassName}Api.apiPath)
+@RequiredArgsConstructor
+public class ${ClassName}Controller implements ${ClassName}Api{
+
+
+    private final ${ClassName}Service baseService;
+
+    private final BeanSearcher beanSearcher;
+
+
+#if(${isQuery} == 1)
+    /**
+     * 获取所有${functionName}列表
+     */
+    @SaCheckPermission("${permissionPrefix}:list")
+    @GetMapping("/list")
+    public R<List<${ClassName}Vo>> list(@RequestParam(required = false) Map<String, Object> queryParam) {
+        List<${ClassName}> result = beanSearcher.searchList(${ClassName}.class, queryParam);
+        return DataResult.ok(${ClassName}Mapstruct.INSTANCE.entityToVo(result));
+    }
+
+    /**
+     * 分页条件查询${functionName}列表
+     */
+    @SaCheckPermission("${permissionPrefix}:page")
+    @PostMapping("/page")
+    public MpDataResult page(@RequestBody Map<String,Object> queryParam) {
+        SearchResult<${ClassName}> result = beanSearcher.search(${ClassName}.class, queryParam);
+        List<${ClassName}Vo> voList = ${ClassName}Mapstruct.INSTANCE.entityToVo(result.getDataList());
+        return MpResultUtil.buildPage(voList,(Long)result.getTotalCount());
+    }
+
+
+    /**
+     * 获取${functionName}详细信息
+     */
+    @SaCheckPermission("${permissionPrefix}:info")
+    @GetMapping("/info/{id}")
+    public R<${ClassName}Vo> info(@PathVariable("id")Long id) {
+       ${ClassName} entity = baseService.getById(id);
+        return DataResult.ok(${ClassName}Mapstruct.INSTANCE.entityToVo(entity));
+    }
+#end
+
+#if(${isInsert} == 1)
+    /**
+     * 新增${functionName}
+     */
+    @SaCheckPermission("${permissionPrefix}:add")
+    @PostMapping("/add")
+    @SaveLog(logType = "操作日志", moduleName = "${functionName}", description = "添加${functionName}", actionType = "添加")
+    public R<Object> add(@RequestBody @Validated({Insert.class}) ${ClassName}Dto ${className}Dto) {
+        ${ClassName} entity = ${ClassName}Mapstruct.INSTANCE.dtoToEntity(${className}Dto);
+        return baseService.save(entity)? DataResult.ok():DataResult.fail();
+    }
+#end
+
+#if(${isUpdate} == 1)
+    /**
+     * 修改${functionName}
+     */
+    @SaCheckPermission("${permissionPrefix}:update")
+    @PostMapping("/update")
+    @SaveLog(logType = "操作日志", moduleName = "${functionName}", description = "编辑${functionName}: ?1", expressions = {"#p1.id"},actionType = "编辑")
+    public R<Object> update(@RequestBody @Validated({Update.class}) ${ClassName}Dto ${className}Dto) {
+        ${ClassName} entity = ${ClassName}Mapstruct.INSTANCE.dtoToEntity(${className}Dto);
+        return baseService.updateById(entity)? DataResult.ok():DataResult.fail();
+    }
+#end
+
+#if(${isRemove} == 1)
+    /**
+     * 删除${functionName}
+     */
+    @SaCheckPermission("${permissionPrefix}:remove")
+	@GetMapping("/remove/{id}")
+    @SaveLog(logType = "操作日志", moduleName = "${functionName}", description = "删除${functionName}: ?1", expressions = {"#p1"}, actionType = "删除")
+    public R<Object> remove(@PathVariable("id")Long id) {
+        return baseService.removeById(id)? DataResult.ok():DataResult.fail();
+    }
+#end
+}
+', 'java', 'public', '1.0.0', 'api.java.vm', 'main/java/#{packageName}/api/#{className}Api.java', NULL, '2023-05-27 01:46:47.000', '2023-05-27 02:26:44.000', 17, 17, '隔壁老于', 0);

@@ -13,13 +13,13 @@ import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-
 import { getColumns, getDefaultOrders, searchConfig, selectColumns } from './constants';
+import { buildSearchCondition} from '../../../utils/searchUtil'
 import { managerPage } from '@/api/userManager';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 
-import { buildSearchCondition} from '../../../utils/searchUtil'
+
 
 
 const { Title } = Typography;

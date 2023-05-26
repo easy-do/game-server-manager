@@ -388,6 +388,7 @@
                 `update_by`      varchar(64)  DEFAULT '' COMMENT '更新者',
                 `update_time`    datetime     DEFAULT NULL ON UPDATE current_timestamp() COMMENT '更新时间',
                 `default_value`  varchar(255) DEFAULT NULL COMMENT '字段默认值',
+                `maximum_length` varchar(64) DEFAULT NULL COMMENT '最大长度',
                 PRIMARY KEY (`column_id`) USING BTREE
             ) ENGINE = InnoDB
               DEFAULT CHARSET = utf8 COMMENT ='代码生成业务表字段';
