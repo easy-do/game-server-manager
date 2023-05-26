@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>plus.easydo.push</groupId>
+        <artifactId>easy-do-plus</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>easy-do-plus-server</artifactId>
+    <version>1.0.0</version>
+    <name>easy-do-plus-server</name>
+
+    <description>主服务</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+
+        <!--  web -->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-web</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--  api -->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--  doc -->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-doc</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--  event -->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-event</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- mapstruct -->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-mapstruct</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- websocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <!-- 授权相关 -->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-auth</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- redis -->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-redis</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- 日志相关 -->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-log</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--  数据库相关-->
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-dao</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>5.3.23</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.18.4</version>
+        </dependency>
+
+        <!-- jsch的方式 远程连接的包-->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+        </dependency>
+
+        <!-- Quartz -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.3.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.mchange</groupId>
+                    <artifactId>c3p0</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>plus.easydo.push</groupId>
+            <artifactId>easy-do-plus-docker</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--minio 对象存储  -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.4.6</version>
+        </dependency>
+
+        <!--  okhttp作为http请求的客户端-->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.10.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--velocity代码生成使用模板 -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.aviator</groupId>
+            <artifactId>aviator</artifactId>
+            <version>5.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--        word转pdf  -->
+        <dependency>
+            <groupId>org.docx4j</groupId>
+            <artifactId>docx4j-JAXB-Internal</artifactId>
+            <version>8.3.8</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-io</artifactId>
+                    <groupId>commons-io</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xmlgraphics-commons</artifactId>
+                    <groupId>org.apache.xmlgraphics</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.docx4j</groupId>
+            <artifactId>docx4j-export-fo</artifactId>
+            <version>11.4.8</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-io</artifactId>
+                    <groupId>commons-io</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>app</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- mapstruct 需要的配置 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

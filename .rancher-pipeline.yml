@@ -10,15 +10,15 @@ stages:
         mvn clean package -Dmaven.test.skip=true
         echo "[$LOG_TAG]===========Execute Maven CMD Build Project End==========="
         echo "[$LOG_TAG]Dir:target ls -l:`pwd`"
-        ls -l ./game-server-manager-server/target
+        ls -l ./easy-do-plus-server/target
     when:
       event: {}
 - name: 推送server镜像
   steps:
   - publishImageConfig:
-      dockerfilePath: ./game-server-manager-server/Dockerfile-Rancher
+      dockerfilePath: ./easy-do-plus-server/Dockerfile-Rancher
       buildContext: .
-      tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:server-1.0.0
+      tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:server-1.0.0
       pushRemote: true
       registry: registry.cn-hangzhou.aliyuncs.com
     when:
@@ -26,9 +26,9 @@ stages:
 - name: 推送uc镜像
   steps:
     - publishImageConfig:
-        dockerfilePath: ./game-server-manager-uc/Dockerfile-Rancher
+        dockerfilePath: ./easy-do-plus-uc/Dockerfile-Rancher
         buildContext: .
-        tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:uc-1.0.0
+        tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:uc-1.0.0
         pushRemote: true
         registry: registry.cn-hangzhou.aliyuncs.com
       when:
@@ -36,9 +36,9 @@ stages:
 - name: 推送generate镜像
   steps:
     - publishImageConfig:
-        dockerfilePath: ./game-server-manager-generate/Dockerfile-Rancher
+        dockerfilePath: ./easy-do-plus-generate/Dockerfile-Rancher
         buildContext: .
-        tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:generate-1.0.0
+        tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:generate-1.0.0
         pushRemote: true
         registry: registry.cn-hangzhou.aliyuncs.com
       when:
@@ -46,9 +46,9 @@ stages:
 - name: 推送plugins镜像
   steps:
     - publishImageConfig:
-        dockerfilePath: ./game-server-manager-plugins/Dockerfile-Rancher
+        dockerfilePath: ./easy-do-plus-plugins/Dockerfile-Rancher
         buildContext: .
-        tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:plugins-1.0.0
+        tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:plugins-1.0.0
         pushRemote: true
         registry: registry.cn-hangzhou.aliyuncs.com
       when:
@@ -68,7 +68,7 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./easy-push/docker/Dockerfile-Rancher
       buildContext: .
-      tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:web-1.0.0
+      tag: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:web-1.0.0
       pushRemote: true
       registry: registry.cn-hangzhou.aliyuncs.com
     when:

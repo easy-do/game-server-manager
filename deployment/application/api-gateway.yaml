@@ -33,7 +33,7 @@ spec:
         workload.user.cattle.io/workloadselector: deployment-server-api-gateway
     spec:
       containers:
-      - image: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:gateway-1.0.0
+      - image: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:gateway-1.0.0
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3

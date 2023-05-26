@@ -1,7 +1,7 @@
 FROM registry.cn-hangzhou.aliyuncs.com/gebilaoyu/bitnami:nginx-1.20.2
 MAINTAINER gebilaoyu
 
-ENV MANAGER_ADDRESS=http://game-server-manager-server:8888
+ENV MANAGER_ADDRESS=http://easy-do-plus-server:8888
 ENV TZ=Asia/Shanghai
 
 

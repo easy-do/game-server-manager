@@ -49,7 +49,7 @@ stages:
         name: build_docker
         displayName: 镜像构建
         type: account
-        repository: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager
+        repository: registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus
         username: at2627k4r@aliyun.com
         password: Yu5358915200!
         tag: web-1.0.1
