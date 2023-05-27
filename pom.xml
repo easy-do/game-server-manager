@@ -39,7 +39,12 @@
         <module>user-center/easy-do-plus-uc-core</module>
         <module>user-center/easy-do-plus-uc-api</module>
         <module>user-center/easy-do-plus-uc</module>
-        <module>easy-do-plus-server</module>
+        <module>service/generate/easy-do-plus-generate</module>
+        <module>service/generate/easy-do-plus-generate-core</module>
+        <module>service/generate/easy-do-plus-generate-api</module>
+        <module>service/server/easy-do-plus-server-core</module>
+        <module>service/server/easy-do-plus-server-api</module>
+        <module>service/server/easy-do-plus-server</module>
     </modules>
 
     <dependencyManagement>
