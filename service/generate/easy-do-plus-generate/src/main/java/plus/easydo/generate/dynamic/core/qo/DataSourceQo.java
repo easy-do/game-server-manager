@@ -1,6 +1,6 @@
 package plus.easydo.generate.dynamic.core.qo;
 
-import plus.easydo.generate.entity.DataSource;
+import plus.easydo.generate.entity.dataSourceManager;
 import plus.easydo.dao.qo.MpBaseQo;
 import lombok.Data;
 
@@ -10,6 +10,6 @@ import lombok.Data;
  * @author gebilaoyu
  */
 @Data
-public class DataSourceQo extends MpBaseQo<DataSource> {
+public class DataSourceQo extends MpBaseQo<dataSourceManager> {
 
 }

@@ -266,3 +266,11 @@ oss:
     default-group-name: defaultGroup
     #存储文件的系统绝对路径
     store-path: D:\defaultOss-path\
+
+
+bean-searcher:
+  params:
+    pagination:
+      type: page
+      page: currentPage
+      size: pageSize

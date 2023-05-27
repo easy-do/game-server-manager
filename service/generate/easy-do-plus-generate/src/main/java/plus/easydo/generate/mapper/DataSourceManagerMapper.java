@@ -1,7 +1,7 @@
 package plus.easydo.generate.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import plus.easydo.generate.entity.DataSource;
+import plus.easydo.generate.entity.dataSourceManager;
 import org.apache.ibatis.annotations.Mapper;
 
 
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author gebilaoyu
  */
 @Mapper
-public interface DataSourceManagerMapper extends BaseMapper<DataSource> {
+public interface DataSourceManagerMapper extends BaseMapper<dataSourceManager> {
 
 }

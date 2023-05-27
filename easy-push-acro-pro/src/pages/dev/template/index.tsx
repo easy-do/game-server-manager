@@ -13,7 +13,7 @@ import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
+import { getColumns, getDefaultOrders, searchConfig, selectColumns } from './constants';
 import { managerPage, removeRequest } from '@/api/template';
 import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
@@ -21,6 +21,7 @@ import InfoPage from './info';
 import UpdatePage from './update';
 import EditCodePage from './editCode';
 import AddPage from './add';
+import { buildSearchCondition } from '@/utils/searchUtil';
 
 const { Title } = Typography;
 
@@ -116,20 +117,17 @@ function SearchTable() {
     orders,
   ]);
 
+ 
   // 获取数据
   function fetchData() {
     const { current, pageSize } = pagination;
+    const searchParam = buildSearchCondition(selectColumns,searchConfig,orders,formParams)
     setLoading(true);
     managerPage({
-      currentPage: current,
+      currentPage: current-1,
       pageSize,
-      searchParam: formParams,
-      orders: orders,
-      columns: getSearChColumns(),
-      searchConfig: {
-        nickName: SearchTypeEnum.LIKE,
-        createTime: SearchTypeEnum.BETWEEN,
-      },
+      ...searchParam
+
     }).then((res) => {
       setData(res.data.data);
       setPatination({

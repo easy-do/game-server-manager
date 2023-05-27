@@ -13,7 +13,7 @@ import plus.easydo.mapstruct.BaseMapstruct;
  * @version 1.0
  * @date 2022/9/4
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TemplateMapstruct extends BaseMapstruct<TemplateManagement, TemplateManagementVo, TemplateManagementDto> {
 
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Popconfirm } from '@arco-design/web-react';
 import { dictLabelEnum } from '@/utils/dictDataUtils';
+import { SearchType, SelectColumnType } from '@/utils/searchUtil';
 
 const scopeSelect = dictLabelEnum("scope_select",'string')
 
@@ -23,25 +24,41 @@ export interface DataInfoVo {
 }
 
 // 后台sql查询字段
-export function getSearChColumns() {
-  return [
-    'delFlag',
-    'createName',
-    'updateBy',
-    'createBy',
-    'updateTime',
-    'createTime',
-    'description',
-    'filePath',
-    'fileName',
-    'version',
-    'templateScope',
-    'templateType',
-    'templateCode',
-    'templateName',
+export const selectColumns = {
+  columns: [
     'id',
-  ];
+    'templateName',
+    'templateCode',
+    'templateType',
+    'templateScope',
+    'version',
+    'fileName',
+    'filePath',
+    'description',
+    'createTime',
+    'updateTime',
+    'createBy',
+    'updateBy',
+    'createName',
+    'delFlag',
+  ],
+  type: SelectColumnType.onlySelect,
 }
+
+
+// 搜索配置
+export const searchConfig = {
+        'templateName': SearchType.LIKE,
+        'templateCode': SearchType.EQ,
+        'templateType': SearchType.EQ,
+        'templateScope': SearchType.EQ,
+        'version': SearchType.EQ,
+        'fileName': SearchType.LIKE,
+        'filePath': SearchType.EQ,
+        'description': SearchType.EQ,
+        'createName': SearchType.LIKE,
+}
+
 
 //默认排序字段
 export function getDefaultOrders() {

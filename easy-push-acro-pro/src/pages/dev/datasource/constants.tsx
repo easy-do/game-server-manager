@@ -3,6 +3,11 @@ import { Button, Popconfirm } from '@arco-design/web-react';
 import { dictLabelEnum, getDictList } from '@/utils/dictDataUtils';
 import PermissionWrapper from '@/components/PermissionWrapper';
 
+import {
+  SearchType,
+  SelectColumnType,
+} from '@/utils/searchUtil';
+
 export const statusEnum = dictLabelEnum('status_select','string')
 
 export interface DataInfoVo{
@@ -24,25 +29,41 @@ export interface DataInfoVo{
 }
 
 // 后台sql查询字段
-export function getSearChColumns(){
-    return [
-    'delFlag',
-    'remark',
-    'updateTime',
-    'updateBy',
-    'createTime',
-    'createBy',
-    'status',
-    'params',
-    'password',
-    'userName',
-    'url',
-    'sourceType',
-    'sourceCode',
-    'sourceName',
+export const selectColumns = {
+  columns: [
     'id',
-      ];
+    'templateName',
+    'templateCode',
+    'templateType',
+    'templateScope',
+    'version',
+    'fileName',
+    'filePath',
+    'description',
+    'createTime',
+    'updateTime',
+    'createBy',
+    'updateBy',
+    'createName',
+    'delFlag',
+  ],
+  type: SelectColumnType.onlySelect,
 }
+
+
+// 搜索配置
+export const searchConfig = {
+        'templateName': SearchType.LIKE,
+        'templateCode': SearchType.EQ,
+        'templateType': SearchType.EQ,
+        'templateScope': SearchType.EQ,
+        'version': SearchType.EQ,
+        'fileName': SearchType.LIKE,
+        'filePath': SearchType.EQ,
+        'description': SearchType.EQ,
+        'createName': SearchType.LIKE,
+  }
+
 
 //默认排序字段
 export function getDefaultOrders(){
@@ -57,28 +78,12 @@ export function getColumns(
 ) {
   return [
     {
-      title: t['searchTable.columns.delFlag'],
-      dataIndex: 'delFlag',
-    },
-    {
       title: t['searchTable.columns.remark'],
       dataIndex: 'remark',
     },
     {
-      title: t['searchTable.columns.updateTime'],
-      dataIndex: 'updateTime',
-    },
-    {
-      title: t['searchTable.columns.updateBy'],
-      dataIndex: 'updateBy',
-    },
-    {
       title: t['searchTable.columns.createTime'],
       dataIndex: 'createTime',
-    },
-    {
-      title: t['searchTable.columns.createBy'],
-      dataIndex: 'createBy',
     },
     {
       title: t['searchTable.columns.status'],
@@ -87,10 +92,6 @@ export function getColumns(
     {
       title: t['searchTable.columns.params'],
       dataIndex: 'params',
-    },
-    {
-      title: t['searchTable.columns.password'],
-      dataIndex: 'password',
     },
     {
       title: t['searchTable.columns.userName'],
