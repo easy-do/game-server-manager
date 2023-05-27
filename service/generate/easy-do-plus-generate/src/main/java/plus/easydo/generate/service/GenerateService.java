@@ -3,6 +3,7 @@ package plus.easydo.generate.service;
 
 import plus.easydo.generate.dto.GenerateDatabaseDocDto;
 import plus.easydo.generate.dto.JsonGenerateDto;
+import plus.easydo.generate.vo.CodePreviewVo;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -20,7 +21,7 @@ public interface GenerateService {
      * @param tableId 表编号
      * @return 预览数据列表
      */
-    Map<String, String> previewCode(Long tableId);
+    CodePreviewVo previewCode(Long tableId);
 
     /**
      * 生成代码（下载方式）

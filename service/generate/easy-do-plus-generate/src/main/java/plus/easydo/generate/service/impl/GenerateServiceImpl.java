@@ -1,11 +1,17 @@
 package plus.easydo.generate.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
+import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.lang.tree.parser.NodeParser;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.google.common.collect.Maps;
+import plus.easydo.common.enums.StatusEnum;
 import plus.easydo.common.exception.BizException;
 import plus.easydo.generate.constant.GenConstants;
 import plus.easydo.generate.service.GenerateService;
@@ -21,6 +27,8 @@ import plus.easydo.generate.util.GenUtils;
 import plus.easydo.generate.util.VelocityInitializer;
 import plus.easydo.generate.util.VelocityUtils;
 import plus.easydo.generate.util.WordPdfUtils;
+import plus.easydo.generate.vo.CodePathTree;
+import plus.easydo.generate.vo.CodePreviewVo;
 import plus.easydo.generate.vo.DbListVo;
 import plus.easydo.generate.vo.TemplateManagementVo;
 import org.apache.commons.io.FileUtils;
@@ -36,16 +44,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.tree.TreeNode;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -111,8 +125,8 @@ public class GenerateServiceImpl implements GenerateService {
      * @return 预览数据列表
      */
     @Override
-    public Map<String, String> previewCode(Long tableId) {
-        Map<String, String> dataMap = new LinkedHashMap<>();
+    public CodePreviewVo previewCode(Long tableId) {
+        Map<String, CodePreviewVo> dataMap = new LinkedHashMap<>();
         // 查询表信息
         GenTable table = genTableService.selectGenTableById(tableId);
         // 设置主子表信息
@@ -122,14 +136,77 @@ public class GenerateServiceImpl implements GenerateService {
         VelocityContext context = VelocityUtils.prepareContext(table);
         String templateIds = table.getTemplateIds();
         Map<TemplateManagementVo, Template> templates = getTemplatesForDb(templateIds);
+        List<CodePreviewVo.Code> codeList = new ArrayList<>(templates.size());
         for (Map.Entry<TemplateManagementVo, Template> entry : templates.entrySet()) {
             StringWriter stringWriter = new StringWriter();
-            TemplateManagementVo vo = entry.getKey();
+            TemplateManagementVo templateManagementVo = entry.getKey();
             Template template = entry.getValue();
             template.merge(context, stringWriter);
-            dataMap.put(vo.getTemplateName(), stringWriter.toString());
+            String filePath = VelocityUtils.generatePath(table, templateManagementVo.getFilePath());
+            List<String> paths = CharSequenceUtil.split(filePath, "/");
+            String fileName = paths.get(paths.size()-1);
+            CodePreviewVo.Code code = CodePreviewVo.Code.builder()
+                    .templateName(templateManagementVo.getTemplateName())
+                    .templateType(templateManagementVo.getTemplateType())
+                    .filePath(filePath)
+                    .fileName(fileName)
+                    .code(stringWriter.toString()).build();
+            codeList.add(code);
         }
-        return dataMap;
+        return CodePreviewVo.builder().filePathTree(buildFilePathTree(codeList)).codes(codeList).build();
+    }
+
+    /**
+     * 构建预览代码的文件夹树结构
+     *
+     * @param codeList codeList
+     * @return java.util.List<cn.hutool.core.lang.tree.Tree<java.lang.Integer>>
+     * @author laoyu
+     * @date 2023/5/28
+     */
+    private List<Tree<Integer>> buildFilePathTree(List<CodePreviewVo.Code> codeList) {
+        Map<String,CodePathTree> treeKeyMap = new HashMap<>();
+        List<CodePathTree> allTree = new ArrayList<>();
+        Integer currentMaxId = 1;
+        //先加入根节点
+        allTree.add(CodePathTree.builder().id(currentMaxId).parentId(0).path("/").build());
+        //构建tree集合
+        for (int i = 0; i < codeList.size(); i++) {
+            CodePreviewVo.Code code = codeList.get(i);
+            List<String> paths = CharSequenceUtil.split(code.getFilePath(), "/");
+            for (int j = 0; j < paths.size(); j++) {
+                String path = paths.get(j);
+                //如果已经存在则不再加入
+                if(!treeKeyMap.containsKey(path)){
+                    Integer parentId;
+                    if(j == 0){
+                        //如果是根目录第一个设计父节点为更目录
+                        parentId = 1;
+                    }else {
+                        //查找上一级目录
+                        String parentPath = paths.get(j - 1);
+                        CodePathTree parentTree = treeKeyMap.get(parentPath);
+                        parentId = parentTree.getId();
+                    }
+                    currentMaxId++;
+                    //存储信息
+                    CodePathTree tree = CodePathTree.builder().id(currentMaxId).parentId(parentId).path(path).build();
+                    treeKeyMap.put(path,tree);
+                    allTree.add(tree);
+                }
+            }
+        }
+
+        NodeParser<CodePathTree, Integer> nodeParser = (codePathTree, treeNode) -> {
+            treeNode.setId(codePathTree.getId());
+            treeNode.setParentId(codePathTree.getParentId());
+            treeNode.setName(codePathTree.getPath());
+            treeNode.putExtra("title", codePathTree.getPath());
+            treeNode.putExtra("key", codePathTree.getPath());;
+        };
+
+        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        return TreeUtil.build(allTree, 1, treeNodeConfig, nodeParser);
     }
 
     /**

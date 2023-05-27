@@ -14,6 +14,7 @@ import plus.easydo.generate.util.WordPdfUtils;
 import plus.easydo.generate.dto.GenerateDatabaseDocDto;
 import plus.easydo.generate.dto.JsonGenerateDto;
 import plus.easydo.generate.service.GenTableColumnService;
+import plus.easydo.generate.vo.CodePreviewVo;
 import plus.easydo.generate.vo.DbListVo;
 import plus.easydo.dao.qo.MpBaseQo;
 import plus.easydo.common.result.MpDataResult;
@@ -187,9 +188,9 @@ public class GenController {
      * @author laoyu
      */
     @GetMapping("/preview/{tableId}")
-    public R<Map<String, String>> preview(@PathVariable("tableId") Long tableId) {
-        Map<String, String> dataMap = generateService.previewCode(tableId);
-        return DataResult.ok(dataMap);
+    public R<CodePreviewVo> preview(@PathVariable("tableId") Long tableId) {
+        CodePreviewVo codePreviewVo = generateService.previewCode(tableId);
+        return DataResult.ok(codePreviewVo);
     }
 
     /**
