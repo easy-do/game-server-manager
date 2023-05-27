@@ -1,9 +1,6 @@
 package plus.easydo.uc.service;
 
-import plus.easydo.uc.qo.OauthClientDetailsQo;
-import plus.easydo.web.base.BaseService;
-import plus.easydo.uc.dto.OauthClientDetailsDto;
-import plus.easydo.uc.vo.OauthClientDetailsVo;
+import com.baomidou.mybatisplus.extension.service.IService;
 import plus.easydo.uc.entity.OauthClientDetails;
 
 
@@ -13,7 +10,7 @@ import plus.easydo.uc.entity.OauthClientDetails;
  * @author yuzhanfeng
  * @date 2023-02-27 16:01:25
  */
-public interface OauthClientDetailsService extends BaseService<OauthClientDetails, OauthClientDetailsQo, OauthClientDetailsVo, OauthClientDetailsDto>{
+public interface OauthClientDetailsService extends IService<OauthClientDetails> {
 
 
 }
