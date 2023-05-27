@@ -3,8 +3,8 @@ package plus.easydo.generate.dynamic.configuration;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import plus.easydo.common.exception.BizException;
+import plus.easydo.generate.entity.dataSourceManager;
 import plus.easydo.generate.service.DataSourceManagerService;
-import plus.easydo.generate.vo.DataSourceVo;
 import plus.easydo.generate.dynamic.utils.JdbcDataSourceExecTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ public class JdbcDynamicDataSource {
     /** copy from DataSourceBuilder */
     private static final String[] DATA_SOURCE_TYPE_NAMES = new String[]{
             "com.zaxxer.hikari.HikariDataSource",
-            "org.apache.tomcat.jdbc.pool.DataSource",
+            "org.apache.tomcat.jdbc.pool.dataSourceManager",
             "org.apache.commons.dbcp2.BasicDataSource"};
 
     @Autowired(required = false)
@@ -139,7 +139,8 @@ public class JdbcDynamicDataSource {
             if(Objects.isNull(dataSourceManagerService)){
                 throw new BizException("500","You need to implement : "+ DataSourceManagerService.class.getName());
             }
-            DataSourceVo dataSourceManager = dataSourceManagerService.selectById(id);
+
+            dataSourceManager dataSourceManager = dataSourceManagerService.getById(id);
             if(Objects.nonNull(dataSourceManager)){
                 logger.info("缓存中未找到数据源,尝试注册：{}", dataSourceManager.getSourceName());
                 DataSource dataSource = createDataSource(BeanUtil.beanToMap(dataSourceManager));
@@ -177,11 +178,11 @@ public class JdbcDynamicDataSource {
      * 创建数据源
      *
      * @param dataSourceInfo dataSourceInfo
-     * @return javax.sql.DataSource
+     * @return javax.sql.dataSourceManager
      * @author laoyu
      */
     public static DataSource createDataSource(Map<String,Object> dataSourceInfo) {
-        /** Class<? extends DataSource> dataSourceType = getDataSourceType((String) dataSourceInfo.get("source_type")); */
+        /** Class<? extends dataSourceManager> dataSourceType = getDataSourceType((String) dataSourceInfo.get("source_type")); */
         Class<? extends DataSource> dataSourceType = getDataSourceType("com.zaxxer.hikari.HikariDataSource");
         String url = (String) dataSourceInfo.get("url");
         String driverClass = DatabaseDriver.fromJdbcUrl(url).getDriverClassName();
@@ -226,7 +227,7 @@ public class JdbcDynamicDataSource {
      * 获得数据源类型
      *
      * @param datasourceType datasourceType
-     * @return java.lang.Class<? extends javax.sql.DataSource>
+     * @return java.lang.Class<? extends javax.sql.dataSourceManager>
      * @author laoyu
      */
     private static Class<? extends DataSource> getDataSourceType(String datasourceType) {
@@ -303,10 +304,10 @@ public class JdbcDynamicDataSource {
                     try {
                         ((Closeable) dataSource).close();
                     } catch (Exception e) {
-                        logger.warn("Close DataSource error", e);
+                        logger.warn("Close dataSourceManager error", e);
                     }
                 } else {
-                    logger.warn("DataSource can not close");
+                    logger.warn("dataSourceManager can not close");
                 }
             }
         }

@@ -9,8 +9,6 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
-import plus.easydo.generate.vo.DataSourceVo;
-import plus.easydo.generate.dto.DataSourceDto;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +19,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @TableName("data_source_manager")
-public class DataSource {
+public class dataSourceManager {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */

@@ -14,13 +14,13 @@ import useLocale from '@/utils/useLocale';
 import SearchForm from './form';
 import locale from './locale';
 import styles from './style/index.module.less';
-import { getColumns, getDefaultOrders, getSearChColumns } from './constants';
+import { getColumns, getDefaultOrders, searchConfig, selectColumns } from './constants';
 import { managerPage, removeRequest } from '@/api/dataSourceManager';
-import { SearchTypeEnum } from '@/utils/systemConstant';
 import { SorterResult } from '@arco-design/web-react/es/Table/interface';
 import InfoPage from './info';
 import UpdatePage from './update';
 import AddPage from './add';
+import { buildSearchCondition } from '@/utils/searchUtil';
 
 const { Title } = Typography;
 
@@ -104,31 +104,27 @@ function SearchTable() {
     orders,
   ]);
 
-  // 获取数据
-  function fetchData() {
-    const { current, pageSize } = pagination;
-    setLoading(true);
-    managerPage({
-      currentPage: current,
+ // 获取数据
+ function fetchData() {
+  const { current, pageSize } = pagination;
+  const searchParam = buildSearchCondition(selectColumns,searchConfig,orders,formParams)
+  setLoading(true);
+  managerPage({
+    currentPage: current-1,
+    pageSize,
+    ...searchParam
+
+  }).then((res) => {
+    setData(res.data.data);
+    setPatination({
+      ...pagination,
+      current,
       pageSize,
-      searchParam: formParams,
-      orders: orders,
-      columns: getSearChColumns(),
-      searchConfig: {
-        nickName: SearchTypeEnum.LIKE,
-        createTime: SearchTypeEnum.BETWEEN,
-      },
-    }).then((res) => {
-      setData(res.data.data);
-      setPatination({
-        ...pagination,
-        current,
-        pageSize,
-        total: res.data.total,
-      });
-      setLoading(false);
+      total: res.data.total,
     });
-  }
+    setLoading(false);
+  });
+}
 
   //表格搜索排序回调函数
   function onChangeTable(
