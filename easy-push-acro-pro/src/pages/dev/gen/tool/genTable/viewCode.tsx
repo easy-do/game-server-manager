@@ -1,12 +1,14 @@
 import { preview } from '@/api/genTable';
 import MEditor from '@/components/Medit/MEditor';
 import useLocale from '@/utils/useLocale';
-import { Tabs, Modal, Spin } from '@arco-design/web-react';
+import { Tabs, Modal, Tree, Card } from '@arco-design/web-react';
 import React, { useEffect, useState } from 'react';
 import locale from './locale';
+import Col from '@arco-design/web-react/es/Grid/col';
+import Row from '@arco-design/web-react/es/Grid/row';
+
 
 const TabPane = Tabs.TabPane;
-
 
 function ViewCodePage({ id, visible, setVisible }) {
   const t = useLocale(locale);
@@ -14,6 +16,13 @@ function ViewCodePage({ id, visible, setVisible }) {
   const [loading, setLoading] = useState(false);
 
   const [codeTabPanes, setCodeTabPanes] = useState([]);
+
+  const [pathTreeData, setPathTreeData] = useState([]);
+
+  const [expandedKeys, setExpandedKeys] = useState([]);
+
+  const [currentSelectKey, setCurrentSelectKey] = useState<string>();
+
 
   //加载数据
   function fetchData() {
@@ -23,17 +32,28 @@ function ViewCodePage({ id, visible, setVisible }) {
         const { success, data } = res.data;
         if (success) {
           const list = [];
-          const map = new Map(Object.entries(data));
-          map.forEach((value:string, key: string) => {
+          const expandedKeyList: string[] = [];
+          data.codes.forEach((element) => {
             list.push(
-              <TabPane key={key} title={key}>
-                <MEditor showLanguageSelect={true} height={'600px'} width={'950px'} theme='vs-dark' language='typescript' value={value} callBack={null} />
+              <TabPane key={element.fileName} title={element.fileName}>
+                <MEditor
+                  key={element.fileName}
+                  showLanguageSelect={true}
+                  height={'600px'}
+                  width={'1000px'}
+                  theme="vs-dark"
+                  language={element.templateType}
+                  value={element.code}
+                  callBack={null}
+                />
               </TabPane>
             );
+            expandedKeyList.push(element.fileName);
           });
-          console.info(list[0]);
-          console.info(list[0].key);
+          setPathTreeData(data.filePathTree);
           setCodeTabPanes(list);
+          setCurrentSelectKey(expandedKeyList[0]);
+          setExpandedKeys(expandedKeyList);
         }
         setLoading(false);
       });
@@ -42,7 +62,7 @@ function ViewCodePage({ id, visible, setVisible }) {
 
   useEffect(() => {
     fetchData();
-  }, [id,visible]);
+  }, [id, visible]);
 
   return (
     <Modal
@@ -57,11 +77,45 @@ function ViewCodePage({ id, visible, setVisible }) {
       autoFocus={false}
       focusLock={true}
       maskClosable={false}
-      style={{ width: '1000px', height: '800px' }}
+      style={{ width: '90%', minHeight: '90%' }}
     >
-        <Spin tip="loading Data..." loading={loading}>
-          <Tabs style={{ width: '950px', height: '650px' }}>{codeTabPanes}</Tabs>
-        </Spin>
+      <div style={{ width: '100%' }}>
+        <div style={{ width: '100%' }}>
+          <Row>
+            <Col span={8}>
+              <Card key={'tree'} bordered style={{ height: '90%' }}>
+                <Tree
+                  onSelect={(selectedKeys: string[], _extra) => {
+                    if(expandedKeys.indexOf(selectedKeys[0]) > -1){
+                      setCurrentSelectKey(selectedKeys[0]);
+                    }
+                  }}
+                  expandedKeys={expandedKeys}
+                  onExpand={(keys, _extra) => {
+                    setExpandedKeys(keys);
+                  }}
+                  size="small"
+                  selectedKeys={[currentSelectKey]}
+                  treeData={pathTreeData}
+                />
+              </Card>
+            </Col>
+            <Col span={16}>
+              <Card key={'code'} bordered>
+                <Tabs
+                  activeTab={currentSelectKey}
+                  onClickTab={(key: string) => {
+                    setCurrentSelectKey(key);
+                  }}
+                  type="card-gutter"
+                >
+                  {codeTabPanes}
+                </Tabs>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </div>
     </Modal>
   );
 }

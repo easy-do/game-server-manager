@@ -280,7 +280,7 @@ public class VelocityUtils {
         if ("1".equals(table.getGenType())) {
             filePath = table.getGenPath() + File.separator + filePath;
         }
-        filePath = filePath.replace("#{packageName}", packageName);
+        filePath = filePath.replace("#{packageName}", packageName.replace(".","/"));
         filePath = filePath.replace("#{className}", className);
         filePath = filePath.replace("#{businessName}", businessName);
         filePath = filePath.replace("#{moduleName}", moduleName);
