@@ -1,4 +1,4 @@
-package plus.easydo.push.client.utils;
+package plus.easydo.client.utils;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;

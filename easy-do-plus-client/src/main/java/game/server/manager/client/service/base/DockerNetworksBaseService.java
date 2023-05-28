@@ -1,9 +1,9 @@
-package plus.easydo.push.client.service.base;
+package plus.easydo.client.service.base;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.model.Network;
-import plus.easydo.push.client.model.CreateNetworkDto;
+import plus.easydo.client.model.CreateNetworkDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

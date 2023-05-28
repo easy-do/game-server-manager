@@ -14,7 +14,7 @@ management:
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: plus.easydo.push.**.entity
+  typeAliasesPackage: plus.easydo.**.entity
   global-config:
     #数据库相关配置
     db-config:
@@ -107,7 +107,7 @@ springdoc:
     # 开启api-docs
     enabled: true
   # 配置需要生成接口文档的扫描包
-  packages-to-scan: plus.easydo.push.server.controller
+  packages-to-scan: plus.easydo.server.controller
   # 配置需要生成接口文档的接口路径
   #  paths-to-match: /brand/**,/admin/**
   customize:

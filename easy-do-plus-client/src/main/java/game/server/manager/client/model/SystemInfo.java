@@ -1,4 +1,4 @@
-package plus.easydo.push.client.model;
+package plus.easydo.client.model;
 
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;

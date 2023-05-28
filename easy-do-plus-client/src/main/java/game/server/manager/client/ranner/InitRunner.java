@@ -1,4 +1,4 @@
-package plus.easydo.push.client.ranner;
+package plus.easydo.client.ranner;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

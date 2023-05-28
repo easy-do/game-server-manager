@@ -1,4 +1,4 @@
-package plus.easydo.push.client.config;
+package plus.easydo.client.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

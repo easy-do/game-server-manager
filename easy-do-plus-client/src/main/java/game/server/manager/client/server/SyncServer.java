@@ -1,12 +1,12 @@
-package plus.easydo.push.client.server;
+package plus.easydo.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import plus.easydo.push.client.config.JacksonObjectMapper;
-import plus.easydo.push.client.config.SystemUtils;
-import plus.easydo.push.client.contants.ClientSocketTypeEnum;
-import plus.easydo.push.client.model.socket.ClientMessage;
-import plus.easydo.push.client.websocket.ClientWebsocketEndpoint;
+import plus.easydo.client.config.JacksonObjectMapper;
+import plus.easydo.client.config.SystemUtils;
+import plus.easydo.client.contants.ClientSocketTypeEnum;
+import plus.easydo.client.model.socket.ClientMessage;
+import plus.easydo.client.websocket.ClientWebsocketEndpoint;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

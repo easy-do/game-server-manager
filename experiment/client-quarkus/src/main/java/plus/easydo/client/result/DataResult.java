@@ -35,7 +35,7 @@ public class DataResult<T> extends R<T> {
     /**
      * OK
      *
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> ok() {
@@ -51,7 +51,7 @@ public class DataResult<T> extends R<T> {
      * OK
      *
      * @param data data
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> ok(T data) {
@@ -67,7 +67,7 @@ public class DataResult<T> extends R<T> {
      * OK
      *
      * @param msg msg
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> okMsg(String msg) {
@@ -83,7 +83,7 @@ public class DataResult<T> extends R<T> {
      *
      * @param data data
      * @param msg  msg
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> ok(T data, String msg) {
@@ -98,7 +98,7 @@ public class DataResult<T> extends R<T> {
     /**
      * FAIL
      *
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> fail() {
@@ -115,7 +115,7 @@ public class DataResult<T> extends R<T> {
      * FAIL
      *
      * @param msg msg
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> fail(String msg) {
@@ -132,7 +132,7 @@ public class DataResult<T> extends R<T> {
      * FAIL
      *
      * @param data data
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> fail(T data) {
@@ -151,7 +151,7 @@ public class DataResult<T> extends R<T> {
      *
      * @param data data
      * @param msg  msg
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> fail(T data, String msg) {
@@ -170,7 +170,7 @@ public class DataResult<T> extends R<T> {
      *
      * @param code code
      * @param msg  msg
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> fail(int code, String msg) {
@@ -190,7 +190,7 @@ public class DataResult<T> extends R<T> {
      * @param code code
      * @param msg  msg
      * @param success  success
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> result(T data, int code, String msg, boolean success) {
@@ -209,7 +209,7 @@ public class DataResult<T> extends R<T> {
      * @param code code
      * @param msg  msg
      * @param success  success
-     * @return plus.easydo.push.common.result
+     * @return plus.easydo.common.result
      * @author laoyu
      */
     public static <T> DataResult<T> result(int code, String msg, boolean success) {

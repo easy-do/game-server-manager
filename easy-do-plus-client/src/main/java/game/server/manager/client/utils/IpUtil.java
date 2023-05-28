@@ -1,4 +1,4 @@
-package plus.easydo.push.client.utils;
+package plus.easydo.client.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;

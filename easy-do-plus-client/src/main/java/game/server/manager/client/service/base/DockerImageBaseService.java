@@ -1,4 +1,4 @@
-package plus.easydo.push.client.service.base;
+package plus.easydo.client.service.base;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ListImagesCmd;

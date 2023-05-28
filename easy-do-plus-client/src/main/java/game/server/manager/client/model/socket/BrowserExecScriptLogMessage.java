@@ -1,4 +1,4 @@
-package plus.easydo.push.client.model.socket;
+package plus.easydo.client.model.socket;
 
 import lombok.Data;
 

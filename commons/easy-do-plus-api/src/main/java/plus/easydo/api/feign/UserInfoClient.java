@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 /**
  * @author yuzhanfeng
  */
-@FeignClient( url = "${system.server-list.uc:easy-do-plus-uc.server}", configuration = FeignInterceptor.class,
+@FeignClient( url = "${system.server-list.uc:game-server-manager-uc.server}", configuration = FeignInterceptor.class,
         path = "/user",name = "uc-userinfo", fallback = UserInfoClientFallback.class)
 public interface UserInfoClient extends UserInfoApi {
 }

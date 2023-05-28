@@ -1,13 +1,13 @@
-package plus.easydo.push.client.websocket;
+package plus.easydo.client.websocket;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import plus.easydo.push.client.config.SystemUtils;
-import plus.easydo.push.client.contants.ClientSocketTypeEnum;
-import plus.easydo.push.client.model.socket.ClientMessage;
-import plus.easydo.push.client.model.socket.ServerMessage;
+import plus.easydo.client.config.SystemUtils;
+import plus.easydo.client.contants.ClientSocketTypeEnum;
+import plus.easydo.client.model.socket.ClientMessage;
+import plus.easydo.client.model.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;

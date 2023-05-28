@@ -1,4 +1,4 @@
-package plus.easydo.push.client;
+package plus.easydo.client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

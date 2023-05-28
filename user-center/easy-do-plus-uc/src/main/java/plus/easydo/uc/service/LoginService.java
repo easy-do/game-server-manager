@@ -62,7 +62,7 @@ public class LoginService {
      * 登录
      *
      * @param loginModel loginModel
-     * @return plus.easydo.push.server.vo.UserInfoVo
+     * @return plus.easydo.server.vo.UserInfoVo
      * @author laoyu
      * @date 2022/6/14
      */
@@ -83,7 +83,7 @@ public class LoginService {
      * 密钥登陆
      *
      * @param loginModel loginModel
-     * @return plus.easydo.push.server.vo.UserInfoVo
+     * @return plus.easydo.server.vo.UserInfoVo
      * @author laoyu
      * @date 2022/6/14
      */
@@ -112,7 +112,7 @@ public class LoginService {
      * 密码登录
      *
      * @param loginModel loginModel
-     * @return plus.easydo.push.server.vo.UserInfoVo
+     * @return plus.easydo.server.vo.UserInfoVo
      * @author laoyu
      * @date 2022/6/14
      */
@@ -143,7 +143,7 @@ public class LoginService {
      * 邮箱登录
      *
      * @param loginModel loginModel
-     * @return plus.easydo.push.server.vo.UserInfoVo
+     * @return plus.easydo.server.vo.UserInfoVo
      * @author laoyu
      * @date 2022/6/14
      */
@@ -169,7 +169,7 @@ public class LoginService {
      * 第三方平台登陆
      *
      * @param authUser authUser
-     * @return plus.easydo.push.server.vo.UserInfoVo
+     * @return plus.easydo.server.vo.UserInfoVo
      * @author laoyu
      * @date 2022/6/14
      */

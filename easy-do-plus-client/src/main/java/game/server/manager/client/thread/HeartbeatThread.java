@@ -1,11 +1,11 @@
-package plus.easydo.push.client.thread;
+package plus.easydo.client.thread;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import plus.easydo.push.client.config.JacksonObjectMapper;
-import plus.easydo.push.client.contants.ClientSocketTypeEnum;
-import plus.easydo.push.client.model.ClientData;
-import plus.easydo.push.client.server.ClientDataServer;
-import plus.easydo.push.client.server.SyncServer;
+import plus.easydo.client.config.JacksonObjectMapper;
+import plus.easydo.client.contants.ClientSocketTypeEnum;
+import plus.easydo.client.model.ClientData;
+import plus.easydo.client.server.ClientDataServer;
+import plus.easydo.client.server.SyncServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

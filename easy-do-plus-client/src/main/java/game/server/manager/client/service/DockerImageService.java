@@ -1,4 +1,4 @@
-package plus.easydo.push.client.service;
+package plus.easydo.client.service;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
@@ -8,11 +8,11 @@ import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
-import plus.easydo.push.client.contants.ClientSocketTypeEnum;
-import plus.easydo.push.client.model.socket.InstallLogResultData;
-import plus.easydo.push.client.server.SyncServer;
-import plus.easydo.push.client.service.base.DockerImageBaseService;
-import plus.easydo.push.client.utils.DockerUtils;
+import plus.easydo.client.contants.ClientSocketTypeEnum;
+import plus.easydo.client.model.socket.InstallLogResultData;
+import plus.easydo.client.server.SyncServer;
+import plus.easydo.client.service.base.DockerImageBaseService;
+import plus.easydo.client.utils.DockerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

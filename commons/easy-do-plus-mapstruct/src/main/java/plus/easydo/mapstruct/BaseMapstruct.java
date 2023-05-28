@@ -67,7 +67,7 @@ public interface BaseMapstruct <ENTITY,VO,DTO>{
      * entityToVo
      *
      * @param list list
-     * @return plus.easydo.push.generate.core.dto.DataSourceDto
+     * @return plus.easydo.generate.core.dto.DataSourceDto
      * @author laoyu
      * @date 2022/8/29
      */

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>plus.easydo.push</groupId>
+        <groupId>plus.easydo</groupId>
         <artifactId>easy-do-plus</artifactId>
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
@@ -23,7 +23,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-common</artifactId>
             <version>1.0.0</version>
         </dependency>

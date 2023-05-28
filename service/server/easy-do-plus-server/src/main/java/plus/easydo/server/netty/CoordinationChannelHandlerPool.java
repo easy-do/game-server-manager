@@ -1,4 +1,4 @@
-//package plus.easydo.push.server.netty;
+//package plus.easydo.server.netty;
 //
 //import enums.plus.easydo.common.ChannelTypeEnum;
 //import exception.plus.easydo.common.ExceptionFactory;

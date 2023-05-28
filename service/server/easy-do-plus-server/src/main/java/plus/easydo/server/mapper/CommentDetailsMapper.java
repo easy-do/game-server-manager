@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @author yuzhanfeng
 * @description 针对表【comment_details(评论信息)】的数据库操作Mapper
 * @createDate 2022-07-03 20:00:35
-* @Entity plus.easydo.push.server.entity.CommentDetailsDto
+* @Entity plus.easydo.server.entity.CommentDetailsDto
 */
 @Mapper
 public interface CommentDetailsMapper extends BaseMapper<CommentDetails> {
