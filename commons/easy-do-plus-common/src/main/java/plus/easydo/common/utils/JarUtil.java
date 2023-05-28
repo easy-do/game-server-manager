@@ -1,4 +1,4 @@
-//package plus.easydo.push.common.utils;
+//package plus.easydo.common.utils;
 //
 //import cn.hutool.core.exceptions.ExceptionUtil;
 //import lombok.extern.slf4j.Slf4j;

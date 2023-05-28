@@ -10,7 +10,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @version 1.0
  * @date 2022/8/31
  */
-@FeignClient( url = "${system.server-list.oss:easy-do-plus-oss.server}", configuration = FeignInterceptor.class,
+@FeignClient( url = "${system.server-list.oss:game-server-manager-oss.server}", configuration = FeignInterceptor.class,
         path = "/", name = "oss", fallback = OssClientFallback.class)
 public interface OssClient extends OssApi {
 

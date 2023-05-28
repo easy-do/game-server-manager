@@ -19,7 +19,7 @@ public interface UserInfoService extends IService<UserInfo>{
      * 获取用户信息 不存在则创建
      *
      * @param authUser authUser
-     * @return plus.easydo.push.server.vo.UserInfoVo
+     * @return plus.easydo.server.vo.UserInfoVo
      * @author laoyu
      * @date 2022/5/19
      */

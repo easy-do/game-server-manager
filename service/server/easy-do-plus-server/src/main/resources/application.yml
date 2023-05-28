@@ -82,7 +82,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: plus.easydo.push.**.entity
+  typeAliasesPackage: plus.easydo.**.entity
   global-config:
     #数据库相关配置
     db-config:
@@ -107,7 +107,7 @@ system:
     # 作者
     author: yuzhanfeng
     # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool\r\n
-    packageName: plus.easydo.push
+    packageName: plus.easydo
     # 自动去除表前缀，默认是false
     autoRemovePre: false
     # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）

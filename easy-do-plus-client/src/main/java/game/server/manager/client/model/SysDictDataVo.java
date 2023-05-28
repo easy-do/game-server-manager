@@ -1,4 +1,4 @@
-package plus.easydo.push.client.model;
+package plus.easydo.client.model;
 
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;

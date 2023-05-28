@@ -1,11 +1,11 @@
-package plus.easydo.push.client.server;
+package plus.easydo.client.server;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.IoUtil;
-import plus.easydo.push.client.config.SystemUtils;
-import plus.easydo.push.client.model.ClientData;
-import plus.easydo.push.client.model.SystemInfo;
-import plus.easydo.push.client.utils.IpRegionSearchUtil;
+import plus.easydo.client.config.SystemUtils;
+import plus.easydo.client.model.ClientData;
+import plus.easydo.client.model.SystemInfo;
+import plus.easydo.client.utils.IpRegionSearchUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

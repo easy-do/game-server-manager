@@ -1,13 +1,13 @@
-package plus.easydo.push.client.server;
+package plus.easydo.client.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import plus.easydo.push.client.config.JacksonObjectMapper;
-import plus.easydo.push.client.config.SystemUtils;
-import plus.easydo.push.client.contants.PathConstants;
-import plus.easydo.push.client.model.SysDictDataVo;
-import plus.easydo.push.client.result.R;
-import plus.easydo.push.client.utils.http.HttpModel;
-import plus.easydo.push.client.utils.http.HttpRequestUtil;
+import plus.easydo.client.config.JacksonObjectMapper;
+import plus.easydo.client.config.SystemUtils;
+import plus.easydo.client.contants.PathConstants;
+import plus.easydo.client.model.SysDictDataVo;
+import plus.easydo.client.result.R;
+import plus.easydo.client.utils.http.HttpModel;
+import plus.easydo.client.utils.http.HttpRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

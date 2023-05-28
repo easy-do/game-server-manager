@@ -54,7 +54,7 @@ public abstract class BaseController<SERVICE extends BaseService<Entity, QO, VO,
      * 分页查询
      *
      * @param qo qo
-     * @return plus.easydo.push.server.result.MPDataResult
+     * @return plus.easydo.server.result.MPDataResult
      * @author laoyu
      * @date 2022/7/6
      */

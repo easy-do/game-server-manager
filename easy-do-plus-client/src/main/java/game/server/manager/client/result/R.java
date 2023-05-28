@@ -1,4 +1,4 @@
-package plus.easydo.push.client.result;
+package plus.easydo.client.result;
 
 
 

@@ -1,4 +1,4 @@
-package plus.easydo.push.client.utils;
+package plus.easydo.client.utils;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.CharSequenceUtil;

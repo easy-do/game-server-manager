@@ -31,7 +31,7 @@ public interface SysDictDataService extends  BaseService<SysDictData, MpBaseQo<S
      * 根据字典编码获取所有键值对
      *
      * @param dictCode dictCode
-     * @return java.util.List<plus.easydo.push.server.vo.SysDictDataVo>
+     * @return java.util.List<plus.easydo.server.vo.SysDictDataVo>
      * @author laoyu
      * @date 2022/7/22
      */
@@ -43,7 +43,7 @@ public interface SysDictDataService extends  BaseService<SysDictData, MpBaseQo<S
      *
      * @param dictCode dictCode
      * @param dictDataKey dictDataKey
-     * @return plus.easydo.push.server.vo.SysDictDataVo
+     * @return plus.easydo.server.vo.SysDictDataVo
      * @author laoyu
      * @date 2022/7/23
      */

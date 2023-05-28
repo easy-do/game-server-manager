@@ -1,4 +1,4 @@
-package plus.easydo.push.client.model;
+package plus.easydo.client.model;
 
 import com.github.dockerjava.api.model.Network;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-//package plus.easydo.push.server.netty;
+//package plus.easydo.server.netty;
 //
 //import com.alibaba.fastjson2.JSONObject;
 //import enums.plus.easydo.common.ChannelTypeEnum;

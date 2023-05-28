@@ -16,7 +16,7 @@ public interface SysUserRoleService extends IService<SysUserRole> {
      * 根据角色获取集合
      *
      * @param userId userId
-     * @return java.util.List<plus.easydo.push.server.entity.SysUserRole>
+     * @return java.util.List<plus.easydo.server.entity.SysUserRole>
      * @author laoyu
      * @date 2022/7/20
      */
@@ -26,7 +26,7 @@ public interface SysUserRoleService extends IService<SysUserRole> {
      * 根据角色获取集合
      *
      * @param userId userId
-     * @return java.util.List<plus.easydo.push.server.entity.SysUserRole>
+     * @return java.util.List<plus.easydo.server.entity.SysUserRole>
      * @author laoyu
      * @date 2022/7/20
      */

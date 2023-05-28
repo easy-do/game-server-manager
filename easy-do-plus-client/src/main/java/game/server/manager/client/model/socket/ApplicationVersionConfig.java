@@ -1,9 +1,9 @@
-package plus.easydo.push.client.model.socket;
+package plus.easydo.client.model.socket;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import plus.easydo.push.client.model.BindDto;
-import plus.easydo.push.client.model.CreateNetworkDto;
-import plus.easydo.push.client.model.PortBindDto;
+import plus.easydo.client.model.BindDto;
+import plus.easydo.client.model.CreateNetworkDto;
+import plus.easydo.client.model.PortBindDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

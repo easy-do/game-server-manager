@@ -18,7 +18,7 @@ public interface DiscussionService extends BaseService<Discussion, MpBaseQo<Disc
      * 管理分页
      *
      * @param mpBaseQo mpBaseQo
-     * @return com.baomidou.mybatisplus.core.metadata.IPage<plus.easydo.push.server.vo.DiscussionVo>
+     * @return com.baomidou.mybatisplus.core.metadata.IPage<plus.easydo.server.vo.DiscussionVo>
      * @author laoyu
      * @date 2022/7/8
      */

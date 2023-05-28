@@ -1,4 +1,4 @@
-package plus.easydo.push.client.utils.http;
+package plus.easydo.client.utils.http;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

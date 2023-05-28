@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>plus.easydo.push</groupId>
+        <groupId>plus.easydo</groupId>
         <artifactId>easy-do-plus</artifactId>
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
@@ -21,27 +21,27 @@
     <dependencies>
 
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-uc-core</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-uc-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <!--  web -->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-web</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <!--  api -->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-api</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -49,7 +49,7 @@
 
         <!--  doc -->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-doc</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -57,35 +57,35 @@
 
         <!--  event -->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-event</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <!-- mapstruct -->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-mapstruct</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <!-- 授权相关 -->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-auth</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <!-- 日志相关 -->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-log</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <!--  数据库相关-->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-dao</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -98,7 +98,7 @@
 
         <!-- redis -->
         <dependency>
-            <groupId>plus.easydo.push</groupId>
+            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-redis</artifactId>
             <version>1.0.0</version>
         </dependency>

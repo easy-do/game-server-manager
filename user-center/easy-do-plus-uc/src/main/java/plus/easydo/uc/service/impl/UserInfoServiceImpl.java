@@ -87,7 +87,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      *
      * @param unionId  unionId
      * @param platform platform
-     * @return plus.easydo.push.server.entity.UserInfo
+     * @return plus.easydo.server.entity.UserInfo
      * @author laoyu
      * @date 2022/6/12
      */

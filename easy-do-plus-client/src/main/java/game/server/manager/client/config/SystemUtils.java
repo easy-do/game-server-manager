@@ -1,10 +1,10 @@
-package plus.easydo.push.client.config;
+package plus.easydo.client.config;
 
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import plus.easydo.push.client.model.ClientInitData;
+import plus.easydo.client.model.ClientInitData;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

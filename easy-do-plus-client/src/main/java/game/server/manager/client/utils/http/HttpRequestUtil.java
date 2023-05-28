@@ -1,4 +1,4 @@
-package plus.easydo.push.client.utils.http;
+package plus.easydo.client.utils.http;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.net.url.UrlQuery;
@@ -6,7 +6,7 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import plus.easydo.push.client.result.R;
+import plus.easydo.client.result.R;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package plus.easydo.push.client.contants;
+package plus.easydo.client.contants;
 
 /**
  * @author yuzhanfeng

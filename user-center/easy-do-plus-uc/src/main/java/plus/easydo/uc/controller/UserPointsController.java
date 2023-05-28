@@ -41,7 +41,7 @@ public class UserPointsController {
      * 分页查询
      *
      * @param userPointsQo userPointsQo
-     * @return plus.easydo.push.server.result.MPDataResult
+     * @return plus.easydo.server.result.MPDataResult
      * @author laoyu
      * @date 2022/7/6
      */
@@ -63,7 +63,7 @@ public class UserPointsController {
      * 对指定用户积分进行操作
      *
      * @param userPointsOperationDto userPointsOperationDto
-     * @return plus.easydo.push.server.result.MPDataResult
+     * @return plus.easydo.server.result.MPDataResult
      * @author laoyu
      * @date 2022/7/29
      */

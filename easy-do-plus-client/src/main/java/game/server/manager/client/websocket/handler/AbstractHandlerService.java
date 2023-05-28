@@ -1,6 +1,6 @@
-package plus.easydo.push.client.websocket.handler;
+package plus.easydo.client.websocket.handler;
 
-import plus.easydo.push.client.model.socket.ServerMessage;
+import plus.easydo.client.model.socket.ServerMessage;
 
 public interface AbstractHandlerService {
 

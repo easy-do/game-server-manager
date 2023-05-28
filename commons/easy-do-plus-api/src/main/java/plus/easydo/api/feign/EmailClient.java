@@ -10,7 +10,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @version 1.0
  * @date 2022/8/31
  */
-@FeignClient( url = "${system.server-list.uc:easy-do-plus-uc.server}", configuration = FeignInterceptor.class,
+@FeignClient( url = "${system.server-list.uc:game-server-manager-uc.server}", configuration = FeignInterceptor.class,
         path = "/email", name = "uc-email", fallback = EmailClientFallback.class)
 public interface EmailClient extends EmailApi {
 }

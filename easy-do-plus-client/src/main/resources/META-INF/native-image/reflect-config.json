@@ -1129,7 +1129,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.GameServerManagerClientApplication",
+  "name":"plus.easydo.client.GameServerManagerClientApplication",
   "allDeclaredFields":true,
   "allDeclaredClasses":true,
   "queryAllDeclaredMethods":true,
@@ -1140,7 +1140,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.GameServerManagerClientApplication$$SpringCGLIB$$0",
+  "name":"plus.easydo.client.GameServerManagerClientApplication$$SpringCGLIB$$0",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1152,21 +1152,21 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.config.JacksonObjectMapper",
+  "name":"plus.easydo.client.config.JacksonObjectMapper",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.config.SystemUtils",
+  "name":"plus.easydo.client.config.SystemUtils",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.model.BindDto",
+  "name":"plus.easydo.client.model.BindDto",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1179,7 +1179,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.ClientData",
+  "name":"plus.easydo.client.model.ClientData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1193,7 +1193,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.CreateContainerDto",
+  "name":"plus.easydo.client.model.CreateContainerDto",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
@@ -1239,7 +1239,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.CreateNetworkDto",
+  "name":"plus.easydo.client.model.CreateNetworkDto",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1250,7 +1250,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.PortBindDto",
+  "name":"plus.easydo.client.model.PortBindDto",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1265,7 +1265,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.SystemInfo",
+  "name":"plus.easydo.client.model.SystemInfo",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1276,7 +1276,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.socket.ApplicationVersion",
+  "name":"plus.easydo.client.model.socket.ApplicationVersion",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1293,7 +1293,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.socket.ApplicationVersionConfig",
+  "name":"plus.easydo.client.model.socket.ApplicationVersionConfig",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1305,7 +1305,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.socket.ApplicationVersionConfig$SubApps",
+  "name":"plus.easydo.client.model.socket.ApplicationVersionConfig$SubApps",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
@@ -1351,7 +1351,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.socket.ClientMessage",
+  "name":"plus.easydo.client.model.socket.ClientMessage",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1364,7 +1364,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.socket.InstallLogResultData",
+  "name":"plus.easydo.client.model.socket.InstallLogResultData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1374,7 +1374,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.socket.RenameContainerData",
+  "name":"plus.easydo.client.model.socket.RenameContainerData",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1385,7 +1385,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.socket.ServerContainerLogMessage",
+  "name":"plus.easydo.client.model.socket.ServerContainerLogMessage",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1395,7 +1395,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.model.socket.ServerMessage",
+  "name":"plus.easydo.client.model.socket.ServerMessage",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1408,7 +1408,7 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.ranner.InitRunner",
+  "name":"plus.easydo.client.ranner.InitRunner",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1418,84 +1418,84 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.server.ClientDataServer",
+  "name":"plus.easydo.client.server.ClientDataServer",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.server.DictDataService",
+  "name":"plus.easydo.client.server.DictDataService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.server.SyncServer",
+  "name":"plus.easydo.client.server.SyncServer",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.service.DockerContainerService",
+  "name":"plus.easydo.client.service.DockerContainerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.service.DockerImageService",
+  "name":"plus.easydo.client.service.DockerImageService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.service.DockerNetworkService",
+  "name":"plus.easydo.client.service.DockerNetworkService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.service.DockerService",
+  "name":"plus.easydo.client.service.DockerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.service.base.DockerBaseService",
+  "name":"plus.easydo.client.service.base.DockerBaseService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.service.base.DockerContainerBaseService",
+  "name":"plus.easydo.client.service.base.DockerContainerBaseService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.service.base.DockerImageBaseService",
+  "name":"plus.easydo.client.service.base.DockerImageBaseService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.service.base.DockerNetworksBaseService",
+  "name":"plus.easydo.client.service.base.DockerNetworksBaseService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.thread.HeartbeatThread",
+  "name":"plus.easydo.client.thread.HeartbeatThread",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
@@ -1505,205 +1505,205 @@
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.ClientWebsocketEndpoint",
+  "name":"plus.easydo.client.websocket.ClientWebsocketEndpoint",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["plus.easydo.push.client.config.SystemUtils","plus.easydo.push.client.websocket.WebSocketClientHandlerService"] }]
+  "methods":[{"name":"<init>","parameterTypes":["plus.easydo.client.config.SystemUtils","plus.easydo.client.websocket.WebSocketClientHandlerService"] }]
 },
 {
-  "name":"plus.easydo.push.client.websocket.ClientWebsocketEndpoint$1"
+  "name":"plus.easydo.client.websocket.ClientWebsocketEndpoint$1"
 },
 {
-  "name":"plus.easydo.push.client.websocket.WebSocketClientHandlerService",
+  "name":"plus.easydo.client.websocket.WebSocketClientHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.AbstractHandlerService",
+  "name":"plus.easydo.client.websocket.handler.AbstractHandlerService",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.CanCelSyncHandlerService",
+  "name":"plus.easydo.client.websocket.handler.CanCelSyncHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.ContainerLogHandlerService",
+  "name":"plus.easydo.client.websocket.handler.ContainerLogHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.CreateContainerHandlerService",
+  "name":"plus.easydo.client.websocket.handler.CreateContainerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.DockerInfoHandlerService",
+  "name":"plus.easydo.client.websocket.handler.DockerInfoHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.DockerVersionHandlerService",
+  "name":"plus.easydo.client.websocket.handler.DockerVersionHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.HeartbeatHandlerService",
+  "name":"plus.easydo.client.websocket.handler.HeartbeatHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.InstallApplicationHandlerService",
+  "name":"plus.easydo.client.websocket.handler.InstallApplicationHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.ListContainerHandlerService",
+  "name":"plus.easydo.client.websocket.handler.ListContainerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.ListImageHandlerService",
+  "name":"plus.easydo.client.websocket.handler.ListImageHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.PingDockerHandlerService",
+  "name":"plus.easydo.client.websocket.handler.PingDockerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.PullImageHandlerService",
+  "name":"plus.easydo.client.websocket.handler.PullImageHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.RemoveContainerHandlerService",
+  "name":"plus.easydo.client.websocket.handler.RemoveContainerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.RemoveImageHandlerService",
+  "name":"plus.easydo.client.websocket.handler.RemoveImageHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.RenameContainerHandlerService",
+  "name":"plus.easydo.client.websocket.handler.RenameContainerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.RestartContainerHandlerService",
+  "name":"plus.easydo.client.websocket.handler.RestartContainerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.ServerErrorHandlerService",
+  "name":"plus.easydo.client.websocket.handler.ServerErrorHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.StartContainerHandlerService",
+  "name":"plus.easydo.client.websocket.handler.StartContainerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {
-  "name":"plus.easydo.push.client.websocket.handler.StopContainerHandlerService",
+  "name":"plus.easydo.client.websocket.handler.StopContainerHandlerService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
-    {"name":"handler","parameterTypes":["plus.easydo.push.client.model.socket.ServerMessage"] }
+    {"name":"handler","parameterTypes":["plus.easydo.client.model.socket.ServerMessage"] }
   ]
 },
 {

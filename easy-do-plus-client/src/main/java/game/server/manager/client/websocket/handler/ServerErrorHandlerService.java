@@ -1,7 +1,7 @@
-package plus.easydo.push.client.websocket.handler;
+package plus.easydo.client.websocket.handler;
 
-import plus.easydo.push.client.contants.MessageTypeConstants;
-import plus.easydo.push.client.model.socket.ServerMessage;
+import plus.easydo.client.contants.MessageTypeConstants;
+import plus.easydo.client.model.socket.ServerMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
