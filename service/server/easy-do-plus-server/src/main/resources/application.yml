@@ -54,7 +54,7 @@ spring:
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:root}
   liquibase:
-    enabled: true
+    enabled: ${liquibase_enabled:true}
     databaseChangeLogTable: "DATABASECHANGELOG_SERVER"
     databaseChangeLogLockTable: "DATABASECHANGELOGLOCK_SERVER"
   #redis 配置
@@ -113,7 +113,7 @@ system:
     # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
     tablePrefix: sys_
   server-list:
-    uc: easy-do-plus-uc.server:8888
+    uc: htt://game-server-manager-uc.server:8888
   #黑名单配置
   back-list:
     #拉黑持续时间 分钟
@@ -215,12 +215,12 @@ springdoc:
     # 开启api-docs
     enabled: true
   # 配置需要生成接口文档的扫描包
-  packages-to-scan: plus.easydo.push.uc.controller
+  packages-to-scan: plus.easydo.uc.controller
   # 配置需要生成接口文档的接口路径
   #  paths-to-match: /brand/**,/admin/**
   customize:
-    title: 主服务程序 API
-    description: 主服务程序API接口
+    title: 用户中心
+    description: 用户中心API接口
     version: 1.0.0
     license:
       name: 未设置

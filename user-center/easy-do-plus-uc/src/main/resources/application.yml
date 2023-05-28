@@ -55,7 +55,7 @@ spring:
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:root}
   liquibase:
-    enabled: true
+    enabled: ${liquibase_enabled:true}
     databaseChangeLogTable: "DATABASECHANGELOG_UC"
     databaseChangeLogLockTable: "DATABASECHANGELOGLOCK_UC"
   #redis 配置
@@ -129,7 +129,7 @@ mybatis-plus:
 
 system:
   server-list:
-    uc: easy-do-plus-uc.server:8888
+    uc: game-server-manager-uc.server:8888
   #黑名单配置
   back-list:
     #拉黑持续时间 分钟
