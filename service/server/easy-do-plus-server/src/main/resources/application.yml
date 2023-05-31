@@ -113,7 +113,7 @@ system:
     # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
     tablePrefix: sys_
   server-list:
-    uc: htt://game-server-manager-uc.server:8888
+    uc: http://game-server-manager-uc.server:8888
   #黑名单配置
   back-list:
     #拉黑持续时间 分钟
