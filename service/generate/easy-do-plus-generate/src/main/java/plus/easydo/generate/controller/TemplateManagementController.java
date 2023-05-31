@@ -56,6 +56,8 @@ public class TemplateManagementController implements TemplateManagementApi{
     @SaCheckPermission("generate:TemplateManagement:list")
     @GetMapping("/list")
     public R<List<TemplateManagementVo>> list(@RequestParam(required = false) Map<String, Object> queryParam) {
+        queryParam.put("currentPage",1);
+        queryParam.put("pageSize",999);
         List<TemplateManagement> result = beanSearcher.searchList(TemplateManagement.class, queryParam);
         return DataResult.ok(convert.entityToVo(result));
     }
