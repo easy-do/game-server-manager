@@ -2,6 +2,7 @@ package plus.easydo.uc.api;
 
 
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.service.annotation.HttpExchange;
 import plus.easydo.uc.vo.OauthClientDetailsVo;
 import plus.easydo.uc.dto.OauthClientDetailsDto;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import java.util.Map;
  * @author yuzhanfeng
  * @date 2023-05-27 02:18:43
  */
+@HttpExchange("/oauthClient")
 public interface OauthClientDetailsApi {
 
     String apiPath = "/oauthClient";

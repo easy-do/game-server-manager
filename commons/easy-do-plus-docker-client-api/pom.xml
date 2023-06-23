@@ -36,12 +36,14 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-httpclient</artifactId>
+            <version>11.10</version>
         </dependency>
 
         <!--  okhttp作为http请求的客户端-->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
+            <version>5.0.0-alpha.11</version>
         </dependency>
 
         <dependency>
@@ -68,7 +70,7 @@
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java-api</artifactId>
-            <version>3.2.13</version>
+            <version>3.3.0</version>
             <scope>compile</scope>
         </dependency>
 

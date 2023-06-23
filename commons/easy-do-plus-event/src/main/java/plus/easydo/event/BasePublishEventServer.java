@@ -1,12 +1,12 @@
 package plus.easydo.event;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import plus.easydo.common.dto.AuthorizationConfigDto;
 import plus.easydo.event.model.*;
 import lombok.Data;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 
 /**
  * @author laoyu
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 @Component
 public class BasePublishEventServer {
 
-    @Resource
+    @Autowired
     private ApplicationContext applicationContext;
 
     public void publishResetPasswordEvent(Long userId,String password){

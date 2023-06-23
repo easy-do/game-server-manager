@@ -4,6 +4,7 @@ package plus.easydo.uc.api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.service.annotation.HttpExchange;
 import plus.easydo.common.result.R;
 
 /**
@@ -12,6 +13,7 @@ import plus.easydo.common.result.R;
  * @description 邮箱相关
  * @date 2022/6/12
  */
+@HttpExchange("/email")
 public interface EmailApi {
 
     String apiPath = "/email";
