@@ -1,6 +1,7 @@
 package plus.easydo.common.vaild;
 
-import javax.validation.groups.Default;
+
+import jakarta.validation.groups.Default;
 
 /**
  * @author laoyu

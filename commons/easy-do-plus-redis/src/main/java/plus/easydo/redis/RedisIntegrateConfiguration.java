@@ -1,7 +1,6 @@
 package plus.easydo.redis;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -15,7 +14,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import javax.annotation.Resource;
 import java.time.Duration;
 
 /**
@@ -31,7 +29,7 @@ public class RedisIntegrateConfiguration extends CachingConfigurerSupport {
     @Value("${system.redis.cache.timout:60}")
     private Integer cacheTimout;
 
-    @Resource
+    @Autowired
     FastJson2RedisSerializer fastJsonRedisSerializer;
 
     public RedisIntegrateConfiguration() {
