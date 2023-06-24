@@ -22,12 +22,6 @@
 
         <dependency>
             <groupId>plus.easydo</groupId>
-            <artifactId>easy-do-plus-uc-core</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>plus.easydo</groupId>
             <artifactId>easy-do-plus-uc-api</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -45,7 +39,6 @@
             <artifactId>easy-do-plus-doc</artifactId>
             <version>1.0.0</version>
         </dependency>
-
 
         <!--  event -->
         <dependency>
@@ -107,16 +100,12 @@
         <finalName>app</finalName>
         <plugins>
             <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <!-- mapstruct 需要的配置 -->
             <plugin>
@@ -142,5 +131,33 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <!-- jar包的仓库地址-->
+    <repositories>
+        <repository>
+            <id>aliyun</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <!-- maven插件的仓库地址 -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>aliyun-plugin</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
