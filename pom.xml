@@ -31,12 +31,14 @@
         <module>commons/easy-do-plus-dao</module>
         <module>commons/easy-do-plus-web</module>
         <module>commons/easy-do-plus-doc</module>
+        <module>commons/easy-do-plus-api</module>
         <module>commons/easy-do-plus-docker</module>
         <module>commons/easy-do-plus-docker-client-api</module>
         <module>user-center/easy-do-plus-uc-core</module>
         <module>user-center/easy-do-plus-uc-api</module>
-        <module>user-center/easy-do-plus-uc</module>
-<!--        <module>service/generate/easy-do-plus-generate</module>-->
+        <module>user-center/easy-do-plus-uc-web</module>
+        <module>commons/easy-do-plus-api</module>
+        <!--        <module>service/generate/easy-do-plus-generate</module>-->
 <!--        <module>service/generate/easy-do-plus-generate-core</module>-->
 <!--        <module>service/generate/easy-do-plus-generate-api</module>-->
 <!--        <module>service/server/easy-do-plus-server-core</module>-->

@@ -20,11 +20,11 @@
 
     <dependencies>
 
-        <!--springdoc 官方Starter-->
+        <!--springdoc v2 对3.x支持 -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.15</version>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.1.0</version>
         </dependency>
 
         <dependency>

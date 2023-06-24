@@ -60,7 +60,7 @@ public class UserMessageController {
 
     @SaCheckLogin
     @GetMapping("/count")
-    public R<Long> page() {
+    public R<Long> count() {
         LambdaQueryWrapper<UserMessage> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(UserMessage::getUserId, AuthorizationUtil.getUserId());
         wrapper.eq(UserMessage::getStatus, 0);

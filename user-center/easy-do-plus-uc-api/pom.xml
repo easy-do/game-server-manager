@@ -26,8 +26,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <groupId>plus.easydo</groupId>
+            <artifactId>easy-do-plus-api</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>
