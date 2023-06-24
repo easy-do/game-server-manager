@@ -28,22 +28,22 @@ public class UcApiConfiguration {
     private ApiConfigurationExpand apiConfigurationExpand;
 
     @Bean
-    public OauthClientDetailsApi oauthClientDetailsApi(WebClient.Builder webClientBuilder) {
-        WebClient webClient = buidlWebclient(webClientBuilder);
+    public OauthClientDetailsApi oauthClientDetailsApi() {
+        WebClient webClient = buidlWebclient();
         return HttpServiceProxyFactory.builder().clientAdapter(WebClientAdapter.forClient(webClient)) //
                 .build().createClient(OauthClientDetailsApi.class);
     }
 
     @Bean
-    public EmailApi emailApi(WebClient.Builder webClientBuilder) {
-        WebClient webClient = buidlWebclient(webClientBuilder);
+    public EmailApi emailApi() {
+        WebClient webClient = buidlWebclient();
         return HttpServiceProxyFactory.builder().clientAdapter(WebClientAdapter.forClient(webClient)) //
                 .build().createClient(EmailApi.class);
     }
 
     @Bean
-    public AuthorizationCodeApi authorizationCodeApi(WebClient.Builder webClientBuilder) {
-        WebClient webClient = buidlWebclient(webClientBuilder);
+    public AuthorizationCodeApi authorizationCodeApi() {
+        WebClient webClient = buidlWebclient();
         return HttpServiceProxyFactory.builder().clientAdapter(WebClientAdapter.forClient(webClient)) //
                 .build().createClient(AuthorizationCodeApi.class);
     }
@@ -51,12 +51,12 @@ public class UcApiConfiguration {
     /**
      * 构建webclient
      *
-     * @param webClientBuilder webClientBuilder
      * @return org.springframework.web.reactive.function.client.WebClient
      * @author laoyu
      * @date 2023/6/24
      */
-    private WebClient buidlWebclient(WebClient.Builder webClientBuilder) {
+    private WebClient buidlWebclient() {
+        WebClient.Builder webClientBuilder = WebClient.builder();
         webClientBuilder.baseUrl(baseUrl);
         if(Objects.nonNull(apiConfigurationExpand)){
             apiConfigurationExpand.expand(webClientBuilder);

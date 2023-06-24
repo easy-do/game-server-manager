@@ -21,7 +21,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2022/5/21
  */
-@HttpExchange("/authCode")
+@HttpExchange()
 public interface AuthorizationCodeApi {
 
     String apiPath = "/authCode";

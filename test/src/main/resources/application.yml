@@ -1,0 +1,13 @@
+
+
+system:
+  server-list:
+    uc: http://localhost:30001
+
+
+
+
+
+logging:
+  level:
+    root: DEBUG
