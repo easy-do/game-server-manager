@@ -51,7 +51,7 @@ public class OauthClientDetailsController implements OauthClientDetailsApi{
     /**
      * 获取所有授权客户端信息列表
      */
-    @SaCheckPermission("uc:oauthClient:list")
+//    @SaCheckPermission("uc:oauthClient:list")
     @GetMapping("/list")
     public R<List<OauthClientDetailsVo>> list(@RequestParam(required = false) Map<String, Object> queryParam) {
         List<OauthClientDetails> result = beanSearcher.searchList(OauthClientDetails.class, queryParam);

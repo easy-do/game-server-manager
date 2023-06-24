@@ -1,10 +1,10 @@
 package plus.easydo.uc.api;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
+import org.springframework.web.service.annotation.PostExchange;
 import plus.easydo.common.result.R;
 
 /**
@@ -13,7 +13,7 @@ import plus.easydo.common.result.R;
  * @description 邮箱相关
  * @date 2022/6/12
  */
-@HttpExchange("/email")
+@HttpExchange()
 public interface EmailApi {
 
     String apiPath = "/email";
@@ -31,7 +31,7 @@ public interface EmailApi {
      * @author laoyu
      * @date 2022/7/9
      */
-    @PostMapping(apiPath + "/sendHtmlMail")
+    @PostExchange(apiPath + "/sendHtmlMail")
     public R<String> sendHtmlMail(@RequestParam("email") String email, @RequestParam("title") String title, @RequestParam("content") String content);
 
     /**
@@ -44,7 +44,7 @@ public interface EmailApi {
      * @author laoyu
      * @date 2022/7/9
      */
-    @GetMapping(apiPath + "/sendHtmlMailByUserId")
+    @GetExchange(apiPath + "/sendHtmlMailByUserId")
     public R<String> sendHtmlMailByUserId(@RequestParam("userId") Long userId, @RequestParam("title") String title, @RequestParam("content") String content);
 
 
