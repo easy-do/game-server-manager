@@ -228,9 +228,10 @@ springdoc:
     enabled: true
   api-docs:
     # 修改api-docs路径
-    path: /v2/api-docs
+    path: /v3/api-docs
     # 开启api-docs
     enabled: true
+    version: openapi_3_0
   # 配置需要生成接口文档的扫描包
   packages-to-scan: plus.easydo.uc.controller
   # 配置需要生成接口文档的接口路径

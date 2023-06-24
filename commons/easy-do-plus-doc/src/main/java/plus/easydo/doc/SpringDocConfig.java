@@ -24,7 +24,7 @@ public class SpringDocConfig {
     @Value("${springdoc.customize.description:'SpringDoc API'}")
     private String description;
 
-    @Value("${springdoc.customize.version:1.0.0}")
+    @Value("${springdoc.customize.version:3.0.1}")
     private String version;
 
     @Value("${springdoc.customize.license.name:noSetting}")
@@ -39,15 +39,15 @@ public class SpringDocConfig {
     @Value("${springdoc.customize.externalDocs.url:localhost}")
     private String externalDocsUrl;
 
-    @Bean
-    public OpenAPI mallTinyOpenApi() {
-        return new OpenAPI()
-                .info(new Info().title(title)
-                        .description(description)
-                        .version(version)
-                        .license(new License().name(licenseName).url(licenseUrl)))
-                .externalDocs(new ExternalDocumentation()
-                        .description(externalDocsDescription)
-                        .url(externalDocsUrl));
-    }
+//    @Bean
+//    public OpenAPI openAPI() {
+//        return new OpenAPI()
+//                .info(new Info().title(title)
+//                        .description(description)
+//                        .version(version)
+//                        .license(new License().name(licenseName).url(licenseUrl)))
+//                .externalDocs(new ExternalDocumentation()
+//                        .description(externalDocsDescription)
+//                        .url(externalDocsUrl));
+//    }
 }

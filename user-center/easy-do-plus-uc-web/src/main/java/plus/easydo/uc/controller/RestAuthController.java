@@ -81,7 +81,7 @@ public class RestAuthController {
 
     @SaveLog(saveDb = false, logType = "授权日志", moduleName = "授权服务", description = "三方平台授权验证: ?1", expressions = {"#p1"}, actionType = "三方授权验证")
     @GetMapping("/login/{source}")
-    public R<String> login(@PathVariable("source") String source) {
+    public R<String> platformLogin(@PathVariable("source") String source) {
         AuthRequest authRequest = getAuthRequest(source);
         return DataResult.ok(authRequest.authorize(AuthStateUtils.createState()), "ok");
     }
