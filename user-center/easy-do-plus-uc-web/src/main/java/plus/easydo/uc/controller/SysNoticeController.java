@@ -2,8 +2,14 @@ package plus.easydo.uc.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import plus.easydo.uc.qo.SysNoticeQo;
-import plus.easydo.web.base.BaseController;
+import cn.zhxu.bs.BeanSearcher;
+import cn.zhxu.bs.SearchResult;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
+import plus.easydo.common.result.DataResult;
+import plus.easydo.dao.result.MpResultUtil;
+import plus.easydo.uc.api.SysNoticeApi;
+import plus.easydo.uc.mapstruct.SysNoticeMapstruct;
 import plus.easydo.uc.service.SysNoticeService;
 import plus.easydo.uc.vo.SysNoticeVo;
 import plus.easydo.uc.dto.SysNoticeDto;
@@ -22,6 +28,9 @@ import plus.easydo.common.vaild.Insert;
 import plus.easydo.common.vaild.Update;
 
 import java.util.List;
+import java.util.Map;
+
+import static plus.easydo.uc.api.SysNoticeApi.apiPath;
 
 
 /**
@@ -31,35 +40,40 @@ import java.util.List;
  * @date 2022-10-03 17:39:25
  */
 @RestController
-@RequestMapping("/notice")
-public class SysNoticeController extends BaseController<SysNoticeService,SysNotice,Long, SysNoticeQo, SysNoticeVo,SysNoticeDto> {
+@RequiredArgsConstructor
+@RequestMapping(apiPath)
+public class SysNoticeController implements SysNoticeApi {
+
+    private final  SysNoticeService baseService;
+
+    private final BeanSearcher beanSearcher;
 
     /**
      * 获取所有通知公告列表
      */
-    @RequestMapping("/list")
-    @Override
-    public R<List<SysNoticeVo>> list() {
-        return super.list();
+    @GetMapping("/list")
+    public R<List<SysNoticeVo>> list(@RequestParam(required = false) Map<String, Object> queryParam) {
+        List<SysNotice> result = beanSearcher.searchList(SysNotice.class, queryParam);
+        return DataResult.ok(SysNoticeMapstruct.INSTANCE.entityToVo(result));
     }
 
     /**
      * 分页条件查询通知公告列表
      */
     @PostMapping("/page")
-    @Override
-    public MpDataResult page(@RequestBody SysNoticeQo sysNoticeQo) {
-        return super.page(sysNoticeQo);
+    public MpDataResult page(@RequestBody Map<String,Object> queryParam) {
+        SearchResult<SysNotice> result = beanSearcher.search(SysNotice.class, queryParam);
+        List<SysNoticeVo> voList = SysNoticeMapstruct.INSTANCE.entityToVo(result.getDataList());
+        return MpResultUtil.buildPage(voList, (Long) result.getTotalCount());
     }
-
 
     /**
      * 获取通知公告详细信息
      */
     @GetMapping("/info/{id}")
-    @Override
     public R<SysNoticeVo> info(@PathVariable("id")Long id) {
-        return super.info(id);
+            SysNotice entity  = baseService.getById(id);
+            return DataResult.ok(SysNoticeMapstruct.INSTANCE.entityToVo(entity));
     }
 
     /**
@@ -68,9 +82,9 @@ public class SysNoticeController extends BaseController<SysNoticeService,SysNoti
     @SaCheckPermission("notice:add")
     @PostMapping("/add")
     @SaveLog(logType = "操作日志", moduleName = "通知公告", description = "添加通知公告", actionType = "添加")
-    @Override
     public R<Object> add(@RequestBody @Validated({Insert.class}) SysNoticeDto sysNoticeDto) {
-        return super.add(sysNoticeDto);
+        SysNotice entity = SysNoticeMapstruct.INSTANCE.dtoToEntity(sysNoticeDto);
+        return baseService.save(entity)? DataResult.ok():DataResult.fail();
     }
 
     /**
@@ -79,9 +93,9 @@ public class SysNoticeController extends BaseController<SysNoticeService,SysNoti
     @SaCheckPermission("notice:update")
     @PostMapping("/update")
     @SaveLog(logType = "操作日志", moduleName = "通知公告", description = "编辑通知公告: ?1", expressions = {"#p1.id"},actionType = "编辑")
-    @Override
     public R<Object> update(@RequestBody @Validated({Update.class}) SysNoticeDto sysNoticeDto) {
-        return super.update(sysNoticeDto);
+        SysNotice entity = SysNoticeMapstruct.INSTANCE.dtoToEntity(sysNoticeDto);
+        return baseService.updateById(entity)? DataResult.ok():DataResult.fail();
     }
 
     /**
@@ -90,8 +104,7 @@ public class SysNoticeController extends BaseController<SysNoticeService,SysNoti
     @SaCheckPermission("notice:remove")
 	@GetMapping("/remove/{id}")
     @SaveLog(logType = "操作日志", moduleName = "通知公告", description = "删除通知公告: ?1", expressions = {"#p1"}, actionType = "删除")
-    @Override
     public R<Object> remove(@PathVariable("id")Long id) {
-        return super.remove(id);
+        return baseService.removeById(id)? DataResult.ok():DataResult.fail();
     }
 }

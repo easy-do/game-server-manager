@@ -9,6 +9,7 @@ import plus.easydo.auth.AuthorizationUtil;
 import plus.easydo.auth.OauthConfigProperties;
 import plus.easydo.log.SaveLog;
 import plus.easydo.common.vo.UserInfoVo;
+import plus.easydo.uc.api.RestAuthApi;
 import plus.easydo.uc.dto.LoginModel;
 import plus.easydo.uc.dto.RestPasswordModel;
 import plus.easydo.uc.service.AuthorizationCodeService;
@@ -40,6 +41,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Objects;
 
+import static plus.easydo.uc.api.RestAuthApi.apiPath;
+
 /**
  * @author laoyu
  * @version 1.0
@@ -47,9 +50,9 @@ import java.util.Objects;
  */
 @Data
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping(apiPath)
 @EnableConfigurationProperties(OauthConfigProperties.class)
-public class RestAuthController {
+public class RestAuthController implements RestAuthApi {
 
     @Autowired
     private OauthConfigProperties oauthConfigProperties;

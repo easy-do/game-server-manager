@@ -25,7 +25,7 @@ import java.util.Map;
  * @author yuzhanfeng
  * @date 2023-05-27 02:18:43
  */
-@HttpExchange()
+@HttpExchange("/oauthClient")
 public interface OauthClientDetailsApi {
 
     String apiPath = "/oauthClient";
@@ -33,37 +33,37 @@ public interface OauthClientDetailsApi {
     /**
      * 获取所有授权客户端信息列表
      */
-    @GetExchange(apiPath + "/list")
-    public R<List<OauthClientDetailsVo>> list(@RequestParam(required = false) Map<String, Object> queryParam);
+    @GetExchange("/list")
+    R<List<OauthClientDetailsVo>> list(@RequestParam(required = false) Map<String, Object> queryParam);
 
     /**
      * 分页条件查询授权客户端信息列表
      */
-    @PostExchange(apiPath + "/page")
-    public MpDataResult page(@RequestBody Map<String, Object> queryParam);
+    @PostExchange("/page")
+    MpDataResult page(@RequestBody Map<String, Object> queryParam);
 
 
     /**
      * 获取授权客户端信息详细信息
      */
-    @GetExchange(apiPath + "/info/{id}")
-    public R<OauthClientDetailsVo> info(@PathVariable("id")Long id);
+    @GetExchange("/info/{id}")
+    R<OauthClientDetailsVo> info(@PathVariable("id")Long id);
 
     /**
      * 新增授权客户端信息
      */
-    @PostExchange(apiPath + "/add")
-    public R<Object> add(@RequestBody @Validated({Insert.class}) OauthClientDetailsDto oauthClientDetailsDto);
+    @PostExchange("/add")
+    R<Object> add(@RequestBody @Validated({Insert.class}) OauthClientDetailsDto oauthClientDetailsDto);
 
     /**
      * 修改授权客户端信息
      */
-    @PostExchange(apiPath + "/update")
-    public R<Object> update(@RequestBody @Validated({Update.class}) OauthClientDetailsDto oauthClientDetailsDto);
+    @PostExchange("/update")
+    R<Object> update(@RequestBody @Validated({Update.class}) OauthClientDetailsDto oauthClientDetailsDto);
 
     /**
      * 删除授权客户端信息
      */
-    @GetExchange(apiPath + "/remove/{id}")
-    public R<Object> remove(@PathVariable("id")Long id);
+    @GetExchange("/remove/{id}")
+    R<Object> remove(@PathVariable("id")Long id);
 }

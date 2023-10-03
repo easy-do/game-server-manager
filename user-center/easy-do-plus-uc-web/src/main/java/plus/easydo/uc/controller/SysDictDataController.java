@@ -2,14 +2,20 @@ package plus.easydo.uc.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.zhxu.bs.BeanSearcher;
+import cn.zhxu.bs.SearchResult;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
 import plus.easydo.common.constant.SystemConstant;
 import plus.easydo.common.dto.ChangeStatusDto;
+import plus.easydo.common.enums.StatusEnum;
+import plus.easydo.dao.result.MpResultUtil;
+import plus.easydo.uc.api.SysDictDataApi;
 import plus.easydo.uc.dto.SysDictDataDto;
 import plus.easydo.uc.entity.SysDictData;
+import plus.easydo.uc.mapstruct.SysDictDataMapstruct;
 import plus.easydo.uc.service.SysDictDataService;
-import plus.easydo.web.base.BaseController;
 import plus.easydo.log.SaveLog;
-import plus.easydo.dao.qo.MpBaseQo;
 import plus.easydo.common.result.MpDataResult;
 import plus.easydo.common.vo.SysDictDataVo;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +33,12 @@ import plus.easydo.common.vaild.Update;
 import java.util.List;
 import java.util.Map;
 
+import static plus.easydo.uc.api.SysDictDataApi.apiPath;
+import static plus.easydo.web.base.BaseController.ADD_ACTION;
+import static plus.easydo.web.base.BaseController.EDIT_ACTION;
+import static plus.easydo.web.base.BaseController.LOG_TYPE;
+import static plus.easydo.web.base.BaseController.REMOVE_ACTION;
+
 
 /**
  * @author laoyu
@@ -34,8 +46,9 @@ import java.util.Map;
  * @date 2022/7/22
  */
 @RestController
-@RequestMapping("/dictData")
-public class SysDictDataController extends BaseController<SysDictDataService, SysDictData, Long, MpBaseQo<SysDictData>, SysDictDataVo, SysDictDataDto> {
+@RequiredArgsConstructor
+@RequestMapping(apiPath)
+public class SysDictDataController implements SysDictDataApi {
 
     public static final String MODULE_NAME = "字典数据管理";
 
@@ -52,37 +65,54 @@ public class SysDictDataController extends BaseController<SysDictDataService, Sy
     public static final String REMOVE_EXPRESSIONS = "#p1";
 
 
-    @Override
-    @SaCheckLogin
-    public MpDataResult page(@RequestBody MpBaseQo<SysDictData> mpBaseQo){
-        return super.page(mpBaseQo);
+    private final SysDictDataService baseService;
+
+    private final BeanSearcher beanSearcher;
+
+    @GetMapping("/list")
+    public R<List<SysDictDataVo>> list(@RequestParam(required = false) Map<String, Object> queryParam) {
+        queryParam.put("status",StatusEnum.ENABLE);
+        List<SysDictData> result = beanSearcher.searchList(SysDictData.class, queryParam);
+        return DataResult.ok(SysDictDataMapstruct.INSTANCE.entityToVo(result));
     }
 
-    @Override
+
     @SaCheckLogin
+    @PostMapping("/page")
+    public MpDataResult page(@RequestBody Map<String,Object> queryParam) {
+        SearchResult<SysDictData> result = beanSearcher.search(SysDictData.class, queryParam);
+        List<SysDictDataVo> voList = SysDictDataMapstruct.INSTANCE.entityToVo(result.getDataList());
+        return MpResultUtil.buildPage(voList, (Long) result.getTotalCount());
+    }
+
+    @SaCheckLogin
+    @GetMapping("/info/{id}")
     public R<SysDictDataVo> info(@PathVariable("id") Long id) {
-        return super.info(id);
+        SysDictData entity  = baseService.getById(id);
+        return DataResult.ok(SysDictDataMapstruct.INSTANCE.entityToVo(entity));
     }
 
-    @Override
     @SaCheckLogin
+    @PostMapping("/add")
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = ADD_DESCRIPTION, expressions = ADD_EXPRESSIONS, actionType = ADD_ACTION)
     public R<Object> add(@RequestBody @Validated({Insert.class}) SysDictDataDto sysDictDataDto) {
-        return super.add(sysDictDataDto);
+        SysDictData entity = SysDictDataMapstruct.INSTANCE.dtoToEntity(sysDictDataDto);
+        return baseService.save(entity)? DataResult.ok():DataResult.fail();
     }
 
-    @Override
     @SaCheckLogin
+    @PostMapping("/update")
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = EDIT_DESCRIPTION, expressions = EDIT_EXPRESSIONS, actionType = EDIT_ACTION)
     public R<Object> update(@RequestBody @Validated({Update.class}) SysDictDataDto sysDictDataDto) {
-        return super.update(sysDictDataDto);
+        SysDictData entity = SysDictDataMapstruct.INSTANCE.dtoToEntity(sysDictDataDto);
+        return baseService.updateById(entity)? DataResult.ok():DataResult.fail();
     }
 
-    @Override
     @SaCheckLogin
+    @GetMapping("/remove/{id}")
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
     public R<Object> remove(@PathVariable("id") Long id) {
-        return super.remove(id);
+        return baseService.removeById(id)? DataResult.ok():DataResult.fail();
     }
 
     @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)

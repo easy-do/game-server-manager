@@ -6,6 +6,8 @@ import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Maps;
 import plus.easydo.common.vo.SysDictTypeVo;
 import plus.easydo.web.base.BaseServiceImpl;
@@ -34,64 +36,10 @@ import java.util.Objects;
 * @createDate 2022-07-22 10:19:20
 */
 @Service
-public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBaseQo<SysDictData>, SysDictDataVo, SysDictDataDto, SysDictDataMapper>
-    implements SysDictDataService{
+public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper,SysDictData> implements SysDictDataService{
 
     @Autowired
     private SysDictTypeService sysDictTypeService;
-
-    @Override
-    public void listSelect(LambdaQueryWrapper<SysDictData> wrapper) {
-        wrapper.select(SysDictData::getId,SysDictData::getDictKey,SysDictData::getDictValue,SysDictData::getDictTypeId,SysDictData::getDictSort);
-    }
-
-    @Override
-    public void pageSelect(LambdaQueryWrapper<SysDictData> wrapper) {
-
-    }
-
-    @Override
-    public List<SysDictDataVo> voList() {
-        LambdaQueryWrapper<SysDictData> wrapper = getWrapper();
-        listSelect(wrapper);
-        wrapper.eq(SysDictData::getStatus,StatusEnum.ENABLE);
-        return SysDictDataMapstruct.INSTANCE.entityToVo(list(wrapper));
-    }
-
-    @Override
-    public IPage<SysDictDataVo> page(MpBaseQo<SysDictData> mpBaseQo) {
-        mpBaseQo.initInstance(SysDictData.class);
-        return page(mpBaseQo.getPage(),mpBaseQo.getWrapper()).convert(SysDictDataMapstruct.INSTANCE::entityToVo);
-    }
-
-    @Override
-    public SysDictDataVo info(Serializable id) {
-        return SysDictDataMapstruct.INSTANCE.entityToVo(getById(id));
-    }
-
-    @Override
-    @CacheInvalidate(name = "SysDictDataService.listByCode")
-    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
-    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
-    public boolean add(SysDictDataDto sysDictDataDto) {
-        return save(SysDictDataMapstruct.INSTANCE.dtoToEntity(sysDictDataDto));
-    }
-
-    @Override
-    @CacheInvalidate(name = "SysDictDataService.listByCode")
-    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
-    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
-    public boolean edit(SysDictDataDto sysDictDataDto) {
-        return updateById(SysDictDataMapstruct.INSTANCE.dtoToEntity(sysDictDataDto));
-    }
-
-    @Override
-    @CacheInvalidate(name = "SysDictDataService.listByCode")
-    @CacheInvalidate(name = "SysDictDataService.getSingleDictData")
-    @CacheInvalidate(name = "SysDictDataService.getDictDataMap")
-    public boolean delete(Serializable id) {
-        return removeById(id);
-    }
 
     @Override
     @CacheInvalidate(name = "SysDictDataService.listByCode")
@@ -110,7 +58,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     @CacheRefresh(refresh = 60)
     public List<SysDictDataVo> listByCode(String dictCode) {
         Long dictTypeId = sysDictTypeService.getIdByCode(dictCode);
-        LambdaQueryWrapper<SysDictData> wrapper = getWrapper();
+        LambdaQueryWrapper<SysDictData> wrapper = Wrappers.lambdaQuery();
         wrapper.select(SysDictData::getDictLabel,SysDictData::getDictSort,SysDictData::getDictKey,SysDictData::getDictValue,SysDictData::getDictValueType,SysDictData::getIsDefault);
         wrapper.eq(SysDictData::getDictTypeId,dictTypeId);
         wrapper.eq(SysDictData::getStatus, StatusEnum.ENABLE.getCode());
@@ -122,7 +70,7 @@ public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictData,  MpBase
     @CacheRefresh(refresh = 60)
     public SysDictDataVo getSingleDictData(String dictCode, String dictDataKey) {
         Long dictTypeId = sysDictTypeService.getIdByCode(dictCode);
-        LambdaQueryWrapper<SysDictData> wrapper = getWrapper();
+        LambdaQueryWrapper<SysDictData> wrapper = Wrappers.lambdaQuery();
         wrapper.select(SysDictData::getDictLabel,SysDictData::getDictSort,SysDictData::getDictKey,SysDictData::getDictValue,SysDictData::getDictValueType,SysDictData::getIsDefault);
         wrapper.eq(SysDictData::getDictTypeId,dictTypeId);
         wrapper.eq(SysDictData::getDictKey, dictDataKey);

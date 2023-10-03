@@ -1,9 +1,6 @@
 package plus.easydo.uc.service;
 
-import plus.easydo.uc.qo.SysNoticeQo;
-import plus.easydo.web.base.BaseService;
-import plus.easydo.uc.dto.SysNoticeDto;
-import plus.easydo.uc.vo.SysNoticeVo;
+import com.baomidou.mybatisplus.extension.service.IService;
 import plus.easydo.uc.entity.SysNotice;
 
 
@@ -13,7 +10,7 @@ import plus.easydo.uc.entity.SysNotice;
  * @author yuzhanfeng
  * @date 2022-10-03 17:39:25
  */
-public interface SysNoticeService extends BaseService<SysNotice, SysNoticeQo, SysNoticeVo, SysNoticeDto>{
+public interface SysNoticeService extends IService<SysNotice> {
 
 
 }

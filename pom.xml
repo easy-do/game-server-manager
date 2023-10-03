@@ -39,6 +39,7 @@
         <module>user-center/easy-do-plus-uc-web</module>
         <module>commons/easy-do-plus-api</module>
         <module>test</module>
+        <module>easy-do-plus-easy-data</module>
         <!--        <module>service/generate/easy-do-plus-generate</module>-->
 <!--        <module>service/generate/easy-do-plus-generate-core</module>-->
 <!--        <module>service/generate/easy-do-plus-generate-api</module>-->

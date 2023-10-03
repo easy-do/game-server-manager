@@ -1,0 +1,93 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>plus.easydo</groupId>
+        <artifactId>easy-do-plus</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>easy-do-plus-easy-data</artifactId>
+    <packaging>jar</packaging>
+
+    <name>easy-do-plus-easy-data</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.18</version>
+        </dependency>
+
+
+
+<!--        <dependency>-->
+<!--            <groupId>plus.easydo</groupId>-->
+<!--            <artifactId>easy-do-plus-web</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash;  数据库相关&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>plus.easydo</groupId>-->
+<!--            <artifactId>easy-do-plus-dao</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--            <version>8.0.33</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; redis &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>plus.easydo</groupId>-->
+<!--            <artifactId>easy-do-plus-redis</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>cn.zhxu</groupId>-->
+<!--            <artifactId>bean-searcher-boot-starter</artifactId>-->
+<!--            <version>4.2.0</version>-->
+<!--        </dependency>-->
+
+    </dependencies>
+</project>

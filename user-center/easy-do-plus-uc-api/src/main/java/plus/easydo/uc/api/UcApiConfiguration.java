@@ -48,6 +48,13 @@ public class UcApiConfiguration {
                 .build().createClient(AuthorizationCodeApi.class);
     }
 
+    @Bean
+    public RestAuthApi restAuthApi() {
+        WebClient webClient = buidlWebclient();
+        return HttpServiceProxyFactory.builder().clientAdapter(WebClientAdapter.forClient(webClient)) //
+                .build().createClient(RestAuthApi.class);
+    }
+
     /**
      * 构建webclient
      *
