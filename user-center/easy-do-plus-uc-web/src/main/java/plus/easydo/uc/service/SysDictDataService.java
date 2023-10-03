@@ -1,10 +1,8 @@
 package plus.easydo.uc.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import plus.easydo.common.dto.ChangeStatusDto;
-import plus.easydo.dao.qo.MpBaseQo;
-import plus.easydo.uc.dto.SysDictDataDto;
 import plus.easydo.uc.entity.SysDictData;
-import plus.easydo.web.base.BaseService;
 import plus.easydo.common.vo.SysDictDataVo;
 
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.Map;
 * @description 针对表【sys_dict_data(字典数据表)】的数据库操作Service
 * @createDate 2022-07-22 10:19:20
 */
-public interface SysDictDataService extends  BaseService<SysDictData, MpBaseQo<SysDictData>, SysDictDataVo, SysDictDataDto> {
+public interface SysDictDataService extends IService<SysDictData> {
 
     /**
      * 更改状态

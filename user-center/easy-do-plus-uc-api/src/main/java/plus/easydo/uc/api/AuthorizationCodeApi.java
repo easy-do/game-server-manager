@@ -21,26 +21,26 @@ import java.util.Map;
  * @version 1.0
  * @date 2022/5/21
  */
-@HttpExchange()
+@HttpExchange("/authCode")
 public interface AuthorizationCodeApi {
 
     String apiPath = "/authCode";
 
-    @GetExchange(apiPath + "/list")
-    public R<List<AuthorizationCodeVo>> list(@RequestParam(required = false) Map<String, Object> queryParam);
+    @GetExchange("/list")
+    R<List<AuthorizationCodeVo>> list(@RequestParam(required = false) Map<String, Object> queryParam);
 
-    @PostExchange(apiPath + "/page")
-    public MpDataResult page(@RequestBody Map<String, Object> queryParam);
+    @PostExchange("/page")
+    MpDataResult page(@RequestBody Map<String, Object> queryParam);
 
-    @GetExchange(apiPath + "/info/{id}")
-    public R<AuthorizationCodeVo> info(@PathVariable("id") String id);
+    @GetExchange("/info/{id}")
+    R<AuthorizationCodeVo> info(@PathVariable("id") String id);
 
-    @PostExchange(apiPath + "/update")
-    public R<Object> edit(@RequestBody AuthorizationCodeDto authorizationCodeDto);
+    @PostExchange("/update")
+    R<Object> edit(@RequestBody AuthorizationCodeDto authorizationCodeDto);
 
-    @PostExchange(apiPath + "/generateAuthCode")
-    public R<Object> generateAuthorization(@RequestBody AuthorizationConfigDto authorizationConfigDto);
+    @PostExchange("/generateAuthCode")
+    R<Object> generateAuthorization(@RequestBody AuthorizationConfigDto authorizationConfigDto);
 
-    @GetExchange(apiPath + "/remove/{id}")
-    public R<Object> delete(@PathVariable("id") String id);
+    @GetExchange("/remove/{id}")
+    R<Object> delete(@PathVariable("id") String id);
 }

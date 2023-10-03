@@ -13,12 +13,13 @@ import plus.easydo.common.result.R;
  * @description 邮箱相关
  * @date 2022/6/12
  */
-@HttpExchange()
-public interface EmailApi {
+@HttpExchange("/email")
+public  interface EmailApi {
 
     String apiPath = "/email";
 
-    public R<Object> sendMailCode(@RequestParam("email") String email);
+    @GetExchange("/sendMailCode")
+    R<Object> sendMailCode(@RequestParam("email") String email);
 
 
     /**
@@ -31,8 +32,8 @@ public interface EmailApi {
      * @author laoyu
      * @date 2022/7/9
      */
-    @PostExchange(apiPath + "/sendHtmlMail")
-    public R<String> sendHtmlMail(@RequestParam("email") String email, @RequestParam("title") String title, @RequestParam("content") String content);
+    @PostExchange("/sendHtmlMail")
+    R<String> sendHtmlMail(@RequestParam("email") String email, @RequestParam("title") String title, @RequestParam("content") String content);
 
     /**
      * 向用户发送邮件
@@ -44,8 +45,8 @@ public interface EmailApi {
      * @author laoyu
      * @date 2022/7/9
      */
-    @GetExchange(apiPath + "/sendHtmlMailByUserId")
-    public R<String> sendHtmlMailByUserId(@RequestParam("userId") Long userId, @RequestParam("title") String title, @RequestParam("content") String content);
+    @GetExchange("/sendHtmlMailByUserId")
+    R<String> sendHtmlMailByUserId(@RequestParam("userId") Long userId, @RequestParam("title") String title, @RequestParam("content") String content);
 
 
 }

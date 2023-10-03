@@ -76,8 +76,9 @@ public class SysUserController {
     /**
      * 获取用户列表
      */
+    @SaCheckRole(SystemConstant.SUPER_ADMIN_ROLE)
     @PostMapping("/page")
-    public MpDataResult list(@RequestBody Map<String,Object> queryParam) {
+    public MpDataResult page(@RequestBody Map<String,Object> queryParam) {
         return MpResultUtil.buildPage(beanSearcher.search(UserInfo.class,queryParam));
     }
 

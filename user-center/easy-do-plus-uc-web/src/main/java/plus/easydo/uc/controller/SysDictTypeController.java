@@ -76,6 +76,7 @@ public class SysDictTypeController extends BaseController<SysDictTypeService, Sy
     @Override
     @SaCheckLogin
     @SaveLog(logType = LOG_TYPE, moduleName = MODULE_NAME, description = REMOVE_DESCRIPTION, expressions = REMOVE_EXPRESSIONS, actionType = REMOVE_ACTION)
+
     public R<Object> remove(@PathVariable("id") Long id) {
         return super.remove(id);
     }
