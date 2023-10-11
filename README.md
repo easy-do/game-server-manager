@@ -1,9 +1,9 @@
 一套游戏管理、开发、云部署的平台软件，摸索开发中。
 
-gitee：https://gitee.com/yuzhanfeng/easy-do-plus
+gitee：https://gitee.com/yuzhanfeng/game-server-manager
 
 
-github：https://github.com/easy-do/easy-do-plus
+github：https://github.com/easy-do/game-server-manager
 
 
 在线预览：https://push.easydo.plus
@@ -82,25 +82,25 @@ docker run -dit --net=game-manager -p 6379:6379 -e REDIS_PASSWORD=123456789 --na
 
 ##### 启动网关
 ```
-docker run -dit --net=game-manager --name api-gateway registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:gateway-1.0.0
+docker run -dit --net=game-manager --name api-gateway registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:gateway-1.0.0
 
 ```
 
 ##### 启动用户中心
 ```
-docker run -dit --net=game-manager -e MYSQL_HOST=manager-mysql -e MYSQL_PORT=3306 -e MYSQL_PASS=123456789 -e REDIS_HOST=manager-redis -e REDIS_PASSWORD=123456789 --name easy-do-plus-uc registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:uc-1.0.0
+docker run -dit --net=game-manager -e MYSQL_HOST=manager-mysql -e MYSQL_PORT=3306 -e MYSQL_PASS=123456789 -e REDIS_HOST=manager-redis -e REDIS_PASSWORD=123456789 --name game-server-manager-uc registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:uc-1.0.0
 
 ```
 
 ##### 启动主服务
 ```
-docker run -dit --net=game-manager -e MYSQL_HOST=manager-mysql -e MYSQL_PORT=3306 -e MYSQL_PASS=123456789 -e REDIS_HOST=manager-redis -e REDIS_PASSWORD=123456789 --name easy-do-plus-server registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:server-1.0.0
+docker run -dit --net=game-manager -e MYSQL_HOST=manager-mysql -e MYSQL_PORT=3306 -e MYSQL_PASS=123456789 -e REDIS_HOST=manager-redis -e REDIS_PASSWORD=123456789 --name game-server-manager-server registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:server-1.0.0
 
 ```
 
 ##### 启动前端页面
 ```
-docker run -dit --net=game-manager -p 8383:8080 --name easy-do-plus-web registry.cn-hangzhou.aliyuncs.com/gebilaoyu/easy-do-plus:web-1.0.0
+docker run -dit --net=game-manager -p 8383:8080 --name game-server-manager-web registry.cn-hangzhou.aliyuncs.com/gebilaoyu/game-server-manager:web-1.0.0
 
 ```
 ##### 访问系统
@@ -125,9 +125,9 @@ docker run -dit --net=game-manager -p 8383:8080 --name easy-do-plus-web registry
 docker rm -f manager-mysql
 docker rm -f manager-redis
 docker rm -f api-gateway
-docker rm -f easy-do-plus-uc
-docker rm -f easy-do-plus-server
-docker rm -f easy-do-plus-web
+docker rm -f game-server-manager-uc
+docker rm -f game-server-manager-server
+docker rm -f game-server-manager-web
 rm -f /data/mysql
 
 ```
